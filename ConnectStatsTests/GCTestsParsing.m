@@ -39,7 +39,7 @@
 #import "GCActivity+TestBackwardCompat.h"
 #import "GCActivity+TrackTransform.h"
 #import "GCactivity+Series.h"
-#import "GCHistoryFieldDataHolder.h"
+#import "GCHistoryFieldSummaryDataHolder.h"
 #import "GCConnectStatsSearchJsonParser.h"
 
 @interface GCTestsParsing : GCTestCase
@@ -133,6 +133,7 @@
     GCActivity * modernAct = [[[GCActivity alloc] initWithId:activityId andGarminData:json] autorelease];
     modernAct.db = db;
     modernAct.trackdb = db;
+    modernAct.settings.worker = nil;
     
     [GCGarminActivityTrack13Request testForActivity:modernAct withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]] mergeFit:false];
     [modernAct saveToDb:db];
@@ -322,10 +323,12 @@
         GCActivity * act_tcx = [GCGarminRequestActivityReload testForActivity:activityId withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
         act_tcx.activityId = activityId_tcx;
         act_tcx.db = act_tcx.trackdb;
+        act_tcx.settings.worker = nil;
         [GCActivity ensureDbStructure:act_tcx.db];
         GCActivity * act_fit = [GCGarminRequestActivityReload testForActivity:activityId withFilesIn:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
         act_fit.activityId = activityId_fit;
         act_fit.db = act_fit.trackdb;
+        act_fit.settings.worker = nil;
         [GCActivity ensureDbStructure:act_fit.db];
         NSString * tcx = [NSString stringWithFormat:@"activity_%@.tcx", activityId];
         NSString * fit = [NSString stringWithFormat:@"activity_%@.fit", activityId];
@@ -719,7 +722,10 @@
     
     GCField * hf = [GCHealthMeasure weight];
     
-    NSDictionary * rv = [organizer fieldsSeries:@[ @"WeightedMeanHeartRate", @"WeightedMeanPace", hf] matching:nil useFiltered:NO ignoreMode:gcIgnoreModeActivityFocus];
+    GCField * hrField = [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:GC_TYPE_ALL];
+    GCField * paceField = [GCField fieldForKey:@"WeightedMeanPace" andActivityType:GC_TYPE_ALL];
+    
+    NSDictionary * rv = [organizer fieldsSeries:@[ hrField, paceField, hf] matching:nil useFiltered:NO ignoreMode:gcIgnoreModeActivityFocus];
     
     RZRegressionManager * manager = [RZRegressionManager managerForTestClass:[self class]];
     manager.recordMode = [GCTestCase recordModeGlobal];
@@ -730,7 +736,7 @@
     
     NSDictionary * expected = [manager retrieveReferenceObject:rv forClasses:classes selector:_cmd identifier:@"timeSeries" error:&error];
     XCTAssertEqual(expected.count, rv.count);
-    for (id key in expected) {
+    for (GCField * key in expected) {
         GCStatsDataSerieWithUnit * exp_serie = expected[key];
         GCStatsDataSerieWithUnit * got_serie = rv[key];
         XCTAssertNotNil(got_serie, @"key %@", key);
@@ -755,29 +761,31 @@
     
     [GCGarminRequestModernSearch testForOrganizer:organizer withFilesInPath:[RZFileOrganizer bundleFilePath:nil forClass:[self class]]];
     
-    [organizer fieldsSeries:@[@"SumDistance"] matching:nil useFiltered:false ignoreMode:gcIgnoreModeActivityFocus];
+    GCField * distField = [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:GC_TYPE_ALL];
+    
+    [organizer fieldsSeries:@[distField] matching:nil useFiltered:false ignoreMode:gcIgnoreModeActivityFocus];
     
     GCActivity * first = [organizer activityForIndex:0];
     NSString * activityType = first.activityType;
     GCNumberWithUnit * dist = [first numberWithUnitForField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:activityType]];
     
-    GCHistoryFieldSummaryStats * start_stats = [GCHistoryFieldSummaryStats fieldStatsWithActivities:organizer.activities matching:nil referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
+    GCHistoryFieldSummaryStats * start_stats = [GCHistoryFieldSummaryStats fieldStatsWithActivities:organizer.activities activityTypeSelection:nil referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
     GCNumberWithUnit * start_nu = [[start_stats dataForField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:activityType]] weightedSumWithUnit:gcHistoryStatsAll];
     
     first.skipAlways = true;
     [first saveToDb:organizer.db];
     
-    GCHistoryFieldSummaryStats * skip_stats = [GCHistoryFieldSummaryStats fieldStatsWithActivities:organizer.activities matching:nil referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
+    GCHistoryFieldSummaryStats * skip_stats = [GCHistoryFieldSummaryStats fieldStatsWithActivities:organizer.activities activityTypeSelection:nil referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
     GCNumberWithUnit * skip_nu = [[skip_stats dataForField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:activityType]] weightedSumWithUnit:gcHistoryStatsAll];
 
     GCActivitiesOrganizer * reload = [[[GCActivitiesOrganizer alloc] initTestModeWithDb:organizer.db] autorelease];
 
-    GCHistoryFieldSummaryStats * reload_stats = [GCHistoryFieldSummaryStats fieldStatsWithActivities:reload.activities matching:nil referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
+    GCHistoryFieldSummaryStats * reload_stats = [GCHistoryFieldSummaryStats fieldStatsWithActivities:reload.activities activityTypeSelection:nil referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
     GCNumberWithUnit * reload_nu = [[reload_stats dataForField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:activityType]] weightedSumWithUnit:gcHistoryStatsAll];
 
     first.skipAlways = false;
     
-    GCHistoryFieldSummaryStats * unskip_stats = [GCHistoryFieldSummaryStats fieldStatsWithActivities:organizer.activities matching:nil referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
+    GCHistoryFieldSummaryStats * unskip_stats = [GCHistoryFieldSummaryStats fieldStatsWithActivities:organizer.activities activityTypeSelection:nil referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
     GCNumberWithUnit * unskip_nu = [[unskip_stats dataForField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:activityType]] weightedSumWithUnit:gcHistoryStatsAll];
 
     
@@ -990,6 +998,172 @@
     
 }
 
+-(void)testOrganizerBackgroundRegister{    
+    NSString * bundlePath = [RZFileOrganizer bundleFilePath:nil forClass:[self class]];
+
+    NSMutableDictionary * save_cs = [NSMutableDictionary dictionary];
+    NSMutableDictionary * save_fit = [NSMutableDictionary dictionary];
+    NSMutableDictionary * save_gar = [NSMutableDictionary dictionary];
+
+    GCNumberWithUnit * exampleFieldValue = nil;
+    GCField * exampleDetailField = [GCField fieldForKey:@"GainElevation" andActivityType:GC_TYPE_RUNNING];
+    NSString * exampleActivityId = @"__connectstats__5567";
+
+    FMDatabase * db = nil;
+
+    @autoreleasepool {
+        GCActivitiesOrganizer * organizer = [self createEmptyOrganizer:@"test_register_background.db"];
+        db = organizer.db;
+        
+        [GCConnectStatsRequestSearch testForOrganizer:organizer withFilesInPath:bundlePath];
+        
+        // First do the motion of the workflow of update:
+        //   1. connectstats search activity
+        //   2. update from fit file
+        //   3. update garmin connect summaries
+
+        for (GCActivity * one in organizer.activities) {
+            save_cs[one.activityId] = one.summaryData;
+        }
+        
+        XCTAssertNil([[organizer activityForId:exampleActivityId] numberWithUnitForField:exampleDetailField], @"From the initial download, detail field is missing" );
+
+        for (GCActivity * one in organizer.activities) {
+            one.settings.worker = nil;
+            NSDictionary * before = save_cs[one.activityId];
+            GCActivity * fit = [GCConnectStatsRequestFitFile testForActivity:one  withFilesIn:bundlePath];
+            if( fit ) {
+                XCTAssertGreaterThan(one.summaryData.count, before.count,@"%@ after fit load has more information", one);
+                save_fit[one.activityId] = one.summaryData;
+            }
+            NSMutableSet<GCField*>*updated = [NSMutableSet set];
+            
+            for (GCField *key in one.summaryData) {
+                if( before[key] == nil){
+                    [updated addObject:key];
+                }
+            }
+            if( updated.count > 0){
+                RZLog(RZLogInfo, @"%@: updated fit with %@ fields", one, @(updated.count));
+            }
+        }
+        exampleFieldValue = [[[organizer activityForId:exampleActivityId] numberWithUnitForField:exampleDetailField] retain];
+        XCTAssertNotNil(exampleFieldValue, @"After detail download, detail field is n ot missing" );
+        [GCGarminRequestModernSearch testForOrganizer:organizer withFilesInPath:bundlePath];
+        
+        for (NSString * activityId in save_fit) {
+            NSDictionary * before = save_fit[activityId];
+            GCActivity * after  = [organizer activityForId:activityId];
+            XCTAssertNotNil(after);
+            XCTAssertGreaterThan(after.summaryData.count,before.count,@"%@ after garmin has more information", after);
+            save_gar[activityId] = after.summaryData;
+            for (GCField *key in before) {
+                // we didn't loose anything
+                XCTAssertNotNil(after.summaryData[key], @"%@ has %@", activityId, key);
+            }
+
+            NSMutableSet<GCField*>*updated = [NSMutableSet set];
+            for (GCField *key in after.summaryData) {
+                if( before[key] == nil){
+                    [updated addObject:key];
+                }
+            }
+            if( updated.count > 0){
+                RZLog(RZLogInfo, @"%@: updated gar with %@ fields", activityId, @(updated.count));
+            }
+        }
+        
+        // Remove all details and close db for activities
+        [organizer purgeCache];
+    } // End autoreleast pool
+    
+    // Now do a workflow of background update:
+    //   1. load without details
+    //   2. update new only from connectstats + fit file
+    //   3. load details for the rest when UI starts
+
+    GCActivitiesOrganizer * organizer_light = RZReturnAutorelease([[GCActivitiesOrganizer alloc] initTestModeWithDb:db loadDetails:false]);
+    for (NSString * activityId in save_fit) {
+        GCActivity * after  = [organizer_light activityForId:activityId];
+        XCTAssertNotNil(after);
+        XCTAssertEqual(after.summaryData.count,0,@"%@ summary loaded no details", after);
+    }
+
+    [organizer_light ensureDetailsLoaded];
+    XCTAssertEqualObjects(exampleFieldValue, [[organizer_light activityForId:exampleActivityId] numberWithUnitForField:exampleDetailField], @"After detail download example field still correct");
+    
+    for (NSString * activityId in save_fit) {
+        NSDictionary * before = save_gar[activityId];
+        GCActivity * after  = [organizer_light activityForId:activityId];
+        XCTAssertEqual(after.summaryData.count,before.count, @"%@ after split reload has all information", after);
+        for (GCField *key in before) {
+            if( after.summaryData[key] == nil){
+                NSLog(@"missing %@ = %@", key, before[key]);
+            }
+        }
+    }
+
+    // now delete one fit activity, to make sure background reload will bring it back
+    NSString * deletedActivityId = save_fit.allKeys.firstObject;
+    [organizer_light deleteActivityId:deletedActivityId];
+    // reload it
+    organizer_light = RZReturnAutorelease([[GCActivitiesOrganizer alloc] initTestModeWithDb:db loadDetails:false]);
+    for (NSString * activityId in save_fit) {
+        if( [activityId isEqualToString:deletedActivityId]){
+            XCTAssertNil([organizer_light activityForId:activityId]);
+        }else{
+            GCActivity * after  = [organizer_light activityForId:activityId];
+            XCTAssertEqual(after.summaryData.count,0,@"%@ summary loaded no details", after);
+        }
+    }
+    // Do the background refresh, without details loaded, to simulate background refresh
+    [GCConnectStatsRequestBackgroundSearch testWithOrganizer:organizer_light path:bundlePath];
+    
+    // Right now activity was reconstructed from fit
+    GCActivity * current = [organizer_light activityForId:deletedActivityId];
+    NSDictionary * before = nil;
+    
+    XCTAssertNotNil(current);
+    before = save_fit[deletedActivityId];
+    XCTAssertEqual(current.summaryData.count,before.count, @"In memory reconstruction match original");
+    
+    // then load details, simulate when the UI starts, this will
+    // trigger an update from the database of what was saved from the background update, need
+    // to make sure still consistent
+    [organizer_light ensureDetailsLoaded];
+    for (NSString * activityId in save_fit) {
+        GCActivity * after  = [organizer_light activityForId:activityId];
+        XCTAssertNotNil(after);
+        
+        if( [activityId isEqualToString:deletedActivityId]){
+            before = save_fit[activityId];
+        }else{
+            before = save_gar[activityId];
+        }
+        XCTAssertEqual(after.summaryData.count,before.count, @"%@ after split reload has all information", after);
+    }
+
+    // Now reload fit for deleted activity in background
+    GCActivity * newAct = [organizer_light activityForId:deletedActivityId];
+    GCActivity * fit = [GCConnectStatsRequestBackgroundFitFile testForActivity:newAct  withFilesIn:bundlePath];
+    XCTAssertNotNil(fit);
+    
+    // do full reload of activity and make sure we get back same as we started
+    GCActivitiesOrganizer * organizer_final = RZReturnAutorelease([[GCActivitiesOrganizer alloc] initTestModeWithDb:db loadDetails:true]);
+    for (NSString * activityId in save_fit) {
+        NSDictionary * before = nil;
+        GCActivity * after  = [organizer_final activityForId:activityId];
+        if( [activityId isEqualToString:deletedActivityId]){
+            before = save_fit[activityId];
+        }else{
+            before = save_gar[activityId];
+        }
+        XCTAssertEqual(after.summaryData.count,before.count, @"%@ after full reload has all information", after);
+    }
+    
+    [exampleFieldValue release];
+}
+
 -(void)testOrganizerRegister{
     NSData * searchLegacyInfo = [NSData  dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"last_modern_search_0.json"
                                                                                        forClass:[self class]]];
@@ -1064,6 +1238,10 @@
 -(void)compareActivitySummaryIn:(GCActivity*)one and:(GCActivity*)two tolerance:(NSDictionary<NSString*,id>*)tolerances message:(NSString*)msg{
     NSDictionary<GCField*,GCActivitySummaryValue*> * oneDict = one.summaryData;
     NSDictionary<GCField*,GCActivitySummaryValue*> * twoDict = two.summaryData;
+    [self compareActivitySummaryDictIn:oneDict and:twoDict tolerance:tolerances message:msg];
+}
+
+-(void)compareActivitySummaryDictIn:(NSDictionary<GCField*,GCActivitySummaryValue*>*)oneDict and:(NSDictionary<GCField*,GCActivitySummaryValue*>*)twoDict tolerance:(NSDictionary<NSString*,id>*)tolerances message:(NSString*)msg{
     
     NSMutableDictionary * missingFromTwo = [NSMutableDictionary dictionary];
 

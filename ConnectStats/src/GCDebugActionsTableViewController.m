@@ -168,35 +168,29 @@
     [[GCAppGlobal derived] processSome];
 }
 
--(void)actionBuildActivityTypeSamples{
-    GCActivitiesOrganizer * organizer = [GCAppGlobal organizer];
-    
-    NSMutableDictionary * found = [NSMutableDictionary dictionary];
-    
-    NSString * name = @"activities_types_samples.db";
-    [RZFileOrganizer removeEditableFile:name];
-    FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:name]];
-    [db open];
-    [GCActivitiesOrganizer ensureDbStructure:db];
-    GCActivitiesOrganizer * newOrganizer = [[GCActivitiesOrganizer alloc] initTestModeWithDb:db];
-    for (GCActivity * act in organizer.activities) {
-        if( found[act.activityTypeDetail] == nil ){
-            found[act.activityTypeDetail] = @1;
-            [newOrganizer registerActivity:act forActivityId:act.activityId];
-            RZLog(RZLogInfo, @"add %@", act);
+-(void)actionCleanPowerSpecialPapain{
+    NSArray<NSString*>*power = [RZFileOrganizer writeableFilesMatching:^(NSString * fn){
+        if( [fn hasSuffix:@".data"]){
+            if( [fn rangeOfString:@"running-power"].location != NSNotFound){
+                return (BOOL)true;
+            }
+            if( [fn rangeOfString:@"cycling-power"].location != NSNotFound){
+                return (BOOL)true;
+            }
         }
+        return (BOOL)false;
+    }];
+    for (NSString * bad in power) {
+        [RZFileOrganizer removeEditableFile:bad];
     }
-    NSLog(@"total: %@", @(newOrganizer.countOfActivities));
-    [newOrganizer release];
-}
-
-
-
--(void)actionTestNetwork{
-    BOOL wifi = [RZSystemInfo wifiAvailable];
-    BOOL network = [RZSystemInfo networkAvailable];
-
-    RZLog(RZLogInfo,@"Network: %@ Wifi: %@", network ? @"Yes" : @"No", wifi?@"Yes": @"No");
+    
+    FMDatabase * db =[GCAppGlobal derived].deriveddb;
+    BOOL success = [db executeUpdate:@"DELETE FROM gc_derived_series WHERE fieldFlag = 64"];
+    if( ! success){
+        NSLog(@"error %@", db.lastErrorMessage);
+    }
+    NSUInteger c = [[GCAppGlobal derived] cleanAllEmpty];
+    NSLog(@"Cleaned %@", @(c));
 }
 
 -(void)actionSaveCurrentActivity{

@@ -46,6 +46,7 @@
     self = [self initWithId:aId];
     if (self) {
         self.activityId = aId;
+        self.serviceStatus = 1;
         [self parseConnectStatsJson:aData];
         self.settings = [GCActivitySettings defaultsFor:self];
     }
@@ -56,6 +57,7 @@
     self = [self initWithId:aId];
     if (self) {
         [self parseModernGarminJson:aData];
+        self.serviceStatus = 1 << 4;
         self.settings = [GCActivitySettings defaultsFor:self];
     }
     return self;
@@ -66,6 +68,7 @@
     self = [self initWithId:aId];
     if (self) {
         self.activityId = aId;
+        self.serviceStatus = 1 << 8;
         [self parseStravaJson:aData];
         self.settings = [GCActivitySettings defaultsFor:self];
     }
@@ -111,7 +114,6 @@
             }
             if( cache[field] == nil){
                 cache[field] = @1;
-                RZLog(RZLogInfo, @"Skipping 0 for %@ %@", field, new.numberWithUnit);
             }
 #endif
         }
@@ -1039,9 +1041,7 @@
                         if (!newMetaData) {
                             newMetaData = [NSMutableDictionary dictionaryWithDictionary:self.metaData];
                         }
-                        if( verbose ){
-                            RZLog(RZLogInfo, @"%@ changed %@ %@ -> %@", self, field, thisVal.display, otherVal.display);
-                        }
+                        [self.settings.updateRecord recordFor:self changedMeta:thisVal to:otherVal];
                         [newMetaData setValue:otherVal forKey:field];
                         FMDatabase * db = self.db;
                         if( db ){
@@ -1061,9 +1061,8 @@
                         if( !newMetaData){
                             newMetaData = [NSMutableDictionary dictionaryWithDictionary:self.metaData];
                         }
-                        if( verbose ){
-                            RZLog(RZLogInfo, @"%@ new data %@ -> %@", self, field, otherVal.display);
-                        }
+                        [self.settings.updateRecord recordFor:self newMeta:otherVal];
+
                         [newMetaData setValue:otherVal forKey:field];
                         FMDatabase * db = self.db;
                         if( db ){
@@ -1086,18 +1085,17 @@
             for (GCField * field in self.summaryData) {
                 GCActivitySummaryValue * thisVal = self.summaryData[field];
                 GCActivitySummaryValue * otherVal = other.summaryData[field];
+
                 // Only change if formatted value changes, to avoid issue with just low precision diffs
                 if (otherVal && (! [otherVal isEqualToValue:thisVal]) && (![otherVal.formattedValue isEqualToString:thisVal.formattedValue])) {
-                    if( thisVal.value != 0.0 && otherVal.value == 0.0){
+                    if( !field.isZeroValid && otherVal.value == 0.0){
                         // Don't put back to 0.0 value that were picked up
                         continue;
                     }
                     if (!newSummaryData) {
                         newSummaryData = [NSMutableDictionary dictionaryWithDictionary:self.summaryData];
                     }
-                    if( verbose ){
-                        RZLog(RZLogInfo, @"%@ Changed  %@ = %@ (prev %@)", self, field,  otherVal.numberWithUnit, thisVal.numberWithUnit);
-                    }
+                    [self.settings.updateRecord recordFor:self changedValue:thisVal to:otherVal];
                     newSummaryData[field] = otherVal;
                     
                     FMDatabase * db = self.db;
@@ -1113,23 +1111,12 @@
         for (GCField * field in other.summaryData) {
             GCActivitySummaryValue * thisVal = self.summaryData[field];
             GCActivitySummaryValue * otherVal = other.summaryData[field];
-            // Update if missing or if new value is 0.0
+            // Update if missing or if old value is 0.0
             if ((thisVal==nil && otherVal.value != 0.0 ) || ( thisVal.value == 0.0 && otherVal.value != 0.0) ) {
                 if (!newSummaryData) {
                     newSummaryData = [NSMutableDictionary dictionaryWithDictionary:self.summaryData];
                 }
-                
-                if( verbose ){
-                    if( thisVal.value == 0.0 && otherVal.value != 0.0){
-                        static NSUInteger _prevZero = 0;
-                        if( _prevZero < 5 || _prevZero % 25 == 0){
-                            RZLog(RZLogInfo, @"[#%@] %@ New Data %@ = %@ (prev 0)", @(_prevZero), self, field, otherVal.numberWithUnit);
-                        }
-                        _prevZero++;
-                    }else{
-                        RZLog(RZLogInfo, @"%@ New Data %@ = %@", self, field, otherVal.numberWithUnit);
-                    }
-                }
+                [self.settings.updateRecord recordFor:self newValue:otherVal];
                 newSummaryData[field] = otherVal;
                 
                 FMDatabase * db = self.db;
@@ -1190,12 +1177,14 @@
     // Special Case were some field should always be imported (like name event etc)
     BOOL connectstatsFromGarmin = self.service.service == gcServiceConnectStats && other.service.service == gcServiceGarmin;
     
+    if( [self markCompleted:gcServicePhaseSummary for:other.service.service] ){
+        RZLog(RZLogInfo, @"%@: Already completed %@/summary", self, other.service);
+    }
+
     if( ! newOnly){
         GCActivityType * aType = other.activityTypeDetail;
         if (![aType isEqualToActivityType:self.activityTypeDetail]) {
-            if( verbose ){
-                RZLog(RZLogInfo, @"change activity type %@ -> %@", self.activityTypeDetail,aType);
-            }
+            [self.settings.updateRecord recordFor:self changedAttribute:@"activityType" from:self.activityTypeDetail.description to:aType.description];
             rv = true;
             [self changeActivityType:aType];
             FMDatabase * db = self.db;
@@ -1208,9 +1197,7 @@
     NSString * aName = other.activityName;
     if( ! newOnly || connectstatsFromGarmin){
         if (aName.length > 0 && ![aName isEqualToString:self.activityName]) {
-            if( verbose ){
-                RZLog(RZLogInfo, @"change activity name %@ -> %@", self.activityName, aName);
-            }
+            [self.settings.updateRecord recordFor:self changedAttribute:@"activityName" from:self.activityName to:aName];
             rv = true;
             self.activityName = aName;
             FMDatabase * db = self.db;
@@ -1219,6 +1206,7 @@
             [db commit];
         }
     }
+    
     if( [self updateSummaryDataFromActivity:other newOnly:newOnly verbose:verbose] ){
         rv = true;
     }
@@ -1350,6 +1338,9 @@
     
     for (GCField *field in results) {
         GCNumberWithUnit * num = results[field];
+        if( num.value == 0.0 && !field.isZeroValid){
+            continue;
+        }
         GCActivitySummaryValue * val = [self buildSummaryValue:field.key uom:num.unit.key fieldFlag:field.fieldFlag andValue:num.value];
         newSum[field] = val;
     }

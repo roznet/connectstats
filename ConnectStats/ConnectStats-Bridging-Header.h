@@ -48,7 +48,10 @@
 #import "GCGarminActivityTrack13Request.h"
 #import "GCGarminRequestModernSearch.h"
 
-#import "GCHistoryFieldDataHolder.h"
+#import "GCHistoryFieldSummaryDataHolder.h"
 #import "GCHistoryFieldSummaryStats.h"
 
 #import "GCGarminLoginSSORequest.h"
+#import "GCConnectStatsRequest.h"
+#import "GCConnectStatsSearchJsonParser.h"
+#import "GCConnectStatsRequestFitFile.h"

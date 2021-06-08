@@ -96,6 +96,8 @@ static BOOL kDerivedEnabled = true;
 @property (nonatomic,retain) NSMutableDictionary<NSDictionary*,GCStatsDataSerie*> * historicalSeriesByKeys;
 
 @property (nonatomic, retain) NSString * useDerivedFilePrefix;
+@property (nonatomic, assign) BOOL loadDetailsNeeded;
+@property (nonatomic, assign) BOOL loadDetailsCompleted;
 @end
 
 @implementation GCDerivedOrganizer
@@ -118,17 +120,6 @@ static BOOL kDerivedEnabled = true;
         [self.web attach:self];
         self.useDerivedFilePrefix = filePrefix;
         
-        if (thread==nil) {
-            if( aDb ){
-                [self loadFromDb];
-            }else{
-                self.derivedSeries= [NSMutableDictionary dictionary];
-            }
-        }else{
-            dispatch_async(self.worker,^(){
-                [self loadFromDb];
-            });
-        }
     }
     return self;
 }
@@ -136,8 +127,10 @@ static BOOL kDerivedEnabled = true;
 -(GCDerivedOrganizer*)initWithDb:(FMDatabase*)aDb andThread:(dispatch_queue_t)thread{
     return [self initWithDb:aDb thread:thread andFilePrefix:nil];
 }
--(GCDerivedOrganizer*)initForTestModeWithDb:(FMDatabase*)aDb thread:(dispatch_queue_t)thread andFilePrefix:(NSString*)filePrefix{
-    return [self initWithDb:aDb thread:thread andFilePrefix:filePrefix];
+-(GCDerivedOrganizer*)initTestModeWithDb:(FMDatabase*)aDb thread:(dispatch_queue_t)thread andFilePrefix:(NSString*)filePrefix{
+    GCDerivedOrganizer * rv = [self initWithDb:aDb thread:thread andFilePrefix:filePrefix];
+    [rv ensureDetailsLoaded];
+    return rv;
 }
 
 -(void)dealloc{
@@ -155,6 +148,29 @@ static BOOL kDerivedEnabled = true;
     [super dealloc];
 }
 
+-(BOOL)ensureDetailsLoaded{
+    @synchronized (self) {
+        self.loadDetailsNeeded = true;
+        if( self.loadDetailsCompleted ){
+            return true;
+        }
+    }
+    if (self.worker==nil) {
+        if( self.db ){
+            [self loadFromDb];
+        }else{
+            self.derivedSeries= [NSMutableDictionary dictionary];
+        }
+        return true;
+    }else{
+        dispatch_async(self.worker,^(){
+            [self loadFromDb];
+        });
+        return false;
+    }
+}
+
+
 #pragma mark - Load Derived Series
 
 -(NSString*)derivedFilePrefix{
@@ -165,6 +181,7 @@ static BOOL kDerivedEnabled = true;
     self.derivedSeries = [NSMutableDictionary dictionaryWithCapacity:10];
 
     if ( kDerivedEnabled) {
+        RZPerformance * perf = [RZPerformance start];
         FMDatabase * db = [self deriveddb];
         if( db ){
             FMResultSet * res= [db executeQuery:@"SELECT * FROM gc_derived_series"];
@@ -191,20 +208,21 @@ static BOOL kDerivedEnabled = true;
             }
             
             if( self.seriesByKeys.count > 0){
-                RZLog(RZLogInfo, @"Loaded %d derived series and %@ series by key", (int)self.derivedSeries.count, @(self.seriesByKeys.count));
+                RZLog(RZLogInfo, @"Loaded %d derived series and %@ series by key %@", (int)self.derivedSeries.count, @(self.seriesByKeys.count), perf);
             }else{
                 RZLog(RZLogInfo, @"Loaded %d derived series", (int)self.derivedSeries.count);
             }
         }
     }
+    self.loadDetailsCompleted = true;
 }
 
 -(void)loadHistoricalFileSeries{
     BOOL convert = ! [[self deriveddb] tableExists:@"gc_converted_historical_second"];
     
     GCStatsDatabase * statsDb = [GCStatsDatabase database:[self deriveddb] table:@"gc_converted_historical_second"];
-    RZPerformance * perf = [RZPerformance start];
     if( convert ){
+        RZPerformance * perf = [RZPerformance start];
         for (NSString * key in self.derivedSeries) {
             GCDerivedDataSerie * serie = self.derivedSeries[key];
             if( serie.derivedPeriod == gcDerivedPeriodMonth){
@@ -224,10 +242,8 @@ static BOOL kDerivedEnabled = true;
             }
         }
         RZLog(RZLogInfo, @"Converted all in %@", perf);
-        [perf reset];
     }
     self.historicalSeriesByKeys = [NSMutableDictionary dictionaryWithDictionary:[statsDb loadByKeys]];
-    RZLog(RZLogInfo, @"Loaded all db in %@", perf);
 }
 
 -(BOOL)debugCheckSerie:(GCStatsDataSerie*)serie{
@@ -988,6 +1004,25 @@ static BOOL kDerivedEnabled = true;
     }else{
         [self loadFromDb];
     }
+}
+
+-(NSUInteger)cleanAllEmpty{
+    RZPerformance * perf = [RZPerformance start];
+    NSUInteger count = 0;
+    
+    for (NSString * key in self.derivedSeries) {
+        if( [self.derivedSeries[key] removeFromDbIfEmpty:self.db] ){
+            count += 1;
+            if( count < 5){
+                RZLog(RZLogInfo, @"removing empty %@", self.derivedSeries[key]);
+            }
+        }
+    }
+    RZLog(RZLogInfo, @"Removed %@ empty series %@", @(count), perf);
+    // Reload
+    [self loadFromDb];
+    
+    return count;
 }
 
 @end

@@ -287,7 +287,7 @@ static NSString * kTypeDisplay = @"kTypeDisplay";
     return self.typesByKey.count;
 }
 
--(NSArray<GCActivityType*>*)allParentTypes{
+-(NSArray<GCActivityType*>*)allPrimaryTypes{
     NSMutableDictionary * rv = [NSMutableDictionary dictionaryWithCapacity:self.typesByKey.count];
     for (NSString * key in self.typesByKey) {
         GCActivityType * type = self.typesByKey[key];
@@ -298,7 +298,7 @@ static NSString * kTypeDisplay = @"kTypeDisplay";
     return rv.allKeys;
 }
 
--(NSArray<GCActivityType*>*)allTypesForParent:(GCActivityType*)parentType{
+-(NSArray<GCActivityType*>*)allTypesWithSamePrimaryTypeAs:(GCActivityType*)parentType{
     NSMutableArray * rv = [NSMutableArray arrayWithCapacity:self.typesByKey.count];
     for (NSString * key in self.typesByKey) {
         GCActivityType * type = self.typesByKey[key];

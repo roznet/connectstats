@@ -28,14 +28,16 @@
 #import "GCViewConfig.h"
 #import "GCAppGlobal.h"
 #import "GCViewIcons.h"
-
+#import "GCActivityType.h"
+#import "GCActivityType+Icon.h"
+#import "ConnectStats-Swift.h"
 
 @interface GCViewActivityTypeButton ()
-@property (nonatomic,retain) NSArray * activityTypeList;
+@property (nonatomic,readonly) NSArray<GCActivityType*> * activityTypeList;
 @property (nonatomic,retain) UILabel * labelView;
 @property (nonatomic,retain) UIImageView * imageView;
 @property (nonatomic,retain) UIViewController * presentingViewController;
-@property (nonatomic,retain) UITableViewController * popoverViewController;
+@property (nonatomic,retain) GCActivityTypeSelectionViewController * popoverViewController;
 @end
 
 @implementation GCViewActivityTypeButton
@@ -55,45 +57,63 @@
     [_presentingViewController release];
     [_imageView release];
     [_labelView release];
-    
-    [_activityTypeList release];
+
     [_delegate release];
     [_activityTypeButtonItem release];
 
     [super dealloc];
 }
 
--(NSArray<NSString*>*)listActivityTypes{
-    NSArray * types = nil;
+-(BOOL)matchPrimaryType{
+    return self.delegate.activityTypeSelection.matchPrimaryType;
+}
+
+-(void)setMatchPrimaryType:(BOOL)matchPrimaryType{
+    [self.delegate.activityTypeSelection setMatchPrimaryType:matchPrimaryType];
+}
+
+-(NSArray<GCActivityType*>*)activityTypeList{
+    NSArray<GCActivityType*> * types = nil;
     if ([self.delegate respondsToSelector:@selector(listActivityTypes)]) {
         types = [self.delegate listActivityTypes];
     }else{
         types = [[GCAppGlobal organizer] listActivityTypes];
     }
+    if( self.matchPrimaryType ){
+        NSMutableArray<GCActivityType*>*primaryTypes = [NSMutableArray array];
+        for (GCActivityType * one in types) {
+            GCActivityType * primary = one.primaryActivityType;
+            if( ! [primaryTypes containsObject:primary]){
+                [primaryTypes addObject:primary];
+            }
+        }
+        types = primaryTypes;
+    }
+    
     return types;
 }
 
--(NSString*)buttonTitleFor:(NSString*)activityType{
+-(NSString*)buttonTitleFor:(GCActivityType*)activityType{
     NSString * rv = nil;
     BOOL filter = [self.delegate useFilter];
     
-    if ([activityType isEqualToString:GC_TYPE_ALL]) {
+    if ([activityType.key isEqualToString:GC_TYPE_ALL]) {
         if (filter) {
             rv = NSLocalizedString( @"Search", @"Activity Type Button");
         }else{
             rv = NSLocalizedString(@"All", @"Activity Type Button");
         }
     }else{
-        rv = [GCActivityType activityTypeForKey:activityType].displayName;
+        rv = activityType.displayName;
     }
     return rv;
 }
 
--(UIImage*)imageFor:(NSString*)activityType{
-    UIImage * img = [GCViewIcons activityTypeBWIconFor:activityType];
+-(UIImage*)imageFor:(GCActivityType*)activityType{
+    UIImage * img = activityType.icon;
     if (img == nil) {
         if ([self.delegate respondsToSelector:@selector(useColoredIcons)] && [self.delegate useColoredIcons]) {
-            img = [GCViewIcons activityTypeColoredIconFor:activityType];
+            img = activityType.coloredIcon;
         }
     }
     return img;
@@ -101,10 +121,9 @@
 
 -(void)longPress:(UIGestureRecognizer*)gesture{
     if( self.presentingViewController && gesture.state == UIGestureRecognizerStateBegan){
-        UITableViewController * controller = RZReturnAutorelease([[UITableViewController alloc] initWithStyle:UITableViewStyleGrouped]);
+        GCActivityTypeSelectionViewController * controller = RZReturnAutorelease([[GCActivityTypeSelectionViewController alloc] initWithNibName:@"GCActivityTypeSelectionViewController" bundle:nil]);
         controller.modalPresentationStyle = UIModalPresentationPopover;
-        controller.tableView.dataSource = self;
-        controller.tableView.delegate = self;
+        controller.activityTypeButton = self;
         self.popoverViewController = controller;
         RZAutorelease([[UIPopoverPresentationController alloc] initWithPresentedViewController:controller
                                                                       presentingViewController:self.presentingViewController]);
@@ -115,15 +134,9 @@
 }
 
 -(void)shortPress:(UIGestureRecognizer*)gesture{
-    NSArray * types = nil;
-    if ([self.delegate respondsToSelector:@selector(listActivityTypes)]) {
-        types = [self.delegate listActivityTypes];
-    }else{
-        types = [[GCAppGlobal organizer] listActivityTypes];
-    }
+    NSArray<GCActivityType*> * types = self.activityTypeList;
 
-    NSString * atype = nil;
-    NSString * activityType = [self.delegate activityType];
+    GCActivityTypeSelection * selection = self.delegate.activityTypeSelection;
 
     // useFilter will be toggled when activityType = true and filter is on
     // This allows to have a Search type in the case a filter is on.
@@ -132,12 +145,11 @@
     BOOL currentFilter = [self.delegate useFilter];
     BOOL ignoreFilter = [self.delegate respondsToSelector:@selector(ignoreFilter)] && [self.delegate ignoreFilter];
 
-    NSUInteger idx = [types indexOfObject:activityType];
+    NSUInteger idx = [types indexOfObject:selection.activityTypeDetail];
     if (idx==NSNotFound) {
-        idx = [types indexOfObject:GC_TYPE_ALL];
+        idx = [types indexOfObject:GCActivityType.all];
     }
-    if(!ignoreFilter && ([activityType isEqualToString:GC_TYPE_ALL] && currentFilter == false && [[GCAppGlobal organizer] hasFilter])){
-        atype = GC_TYPE_ALL;
+    if(!ignoreFilter && ([selection.activityTypeDetail isEqualToActivityType:GCActivityType.all] && currentFilter == false && [[GCAppGlobal organizer] hasFilter])){
         currentFilter = true;
     }else{
         if (idx < types.count-1) {
@@ -145,10 +157,12 @@
         }else{
             idx=0;
         }
-        atype = types[idx];
+        selection = RZReturnAutorelease([[GCActivityTypeSelection alloc] initWithSelection:selection]);
+        selection.activityTypeDetail = types[idx];
         currentFilter = false;
     }
-    [self.delegate setupForCurrentActivityType:atype andFilter:currentFilter];
+    
+    [self.delegate setupForCurrentActivityTypeSelection:selection andFilter:currentFilter];
 }
 
 -(BOOL)setupBarButtonItem:(nullable UIViewController*)presentingViewController{
@@ -156,7 +170,7 @@
     
     self.presentingViewController = presentingViewController;
     
-    NSString * activityType = [self.delegate activityType];
+    GCActivityType * activityType = self.delegate.activityTypeSelection.activityTypeDetail;
     if( activityType ){
         
         NSString * buttonTitle = [self buttonTitleFor:activityType];
@@ -208,14 +222,14 @@
     GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
     [cell setupForRows:1 andCols:1];
     
-    NSArray * types = self.listActivityTypes;
+    NSArray<GCActivityType*> * types = self.activityTypeList;
 
     if( indexPath.row < types.count ){
-        NSString * activityType = types[indexPath.row];
-        UIImage * img = [GCViewIcons activityTypeBWIconFor:activityType];
+        GCActivityType * activityType = types[indexPath.row];
+        UIImage * img = activityType.icon;
         if (img == nil) {
             if ([self.delegate respondsToSelector:@selector(useColoredIcons)] && [self.delegate useColoredIcons]) {
-                img = [GCViewIcons activityTypeColoredIconFor:activityType];
+                img = activityType.coloredIcon;
             }
         }
         if( img ){
@@ -225,7 +239,7 @@
             [cell setIconImage:nil];
         }
         
-        [cell labelForRow:0 andCol:0].text = [GCActivityType activityTypeForKey:activityType].displayName;
+        [cell labelForRow:0 andCol:0].text = activityType.displayName;
     }else{
         [cell labelForRow:0 andCol:0].text = NSLocalizedString(@"Index Error",@"Activity Type Button");
     }
@@ -235,7 +249,7 @@
 
 - (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 
-    return self.listActivityTypes.count;
+    return self.activityTypeList.count;
 }
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -243,10 +257,14 @@
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSArray<NSString*>*types = self.listActivityTypes;
-    NSString * type = indexPath.row < types.count ? types[indexPath.row] : types.firstObject;
+    NSArray<GCActivityType*>*types = self.activityTypeList;
+    GCActivityType * type = indexPath.row < types.count ? types[indexPath.row] : types.firstObject;
     
-    [self.delegate setupForCurrentActivityType:type andFilter:false];
+    GCActivityTypeSelection * selection = RZReturnAutorelease([[GCActivityTypeSelection alloc] initWithActivityTypeDetail:type matchPrimaryType:self.matchPrimaryType]);
+    
+    [self.delegate setupForCurrentActivityTypeSelection:selection andFilter:false];
+
+
     [self.popoverViewController dismissViewControllerAnimated:TRUE completion:nil];
 }
 

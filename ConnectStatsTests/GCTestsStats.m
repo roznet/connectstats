@@ -1,8 +1,8 @@
-//  MIT Licence
+//  MIT License
 //
-//  Created on 27/01/2013.
+//  Created on 26/04/2021 for ConnectStatsXCTests
 //
-//  Copyright (c) 2013 Brice Rosenzweig.
+//  Copyright (c) 2021 Brice Rosenzweig
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -10,10 +10,10 @@
 //  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 //  copies of the Software, and to permit persons to whom the Software is
 //  furnished to do so, subject to the following conditions:
-//  
+//
 //  The above copyright notice and this permission notice shall be included in all
 //  copies or substantial portions of the Software.
-//  
+//
 //  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 //  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 //  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,55 +21,46 @@
 //  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
-//  
+//
 
-#import "GCTestStats.h"
+
+
+#import "GCTestCase.h"
+#import "GCActivity.h"
+#import "GCActivitiesOrganizer.h"
 #import "GCAppGlobal.h"
-#import "GCHistoryAggregatedActivityStats.h"
+#import "GCHistoryAggregatedStats.h"
 #import "GCHistoryFieldSummaryStats.h"
 #import "GCViewConfig.h"
 #import "GCActivity+TestBackwardCompat.h"
 #import "GCStatsCalendarAggregationConfig.h"
-#import "GCHistoryFieldDataHolder.h"
-#import "GCTestAppGlobal.h"
+#import "GCHistoryFieldSummaryDataHolder.h"
+#import "ConnectStats-Swift.h"
 
-@import RZExternal;
 @import CHCSVParser;
 
-@implementation GCTestStats
+@interface GCTestsStats : GCTestCase
 
--(NSArray*)testDefinitions{
-    return @[ @{TK_SEL:NSStringFromSelector(@selector(testStats)),
-                TK_DESC:@"Test Aggregation versus garmin samples",
-                TK_SESS:@"GC Stats"},
-              @{TK_SEL:NSStringFromSelector(@selector(testHistStats)),
-                TK_DESC:@"Test Aggregation versus database method",
-                TK_SESS:@"GC Hist Stats"}
-              ];
+@end
+
+@implementation GCTestsStats
+
+- (void)setUp
+{
+    [super setUp];
 }
 
--(void)testStats{
-	[self startSession:@"GC Stats"];
+- (void)tearDown
+{
 
+    [super tearDown];
+}
+
+-(void)testSelfConsistency{
     [[GCAppGlobal profile] configSet:CONFIG_DUPLICATE_CHECK_ON_LOAD boolVal:false];
-
-    // Needs to turn off duplicate check as it compares to stored values from garmin
-    // or from db queries, which didn't handle the duplicates...
-    [GCTestAppGlobal setupSampleState:@"activities_stats.db" config:@{CONFIG_DUPLICATE_CHECK_ON_LOAD:@(false)}];
-
-    [self checkSelfConsistency];
-
-    [[GCAppGlobal profile] configSet:CONFIG_DUPLICATE_CHECK_ON_LOAD boolVal:true];
-	[self endSession:@"GC Stats"];
-}
-
--(void)testHistStats{
-    [self startSession:@"GC Hist Stats"];
-    [self testsHistoryStats];
-    [self endSession:@"GC Hist Stats"];
-}
-
--(void)checkSelfConsistency{
+    
+    GCActivitiesOrganizer * organizer = [self setupSampleState:@"test_activities_stats.db"];
+    
     NSArray * atype= @[ GC_TYPE_RUNNING, GC_TYPE_SWIMMING,GC_TYPE_CYCLING,GC_TYPE_ALL ];
     NSArray * ctype=  @[ @(NSCalendarUnitWeekOfYear), @(NSCalendarUnitMonth), @(NSCalendarUnitYear) ];
 
@@ -79,8 +70,7 @@
         for (NSNumber * vc in ctype) {
             NSCalendarUnit calendarUnit = [vc intValue];
             GCStatsCalendarAggregationConfig * calendarConfig = [GCStatsCalendarAggregationConfig globalConfigFor:calendarUnit];
-            GCActivitiesOrganizer * organizer = [GCAppGlobal organizer];
-            GCHistoryAggregatedActivityStats * vals = [GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityType:activityType];
+            GCHistoryAggregatedStats * vals = [GCHistoryAggregatedStats aggregatedStatsForActivityType:activityType];
             [vals setActivitiesFromOrganizer:organizer];
             
             [vals aggregate:calendarUnit referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
@@ -91,7 +81,7 @@
                 NSArray * actIdx = [organizer activityIndexesMatchingString:filter];
                 GCNumberWithUnit * sum = nil;
                 double cnt = 0.;
-                RZ_ASSERT([actIdx count]>0, @"some activities");
+                XCTAssertGreaterThan(actIdx.count, 0, @"We got some activities");
                 if( actIdx.count > 0){
                     for (NSUInteger i = 0; i < [actIdx count]; i++) {
                         GCActivity * act = [organizer activityForIndex:[[actIdx objectAtIndex:i] integerValue]];
@@ -109,16 +99,16 @@
                     
                     if ( sum != nil && ( fabs(cnt-aggCnt) > 1e-7 || ![aggSum isEqualToNumberWithUnit:sum]) ) {
                         actIdx = [organizer activityIndexesMatchingString:filter];
-                        NSLog( @"%@", data);
-                        NSLog(@"type=%@ config=%@ filter=%@",activityType,calendarConfig,filter);
+                        //NSLog( @"%@", data);
+                        //NSLog(@"type=%@ config=%@ filter=%@",activityType,calendarConfig,filter);
                         for (NSUInteger i = 0; i < [actIdx count]; i++) {
                             GCActivity * act = [organizer activityForIndex:[[actIdx objectAtIndex:i] integerValue]];
                             NSLog(@"%@ %@ %f",act,[[act date] dateShortFormat],act.sumDistanceCompat);
                         }
                     }
-                    RZ_ASSERT(fabs(cnt-aggCnt)<1e-6, @"%f match cnt %f", aggCnt,cnt);
+                    XCTAssertEqualWithAccuracy(cnt, aggCnt, 1e-6,@"%f match cnt %f", aggCnt,cnt);
                     if( sum != nil){
-                        RZ_ASSERT([aggSum isEqualToNumberWithUnit:sum], @"%@ match sum %f", aggSum,sum);
+                        XCTAssertEqualObjects(aggSum, sum,@"%@ match sum %@", aggSum,sum);
                     }
                 }
             }
@@ -135,12 +125,12 @@
         query = @"select distinct field,uom,count(value) as count,sum(value) as sum from gc_activities_values v, gc_activities a where a.activityId=v.activityId group by field,uom";
     }
     FMResultSet * res = [aDb executeQuery:query, activityType];
-    NSMutableDictionary<GCField*,GCHistoryFieldDataHolder*> * fieldData = [NSMutableDictionary dictionary];
+    NSMutableDictionary<GCField*,GCHistoryFieldSummaryDataHolder*> * fieldData = [NSMutableDictionary dictionary];
     while ([res next]) {
         GCField * field = [GCField fieldForKey:[res stringForColumn:@"field"] andActivityType:activityType];
-        GCHistoryFieldDataHolder * pre = [fieldData objectForKey:field];
+        GCHistoryFieldSummaryDataHolder * pre = [fieldData objectForKey:field];
         if (!pre) {
-            GCHistoryFieldDataHolder * v =[[GCHistoryFieldDataHolder alloc] init];
+            GCHistoryFieldSummaryDataHolder * v =[[GCHistoryFieldSummaryDataHolder alloc] init];
             [v setField:field];
             fieldData[field] = v;
             pre = v;
@@ -153,12 +143,10 @@
     return rv;
 }
 
-
-
--(void)checkGarminConsistency:(GCHistoryAggregatedActivityStats*)vals activityType:(NSString*)activityType calendarConfig:(GCStatsCalendarAggregationConfig*)calendarConfig{
+-(void)checkGarminConsistency:(GCHistoryAggregatedStats*)vals activityType:(NSString*)activityType calendarConfig:(GCStatsCalendarAggregationConfig*)calendarConfig{
     if ([activityType isEqualToString:GC_TYPE_CYCLING] || [activityType isEqualToString:GC_TYPE_RUNNING]) {
         NSString * file = [NSString stringWithFormat:@"stats_%@_%@.csv",activityType,[calendarConfig.calendarUnitDescription lowercaseString]];
-        NSArray * gc=[NSArray arrayWithContentsOfCSVURL:[NSURL fileURLWithPath:[RZFileOrganizer bundleFilePath:file]] options:CHCSVParserOptionsTrimsWhitespace];
+        NSArray * gc=[NSArray arrayWithContentsOfCSVURL:[NSURL fileURLWithPath:[RZFileOrganizer bundleFilePath:file forClass:[self class]]] options:CHCSVParserOptionsTrimsWhitespace];
         NSDateFormatter * formatter = [[[NSDateFormatter alloc] init] autorelease];
         if (calendarConfig.calendarUnit == NSCalendarUnitMonth) {
             [formatter setDateFormat:@"MMM yyyy"];
@@ -186,25 +174,11 @@
 
                 NSString * hdr = [NSString stringWithFormat:@"%@ %@ %@", activityType, calendarConfig, dateStr];
 
-                NSString * msg = [NSString stringWithFormat:@"%@: %@ == %@", hdr, dateStr, [formatter stringFromDate:[data date]]];
-                BOOL res = [[formatter stringFromDate:[data date]] isEqualToString:dateStr];
-                RZ_ASSERT(res, msg);
+                NSString * res = [formatter stringFromDate:[data date]];
+                XCTAssertEqualObjects(res, dateStr, @"%@: %@ == %@", hdr, dateStr, res);
 
-                msg = [NSString stringWithFormat:@"%@: cnt %.0f == %.0f", hdr, gc_count,cs_count];
-                res = fabs(gc_count-cs_count) < 0.1;
-                RZ_ASSERT(res, msg);
-                [self assessTestResult:msg result:res];
-
-                msg = [NSString stringWithFormat:@"%@: dist %.2f == %.2f", hdr, gc_dist,cs_dist];
-                res = fabs(gc_dist-cs_dist) < 0.01;
-                RZ_ASSERT(res, msg);
-                /*
-                if (false) {
-                    msg = [NSString stringWithFormat:@"%@: hr %.0f == %.0f", hdr, gc_hr,cs_hr];
-                    res = fabs(gc_hr-cs_hr) < 1.5;
-                    [self assessTestResult:msg result:res];
-                }
-                 */
+                XCTAssertEqualWithAccuracy(gc_count, cs_count, 0.1, @"%@: cnt %.0f == %.0f", hdr, gc_count,cs_count);
+                XCTAssertEqualWithAccuracy(gc_dist, cs_dist, 0.01,@"%@: dist %.2f == %.2f", hdr, gc_dist,cs_dist );
 
             }
 
@@ -213,50 +187,45 @@
 }
 
 -(void)testsHistoryStats{
-    [GCTestAppGlobal setupSampleState:@"activities_large.db"];
+    GCActivitiesOrganizer * organizer = [self setupSampleState:@"test_activities_large.db"];
 
     NSString * activityType = GC_TYPE_CYCLING;
 
-    GCActivityMatchBlock filter = nil;
-    if (![activityType isEqualToString:GC_TYPE_ALL]) {
-        filter = ^(GCActivity*act){
-            return [[act activityType] isEqualToString:activityType];
-        };
-    }
-
-    GCHistoryFieldSummaryStats * vals_sum = [GCHistoryFieldSummaryStats fieldStatsWithActivities:[[GCAppGlobal organizer] activities]
-                                                                                        matching:filter
+    GCActivityTypeSelection * selection = RZReturnAutorelease([[GCActivityTypeSelection alloc] initWithActivityType:activityType]);
+    
+    GCHistoryFieldSummaryStats * vals_sum = [GCHistoryFieldSummaryStats fieldStatsWithActivities:organizer.activities
+                                                                           activityTypeSelection:selection
                                                                                    referenceDate:nil
                                                                                       ignoreMode:gcIgnoreModeActivityFocus];
 
-    GCHistoryAggregatedActivityStats * vals_agg = [GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityType:activityType];
-    [vals_agg setActivitiesFromOrganizer:[GCAppGlobal organizer]];
+    GCHistoryAggregatedStats * vals_agg = [GCHistoryAggregatedStats aggregatedStatsForActivityType:activityType];
+    [vals_agg setActivitiesFromOrganizer:organizer];
     [vals_agg aggregate:NSCalendarUnitWeekOfYear referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
 
     void (^testOne)(NSString*field) = ^(NSString*fieldkey){
         GCField * field = [GCField fieldForKey:fieldkey andActivityType:activityType];
 
         GCHistoryAggregatedDataHolder * data_agg = [vals_agg dataForIndex:0];
-        GCHistoryFieldDataHolder * data_sum = [vals_sum dataForField:field];
+        GCHistoryFieldSummaryDataHolder * data_sum = [vals_sum dataForField:field];
         //nu_agg is always same
         GCNumberWithUnit* nu_agg = [data_agg numberWithUnit:field statType:gcAggregatedSum];
         GCNumberWithUnit* nu_sum = [data_sum sumWithUnit:gcHistoryStatsWeek];
-
-        [self assessTrue: [nu_agg compare:nu_sum withTolerance:1.e-7]==NSOrderedSame msg:@"%@ sum match %@ == %@", field, nu_sum,nu_agg];
+        XCTAssertNotNil(nu_sum);
+        XCTAssertTrue([nu_agg compare:nu_sum withTolerance:1.e-7]==NSOrderedSame,@"%@ sum match %@ == %@", field, nu_sum,nu_agg);
 
         nu_agg = [data_agg numberWithUnit:field statType:gcAggregatedAvg];
         nu_sum = [data_sum averageWithUnit:gcHistoryStatsWeek];
 
-        [self assessTrue: [nu_agg compare:nu_sum withTolerance:1.e-7]==NSOrderedSame msg:@"%@ avg match %@ == %@", field, nu_sum,nu_agg];
+        XCTAssertTrue([nu_agg compare:nu_sum withTolerance:1.e-7]==NSOrderedSame,@"%@ avg match %@ == %@", field, nu_sum,nu_agg);
     };
 
     testOne(@"SumDistance");
     testOne(@"WeightedMeanSpeed");
 
     GCHistoryAggregatedDataHolder * data_agg = [vals_agg dataForIndex:0];
-    GCHistoryFieldDataHolder * dist_sum = [vals_sum dataForField:[GCField fieldForKey:@"SumDistance" andActivityType:activityType]];
-    GCHistoryFieldDataHolder * dur_sum  = [vals_sum dataForField:[GCField fieldForKey:@"SumDuration" andActivityType:activityType]];
-    GCHistoryFieldDataHolder * speed_sum= [vals_sum dataForField:[GCField fieldForKey:@"WeightedMeanSpeed" andActivityType:activityType]];
+    GCHistoryFieldSummaryDataHolder * dist_sum = [vals_sum dataForField:[GCField fieldForKey:@"SumDistance" andActivityType:activityType]];
+    GCHistoryFieldSummaryDataHolder * dur_sum  = [vals_sum dataForField:[GCField fieldForKey:@"SumDuration" andActivityType:activityType]];
+    GCHistoryFieldSummaryDataHolder * speed_sum= [vals_sum dataForField:[GCField fieldForKey:@"WeightedMeanSpeed" andActivityType:activityType]];
 
     GCNumberWithUnit* dist_nu   = [dist_sum sumWithUnit:gcHistoryStatsAll];
     GCNumberWithUnit* dur_nu    = [dur_sum sumWithUnit:gcHistoryStatsAll];
@@ -267,7 +236,7 @@
     double seconds = [dur_nu convertToUnitName:@"second"].value;
     GCNumberWithUnit* implied_speed = [GCNumberWithUnit numberWithUnitName:@"mps" andValue:meters/seconds];
 
-    [self assessTrue:[implied_speed compare:wspeed_nu withTolerance:1.e-7] msg:@"Implied==wspeed %@ %@", implied_speed, wspeed_nu];
+    XCTAssertEqualObjects(wspeed_nu.formatDouble, [implied_speed convertToUnit:wspeed_nu.unit].formatDouble,@"Implied==wspeed %@ %@", implied_speed, wspeed_nu);
 
     dist_nu   = [dist_sum sumWithUnit:gcHistoryStatsWeek];
     dur_nu    = [dur_sum sumWithUnit:gcHistoryStatsWeek];
@@ -281,9 +250,7 @@
     GCField * speed = [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:activityType];
     GCNumberWithUnit * wspeed_agg_nu = [data_agg numberWithUnit:speed statType:gcAggregatedWvg];
 
-    //NSLog(@"(%@ = %@ = %@) != %@ ", [implied_speed convertToUnit:speed_nu.unit], wspeed_nu, wspeed_agg_nu, speed_nu);
-
-    [self assessTrue:[implied_speed compare:wspeed_agg_nu withTolerance:1.e-7] msg:@"Implied==wspeed %@ %@", implied_speed, wspeed_agg_nu];
+    XCTAssertEqualObjects(wspeed_agg_nu.formatDouble,[implied_speed convertToUnit:wspeed_agg_nu.unit].formatDouble,@"Implied==wspeed %@ %@", implied_speed, wspeed_agg_nu);
 
 }
 

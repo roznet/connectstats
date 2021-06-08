@@ -27,9 +27,6 @@
 
 #import "GCTestViewController.h"
 #import "GCTestCommunications.h"
-#import "GCTestStats.h"
-#import "GCTestTracks.h"
-#import "GCTestBasics.h"
 #import "GCTestDerived.h"
 #import "GCTestUIUnitTest.h"
 
@@ -39,20 +36,11 @@
     return @[
              NSStringFromClass([GCTestUIUnitTest class]),
              NSStringFromClass([GCTestDerived class]),
-             NSStringFromClass([GCTestStats class]),
-             NSStringFromClass([GCTestBasics class]),
 
              NSStringFromClass([GCTestCommunications class])
              ];
 }
 
 -(void)doTheSlowTests{
-    /*
-     RZUnitTest * trackTests = [[GCTestTracks alloc] initWithUnitTest:[self results]];
-    [trackTests runTests:nil];
-    [trackTests release];
-
-    [self slowTestsFinished];
-     */
 }
 @end

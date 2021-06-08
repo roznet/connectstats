@@ -34,6 +34,7 @@
 #import "GCActivityTypes.h"
 #import "GCActivityType.h"
 #import "GCTrackPointExtraIndex.h"
+#import "GCAppConstants.h"
 
 @class GCLapSwim;
 @class GCTrackPointSwim;
@@ -74,16 +75,9 @@ typedef NS_ENUM(NSUInteger, gcDownloadMethod) {
     gcDownloadMethodConnectStats= 11
 };
 
-typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
-    gcIgnoreModeActivityFocus,
-    gcIgnoreModeDayFocus
-};
-
 @interface GCActivity : RZParentObject<RZChildObject,GCTrackPointDelegate>{
     // Private Flags
     BOOL _summaryDataLoading;
-    BOOL _downloadRequested;
-    BOOL _skipAlwaysFlag;
 }
 
 @property (nonatomic,retain) NSString * activityId;
@@ -121,12 +115,16 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 @property (nonatomic,retain) NSString * calculatedLapName;
 @property (nullable,nonatomic,retain) GCWeather * weather;
 
-@property (nonatomic,retain) FMDatabase * db;
+@property (nonatomic,retain,nullable) FMDatabase * db;
 @property (nonatomic,retain) FMDatabase * trackdb;
 
 @property (nonatomic,retain) GCActivitySettings * settings;
 
 @property (nonatomic,readonly) BOOL pendingUpdate;
+/**
+ * flag to indicate the activity has unsaved Changes
+ */
+@property (nonatomic,assign) BOOL hasUnsavedChanges;
 
 #pragma mark - Readonly
 
@@ -140,6 +138,7 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 
 @property (nonatomic,readonly) GCUnit * speedDisplayUnit;
 @property (nonatomic,readonly) GCUnit * distanceDisplayUnit;
+
 /**
  Array of trackpoints. Note it maybe lazy loaded so
  can return nil, but asking for this will trigger attempt to load from db
@@ -176,6 +175,9 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
  @brief Disable an activity for all stats
  */
 @property (nonatomic,assign) BOOL skipAlways;
+
+@property (nonatomic,assign) NSUInteger serviceStatus;
+@property (nonatomic,readonly) NSString*serviceStatusDescription;
 
 #pragma mark - Methods
 
@@ -286,21 +288,6 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
 -(void)setSummaryField:(gcFieldFlag)fieldFlag inStoreUnitValue:(double)value;
 -(nullable GCNumberWithUnit*)numberWithUnitForFieldInStoreUnit:(GCField *)field;
 
-/**
- Format a value with unit similar to a given field, unit name not displayed
- */
--(NSString*)formatValueNoUnits:(double)aval forField:(GCField*)which;
-
-/**
- Format a numberWithUnit similar to how field which would be formatted.
- It will convert to displayUnit which may be different than generic field
- */
--(NSString*)formatNumberWithUnit:(GCNumberWithUnit*)nu forField:(GCField*)which DEPRECATED_MSG_ATTRIBUTE("format numberWithUnit directly");
-/**
- Return value for field formatted as number with unit
- */
--(NSString*)formattedValue:(GCField*)field DEPRECATED_MSG_ATTRIBUTE("format numberWithUnit directly");
-
 -(BOOL)hasField:(GCField*)field;
 -(BOOL)isEqualToActivity:(GCActivity*)other;
 
@@ -318,6 +305,9 @@ typedef NS_ENUM(NSUInteger, gcIgnoreMode) {
  @brief method to update the dictionary of summary data
  */
 -(void)updateSummaryData:(NSDictionary<GCField*,GCActivitySummaryValue*>*)summary;
+
+-(BOOL)isCompleted:(gcServicePhase)phase for:(gcService)service;
+-(BOOL)markCompleted:(gcServicePhase)phase for:(gcService)service;
 
 /**
  @brief Add a dictionary of metavalue entries

@@ -118,6 +118,7 @@
     }
     if( [[GCAppGlobal profile] serviceEnabled:gcServiceConnectStats]){
         [dynamic addObjectsFromArray:@[
+            @( GC_CONNECTSTATS_NOTIFICATIONS ),
             @( GC_CONNECTSTATS_LOGOUT ),
         ] ];
     }
@@ -128,22 +129,10 @@
     [self.remap addSection:GC_SECTIONS_GARMIN withRows:dynamic];
     
     
-    if( [[GCAppGlobal profile] configGetBool:CONFIG_SHARING_STRAVA_AUTO defaultValue:NO] == YES){
-        // OBSOLETE: Only showed if AUTO was on before, should not be used anymore
-        [self.remap addSection:GC_SECTIONS_STRAVA withRows:@[
-                                                             @( GC_STRAVA_NAME      ),
-                                                             @( GC_STRAVA_ENABLE    ),
-                                                             @( GC_STRAVA_AUTO      ),
-                                                             @( GC_STRAVA_LOGOUT    ) ]];
-        // OBSOLETE: Only showed if AUTO was on before, should not be used anymore
-    }else{
-        [self.remap addSection:GC_SECTIONS_STRAVA withRows:@[
-                                                             @( GC_STRAVA_NAME      ),
-                                                             @( GC_STRAVA_ENABLE    ),
-                                                             //@( GC_STRAVA_SEGMENTS   ),
-                                                             @( GC_STRAVA_LOGOUT    ) ]];
-        
-    }
+    [self.remap addSection:GC_SECTIONS_STRAVA withRows:@[
+        @( GC_STRAVA_NAME      ),
+        @( GC_STRAVA_ENABLE    ),
+        @( GC_STRAVA_LOGOUT    ) ]];
     
     if ([GCAppGlobal healthKitStore]) {
         [self.remap addSection:GC_SECTIONS_HEALTHKIT withRows:@[
@@ -419,6 +408,24 @@
         [gridcell labelForRow:1 andCol:0].attributedText = sample;
         [gridcell configForRow:1 andCol:0].horizontalOverflow = true;
         rv = gridcell;
+    }else if( indexPath.row == GC_CONNECTSTATS_NOTIFICATIONS){
+        gridcell = [GCCellGrid cellGrid:tableView];
+        [gridcell setupForRows:2 andCols:2];
+        
+        NSAttributedString * title = [[[NSAttributedString alloc] initWithString:NSLocalizedString(@"Notifications",@"Services")
+                                                                      attributes:[GCViewConfig attributeBold16]] autorelease];
+        
+        [gridcell labelForRow:0 andCol:0].attributedText = title;
+        gcNotificationPushType type = [GCAppGlobal profile].pushNotificationType;
+        NSArray<NSString*> * types = [GCViewConfig validChoicesForConnectStatsNotificationType];
+        if (type < types.count) {
+            [gridcell labelForRow:0 andCol:1].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                                         withString:types[type]];
+        }else{
+            [gridcell labelForRow:0 andCol:1].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
+                                                                                         withString:NSLocalizedString(@"Unknown",@"Notification")];
+        }
+        rv = gridcell;
 
     }else if( indexPath.row == GC_CONNECTSTATS_DEBUGKEY){
         gridcell = [GCCellGrid cellGrid:tableView];
@@ -503,14 +510,6 @@
         switchcell.entryFieldDelegate = self;
         rv=switchcell;
 
-    }else if (indexPath.row == GC_STRAVA_AUTO) {
-        switchcell = [GCCellEntrySwitch switchCell:tableView];
-        switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
-                                                                    withString:NSLocalizedString(@"Upload Activities",@"Other Service")];
-        switchcell.toggle.on = [[GCAppGlobal profile] configGetBool:CONFIG_SHARING_STRAVA_AUTO defaultValue:false];
-        switchcell.identifierInt = GC_IDENTIFIER([indexPath section], GC_STRAVA_AUTO);
-        switchcell.entryFieldDelegate = self;
-        rv=switchcell;
     }else if (indexPath.row == GC_STRAVA_PRIVATE){
         switchcell = [GCCellEntrySwitch switchCell:tableView];
         switchcell.label.attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
@@ -784,6 +783,19 @@
             [GCAppGlobal saveSettings];
             break;
         }
+        case GC_IDENTIFIER(GC_SECTIONS_GARMIN, GC_CONNECTSTATS_NOTIFICATIONS):
+        {
+            if( cell.selected < [GCViewConfig validChoicesForConnectStatsNotificationType].count){
+                [[GCAppGlobal profile] setPushNotificationType:cell.selected];
+                NSString * choice = [GCViewConfig validChoicesForConnectStatsNotificationType][cell.selected];
+                RZLog(RZLogInfo, @"ConnectStats: Changed Notification to %@ : %@", @(cell.selected), choice);
+                [GCAppGlobal saveSettings];
+                if( [GCAppGlobal profile].pushNotificationEnabled){
+                    [GCConnectStatsRequestRegisterNotifications register];
+                }
+            }
+            break;
+        }
         case GC_IDENTIFIER(GC_SECTIONS_GARMIN, GC_GARMIN_ENABLE):
         {
             if( cell.on ){
@@ -811,13 +823,6 @@
             break;
         }
 
-        case GC_IDENTIFIER(GC_SECTIONS_STRAVA, GC_STRAVA_AUTO):
-            [[GCAppGlobal profile] configToggleBool:CONFIG_SHARING_STRAVA_AUTO];
-            if ([[GCAppGlobal profile] configGetBool:CONFIG_SHARING_STRAVA_AUTO defaultValue:NO]==YES) {
-                [[GCAppGlobal profile] configSet:CONFIG_STRAVA_ENABLE boolVal:NO];
-            }
-            [GCAppGlobal saveSettings];
-            break;
         case GC_IDENTIFIER(GC_SECTIONS_STRAVA, GC_STRAVA_PRIVATE):
             [[GCAppGlobal profile] configToggleBool:CONFIG_SHARING_STRAVA_PRIVATE];
             [GCAppGlobal saveSettings];
@@ -826,7 +831,6 @@
             [[GCAppGlobal profile] configToggleBool:CONFIG_STRAVA_ENABLE];
             if ([[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_ENABLE defaultValue:NO]==YES) {
                 RZLog(RZLogInfo,@"Strava: Enabled");
-                [[GCAppGlobal profile] configSet:CONFIG_SHARING_STRAVA_AUTO boolVal:NO];
             }else{
                 RZLog(RZLogInfo,@"Strava: Disabled");
             }
@@ -985,6 +989,12 @@
         list.entryFieldDelegate = self;
         list.identifierInt = GC_IDENTIFIER(GC_SECTIONS_GARMIN,GC_CONNECTSTATS_USE);
         [self.navigationController pushViewController:list animated:YES];
+    }else if( indexPath.section == GC_SECTIONS_GARMIN && indexPath.row == GC_CONNECTSTATS_NOTIFICATIONS){
+        GCCellEntryListViewController * list = [GCViewConfig standardEntryListViewController:[GCViewConfig validChoicesForConnectStatsNotificationType] selected:[[GCAppGlobal profile] pushNotificationType]];
+        list.entryFieldDelegate = self;
+        list.identifierInt = GC_IDENTIFIER(GC_SECTIONS_GARMIN,GC_CONNECTSTATS_NOTIFICATIONS);
+        [self.navigationController pushViewController:list animated:YES];
+
     }else if( indexPath.section == GC_SECTIONS_GARMIN && indexPath.row == GC_CONNECTSTATS_CONFIG){
         GCCellEntryListViewController * list = [GCViewConfig standardEntryListViewController:[GCViewConfig validChoicesForConnectStatsConfig] selected:[GCAppGlobal webConnectsStatsConfig]];
         

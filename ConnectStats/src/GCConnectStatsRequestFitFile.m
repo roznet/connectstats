@@ -44,6 +44,14 @@
 
 @implementation GCConnectStatsRequestFitFile
 
+-(instancetype)initWithActivity:(GCActivity*)act{
+    self = [super init];
+    if( self ){
+        self.activity = act;
+    }
+    return self;
+}
+
 +(GCConnectStatsRequestFitFile*)requestWithActivity:(GCActivity*)act andNavigationController:(UINavigationController*)nav{
     GCConnectStatsRequestFitFile * rv = RZReturnAutorelease([[GCConnectStatsRequestFitFile alloc] init]);
     if( rv ){
@@ -72,8 +80,7 @@
 }
 #endif
 
--(id<GCWebRequest>)nextReq{
-    
+-(id<GCWebRequest>)nextReq{    
     if( self.navigationController ){
         return RZReturnAutorelease([[GCConnectStatsRequestFitFile alloc] initNextWith:self]);
     }
@@ -81,7 +88,6 @@
         if( self.shouldCheckForAlternativeWhenEmpty && [self validAlternativeService]){
             self.tryAlternativeService = true;
             return [GCGarminActivityTrack13Request requestWithActivity:self.activity];
-            //return RZReturnAutorelease([[GCConnectStatsRequestFitFile alloc] initNextWith:self]);
         }
         return nil;
     }
@@ -234,6 +240,10 @@
             if( self.activity == nil){
                 self.activity = fitAct;
             }else{
+                if( [self.activity markCompleted:gcServicePhaseTrack for:gcServiceConnectStats] ){
+                    RZLog(RZLogInfo,@"%@: Already completed connectstats/track", self.activity)
+                }
+                
                 [self.activity updateSummaryDataFromActivity:fitAct];
                 [self.activity updateTrackpointsFromActivity:fitAct];
                 [self.activity saveTrackpoints:fitAct.trackpoints andLaps:fitAct.laps];
@@ -254,7 +264,9 @@
     
     if( [[NSFileManager defaultManager] fileExistsAtPath:path isDirectory:&isDirectory]){
         NSString * fp = isDirectory ? [path stringByAppendingPathComponent:[req fitFileName]] : path;
-
+        if( ! [[NSFileManager defaultManager] fileExistsAtPath:fp]) {
+            return nil;
+        }
         [req processParse:fp];
     }
     return req.activity;

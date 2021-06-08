@@ -31,6 +31,8 @@ extern NSInteger kServiceNoAnchor;
 @interface GCAppProfiles : RZParentObject
 
 @property (nonatomic,readonly) NSUInteger currentProfile;
+@property (nonatomic,readonly) BOOL pushNotificationEnabled;
+@property (nonatomic,assign) gcNotificationPushType pushNotificationType;
 
 +(GCAppProfiles*)singleProfileWithValues:(NSDictionary*)dict;
 +(GCAppProfiles*)profilesFromSettings:(NSMutableDictionary*)dict;
@@ -75,6 +77,7 @@ extern NSInteger kServiceNoAnchor;
 -(BOOL)profileRequireSetup;
 -(BOOL)atLeastOneService;
 -(NSUInteger)numberOfServices;
+
 
 -(NSArray*)profileNames;
 -(void)addOrSelectProfile:(NSString*)pName;

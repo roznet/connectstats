@@ -49,7 +49,7 @@
     FMDatabase * db = [FMDatabase databaseWithPath:fp];
     [db open];
     [GCHealthOrganizer ensureDbStructure:db];
-    GCHealthOrganizer * health = [[[GCHealthOrganizer alloc] initWithDb:db andThread:nil] autorelease];
+    GCHealthOrganizer * health = [[[GCHealthOrganizer alloc] initTestModeWithDb:db andThread:nil] autorelease];
     
     NSString * theString = [NSString stringWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"user.json" forClass:[self class]] encoding:NSUTF8StringEncoding error:&error];
     XCTAssertNotNil(theString, @"Could read file without error %@", error);
@@ -66,7 +66,7 @@
     [health registerZoneCalculators:parser.data];
     XCTAssertTrue(parser.success, @"JsonParser Success");
     GCHealthZoneCalculator * calculator = nil;
-    GCHealthOrganizer * reloaded = [[[GCHealthOrganizer alloc] initWithDb:db andThread:nil] autorelease];
+    GCHealthOrganizer * reloaded = [[[GCHealthOrganizer alloc] initTestModeWithDb:db andThread:nil] autorelease];
     
     // New format, but same zone for the last 5:
     NSData * data = [NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"user_hr_zones.json" forClass:[self class]]];

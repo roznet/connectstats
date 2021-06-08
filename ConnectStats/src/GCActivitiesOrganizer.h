@@ -57,15 +57,29 @@ typedef BOOL (^gcActivityOrganizerMatchBlock)(GCActivity*);
 
 -(GCActivitiesOrganizer*)initWithDb:(FMDatabase*)aDb;
 -(GCActivitiesOrganizer*)initWithDb:(FMDatabase*)aDb andThread:(nullable dispatch_queue_t)thread NS_DESIGNATED_INITIALIZER;
--(GCActivitiesOrganizer*)initTestModeWithDb:(FMDatabase*)aDb NS_DESIGNATED_INITIALIZER;
+/**
+ * testmode will trigger load of database including all details on current thread in synchronous method and disable all notificaitons
+ */
+-(GCActivitiesOrganizer*)initTestModeWithDb:(FMDatabase*)aDb;
+/**
+ * testmode will trigger load of database on current thread in synchronous method and disable all notificaitons,
+ *  if loadDetails is false will only load summary else will load everything
+ */
+-(GCActivitiesOrganizer*)initTestModeWithDb:(FMDatabase*)aDb loadDetails:(BOOL)loadDetails NS_DESIGNATED_INITIALIZER;
+
+/**
+ * call this function when details should be loaded
+ * typically when the ui is ready, it can be called multiple time
+ * @return true if details already loaded, false if this actually triggered the load
+ */
+-(BOOL)ensureDetailsLoaded;
 
 -(BOOL)registerActivity:(GCActivity*)act forActivityId:(NSString*)aId;
 -(void)registerTemporaryActivity:(GCActivity*)act forActivityId:(NSString*)aId;
+-(void)registerActivity:(GCActivity*)act withTrackpoints:(nullable NSArray<GCTrackPoint*>*)aTrack andLaps:(nullable NSArray<GCLap*>*)laps;
+-(void)registerActivity:(GCActivity*)act withWeather:(nullable GCWeather *)aData;
 
 -(void)registerActivityTypes:(NSDictionary*)aData;
-
--(void)registerActivity:(NSString*)aId withTrackpoints:(nullable NSArray*)aTrack andLaps:(nullable NSArray*)laps;
--(void)registerActivity:(NSString*)aId withWeather:(nullable GCWeather *)aData;
 
 -(NSUInteger)countOfKnownDuplicates;
 -(nullable GCActivity*)findDuplicate:(GCActivity*)act;
@@ -105,7 +119,7 @@ typedef BOOL (^gcActivityOrganizerMatchBlock)(GCActivity*);
  */
 -(nullable GCActivity*)compareActivity;
 -(void)setCurrentActivityId:(NSString*)aId;
--(NSArray<NSString*>*)listActivityTypes;
+-(NSArray<GCActivityType*>*)listActivityTypes;
 -(nullable NSString*)lastGarminLoginUsername;
 
 /**
@@ -119,6 +133,7 @@ typedef BOOL (^gcActivityOrganizerMatchBlock)(GCActivity*);
 
 -(BOOL)isQuickFilterApplicable;
 -(void)filterForSearchString:(nullable NSString*)str;
+-(void)filterMatching:(nullable GCActivityMatchBlock)matching;
 // Force refresh if something changed, for example location
 -(void)filterForLastSearchString;
 -(void)filterForQuickFilter;
@@ -142,7 +157,7 @@ typedef BOOL (^gcActivityOrganizerMatchBlock)(GCActivity*);
  @param  ignoreMode decide whether to apply on fitness or days activities
  @return NSDictionary with Keys for the values in fields (NSString or GCField) and GCStatsDataSerieWithUnit as value
  */
--(NSDictionary*)fieldsSeries:(NSArray*)fields matching:(nullable GCActivityMatchBlock)match useFiltered:(BOOL)useFilter ignoreMode:(gcIgnoreMode)ignoreMode;
+-(NSDictionary<GCField*,GCStatsDataSerieWithUnit*>*)fieldsSeries:(NSArray<GCField*>*)fields matching:(nullable GCActivityMatchBlock)match useFiltered:(BOOL)useFilter ignoreMode:(gcIgnoreMode)ignoreMode;// DEPRECATED_MSG_ATTRIBUTE( "Use modern");
 -(nullable GCStatsDataSerieFilter*)standardFilterForField:(GCField*)field;
 
 -(void)purgeCache;

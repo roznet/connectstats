@@ -29,7 +29,7 @@
 @import RZExternal;
 #import "GCCellGrid+Templates.h"
 #import "GCViewIcons.h"
-#import "GCHistoryAggregatedActivityStats.h"
+#import "GCHistoryAggregatedStats.h"
 #import "GCCalendarDataDateMarkers.h"
 #import "GCActivity+UI.h"
 #import "GCActivity+Database.h"
@@ -53,26 +53,31 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
 
 @interface GCCalendarDataSource ()
 
-@property (nonatomic,retain) NSArray * activities;
-@property (nonatomic,retain) NSArray * selectedActivities;
+/// All Activities to display
+@property (nonatomic,retain) NSArray<GCActivity*> * activities;
+/// Selected activities when user click on a date
+@property (nonatomic,retain) NSArray<GCActivity*> * selectedActivities;
+/// All potential activities for the current selected month, independently of use filter or selections
+@property (nonatomic,retain) NSArray<GCActivity*> * focusActivities;
 
 @property (nonatomic,assign) NSUInteger lastidx;
 
 @property (nonatomic,retain) NSMutableDictionary * dateMarkerCache;
 @property (nonatomic,retain) GCCalendarDataMarkerInfo * maxInfo;
 
-@property (nonatomic,retain) GCHistoryAggregatedActivityStats * monthlyStats;
-@property (nonatomic,retain) GCHistoryAggregatedActivityStats * weeklyStats;
+@property (nonatomic,retain) GCHistoryAggregatedStats * monthlyStats;
+@property (nonatomic,retain) GCHistoryAggregatedStats * weeklyStats;
 @property (nonatomic,retain) RZNumberWithUnitGeometry * geometry;
 @property (nonatomic,retain) RZNumberWithUnitGeometry * comparisonGeometry;
 
 @property (nonatomic,retain) NSDate * currentDate;
 
+@property (nonatomic,readonly) GCActivityType * activityTypeDetail;;
 @property (nonatomic,retain) GCViewActivityTypeButton * activityTypeButton;
-@property (nonatomic,retain) NSString * activityType;
-@property (nonatomic,retain) NSArray * listActivityTypes;
+@property (nonatomic,retain) GCActivityTypeSelection * activityTypeSelection;
+@property (nonatomic,readonly) NSArray<GCActivityType*> * listActivityTypes;
 
-@property (nonatomic,assign) BOOL primaryActivityTypesOnly;
+
 @property (nonatomic,assign) gcComparisonMetric comparisonMetric;
 
 //Just for convenience
@@ -88,10 +93,8 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
     self = [super init];
     if (self) {
         [[GCAppGlobal organizer] attach:self];
-        self.activityType = GC_TYPE_ALL;
+        self.activityTypeSelection = RZReturnAutorelease([[GCActivityTypeSelection alloc] initWithActivityTypeDetail:GCActivityType.all matchPrimaryType:false]);
         self.activityTypeButton = [GCViewActivityTypeButton activityTypeButtonForDelegate:self];
-        self.listActivityTypes = @[ GC_TYPE_ALL];
-        self.primaryActivityTypesOnly = false;//[GCAppGlobal configGetBool:CONFIG_MAIN_ACTIVITY_TYPE_ONLY defaultValue:true];
         self.comparisonMetric = gcComparisonMetricPercent;
         if( [GCViewConfig is2021Style] ){
             _tableDisplay = gcCalendarTableDisplaySummary;
@@ -102,12 +105,11 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
 
 -(void)dealloc{
     [[GCAppGlobal organizer] detach:self];
-    [_listActivityTypes release];
     [_activityTypeButton release];
-    [_activityType release];
     [_weeklyStats release];
     [_monthlyStats release];
     [_activities release];
+    [_focusActivities release];
     [_selectedActivities release];
     [_dateMarkerCache release];
     [_currentDate release];
@@ -122,6 +124,10 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
 
 #pragma mark - GCViewActivityTypeButton
 
+-(GCActivityType*)activityTypeDetail{
+    return self.activityTypeSelection.activityTypeDetail;
+}
+
 -(BOOL)useColoredIcons{
     return false;
 }
@@ -133,9 +139,9 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
 -(BOOL)ignoreFilter{
     return true;
 }
--(void)setupForCurrentActivityType:(NSString *)aType andFilter:(BOOL)aFilter{
-    self.activityType = aType;
-    [self.activityTypeButton setupBarButtonItem:nil];
+-(void)setupForCurrentActivityTypeSelection:(GCActivityTypeSelection *)selection andFilter:(BOOL)aFilter{
+    self.activityTypeSelection = selection;
+    [self.activityTypeButton setupBarButtonItem:self.presentingViewController];
 
     [[NSNotificationCenter defaultCenter] postNotificationName:KalDataSourceChangedNotification  object:self];
 }
@@ -170,29 +176,29 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
     return NSLocalizedString(@"Calendar", @"Calendar tabbar title");
 }
 
+-(NSArray<GCActivityType*>*)listActivityTypes{
+    if( self.focusActivities == nil ){
+        return @[ GCActivityType.all];
+    }else{
+        return [[self.activityTypeSelection activityTypeListIn:self.focusActivities] sortedArrayUsingSelector:@selector(compare:)];
+    }
+}
+
 - (NSArray *)markedDatesFrom:(NSDate *)fromDate to:(NSDate *)toDate{
     // start one month back, so we can do MoM and WoW comparisons
     NSDate * startDate = [fromDate dateByAddingGregorianComponents:[NSDateComponents dateComponentsForCalendarUnit:NSCalendarUnitMonth withValue:-1]];
     
-    self.activities = [[GCAppGlobal organizer] activitiesFromDate:startDate to:toDate];
-    
-    NSMutableDictionary * allTypes = [NSMutableDictionary dictionary];
-    if ([self.activityType isEqualToString:GC_TYPE_ALL]) {
-        for (GCActivity*act in self.activities) {
-            allTypes[[act activityTypeKey:self.primaryActivityTypesOnly]] = act.activityType;
+    NSArray<GCActivity*>* relevantActivities = [[GCAppGlobal organizer] activitiesFromDate:startDate to:toDate];
+    NSMutableArray<GCActivity*>*focusActivities = [NSMutableArray array];
+    for (GCActivity * act in relevantActivities) {
+        if( [fromDate compare:act.date] == NSOrderedAscending){
+            [focusActivities addObject:act];
         }
-    }else{
-        NSMutableArray * filtered = [NSMutableArray arrayWithCapacity:self.activities.count];
-        for (GCActivity*act in self.activities) {
-            allTypes[[act activityTypeKey:self.primaryActivityTypesOnly]]  = act.activityType;
-            if ([[act activityTypeKey:self.primaryActivityTypesOnly] isEqualToString:self.activityType]) {
-                [filtered addObject:act];
-            }
-        }
-        self.activities = filtered;
     }
-    self.listActivityTypes =[ @[ GC_TYPE_ALL] arrayByAddingObjectsFromArray:allTypes.allKeys];
-
+    
+    self.activities = [self.activityTypeSelection selectedWithActivities:relevantActivities];
+    self.focusActivities = focusActivities;
+    
     _lastidx = 0;
     NSMutableArray * rv = [NSMutableArray arrayWithCapacity:_activities.count];
     if (_dateMarkerCache == nil) {
@@ -201,7 +207,7 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
     [_dateMarkerCache removeAllObjects];
 
     gcIgnoreMode ignoreMode = gcIgnoreModeActivityFocus;
-    if ([self.activityType isEqualToString:GC_TYPE_DAY]) {
+    if ([self.activityTypeDetail isEqualToActivityType:GCActivityType.day]) {
         ignoreMode = gcIgnoreModeDayFocus;
     }
 
@@ -212,7 +218,7 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
             GCCalendarDataDateMarkers * markers = _dateMarkerCache[dateKey];
             if (!markers) {
                 markers = [[[GCCalendarDataDateMarkers alloc] init] autorelease];
-                markers.primaryActivityTypesOnly = self.primaryActivityTypesOnly;
+                markers.primaryActivityTypesOnly = self.activityTypeSelection.matchPrimaryType;
                 _dateMarkerCache[dateKey] = markers;
             }
 
@@ -227,11 +233,11 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
         [self.maxInfo maxMarkerInfo:info.infoTotals];
     }
 
-    self.weeklyStats = [GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityType:self.activityType];
-    self.monthlyStats =[GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityType:self.activityType];
+    RZLog(RZLogInfo,@"calendar aggregate from %@ to %@ for %@ (%@ activities)", startDate.YYYYdashMMdashDD, toDate.YYYYdashMMdashDD, self.activityTypeSelection, @(self.activities.count));
     
-    self.weeklyStats.activityType = self.activityType;
-    self.monthlyStats.activityType = self.activityType;
+    self.weeklyStats = [GCHistoryAggregatedStats aggregatedStatsForActivityTypeSelection:self.activityTypeSelection];
+    self.monthlyStats =[GCHistoryAggregatedStats aggregatedStatsForActivityTypeSelection:self.activityTypeSelection];
+    
     self.weeklyStats.activities = self.activities;
     self.monthlyStats.activities = self.activities;
     // reference date nil as always for gcPeriodCalendar
@@ -240,7 +246,7 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
 
     self.geometry = [RZNumberWithUnitGeometry geometry];
     
-    GCActivityType * type = [GCActivityType activityTypeForKey:self.activityType];
+    GCActivityType * type = self.activityTypeDetail;
     for (GCHistoryAggregatedDataHolder * holder in self.weeklyStats) {
         [GCCellGrid adjustAggregatedWithDataHolder:holder activityType:type geometry:self.geometry];
     }
@@ -303,7 +309,7 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
 }
 
 -(NSArray*)leftButtonItems{
-    if( [self.activityTypeButton setupBarButtonItem:nil] ){
+    if( [self.activityTypeButton setupBarButtonItem:self.presentingViewController] ){
         return @[ self.activityTypeButton.activityTypeButtonItem ];
     }else{
         return @[];
@@ -566,7 +572,11 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
     if (_tableDisplay==gcCalendarTableDisplayActivities) {
         return _selectedActivities.count;
     }else{
-        return 1;
+        if( self.isNewStyle ){
+            return 1;
+        }else{
+            return 2;
+        }
     }
 }
 
@@ -603,13 +613,18 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
         
         NSCalendarUnit calUnit = NSCalendarUnitWeekOfYear;
 
-        if (indexPath.section == GC_SECTION_MONTHLY) {
+        NSUInteger sectionSelector = indexPath.section;
+        if( !self.isNewStyle ){
+            sectionSelector = indexPath.row;
+        }
+        if (sectionSelector == GC_SECTION_MONTHLY) {
             holder = [self.monthlyStats dataForDate:bucket];
             calUnit = NSCalendarUnitMonth;
-        }else if (indexPath.section==GC_SECTION_WEEKLY){
+        }else if (sectionSelector==GC_SECTION_WEEKLY){
             holder = [self.weeklyStats dataForDate:bucket];
             calUnit = NSCalendarUnitWeekOfYear;
         }
+        
         
         if( self.isNewStyle ){
             NSCalendarUnit calendarUnit = indexPath.section == GC_SECTION_MONTHLY ? NSCalendarUnitMonth : NSCalendarUnitWeekOfYear;
@@ -618,10 +633,6 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
                 comparisonHolder = [self.monthlyStats dataForDate:comparisonBucket];
             }else if (indexPath.section==GC_SECTION_WEEKLY){
                 comparisonHolder = [self.weeklyStats dataForDate:comparisonBucket];
-            }
-            // If no data in the comparison bucket, display empty
-            if( comparisonHolder == nil){
-                holder = nil;
             }
         }
         if (holder) {
@@ -634,7 +645,7 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
                                              comparisonHolder:comparisonHolder
                                                         index:indexPath.row
                                              multiFieldConfig:multiFieldConfig
-                                                 activityType:[GCActivityType activityTypeForKey:self.activityType]
+                                                 activityType:self.activityTypeDetail
                                                      geometry:self.geometry
                                                          wide:false];
             }else{
@@ -642,7 +653,7 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
                 [cell setupFromHistoryAggregatedData:holder
                                                index:indexPath.row
                                     multiFieldConfig:multiFieldConfig
-                                     andActivityType:GCActivityType.all
+                                     andActivityType:self.activityTypeDetail
                                                width:tableView.frame.size.width];
             }
         }else{

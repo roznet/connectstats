@@ -33,4 +33,5 @@
 -(void)stravaSignout;
 -(BOOL)startInit;
 -(void)startSuccessful;
+-(void)registerForPushNotifications;
 @end

@@ -25,6 +25,8 @@
 
 #import <Foundation/Foundation.h>
 #import "GCField.h"
+#import "GCActivity.h"
+@class GCActivityTypeSelection;
 
 /**
  Configuration option for extracting time series from activities.
@@ -42,16 +44,19 @@
  */
 @property (nonatomic,retain) GCField * x_activityField;
 /**
- if not nil, will restrict to activity of that type
- */
-@property (nonatomic,retain) NSString * activityType;
-/**
  If not nil, limit series for activities more recent than date
  */
 @property (nonatomic,retain) NSDate   * fromDate;
 /**
  YES if only process filtered activities, NO for all activities
  */
+@property (nonatomic,readonly) GCActivityMatchBlock activityTypeMatchBlock;
+
+@property (nonatomic,readonly) GCActivityType * activityTypeDetail;
+/**
+ if not nil, will restrict to activity of that type
+ */
+@property (nonatomic,retain) GCActivityTypeSelection * activityTypeSelection;
 
 @property (nonatomic,assign) BOOL useFilter;
 /**

@@ -93,6 +93,20 @@
     return rv;
 }
 
+-(BOOL)servicesBackgroundUpdate{
+    BOOL rv = false;
+    if( [[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:NO] &&
+       [[GCAppGlobal profile] serviceCompletedFull:gcServiceConnectStats] &&
+       [[GCAppGlobal profile] serviceSuccess:gcServiceConnectStats] ){
+        // Run on main queue as it accesses a navigation Controller
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self addRequest:RZReturnAutorelease([[GCConnectStatsRequestBackgroundSearch alloc] init])];
+        });
+        rv = true;
+    }
+
+    return rv;
+}
 -(void)servicesSearch:(BOOL)reloadAll{
     if( ([[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:NO])){
         // Run on main queue as it accesses a navigation Controller
@@ -110,7 +124,7 @@
             dispatch_async(dispatch_get_main_queue(), ^(){
                 BOOL garminStatsReload = reloadAll || ![[GCAppGlobal profile] serviceCompletedFull:gcServiceGarmin];
                 NSInteger aStart = garminStatsReload ? [[GCAppGlobal profile] serviceAnchor:gcServiceGarmin] : 0;
-                //[self addRequest:[[[GCGarminRequestModernActivityTypes alloc] init] autorelease]];
+                [self addRequest:[[[GCGarminRequestModernActivityTypes alloc] init] autorelease]];
                 [self addRequest:[[[GCGarminRequestModernSearch alloc] initWithStart:aStart andMode:garminStatsReload] autorelease]];
             });
         }

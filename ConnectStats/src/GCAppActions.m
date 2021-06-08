@@ -27,6 +27,7 @@
 #import "GCAppGlobal.h"
 #import "GCAppDelegate.h"
 #import "GCFields.h"
+#import "ConnectStats-Swift.h"
 
 NSString * kArgumentActivityType = @"activityType";
 NSString * kArgumentViewChoice   = @"viewChoice";
@@ -142,7 +143,8 @@ NSString * kArgumentHistoryStats = @"historyStats";
         [self setupMultiFieldConfig:nconfig fromChoice:vals[kArgumentViewChoice]];
     }
     if (vals[kArgumentActivityType]) {
-        nconfig.activityType = [self activityTypeFromString:vals[kArgumentActivityType] default:nconfig.activityType];
+        NSString * atype = [self activityTypeFromString:vals[kArgumentActivityType] default:nconfig.activityType];
+        nconfig.activityTypeSelection = RZReturnAutorelease([[GCActivityTypeSelection alloc] initWithActivityType:atype]);
     }
     if (vals[kArgumentCalChoice]) {
         nconfig.viewConfig = [self statsCalChoiceFromString:vals[kArgumentCalChoice] default:nconfig.viewConfig];

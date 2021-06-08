@@ -125,11 +125,6 @@ NS_INLINE GCAppDelegate * _sharedApplicationDelegate(void){
     return [appDelegate.actionDelegate currentNavigationController];
 }
 
-+(GCSegmentOrganizer*)segments{
-    GCAppDelegate *appDelegate = _sharedApplicationDelegate();
-    return appDelegate.segments;
-}
-
 +(NSArray<NSDictionary*>*)recentRemoteMessages{
     GCAppDelegate *appDelegate = _sharedApplicationDelegate();
     return [appDelegate recentRemoteMessages];

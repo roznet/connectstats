@@ -130,10 +130,10 @@
 
 -(void)updateDb:(FMDatabase*)db forActivityId:(NSString*)activityId{
     if ([db executeUpdate:@"UPDATE gc_activities_values SET value=?, uom=? WHERE activityId = ? AND field = ?",
-     @(self.value),
-     self.uom,
-     activityId,
-          self.field]){
+         @(self.value),
+         self.uom,
+         activityId,
+         self.field.key]){
         // if didn't exist already so save it
         if( [db changes] == 0){
             [self saveToDb:db forActivityId:activityId];

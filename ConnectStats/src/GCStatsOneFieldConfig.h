@@ -47,15 +47,21 @@ typedef NS_ENUM(NSUInteger, gcOneFieldSecondGraph) {
 @property (nonatomic,retain) GCField * field;
 @property (nonatomic,retain) GCField * x_field;
 
-@property (nonatomic,retain) NSString * activityType;
 @property (nonatomic,assign) gcOneFieldSecondGraph secondGraphChoice;
 
-@property (nonatomic,assign) gcViewChoice viewChoice;
+
+@property (nonatomic,readonly) GCStatsMultiFieldConfig * multiFieldConfig;
+
+// Convenience access from multifield config
+@property (nonatomic,readonly) GCStatsCalendarAggregationConfig * calendarConfig;
+
+@property (nonatomic,readonly) gcViewChoice viewChoice;
 @property (nonatomic,readonly) NSString * viewDescription;
 
-@property (nonatomic,retain) GCStatsCalendarAggregationConfig * calendarConfig;
-
-@property (nonatomic,assign) BOOL useFilter;
+@property (nonatomic,readonly) NSString * activityType;// DEPRECATED_MSG_ATTRIBUTE("Use ActivityType Detail");
+@property (nonatomic,readonly) GCActivityType * activityTypeDetail;
+//@property (nonatomic,readonly) BOOL useFilter;
+@property (nonatomic,readonly) NSArray<GCField*>*fieldsForAggregation;
 
 +(GCStatsOneFieldConfig*)configFromMultiFieldConfig:(GCStatsMultiFieldConfig*)multiFieldConfig forY:(GCField*)field andX:(GCField*)xfield;
 

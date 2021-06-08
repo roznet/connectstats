@@ -26,7 +26,6 @@
 
 #import <XCTest/XCTest.h>
 @import RZUtilsTestInfra;
-#import "GCTestBasics.h"
 #import "GCTestAppGlobal.h"
 
 NSString * kExpectationAllDone = @"RZUnitRunner All Done";

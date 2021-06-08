@@ -77,6 +77,7 @@ extern sqlite3_int64 kInvalidSerieId;
 -(void)loadFromFileIfNeeded;
 -(BOOL)saveToFile;
 -(void)clearDataAndFile;
+-(BOOL)removeFromDbIfEmpty:(FMDatabase*)db;
 
 +(void)ensureDbStructure:(FMDatabase*)db;
 

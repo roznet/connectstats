@@ -32,37 +32,34 @@
 //
 
 // return uom
--(GCStatsDataSerieWithUnit*)addFromDb:(GCField*)field toSerie:(GCStatsDataSerieWithUnit*)serie filter:(GCHistoryTestFilterBlock)filter{
+-(GCStatsDataSerieWithUnit*)addFromDb:(FMDatabase*)db field:(GCField*)field toSerie:(GCStatsDataSerieWithUnit*)serie filter:(GCHistoryTestFilterBlock)filter{
     NSString * query = @"SELECT v.*, activityType, BeginTimestamp FROM gc_activities_values v, gc_activities a WHERE a.activityId=v.activityId AND v.field=? AND a.activityType = ? ORDER BY BeginTimestamp DESC";
     FMResultSet * res = nil;
     if ([field isHealthField]) {
         NSString * col = [field.key substringFromIndex:[GC_HEALTH_PREFIX length]];
         query = @"select measureDate as BeginTimeStamp, measureValue as value,'kilogram' as uom from gc_health_measures where measureType=? order by measureDate DESC;";
-        res = [self.db executeQuery:query,col];
-    }else if ([self.config.activityType isEqualToString:GC_TYPE_ALL]) {
+        res = [db executeQuery:query,col];
+    }else if ([self.config.activityTypeDetail isEqualToActivityType:GCActivityType.all]) {
         query = @"SELECT v.*, activityType, BeginTimestamp FROM gc_activities_values v, gc_activities a WHERE a.activityId=v.activityId AND v.field=? ORDER BY BeginTimestamp DESC";
-        res = [self.db executeQuery:query,field.key];
+        res = [db executeQuery:query,field.key];
     }else{
-        res = [self.db executeQuery:query,field.key, self.config.activityType];
+        res = [db executeQuery:query,field.key, self.config.activityTypeDetail.primaryActivityType.key];
     }
 
     while ([res next]) {
         GCNumberWithUnit * nu = [GCNumberWithUnit numberWithUnitName:[res stringForColumn:@"uom"] andValue:[res doubleForColumn:@"value"]];
         NSDate * date = [res dateForColumn:@"BeginTimestamp"];
         if( !filter || filter( date )){
-            NSLog(@"%@ in", date);
             [serie addNumberWithUnit:nu forDate:date];
-        }else{
-            NSLog(@"%@ out", date);
         }
     }
     return serie;
 }
 
--(void)loadFromDb:(GCHistoryTestFilterBlock)filter{
-    self.dataLock = true;
+-(void)loadFromDb:(FMDatabase*)db filter:(GCHistoryTestFilterBlock)filter{
+    /*
     [self setHistory:[[[GCStatsDataSerieWithUnit alloc] init] autorelease]];
-    [self addFromDb:self.config.activityField toSerie:self.history filter:filter];
+    [self addFromDb:db field:self.config.activityField toSerie:self.history filter:filter];
     if (self.config.x_activityField) {
         GCStatsDataSerieWithUnit * xSerie = [[[GCStatsDataSerieWithUnit alloc] init] autorelease];
         [self addFromDb:self.config.x_activityField toSerie:xSerie filter:filter];
@@ -90,6 +87,7 @@
     dispatch_async(dispatch_get_main_queue(), ^(){
         [self notify];
     });
+     */
 }
 
 

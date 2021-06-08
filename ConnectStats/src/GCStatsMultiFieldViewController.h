@@ -26,7 +26,7 @@
 #import <UIKit/UIKit.h>
 #import "GCHistoryFieldSummaryStats.h"
 #import "GCViewConfig.h"
-#import "GCHistoryAggregatedActivityStats.h"
+#import "GCHistoryAggregatedStats.h"
 #import "GCHistoryFieldDataSerie.h"
 #import "GCViewActivityTypeButton.h"
 #import "GCStatsMultiFieldConfig.h"
@@ -41,7 +41,7 @@
 @interface GCStatsMultiFieldViewController : UITableViewController<RZChildObject,GCViewActivityTypeButtonDelegate,GCCellSimpleGraphDelegate,GCStatsMultiFieldConfigViewDelegate,GCStatsDerivedHistoryViewDelegate>
 
 @property (nonatomic,retain) GCHistoryFieldSummaryStats * fieldStats;
-@property (nonatomic,retain) GCHistoryAggregatedActivityStats * aggregatedStats;
+@property (nonatomic,retain) GCHistoryAggregatedStats * aggregatedStats;
 @property (nonatomic,retain) NSArray<GCFieldsForCategory*> * fieldOrder;
 @property (nonatomic,retain) NSArray<GCField*> * allFields;
 @property (nonatomic,retain) NSDictionary<GCField*,GCHistoryFieldDataSerie*> * fieldDataSeries;
@@ -53,8 +53,7 @@
 
 -(void)setupForCurrentActivityType:(NSString*)aType filter:(BOOL)aFilter andViewChoice:(gcViewChoice)choice;
 -(void)setupForCurrentActivityType:(NSString*)aType andViewChoice:(gcViewChoice)choice;
--(void)setupForCurrentActivityType:(NSString*)aType andFilter:(BOOL)aFilter;
--(void)setupForCurrentActivityAndViewChoice:(gcViewChoice)choice;
+//-(void)setupForCurrentActivityAndViewChoice:(gcViewChoice)choice;
 -(void)setupForFieldListConfig:(GCStatsMultiFieldConfig*)nConfig;
 
 -(void)setupBarButtonItem;

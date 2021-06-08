@@ -206,6 +206,7 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
     [_worker release];
     
     [_validateNextSearch release];
+    [_notificationHandler release];
     
     [super dealloc];
 }
@@ -484,6 +485,9 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
         [self executeCurrentRequest];
         
         [self notifyForString:NOTIFY_NEXT safeTries:5];
+        if( self.notificationHandler ){
+            self.notificationHandler(gcWebNotificationNext);
+        }
     }else{
         if (_requests.count == 0) {
             RZLog(RZLogInfo, @"end data=%@", [GCUnit formatBytes:[RZRemoteDownload totalDataUsage]]);
@@ -498,9 +502,17 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
             self.started = false;
             if (someError) {
                 [self notifyForString:NOTIFY_ERROR];
+                if( self.notificationHandler ){
+                    self.notificationHandler(gcWebNotificationError);
+                }
+
                 [self clearDoneRequests];
             }else{
                 [self notifyForString:NOTIFY_END];
+                if( self.notificationHandler ){
+                    self.notificationHandler(gcWebNotificationEnd);
+                }
+
                 [self clearDoneRequests];
             }
         }
@@ -554,6 +566,10 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
     }
 
     [self notifyForString:NOTIFY_ERROR];
+    if( self.notificationHandler ){
+        self.notificationHandler(gcWebNotificationError);
+    }
+
 }
 
 -(void)downloadDataSuccessful:(RZRemoteDownload *)connection data:(NSData *)data{
@@ -615,6 +631,9 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
 
 -(void)processNewStage{
     [self notifyForString:NOTIFY_CHANGE];
+    if( self.notificationHandler ){
+        self.notificationHandler(gcWebNotificationChange);
+    }
 }
 
 -(BOOL)checkState{

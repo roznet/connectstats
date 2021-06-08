@@ -44,6 +44,7 @@ NSString * INFO_ACTIVITY_TYPE_COUNT = @"activity_type_count";
 NSString * INFO_ACTIVITY_TYPE_LATEST = @"activity_type_latest";
 
 NSString * kNotifyOrganizerLoadComplete = @"kNotifyOrganizerLoadComplete";
+NSString * kNotifyOrganizerLoadSummaryComplete = @"kNotifyOrganizerLoadSummaryComplete";
 NSString * kNotifyOrganizerListChanged = @"kNotifyOrganizerListChanged";
 NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 
@@ -63,7 +64,13 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 @property (nonatomic,assign) BOOL testMode;
 @property (nonatomic,retain) dispatch_queue_t worker;
 
+// Cache information about the load process
 @property (nonatomic,assign) BOOL loadCompleted;
+@property (nonatomic,assign) BOOL loadSummaryCompleted;
+@property (nonatomic,assign) BOOL loadDetailsCompleted;
+@property (nonatomic,assign) BOOL loadDetailsNeeded;
+@property (nonatomic,retain) NSDate * loadStartTime;
+@property (nonatomic,retain) NSMutableDictionary<NSString*,NSString*>*activityIdToActivityType;
 
 @property (nonatomic,retain) GCHealthOrganizer * storedHealth;
 
@@ -74,7 +81,10 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 //@synthesize db,allActivities,currentActivityIndex,reverseGeocoder,focusedField;
 
 -(instancetype)init{
-    return [self initWithDb:[FMDatabase databaseWithPath:nil]];
+    FMDatabase * memDb = [FMDatabase databaseWithPath:nil];
+    [memDb open];
+    [GCActivitiesOrganizer ensureDbStructure:memDb];
+    return [self initWithDb:memDb];
 }
 -(GCActivitiesOrganizer*)initWithDb:(FMDatabase*)aDb{
     return [self initWithDb:aDb andThread:nil];
@@ -100,18 +110,25 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 }
 
 -(GCActivitiesOrganizer*)initTestModeWithDb:(FMDatabase*)aDb{
+    return [self initTestModeWithDb:aDb loadDetails:true];
+}
+
+-(GCActivitiesOrganizer*)initTestModeWithDb:(FMDatabase*)aDb loadDetails:(BOOL)loadDetails{
     self = [super init];
     if (self) {
         self.testMode = true;
+        self.loadDetailsNeeded = loadDetails;
         self.db = aDb;
         [self setReverseGeocoder:nil];
         [self loadFromDb];
     }
     return self;
-
 }
-
 -(void)dealloc{
+    for (GCActivity * act in _allActivities) {
+        act.settings.organizer = nil;
+    }
+    
     _reverseGeocoder.organizer = nil;
     _reverseGeocoder.delegate=nil;
     _reverseGeocoder.geocoder=nil;
@@ -130,7 +147,9 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     [_filteredActivityType release];
     [_duplicateActivityIds release];
     [_storedHealth release];
-
+    [_activityIdToActivityType release];
+    [_loadStartTime release];
+    
     [super dealloc];
 }
 
@@ -145,10 +164,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 /** @brief record activity type currently in the list of activities
  */
 -(void)recordActivityType:(GCActivity*)act{
-    NSString * type = act.activityType;
-    if( [type isEqualToString:GC_TYPE_OTHER] ){
-        type = act.activityTypeDetail.key;
-    }
+    GCActivityType * type = act.activityTypeDetail;
     
     if (!self.info) {
         [self buildInfoDictionary];
@@ -169,6 +185,8 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         info = @{ INFO_ACTIVITY_TYPE_COUNT: @(cur.integerValue+1), INFO_ACTIVITY_TYPE_LATEST : latest };
     }
     self.info[INFO_ACTIVITY_TYPES][type] = info;
+    
+    self.activityIdToActivityType[act.activityId] = act.activityType;
 }
 
 /** @brief Record All Available Activities Types, not just the one the currently list contains
@@ -178,11 +196,11 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 
 /** @brief ActivityTypes currently in the list of activities
  */
--(NSArray*)listActivityTypes{
+-(NSArray<GCActivityType*>*)listActivityTypes{
     NSMutableArray * rv = [NSMutableArray array];
     NSDictionary * infos = self.info[INFO_ACTIVITY_TYPES];
     if (infos) {
-        for (NSString * type in infos) {
+        for (GCActivityType * type in infos) {
             NSDictionary * info = infos[type];
             NSNumber * count = info[INFO_ACTIVITY_TYPE_COUNT];
             NSDate * latest = info[INFO_ACTIVITY_TYPE_LATEST];
@@ -195,9 +213,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
             }
         }
     }
-    [rv sortUsingComparator:^(NSString * s1, NSString * s2){
-        GCActivityType * t1 = [GCActivityType activityTypeForKey:s1];
-        GCActivityType * t2 = [GCActivityType activityTypeForKey:s2];
+    [rv sortUsingComparator:^(GCActivityType * t1, GCActivityType * t2){
         
         if( t1.sortOrder < t2.sortOrder ){
             return NSOrderedAscending;
@@ -208,7 +224,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         }
     }];
     // Add ALL at the end
-    [rv addObject:GC_TYPE_ALL];
+    [rv addObject:GCActivityType.all];
     return rv;
 }
 
@@ -276,23 +292,18 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 
 #pragma mark - load and update
 
--(void)loadSegments{
-
-}
-
--(void)loadFromDb{
-    if (!_db) {
-        if (!self.info) {
-            [self buildInfoDictionary];
+-(void)loadSummaryFromDb {
+    @synchronized (self) {
+        // load startime means we are currently running
+        // and if already loaded don't do it
+        if( self.loadStartTime != nil || self.loadSummaryCompleted){
+            return;
         }
-        self.allActivities = @[];
-
-        return;
+        self.loadStartTime = [NSDate date];
     }
-    self.loadCompleted = false;
-     NSDate * timing_start = [NSDate date];
+    
     unsigned mem_start = [RZMemory memoryInUse];
-
+    
     NSMutableDictionary * duplicates = [NSMutableDictionary dictionary];
     FMResultSet * res = nil;
     if ([_db tableExists:@"gc_duplicate_activities"]) {
@@ -308,7 +319,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     }
     self.duplicateActivityIds = duplicates;
 
-    NSMutableArray * m_activities = [NSMutableArray arrayWithCapacity:[_db intForQuery:@"SELECT count(*) from gc_activities"]];
+    NSMutableArray * m_activities = [NSMutableArray array];
 
     res = [_db executeQuery:@"SELECT * FROM gc_activities ORDER BY BeginTimestamp DESC"];
     if (res == nil) {
@@ -320,7 +331,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     //restart, clear info dictionary
     [self buildInfoDictionary];
 
-    NSMutableDictionary<NSString*,NSString*>*activityIdToActivityType = [NSMutableDictionary dictionary];
+    self.activityIdToActivityType = [NSMutableDictionary dictionary];
     
     while ([res next]) {
         count++;
@@ -332,34 +343,61 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 
         GCActivity * act = [[GCActivity alloc] initWithResultSet:res];
         [act setDb:self.db];
+        act.settings.organizer = self;
         
         if (!lastLocation && [act validCoordinate]) {
             lastLocation = true;
         }
         [self recordActivityType:act];
-        activityIdToActivityType[act.activityId] = act.activityType;
+        
         [m_activities addObject:act];
         [act release];
     }
     [res close];
     self.allActivities = [NSArray arrayWithArray:m_activities];
-
-    [self addSummaryFields:activityIdToActivityType];
-    [self addWeather];
-    [self clearFilter];
-
-    self.worker = nil;
-    self.loadCompleted = true;
-
+    
     if (!self.testMode) {
-
-        RZLog(RZLogInfo, @"Loaded %d activities [%.1f sec %@]",(int)[_allActivities count], [[NSDate date] timeIntervalSinceDate:timing_start],
+        RZLog(RZLogInfo, @"Loaded summary %d activities [%.1f sec %@]",(int)[_allActivities count], [[NSDate date] timeIntervalSinceDate:self.loadStartTime],
               [RZMemory formatMemoryInUseChangeSince:mem_start]);
         NSDictionary * summary = [self serviceSummary];
         for (NSString * serviceName in summary) {
             NSDictionary *serviceSummary = summary[serviceName];
             RZLog( RZLogInfo, @"%@: %@ activities [From: %@ to %@]", serviceName, serviceSummary[@"count"], serviceSummary[@"earliest"], serviceSummary[@"latest"]);
         }
+        [self notifyOnMainThread:nil];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [[NSNotificationCenter defaultCenter] postNotificationName:kNotifyOrganizerLoadSummaryComplete object:nil];
+        });
+    }
+    
+    [self lookForAndRemoveAllDuplicates];
+    
+    @synchronized (self) {
+        self.loadSummaryCompleted = true;
+        self.loadStartTime = nil;
+    }
+}
+
+-(void)loadDetailsFromDb{
+    @synchronized (self) {
+        // something already running or summary not finished, no point
+        if( !self.loadSummaryCompleted || self.loadStartTime != nil){
+            return;
+        }
+        if( self.loadDetailsCompleted){
+            return;
+        }
+        self.loadStartTime = [NSDate date];
+    }
+     unsigned mem_start = [RZMemory memoryInUse];
+    [self addSummaryFields];
+    [self addWeather];
+    [self clearFilter];
+
+    if (!self.testMode) {
+        RZLog(RZLogInfo, @"Loaded details %d activities [%.1f sec %@]",(int)[_allActivities count], [[NSDate date] timeIntervalSinceDate:self.loadStartTime],
+              [RZMemory formatMemoryInUseChangeSince:mem_start]);
+
         [_reverseGeocoder start];
         [self notifyOnMainThread:nil];
         dispatch_async(dispatch_get_main_queue(), ^(){
@@ -367,8 +405,57 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
             [self publishEvent];
         });
     }
-    [self lookForAndRemoveAllDuplicates];
+    @synchronized (self){
+        self.worker = nil;
+        self.loadDetailsCompleted = true;
+        self.loadCompleted = true;
+
+        self.loadStartTime = nil;
+    }
+}
+
+-(BOOL)ensureDetailsLoaded{
+    @synchronized (self) {
+        self.loadDetailsNeeded = true;
+        if( self.loadDetailsCompleted){
+            // nothing to do
+            return true;
+        }
+    }
+    if( self.worker){
+        dispatch_async(self.worker, ^(){
+            [self loadDetailsFromDb];
+        });
+    }else{
+        [self loadDetailsFromDb];
+    }
     
+    return false;
+}
+
+-(void)loadFromDb{
+    if (!_db) {
+        if (!self.info) {
+            [self buildInfoDictionary];
+        }
+        self.allActivities = @[];
+
+        return;
+    }
+    // Load process will have several stages:
+    //   - always load summary first
+    //   - when ui starts: load the details
+    
+    self.loadCompleted = false;
+    self.loadDetailsCompleted = false;
+    self.loadSummaryCompleted = false;
+
+    [self loadSummaryFromDb];
+    // If test mode load details, otherwise wait for signal it's needed
+    // Typically from the ui
+    if( self.loadDetailsNeeded ){
+        [self loadDetailsFromDb];
+    }
 }
 
 
@@ -420,6 +507,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
             [self notifyOnMainThread:aId];
         }
     }else{
+        // checkif duplicate will also update and save if necessary the duplicate with new information from activty
         if ([self checkIfActivityIsDuplicate:act]) {
             return rv;
         }
@@ -428,6 +516,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
             [act saveToDb:self.db];
         }
         NSMutableArray * m_activities = [NSMutableArray arrayWithArray:_allActivities];
+        act.settings.organizer = self;
         if (m_activities.count > 0 && [[m_activities[0] date] compare:act.date] != NSOrderedDescending) {
             [m_activities insertObject:act atIndex:0];
         }else{
@@ -452,12 +541,13 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 }
 
 
--(void)registerActivity:(NSString *)aId withWeather:(GCWeather *)aData{
-    [[self activityForId:aId] recordWeather:aData];
+-(void)registerActivity:(GCActivity*)act withWeather:(GCWeather *)aData{
+    [act recordWeather:aData];
     //needed?
     //[self notifyOnMainThread];
 }
--(void)registerActivity:(NSString*)aId withTrackpoints:(NSArray*)aTrack andLaps:(NSArray*)laps{
+-(void)registerActivity:(GCActivity*)act withTrackpoints:(NSArray*)aTrack andLaps:(NSArray*)laps{
+    NSString * aId = act.activityId;
     if ([[self activityForId:aId] saveTrackpoints:aTrack andLaps:laps]) {
         [self notifyOnMainThread:aId];
     }
@@ -489,8 +579,6 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
                 self.duplicateActivityIds[act.activityId] = other.activityId;
                 [self.db executeUpdate:@"INSERT INTO gc_duplicate_activities (activityId,duplicateActivityId) VALUES (?,?)", act.activityId, other.activityId];
                 
-                gcDuplicate reason = [other testForDuplicate:act];
-                // This is
                 if( reason == gcDuplicateNotMatching){
                     reason = [act testForDuplicate:other];
                     if( reason != gcDuplicateNotMatching ){
@@ -502,7 +590,9 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
                 
                 // If from same service, and preferred, take the extra info
                 if( duplicateServiceIsPreferred ){
-                    RZLog(RZLogInfo, @"Duplicate (%@): updating %@ (preferred: %@)", reasonDescription, other.activityId, act.activityId );
+                    if( reason != gcDuplicateSynchronizedService){
+                        RZLog(RZLogInfo, @"Duplicate (%@): updating %@ (preferred: %@)", reasonDescription, other.activityId, act.activityId );
+                    }
                     // Avoid trivial case where exact same pointer/activity
                     if( act != other ){
                         [other updateMissingFromActivity:act];
@@ -849,6 +939,15 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         self.lastSearchString = nil;
     }
 }
+-(void)filterMatching:(nullable GCActivityMatchBlock)matching{
+    if( matching){
+        self.filteredIndices = [self activityIndexesMatching:matching];
+        self.lastSearchString = nil;
+    }else{
+        self.filteredIndices = nil;
+        self.lastSearchString = nil;
+    }
+}
 -(void)clearFilter{
     self.filteredIndices = nil;
     self.lastSearchString = nil;
@@ -937,7 +1036,34 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 
 }
 
--(NSArray*)activityIndexesMatchingString:(NSString*)str{
+-(NSArray<NSNumber*>*)activityIndexesMatching:(GCActivityMatchBlock)block{
+    if( block == nil){
+        return nil;
+    }
+    NSUInteger n = [self countOfActivities];
+    NSMutableArray * filteredIndexes=[NSMutableArray arrayWithCapacity:n];
+
+    NSString * commonActivityType = nil;
+
+    for (NSUInteger i=0; i<n; i++) {
+        GCActivity * act = _allActivities[i];
+        if (block(act)) {
+            if (commonActivityType == nil) {
+                commonActivityType = act.activityType;
+            }else{
+                if (![commonActivityType isEqualToString:act.activityType]) {
+                    commonActivityType = GC_TYPE_ALL;
+                }
+            }
+
+            [filteredIndexes addObject:@(i)];
+        }
+    }
+    self.filteredActivityType = commonActivityType;
+    return filteredIndexes;
+}
+
+-(NSArray<NSNumber*>*)activityIndexesMatchingString:(NSString*)str{
     if (str == nil || [str isEqualToString:@""]) {
         return nil;
     }
@@ -1092,6 +1218,8 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         for (GCActivity * act in _allActivities) {
             if (toDelete[act.activityId] == nil) {
                 [newActivities addObject:act];
+            }else{
+                act.settings.organizer = nil;
             }
         }
         self.allActivities = [NSArray arrayWithArray:newActivities];
@@ -1131,20 +1259,23 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 }
 
 -(void)deleteActivityAtIndex:(NSUInteger)idx{
-    NSString * activityId = [_allActivities[idx] activityId];
+    GCActivity * act = _allActivities[idx];
+    NSString * activityId = [act activityId];
 
     RZLog(RZLogInfo, @"delete index %d id %@", (int)idx, activityId);
-
-    [_db beginTransaction];
+    
+    act.settings.organizer = nil;
+    
     if (idx<_allActivities.count) {
+        [_db beginTransaction];
         RZEXECUTEUPDATE(_db, @"DELETE FROM gc_activities WHERE activityId=?", activityId);
         RZEXECUTEUPDATE(_db, @"DELETE FROM gc_activities_values WHERE activityId=?", activityId);
         RZEXECUTEUPDATE(_db, @"DELETE FROM gc_activities_meta WHERE activityId=?", activityId);
         RZEXECUTEUPDATE(_db, @"DELETE FROM gc_duplicate_activities WHERE activityId=?",activityId);
         RZEXECUTEUPDATE(_db, @"DELETE FROM gc_duplicate_activities WHERE duplicateActivityId=?",activityId);
-        [RZFileOrganizer removeEditableFile:[NSString stringWithFormat:@"track_%@.db",activityId]];
+        [_db commit];
+        [act clearTrackdb];
     }
-    [_db commit];
     [self deleteDuplicateForActivities:@[ activityId ]];
     
     _currentActivityIndex = 0;
@@ -1180,8 +1311,10 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     [_db beginTransaction];
     for (NSUInteger i=idxfrom; i<idxto; i++) {
         if (i<_allActivities.count) {
-            NSString * activityId = [_allActivities[i] activityId];
-            [toDelete addObject:[_allActivities[i] activityId]];
+            GCActivity * act = self.allActivities[i];
+            act.settings.organizer = nil;
+            NSString * activityId = act.activityId;
+            [toDelete addObject:activityId];
             RZEXECUTEUPDATE(_db, @"DELETE FROM gc_activities WHERE activityId=?", activityId);
             RZEXECUTEUPDATE(_db, @"DELETE FROM gc_activities_values WHERE activityId=?", activityId);
             RZEXECUTEUPDATE(_db, @"DELETE FROM gc_activities_meta WHERE activityId=?", activityId);
@@ -1275,7 +1408,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     }
 }
 
--(void)addSummaryFields:(NSDictionary<NSString*,NSString*>*)idToType{
+-(void)addSummaryFields{
     NSString * query = @"SELECT * FROM gc_activities_values ORDER BY activityId DESC";
     NSMutableDictionary * data = [NSMutableDictionary dictionaryWithCapacity:self.allActivities.count];
     NSMutableDictionary * meta = [NSMutableDictionary dictionaryWithCapacity:self.allActivities.count];
@@ -1296,7 +1429,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
             currentId = rowActivityId;
             currentSummary = [NSMutableDictionary dictionaryWithCapacity:20];
             data[currentId] = currentSummary;
-            activityType = idToType[currentId];
+            activityType = self.activityIdToActivityType[currentId];
         }
         currentValue = [GCActivitySummaryValue activitySummaryValueForResultSet:res activityType:activityType];
         currentSummary[ currentValue.field ] = currentValue;
@@ -1330,7 +1463,6 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         self.activitiesTrash = todelete;
         [self deleteActivitiesInTrash];
     }
-    
 
     for (GCActivity * one in self.allActivities) {
         currentSummary = data[one.activityId];
@@ -1381,7 +1513,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     return filter;
 }
 
--(NSDictionary*)fieldsSeries:(NSArray*)fields
+-(NSDictionary<GCField*,GCStatsDataSerieWithUnit*>*)fieldsSeries:(NSArray<GCField*>*)fields
                     matching:(GCActivityMatchBlock)match
                  useFiltered:(BOOL)useFilter
                   ignoreMode:(gcIgnoreMode)ignoreMode{
@@ -1399,33 +1531,19 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     }
 
     if (actfields.count) {
-        NSArray * useActivities = useFilter ? [self filteredActivities] : self.allActivities;
+        NSArray<GCActivity*> * useActivities = useFilter ? [self filteredActivities] : self.allActivities;
         for (GCActivity * act in useActivities) {
             if (![act ignoreForStats:ignoreMode] && (match==nil || match(act))) {
-                for (id one in actfields) {
-                    GCNumberWithUnit * nu = nil;
-                    GCField * field = nil;
-                    if ([one isKindOfClass:[GCField class]]){
-                        field = one;
-                        if( [field.activityType isEqualToString:GC_TYPE_ALL]){
-                            field = [field correspondingFieldForActivityType:act.activityType];
+                for (GCField * field in actfields) {
+                    GCNumberWithUnit * nu = [act numberWithUnitForField:field];
+                    if (nu) {
+                        nu = [nu convertToGlobalSystem];
+                        GCStatsDataSerieWithUnit * serie = rv[field];
+                        if (serie == nil) {
+                            serie = [GCStatsDataSerieWithUnit dataSerieWithUnit:nu.unit];
+                            rv[field] = serie;
                         }
-                    }else if ([one isKindOfClass:[NSString class]]) {
-                        field = [GCField fieldForKey:one andActivityType:act.activityType];
-                    }else if ([one isKindOfClass:[NSNumber class]]){
-                        field = [GCField fieldForFlag:(gcFieldFlag)[one integerValue] andActivityType:act.activityType];
-                    }
-                    if( field ){
-                        nu = [act numberWithUnitForField:field];
-                        if (nu) {
-                            nu = [nu convertToGlobalSystem];
-                            GCStatsDataSerieWithUnit * serie = rv[one];
-                            if (serie == nil) {
-                                serie = [GCStatsDataSerieWithUnit dataSerieWithUnit:nu.unit];
-                                rv[one] = serie;
-                            }
-                            [serie addNumberWithUnit:nu forDate:act.date];
-                        }
+                        [serie addNumberWithUnit:nu forDate:act.date];
                     }
                 }
             }

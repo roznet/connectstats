@@ -74,7 +74,7 @@
                                                                                        field:field];
 
     GCHistoryFieldDataSerie * fieldDataSerie = [[GCHistoryFieldDataSerie alloc] initFromConfig:config] ;
-    [fieldDataSerie loadFromOrganizer];
+    [fieldDataSerie loadFromOrganizer:[GCAppGlobal organizer]];
 
     NSCalendarUnit unit = NSCalendarUnitYear;
 

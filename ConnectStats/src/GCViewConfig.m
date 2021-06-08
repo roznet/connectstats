@@ -37,7 +37,7 @@ static GCViewConfigSkin * _skin = nil;
 NS_INLINE GCViewConfigSkin * _current_skin(){
     if (_skin == nil) {
         
-        NSString * skinName = [[GCAppGlobal profile] configGetString:CONFIG_SKIN_NAME defaultValue:kGCSkinNameOriginal];
+        NSString * skinName = [[GCAppGlobal profile] configGetString:CONFIG_SKIN_NAME defaultValue:kGCSkinName2021];
         if( skinName ){
             _skin = [GCViewConfigSkin skinForName:skinName];
         }
@@ -440,10 +440,10 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
     GCField * nextX = nil;
 
     GCField * avoid2 = nil;
-    if( avoid && [avoid.key isEqualToString:@"WeightedMeanSpeed"] ){
-        avoid2 = [GCField fieldForKey:@"WeightedMeanPace" andActivityType:avoid.activityType];
-    }else if ( avoid && [avoid.key isEqualToString:@"WeightedMeanPace"]){
-        avoid2 = [GCField fieldForKey:@"WeightedMeanSpeed" andActivityType:avoid.activityType];
+    if( avoid && [avoid.key hasSuffix:@"Speed"] ){
+        avoid2 = [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:avoid.activityType];
+    }else if ( avoid && [avoid.key hasSuffix:@"Pace"]){
+        avoid2 = [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:avoid.activityType];
     }
 
     while (nextX==nil && n<choices.count) {
@@ -706,6 +706,18 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
     if (rv==nil) {
         rv = @[ NSLocalizedString(@"Source", @"ConnectStats Use Method"),
                 NSLocalizedString(@"Validate", @"ConnectStats Use Method")];
+        [rv retain];
+    }
+    return rv;
+}
+
++(NSArray*)validChoicesForConnectStatsNotificationType{
+    static NSArray * rv = nil;
+    if( rv==nil){
+        rv = @[
+            NSLocalizedString(@"Disabled", @"Notifications"),
+            NSLocalizedString(@"New Activities", @"Notifications"),
+        ];
         [rv retain];
     }
     return rv;

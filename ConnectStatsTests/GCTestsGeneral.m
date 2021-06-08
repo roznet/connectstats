@@ -9,7 +9,7 @@
 #import "GCTestCase.h"
 #import "GCActivitiesOrganizer.h"
 #import "GCActivitySearch.h"
-#import "GCHistoryAggregatedActivityStats.h"
+#import "GCHistoryAggregatedStats.h"
 #import "GCAppProfiles.h"
 #import "GCActivity+CalculatedLaps.h"
 #import "GCFieldsCalculated.h"
@@ -33,7 +33,7 @@
 #import "GCActivity+TestBackwardCompat.h"
 #import "GCStatsCalendarAggregationConfig.h"
 #import "GCActivity.h"
-#import "GCHistoryFieldDataHolder.h"
+#import "GCHistoryFieldSummaryDataHolder.h"
 
 @interface GCTestsGeneral : GCTestCase
 @end
@@ -253,7 +253,9 @@
 
 
 -(void)testAggregateActivities{
-    GCActivitiesOrganizer * organizer = [[GCActivitiesOrganizer alloc] init];
+
+    GCActivitiesOrganizer * organizer = [self createTemporaryInMemoryOrganizer];
+    
     NSDictionary * sample  = [GCTestsSamples aggregateSample];
     NSDictionary * expected =[GCTestsSamples aggregateExpected];
     // Create one running/one cycling with distance = val, time = val *2, etc
@@ -276,9 +278,9 @@
     [e_sum sortByReverseDate];
     [e_max sortByReverseDate];
     
-    GCHistoryAggregatedActivityStats * stats = [GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityType:GC_TYPE_RUNNING];
+    GCHistoryAggregatedStats * stats = [GCHistoryAggregatedStats aggregatedStatsForActivityType:GC_TYPE_RUNNING];
     [stats setActivitiesFromOrganizer:organizer];
-    [stats setActivityType:GC_TYPE_RUNNING];
+    [stats setActivityTypeSelection:RZReturnAutorelease([[GCActivityTypeSelection alloc] initWithActivityType:GC_TYPE_RUNNING])];
     [stats aggregate:NSCalendarUnitWeekOfYear referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
     XCTAssertEqual([e_avg count], [stats count], @"Count");
     
@@ -323,10 +325,10 @@
         XCTAssertEqualWithAccuracy([[holder numberWithUnit:f statType:gcAggregatedMax] convertToUnit:GCUnit.mps].value, [e_max dataPointAtIndex:i].y_data*x, 1e-6, @"Same max");
     }
     
-    [stats setActivityType:GC_TYPE_ALL];
+    [stats setActivityTypeSelection:RZReturnAutorelease([[GCActivityTypeSelection alloc] initWithActivityType:GC_TYPE_ALL])];
     [stats aggregate:NSCalendarUnitWeekOfYear referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
 
-    GCHistoryFieldSummaryStats * sumStats = [GCHistoryFieldSummaryStats fieldStatsWithActivities:organizer.activities matching:nil referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
+    GCHistoryFieldSummaryStats * sumStats = [GCHistoryFieldSummaryStats fieldStatsWithActivities:organizer.activities activityTypeSelection:nil referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
     GCHistoryAggregatedDataHolder * holder = [stats dataForIndex:0];
     
     GCField * hrfield =[GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:GC_TYPE_ALL];
@@ -339,7 +341,7 @@
                                1.e-7, @"Count equals");
     
     // Check Cutoff aggregate
-    [stats setActivityType:GC_TYPE_RUNNING];
+     [stats setActivityTypeSelection:RZReturnAutorelease([[GCActivityTypeSelection alloc] initWithActivityType:GC_TYPE_RUNNING])];
     NSDate * cutoff = [organizer.activities.lastObject date];
     [stats aggregate:NSCalendarUnitMonth referenceDate:nil cutOff:cutoff ignoreMode:gcIgnoreModeActivityFocus];
     
@@ -352,8 +354,7 @@
     GCField * distfield = [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:GC_TYPE_RUNNING];
     GCHistoryFieldDataSerieConfig * config = [GCHistoryFieldDataSerieConfig configWithFilter:false field:distfield];
     GCHistoryFieldDataSerie * dataserie = [[GCHistoryFieldDataSerie alloc] initFromConfig:config];
-    dataserie.organizer = organizer;
-    [dataserie loadFromOrganizer];
+    [dataserie loadFromOrganizer:organizer];
     GCHistoryFieldDataSerie * withcutoff = [dataserie serieWithCutOff:cutoff inCalendarUnit:NSCalendarUnitMonth withReferenceDate:nil];
     NSDictionary * dict = [withcutoff.history.serie aggregatedStatsByCalendarUnit:NSCalendarUnitMonth
                                                                     referenceDate:nil
@@ -377,9 +378,6 @@
         }
         XCTAssertTrue(found, @"found %@ in History Field Data Serie", date);
     }
-    
-    
-    [organizer release];
 }
 
 -(void)atestTrackFieldChoiceOrder{
@@ -655,7 +653,7 @@
         [act release];
     }
     
-    GCActivitiesOrganizer * organizer = [[[GCActivitiesOrganizer alloc] init] autorelease];
+    GCActivitiesOrganizer * organizer = [self createTemporaryInMemoryOrganizer];
     organizer.activities = activities;
     
     GCHistoryPerformanceAnalysis * perfAnalysis = [[[GCHistoryPerformanceAnalysis alloc] init] autorelease];
@@ -750,7 +748,7 @@
 #pragma mark - GCActivitiesOrganizer
 
 -(void)testOrganizer{
-    GCActivitiesOrganizer * organizer = [[GCActivitiesOrganizer alloc] init];
+    GCActivitiesOrganizer * organizer = [self createTemporaryInMemoryOrganizer];
     NSArray * initial = [NSArray arrayWithObjects:@"a", @"b", @"c", @"d",@"e", nil];
     NSMutableArray * a1 = [NSMutableArray arrayWithCapacity:[initial count]];
     for (NSString * aId in initial) {
@@ -783,7 +781,7 @@
 
 
 -(void)testOrganizerSearchAndFilter{
-    GCActivitiesOrganizer * organizer = [[GCActivitiesOrganizer alloc] init];
+    GCActivitiesOrganizer * organizer = [self createTemporaryInMemoryOrganizer];
     NSArray * samples  = @[ @[ GC_TYPE_CYCLING, @"2012-09-13T18:48:16.000Z", @1, @"meter",     @5.2,  @"minperkm", @"aa"],
                             @[ GC_TYPE_CYCLING, @"2012-09-14T18:48:16.000Z", @1, @"kilometer", @1,    @"kph", @"bb"],
                             @[ GC_TYPE_RUNNING, @"2012-09-15T18:48:16.000Z", @1, @"kilometer", @1,    @"kph",  @"aa"],
@@ -844,7 +842,7 @@
 }
 
 -(void)testOrganizerTimeSeries{
-    GCActivitiesOrganizer * organizer = [[GCActivitiesOrganizer alloc] init];
+    GCActivitiesOrganizer * organizer = [self createTemporaryInMemoryOrganizer];
     NSArray * samples  = @[ @[ GC_TYPE_CYCLING, @"2012-09-13T18:48:16.000Z", @1, @"meter",     @5.2,  @"minperkm"],
                             @[ GC_TYPE_CYCLING, @"2012-09-14T18:48:16.000Z", @1, @"kilometer", @1,    @"kph"],
                             @[ GC_TYPE_RUNNING, @"2012-09-15T18:48:16.000Z", @1, @"kilometer", @1,    @"kph"]
@@ -864,9 +862,12 @@
     }
     [organizer setActivities:activities];
     
-    NSDictionary * rv = [organizer fieldsSeries:@[@"WeightedMeanSpeed",@(gcFieldFlagSumDistance)] matching:nil useFiltered:false ignoreMode:gcIgnoreModeActivityFocus];
-    GCStatsDataSerieWithUnit * speed = [rv objectForKey:@"WeightedMeanSpeed"];
-    GCStatsDataSerieWithUnit * dist  = [rv objectForKey:@(gcFieldFlagSumDistance)];
+    GCField * speedField = [GCField fieldForKey:@"WeightedMeanSpeed" andActivityType:GC_TYPE_ALL];
+    GCField * distField  = [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:GC_TYPE_ALL];
+    
+    NSDictionary * rv = [organizer fieldsSeries:@[speedField,distField] matching:nil useFiltered:false ignoreMode:gcIgnoreModeActivityFocus];
+    GCStatsDataSerieWithUnit * speed = [rv objectForKey:speedField];
+    GCStatsDataSerieWithUnit * dist  = [rv objectForKey:distField];
     
     GCUnit * km = [GCUnit unitForKey:@"kilometer"];
     GCUnit * kph = [GCUnit unitForKey:@"kph"];
@@ -885,9 +886,9 @@
     }
     
     
-    
-    rv = [organizer fieldsSeries:@[CALC_ENERGY] matching:nil useFiltered:false ignoreMode:gcIgnoreModeActivityFocus];
-    GCStatsDataSerieWithUnit * engy = [rv objectForKey:CALC_ENERGY];
+    GCField * energyField = [GCField fieldForKey:CALC_ENERGY andActivityType:GC_TYPE_ALL];
+    rv = [organizer fieldsSeries:@[ energyField ] matching:nil useFiltered:false ignoreMode:gcIgnoreModeActivityFocus];
+    GCStatsDataSerieWithUnit * engy = [rv objectForKey:energyField];
     
     XCTAssertTrue([[engy unit] isEqualToUnit:[GCUnit unitForKey:@"kilojoule"]], @"Calc Val worked");
     XCTAssertTrue([engy.serie count] == [[organizer activities] count], @"point for each");
@@ -900,12 +901,12 @@
     GCHistoryFieldDataSerieConfig * config = [GCHistoryFieldDataSerieConfig configWithFilter:false field:durfield];
     GCHistoryFieldDataSerie * dataserie = [[GCHistoryFieldDataSerie alloc] initFromConfig:config];
     NSDate * limit = [NSDate dateForRFC3339DateTimeString:@"2012-09-14T00:10:16.000Z"];
-    dataserie.organizer = organizer;
+    
     void (^test)(NSString * type, NSDate * from, NSUInteger e_n) = ^(NSString * type, NSDate * from, NSUInteger e_n){
         dataserie.config.fromDate = from;
-        dataserie.config.activityType = type;
+        dataserie.config.activityTypeSelection = RZReturnAutorelease([[GCActivityTypeSelection alloc] initWithActivityType:type]);
         
-        [dataserie loadFromOrganizer];
+        [dataserie loadFromOrganizer:organizer];
         XCTAssertEqual([[dataserie history] count], e_n, @"%@/%@ expected = %d", type,from,(int)e_n);
     };
     test( GC_TYPE_ALL,nil,3);
@@ -915,8 +916,7 @@
     test( GC_TYPE_RUNNING,limit,1);
     test( GC_TYPE_HIKING,nil,0);
     test( GC_TYPE_HIKING,limit,0);
-    
-    [organizer release];
+
 }
 
 
@@ -937,55 +937,6 @@
         XCTAssertNotNil(img, @"Image for i=%d exists", (int)i);
     }
     
-}
-
--(void)testTimeAxisGeometry{
-    GCHistoryFieldDataSerie * dataserie = [[[GCHistoryFieldDataSerie alloc] init] autorelease];
-    GCStatsDataSerie * serie = [[[GCStatsDataSerie alloc] init] autorelease];
-    NSDictionary * sample  = [GCTestsSamples aggregateSample];
-
-    for (NSString * datestr in sample) {
-        NSNumber * val = [sample objectForKey:datestr];
-        [serie addDataPointWithDate:[NSDate dateForRFC3339DateTimeString:datestr] andValue:[val doubleValue]];
-    }
-    [serie sortByDate];
-
-    dataserie.history = [GCStatsDataSerieWithUnit dataSerieWithUnit:[GCUnit unitForKey:@"dimensionless"] andSerie:serie];
-    NSDate * first = [serie[0] date];
-    
-    GCSimpleGraphCachedDataSource * dataSource = [GCSimpleGraphCachedDataSource historyView:dataserie
-                                                                               calendarConfig:[GCStatsCalendarAggregationConfig globalConfigFor:NSCalendarUnitMonth]
-                                                                                graphChoice:gcGraphChoiceBarGraph
-                                                  after:nil];
-    
-    GCSimpleGraphGeometry * geometry = [[[GCSimpleGraphGeometry alloc] init] autorelease];
-    [geometry setDrawRect:CGRectMake(0., 0., 320., 405.)];
-    [geometry setZoomPercentage:CGPointMake(0., 0.)];
-    [geometry setOffsetPercentage:CGPointMake(0., 0.)];
-    [geometry setDataSource:dataSource];
-    [geometry setAxisIndex:0];
-    [geometry setSerieIndex:0];
-    [geometry calculate];
-    [geometry calculateAxisKnobRect:gcGraphStep andAttribute:@{NSFontAttributeName:[GCViewConfig systemFontOfSize:12.]}];
-    NSCalendar * cal = [GCAppGlobal calculationCalendar];
-    NSDate * start = nil;
-
-    NSTimeInterval extends;
-    NSDateComponents * comp = [[[NSDateComponents alloc] init] autorelease];
-    comp.month = 1;
-    
-    for (GCAxisKnob*point in geometry.xAxisKnobs) {
-        // Check all days are first of month
-        [cal rangeOfUnit:NSCalendarUnitMonth startDate:&start interval:&extends forDate:first];
-        NSDate * knobDate = [NSDate dateWithTimeIntervalSinceReferenceDate:point.value];
-        //XCTAssertEqualObjects(start, knobDate, @"Axis match");
-        if (knobDate) {//FIXME: to avoid unused
-
-        }
-        first = [cal dateByAddingComponents:comp toDate:first options:0];
-    }
-     
-
 }
 
 -(void)testFieldValidChoices{

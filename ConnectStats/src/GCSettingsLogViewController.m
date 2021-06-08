@@ -65,7 +65,7 @@
 
     UIBarButtonItem * rightButton1 = [[UIBarButtonItem alloc] initWithImage:img1 style:UIBarButtonItemStylePlain target:self action:@selector(reloadLog)];
 
-#if TARGET_IPHONE_SIMULATOR
+#if DEBUG
     UIImage * img2= [GCViewIcons navigationIconFor:gcIconNavEye];
     UIBarButtonItem * rightButton2 = [[UIBarButtonItem alloc] initWithImage:img2 style:UIBarButtonItemStylePlain target:self action:@selector(dumpLog)];
     item.rightBarButtonItems = @[rightButton1,rightButton2];

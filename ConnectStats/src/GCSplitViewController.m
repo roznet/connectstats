@@ -93,6 +93,7 @@
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
+    
     [GCAppGlobal startSuccessful];
 }
 - (void)viewDidLoad

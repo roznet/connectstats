@@ -95,12 +95,15 @@ extern NSString * const  CONFIG_GARMIN_LAST_SOURCE;
 extern NSString * const  CONFIG_GARMIN_USE_MODERN;
 extern NSString * const  CONFIG_STRAVA_ENABLE;
 extern NSString * const  CONFIG_STRAVA_SEGMENTS;
-extern NSString * const  CONFIG_SHARING_STRAVA_AUTO;
 extern NSString * const  CONFIG_SHARING_STRAVA_PRIVATE;
 extern NSString * const  CONFIG_HEALTHKIT_ENABLE;
 extern NSString * const  CONFIG_HEALTHKIT_WORKOUT;
 extern NSString * const  CONFIG_HEALTHKIT_DAILY;
 extern NSString * const  CONFIG_HEALTHKIT_SOURCE_CHECKED;
+
+//extern NSString * const  CONFIG_NOTIFICATION_ENABLED;
+extern NSString * const  CONFIG_NOTIFICATION_PUSH_TYPE;
+extern NSString * const  CONFIG_NOTIFICATION_DEVICE_TOKEN;
 
 extern NSString * const  CONFIG_CONNECTSTATS_TOKEN;
 extern NSString * const  CONFIG_CONNECTSTATS_TOKEN_ID;
@@ -195,6 +198,33 @@ typedef NS_ENUM(NSUInteger, gcHistoryStats) {
     gcHistoryStatsEnd
 };
 
+typedef NS_ENUM(NSUInteger, gcNotificationPushType){
+    gcNotificationPushTypeNone,
+    gcNotificationPushTypeAll
+};
+
+typedef NS_ENUM(NSUInteger, gcServicePhase){
+    gcServicePhaseSummary,
+    gcServicePhaseTrack,
+};
+
+typedef struct {
+    unsigned summary : 1;
+    unsigned track : 1;
+    unsigned reserved : 2;
+} __attribute__((packed)) __gcServiceSingleStatus;
+
+typedef struct {
+    __gcServiceSingleStatus connectstats;
+    __gcServiceSingleStatus garmin;
+    __gcServiceSingleStatus strava;
+    __gcServiceSingleStatus reserved1;
+} __gcServiceStatusFlags;
+
+typedef union {
+    unsigned long long flags;
+    __gcServiceStatusFlags status;
+}gcServicesStatusFlags;
 
 typedef BOOL(^gcServiceSourceValidator)(NSString*sourceidentifier);
 

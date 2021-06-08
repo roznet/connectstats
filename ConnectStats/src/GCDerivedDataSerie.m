@@ -355,4 +355,22 @@
     return rv;
 }
 
+-(BOOL)removeFromDbIfEmpty:(FMDatabase*)db{
+    BOOL remove = false;
+    FMResultSet * res = [db executeQuery:@"SELECT * FROM gc_derived_series WHERE key = ?", self.key];
+    if ([res next]) {
+        remove = true;
+    }
+        
+    if( remove ){
+        if( self.serieWithUnit.count == 0){
+            RZEXECUTEUPDATE(db, @"DELETE FROM gc_derived_series WHERE key = ?", self.key);
+        }else{
+            remove = false;
+        }
+    }
+    return remove;
+}
+
+
 @end

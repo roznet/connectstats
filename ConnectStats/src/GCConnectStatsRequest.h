@@ -29,6 +29,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ENUM(NSUInteger, gcWebConnectStatsMode) {
+    gcWebConnectStatsModeDefault,
+    gcWebConnectStatsModeReloadAll,
+    gcWebConnectStatsModeBackgroundFetch
+};
+
 @interface GCConnectStatsRequest : GCWebRequestStandard<NSURLSessionDelegate>
 
 // Set a navigation Controller to present the login web from

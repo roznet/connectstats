@@ -38,18 +38,27 @@
 #import "GCHistoryPerformanceAnalysis.h"
 #import "GCActivitiesOrganizer.h"
 #import "GCStatsCalendarAggregationConfig.h"
+#import "GCHistoryAggregatedStats.h"
+#import "GCStatsMultiFieldConfig.h"
+#import "ConnectStats-Swift.h"
+@import RZUtilsSwift;
+@import RZUtilsTouch;
+@import RZUtilsTouchSwift;
 
 #define GC_S_NAME 0
 #define GC_S_GRAPH 1
 #define GC_S_AVERAGE 2
 #define GC_S_QUARTILES 3
-#define GC_S_END 4
+#define GC_S_AGGREGATE 4
+#define GC_S_END 5
 
 @interface GCStatsOneFieldViewController (){
     NSUInteger movingAverageSample;
 }
 @property (nonatomic,assign) BOOL activityStatsLock;
 @property (nonatomic,assign) BOOL scatterStatsLock;
+@property (nonatomic,retain) RZNumberWithUnitGeometry * geometry;
+@property (nonatomic,readonly) GCStatsMultiFieldConfig * multiFieldConfig;
 
 
 @end
@@ -67,86 +76,78 @@
 }
 
 -(void)dealloc{
-    [_activityStats detach:self];
-    [_scatterStats detach:self];
-
     [_activityStats release];
     [_summarizedHistory release];
     [_average release];
     [_quartiles release];
     [_scatterStats release];
-
+    [_aggregatedStats release];
+    
     [_oneFieldConfig release];
     [_performanceAnalysis release];
     [_fieldOrder release];
-    
+    [_geometry release];
     [super dealloc];
 }
-
--(void)publishEvent{
-    NSDictionary * params = @{@"Type": _oneFieldConfig.activityType ?: @"Unknown",
-                             @"Field": _oneFieldConfig.field ?: @"None",
-                             @"XField": _oneFieldConfig.x_field ?: @"None"};
-    [Flurry logEvent:EVENT_STATISTICS withParameters:params];
+-(GCStatsMultiFieldConfig*)multiFieldConfig{
+    return self.oneFieldConfig.multiFieldConfig;
 }
-
 -(void)setupForConfig:(GCStatsOneFieldConfig*)oneFieldConfig{
 
     self.oneFieldConfig = oneFieldConfig;
+    self.oneFieldConfig.multiFieldConfig.comparisonMetric = gcComparisonMetricPercent;
 
-    self.activityStatsLock = true;
+    [self clearAll];
+    
+    dispatch_async([GCAppGlobal worker], ^(){
+        [self calculate];
+        [self notifyCallBack:self info:nil];
+    });
+}
 
-    GCHistoryFieldDataSerie * stats = [[GCHistoryFieldDataSerie alloc] initAndLoadFromConfig:[_oneFieldConfig historyConfig] withThread:[GCAppGlobal worker]];
-    [_activityStats detach:self];
-    [stats attach:self];
+-(BOOL)isNewStyle{
+    return [GCViewConfig is2021Style];
+}
+
+-(void)clearAll{
+    self.activityStats = nil;
+    self.scatterStats = nil;
+    //self.summarizedHistory = nil;
+    self.aggregatedStats = nil;
+    self.quartiles = nil;
+    self.average = nil;
+}
+
+-(void)calculate{
+    GCHistoryFieldDataSerie * stats = [GCHistoryFieldDataSerie historyFieldDataSerieLoadedFromConfig:self.oneFieldConfig.historyConfig andOrganizer:[GCAppGlobal organizer]];
     self.activityStats = stats;
-    [stats release];
-
-    if (_oneFieldConfig.x_field) {
-        self.scatterStatsLock = true;
-        GCHistoryFieldDataSerie * xystats = [[GCHistoryFieldDataSerie alloc] initAndLoadFromConfig:[_oneFieldConfig historyConfigXY] withThread:[GCAppGlobal worker]];
-        [xystats attach:self];
-        [_scatterStats detach:self];
-        self.scatterStats = xystats;
-        [xystats release];
+    if (self.oneFieldConfig.x_field) {
+            GCHistoryFieldDataSerie * xystats = [GCHistoryFieldDataSerie historyFieldDataSerieLoadedFromConfig:self.oneFieldConfig.historyConfigXY andOrganizer:[GCAppGlobal organizer]];
+            self.scatterStats = xystats;
+    }
+    GCStatsCalendarAggregationConfig * calendarConfig = self.oneFieldConfig.calendarConfig;
+    /*self.summarizedHistory = [_activityStats.history.serie aggregatedStatsByCalendarUnit:calendarConfig.calendarUnit
+                                                                           referenceDate:calendarConfig.referenceDate
+                                                                             andCalendar:calendarConfig.calendar];
+    */
+    self.aggregatedStats = [GCHistoryAggregatedStats aggregatedStatsForActivityTypeSelection:self.multiFieldConfig.activityTypeSelection];
+    
+    [self.aggregatedStats setActivities:[GCAppGlobal organizer].activities andFields:self.oneFieldConfig.fieldsForAggregation];
+    [self.aggregatedStats aggregate:calendarConfig.calendarUnit
+                      referenceDate:calendarConfig.referenceDate
+                             cutOff:calendarConfig.cutOff
+                         ignoreMode:self.multiFieldConfig.activityTypeDetail.ignoreMode];
+    
+    self.geometry = [RZNumberWithUnitGeometry geometry];
+    GCActivityType * type = self.multiFieldConfig.activityTypeDetail;
+    for (GCHistoryAggregatedDataHolder * holder in self.aggregatedStats) {
+        [GCCellGrid adjustAggregatedWithDataHolder:holder activityType:type geometry:self.geometry];
     }
 
-    [self setupForCurrentConfig];
-
-}
-
--(void)setupForCurrentConfig{
-
-    if (self.oneFieldConfig.viewChoice != gcViewChoiceFields) {
-        if ([_activityStats ready]) {
-            GCStatsCalendarAggregationConfig * calendarConfig = self.oneFieldConfig.calendarConfig;
-            self.summarizedHistory = [_activityStats.history.serie aggregatedStatsByCalendarUnit:calendarConfig.calendarUnit
-                                                                                   referenceDate:calendarConfig.referenceDate
-                                                                                     andCalendar:calendarConfig.calendar];
-        }else{
-            [self setSummarizedHistory:nil];
-        }
-    }
-}
--(void)notifyCallBack:(id)theParent info:(RZDependencyInfo*)theInfo{
-
-    if (theParent == _activityStats) {
-        self.activityStatsLock = false;
-    }
-    if (theParent == _scatterStats) {
-        self.scatterStatsLock = false;
-    }
-
-    if (_oneFieldConfig.viewChoice != gcViewChoiceFields) {
-        if (_summarizedHistory == nil && [_activityStats ready]) {
-            GCStatsCalendarAggregationConfig * calendarConfig = self.oneFieldConfig.calendarConfig;
-            self.summarizedHistory = [_activityStats.history.serie aggregatedStatsByCalendarUnit:calendarConfig.calendarUnit
-                                                                                   referenceDate:calendarConfig.referenceDate
-                                                                                     andCalendar:calendarConfig.calendar];
-        }
-    }
     self.quartiles = [_activityStats.history.serie quantiles:4];
     self.average = [_activityStats.history.serie standardDeviation];
+}
+-(void)notifyCallBack:(id)theParent info:(RZDependencyInfo*)theInfo{
 
     dispatch_async(dispatch_get_main_queue(), ^(){
         [self.tableView reloadData];
@@ -155,13 +156,13 @@
 
 -(void)changeXField:(GCField*)xField{
     if (![xField isEqualToField:_oneFieldConfig.x_field]) {
-        self.oneFieldConfig.x_field = xField;
-        self.scatterStatsLock = true;
-        GCHistoryFieldDataSerie * xystats = [[GCHistoryFieldDataSerie alloc] initAndLoadFromConfig:_oneFieldConfig.historyConfigXY withThread:[GCAppGlobal worker]];
-        [_scatterStats detach:self];
-        [xystats attach:self];
-        self.scatterStats = xystats;
-        [xystats release];
+        dispatch_async([GCAppGlobal worker], ^(){
+            if (self.oneFieldConfig.x_field) {
+                    GCHistoryFieldDataSerie * xystats = [GCHistoryFieldDataSerie historyFieldDataSerieLoadedFromConfig:self.oneFieldConfig.historyConfigXY andOrganizer:[GCAppGlobal organizer]];
+                    self.scatterStats = xystats;
+            }
+            [self notifyCallBack:self info:nil];
+        });
     }
 }
 
@@ -190,7 +191,14 @@
 -(void)toggleViewChoice{
     [self.oneFieldConfig nextView];
     
-    [self setupForCurrentConfig];
+    [self clearAll];
+    dispatch_async([GCAppGlobal worker], ^(){
+        [self calculate];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self.tableView reloadData];
+        });
+    });
+    
     self.navigationItem.rightBarButtonItem.title = self.oneFieldConfig.viewDescription;
 
     [self.tableView reloadData];
@@ -215,8 +223,14 @@
     if (section == GC_S_NAME) {
         return 1;
     }else if( section == GC_S_AVERAGE){
+        if( self.isNewStyle ){
+            return 0;
+        }
         return 1;
     }else if(section == GC_S_QUARTILES){
+        if( self.isNewStyle ){
+            return 0;
+        }
         if (_oneFieldConfig.viewChoice == gcViewChoiceFields) {
             return 2;
         }else{
@@ -230,8 +244,35 @@
         }else{
             return 1;
         }
+    }else if( section == GC_S_AGGREGATE){
+        if( self.isNewStyle ){
+            return self.aggregatedStats.count;
+        }else{
+            return 0;
+        }
     }
     return 0;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView aggregatedCellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    GCCellGrid *cell = [GCCellGrid cellGrid:tableView];
+
+    GCHistoryAggregatedDataHolder * data = [self.aggregatedStats dataForIndex:indexPath.row];
+    if( data ){
+        if( self.isNewStyle ){
+            GCHistoryAggregatedDataHolder * comp = [self.aggregatedStats dataForIndex:indexPath.row+1];
+            
+            [cell setupAggregatedComparisonWithField:self.oneFieldConfig.field
+                                          dataHolder:data
+                                    comparisonHolder:comp
+                                               index:indexPath.row
+                                    multiFieldConfig:self.multiFieldConfig
+                                        activityType:self.multiFieldConfig.activityTypeDetail
+                                            geometry:self.geometry
+                                                wide:false];
+        }
+    }
+    return cell;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -242,11 +283,12 @@
 
             GCSimpleGraphCachedDataSource * cache = nil;
             if (self.oneFieldConfig.secondGraphChoice == gcOneFieldSecondGraphHistory) {
-                cache = [GCSimpleGraphCachedDataSource historyView:_activityStats
+                cache = [GCSimpleGraphCachedDataSource aggregatedView:self.aggregatedStats field:self.oneFieldConfig.field multiFieldConfig:self.multiFieldConfig after:self.oneFieldConfig.historyConfig.fromDate];
+                /*cache = [GCSimpleGraphCachedDataSource historyView:_activityStats
                                                       calendarConfig:[GCStatsCalendarAggregationConfig globalConfigFor:NSCalendarUnitMonth]
                                                        graphChoice:gcGraphChoiceBarGraph
                                                              after:nil];
-
+                 */
             }else if(self.oneFieldConfig.secondGraphChoice == gcOneFieldSecondGraphHistogram){
                 cache = [GCSimpleGraphCachedDataSource fieldHistoryHistogramFrom:_activityStats width:tableView.frame.size.width];
             }else if(self.oneFieldConfig.secondGraphChoice == gcOneFieldSecondGraphPerformance){
@@ -289,6 +331,8 @@
         GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
         [cell setUpForSummarizedHistory:_summarizedHistory atIndex:idx forField:_oneFieldConfig.field calendarConfig:self.oneFieldConfig.calendarConfig];
         return cell;
+    }else if( indexPath.section == GC_S_AGGREGATE ){
+        return [self tableView:tableView aggregatedCellForRowAtIndexPath:indexPath];
     }else{
         GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
         if (indexPath.section == GC_S_NAME) {
@@ -304,6 +348,7 @@
     }
     return nil;
 }
+
 
 
 #pragma mark - Table view delegate
@@ -372,10 +417,21 @@
         return 200.;
     }else if(indexPath.section == GC_S_QUARTILES && _oneFieldConfig.viewChoice != gcViewChoiceFields){
         return 64.;
+    }else if(indexPath.section == GC_S_AGGREGATE && self.isNewStyle){
+        if( self.multiFieldConfig.comparisonMetric == gcComparisonMetricNone){
+            //GCHistoryAggregatedDataHolder * data = [self.aggregatedStats dataForIndex:indexPath.row];
+            CGFloat height = [GCViewConfig sizeForNumberOfRows:6];
+            return height;
+        }else{
+            CGFloat height = [GCViewConfig sizeForNumberOfRows:6];
+            return height;
+        }
+
     }else{
         return 58.;
     }
 }
+
 
 @end
 

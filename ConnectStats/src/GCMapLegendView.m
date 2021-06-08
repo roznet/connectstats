@@ -87,19 +87,20 @@
     }
     [[UIColor blackColor] setFill];
     UIFont * valFont = [GCViewConfig systemFontOfSize:10.];
-    NSString * val = [self.activity formatValueNoUnits:self.min forField:self.field];
+    
+    NSString * val = [unit formatDoubleNoUnits:self.min];
     gRect.origin.x = 4.;
     gRect.origin.y = 32.;
     NSDictionary * valAttr = @{NSFontAttributeName:valFont};
     gRect.size = [val sizeWithAttributes:valAttr];
     [val drawInRect:gRect withAttributes:valAttr];
 
-    val = [self.activity formatValueNoUnits:self.mid forField:self.field];
+    val = [unit formatDoubleNoUnits:self.mid];
     gRect.size = [val sizeWithAttributes:valAttr];
     gRect.origin.x = rect.size.width/2. - gRect.size.width/2.;
     [val drawInRect:gRect withAttributes:valAttr];
 
-    val = [self.activity formatValueNoUnits:self.max forField:self.field];
+    val = [unit formatDoubleNoUnits:self.max];
     gRect.size = [val sizeWithAttributes:valAttr];
     gRect.origin.x = rect.size.width - gRect.size.width - 4.;
     [val drawInRect:gRect withAttributes:valAttr];

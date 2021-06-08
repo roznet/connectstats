@@ -6,6 +6,9 @@ target 'ConnectStats' do
   pod 'Flurry-iOS-SDK/FlurrySDK'
   pod 'GenericJSON'
   pod 'Armchair', '>= 0.3', :inhibit_warnings => true
+  target 'ConnectStatsXCTests' do
+    pod 'CHCSVParser', :inhibit_warnings => true
+  end
 end
 target 'HealthStats' do
   use_frameworks!

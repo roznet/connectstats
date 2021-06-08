@@ -28,6 +28,9 @@
 #import "GCActivitiesOrganizer.h"
 
 @interface GCHistoryFieldDataSerie ()
+@property (nonatomic,retain) GCStatsDataSerieWithUnit * history;
+@property (nonatomic,retain) GCStatsDataSerieWithUnit * gradientSerie;
+@property (nonatomic,retain) GCStatsScaledFunction * gradientFunction;
 
 @end
 
@@ -36,6 +39,12 @@
 
 -(instancetype)init{
     return [self initFromConfig:nil];
+}
+
++(GCHistoryFieldDataSerie*)historyFieldDataSerieLoadedFromConfig:(GCHistoryFieldDataSerieConfig*)config andOrganizer:(GCActivitiesOrganizer*)organizer{
+    GCHistoryFieldDataSerie * rv = RZReturnAutorelease([[GCHistoryFieldDataSerie alloc] initFromConfig:config]);
+    [rv loadFromOrganizer:organizer];
+    return rv;
 }
 
 -(GCHistoryFieldDataSerie*)initAndLoadFromConfig:(GCHistoryFieldDataSerieConfig*)config withThread:(dispatch_queue_t)worker{
@@ -62,12 +71,9 @@
 }
 
 -(void)dealloc{
-
-    [_db release];
     [_gradientSerie release];
     [_gradientFunction release];
     [_history release];
-    [_organizer release];
 
     [_config release];
 
@@ -101,7 +107,6 @@
 +(GCHistoryFieldDataSerie*)historyFieldDataSerieFrom:(GCHistoryFieldDataSerie*)other{
     GCHistoryFieldDataSerie * rv = [[[GCHistoryFieldDataSerie alloc] init] autorelease];
     if (rv) {
-        rv.db = other.db;
         rv.config = other.config;
         rv.history = other.history;
         rv.gradientFunction = other.gradientFunction;
@@ -124,10 +129,22 @@
         [self loadFromOrganizer];
     }
 }
+-(void)setupAndLoadForConfig:(GCHistoryFieldDataSerieConfig*)config andOrganizer:(GCActivitiesOrganizer*)organizer{
+    self.config = config;
+    [self loadFromOrganizer:organizer];
+}
 
 -(void)setupForConfig:(GCHistoryFieldDataSerieConfig*)config{
     self.config = config;
     self.history = nil;
+}
+
+-(GCField*)field{
+    return self.config.activityField;
+}
+
+-(GCField*)x_field{
+    return self.config.x_activityField;
 }
 
 -(NSString*)uom{
@@ -147,40 +164,30 @@
 }
 #pragma mark - Load
 
--(void)notifyCallBack:(id)theParent info:(RZDependencyInfo *)theInfo{
-    if (theParent == self.organizer && [self ready]) {
-        // reload
-        dispatch_async([GCAppGlobal worker],^(){
-            [self loadFromOrganizer];
-        });
-    }
-}
-
 -(BOOL)ready{
-    return self.history != nil && !self.dataLock;
+    return self.history != nil;
 }
 
 -(void)loadFromOrganizer{
-    self.dataLock = true;
-    if (self.organizer==nil) {
-        self.organizer = [GCAppGlobal organizer];
-    }
-    NSMutableArray * fields = [NSMutableArray arrayWithObject:self.config.activityField];
+    return [self loadFromOrganizer:[GCAppGlobal organizer]];
+}
+-(void)loadFromOrganizer:(GCActivitiesOrganizer*)organizer{
+    NSMutableArray<GCField*> * fields = [NSMutableArray arrayWithObject:self.config.activityField];
     if (self.config.x_activityField) {
         [fields addObject:self.config.x_activityField];
     }
     GCActivityMatchBlock filter = nil;
-    BOOL checkActivityType = ![self.config.activityType isEqualToString:GC_TYPE_ALL];
-    gcIgnoreMode ignoreMode = [self.config.activityType isEqualToString:GC_TYPE_DAY] ? gcIgnoreModeDayFocus : gcIgnoreModeActivityFocus;
+    GCActivityMatchBlock typeMatchBlock = self.config.activityTypeMatchBlock;
+    BOOL checkActivityType = (typeMatchBlock != nil);
+    gcIgnoreMode ignoreMode = self.config.activityTypeDetail.ignoreMode;
     GCField * activityField = self.config.activityField;
-    NSString * activityType = self.config.activityType;
     GCField * x_activityField = self.config.x_activityField;
 
     NSDate * fromDate = self.config.fromDate;
 
     if (checkActivityType || fromDate!=nil) {
         filter = ^(GCActivity*act){
-            BOOL keep = !checkActivityType || [act.activityType isEqualToString:activityType];
+            BOOL keep = checkActivityType ? typeMatchBlock(act) : true;
             if (fromDate) {
                 keep = keep && ([fromDate compare:act.date] == NSOrderedAscending);
             }
@@ -188,14 +195,14 @@
         };
     }
 
-    NSDictionary * series = [self.organizer fieldsSeries:fields
+    NSDictionary * series = [organizer fieldsSeries:fields
                                                 matching:filter
                                              useFiltered:self.config.useFilter
                                               ignoreMode:ignoreMode];
 
     GCStatsDataSerieWithUnit*(^processSerie)(GCField*field,GCStatsDataSerieWithUnit*serie) = ^(GCField*field,GCStatsDataSerieWithUnit*serie){
         GCStatsDataSerieWithUnit * rv = serie;
-        GCStatsDataSerieFilter * seriefilter = [self.organizer standardFilterForField:field];
+        GCStatsDataSerieFilter * seriefilter = [organizer standardFilterForField:field];
         if (seriefilter) {
             rv = [seriefilter filteredSerieWithUnitFrom:rv];
         }
@@ -253,11 +260,6 @@
         [self setGradientFunction:nil];
         [self setGradientSerie:nil];
     }
-
-    self.dataLock = false;
-    dispatch_async(dispatch_get_main_queue(), ^(){
-        [self notify];
-    });
 }
 
 
@@ -268,7 +270,7 @@
 }
 
 -(NSString*)description{
-    return [NSString stringWithFormat:@"%@ %@ %d points", self.config.activityType, self.config.activityField, (int)[_history count]];
+    return [NSString stringWithFormat:@"<%@: %@ %d points>", NSStringFromClass([self class]), self.config, (int)[_history count]];
 }
 
 -(NSString*)formattedValue:(double)aVal{

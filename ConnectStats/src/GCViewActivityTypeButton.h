@@ -24,16 +24,18 @@
 //  
 
 #import <Foundation/Foundation.h>
+@class GCActivityType;
+@class GCActivityTypeSelection;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol GCViewActivityTypeButtonDelegate <NSObject>
 
 -(BOOL)useFilter;
--(NSString*)activityType;
--(void)setupForCurrentActivityType:(NSString*)aType andFilter:(BOOL)aFilter;
+-(GCActivityTypeSelection*)activityTypeSelection;
+-(void)setupForCurrentActivityTypeSelection:(GCActivityTypeSelection*)selection andFilter:(BOOL)aFilter;
 @optional
--(NSArray*)listActivityTypes;
+-(NSArray<GCActivityType*>*)listActivityTypes;
 -(BOOL)useColoredIcons;
 -(BOOL)ignoreFilter;
 @end
@@ -42,6 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic,retain) UIBarButtonItem * activityTypeButtonItem;
 @property (nonatomic,retain) NSObject<GCViewActivityTypeButtonDelegate> * delegate;
+@property (nonatomic,assign) BOOL matchPrimaryType;
 
 +(GCViewActivityTypeButton*)activityTypeButtonForDelegate:(NSObject<GCViewActivityTypeButtonDelegate>*)del;
 

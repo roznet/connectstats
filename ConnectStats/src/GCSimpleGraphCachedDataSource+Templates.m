@@ -36,6 +36,8 @@
 #import "GCActivity+Series.h"
 #import "GCStatsDerivedHistory.h"
 #import "GCStatsCalendarAggregationConfig.h"
+#import "GCHistoryAggregatedStats.h"
+#import "GCStatsMultiFieldConfig.h"
 
 @implementation GCSimpleGraphCachedDataSource (Templates)
 
@@ -81,6 +83,30 @@
     }else{
         return [GCSimpleGraphCachedDataSource calendarView:fieldserie calendarConfig:aUnit graphChoice:graphChoice];
     }
+}
+
++(GCSimpleGraphCachedDataSource*)aggregatedView:(GCHistoryAggregatedStats*)aggregatedStats
+                                          field:(GCField*)field
+                               multiFieldConfig:(GCStatsMultiFieldConfig*)multiFieldConfig
+                                          after:(NSDate*)date{
+    
+    GCStatsCalendarAggregationConfig*calendarConfig = multiFieldConfig.calendarConfig;
+    
+    NSDate * after = [multiFieldConfig selectAfterDateFrom:aggregatedStats.lastDate ?: [NSDate date]];
+    
+    GCStatsDataSerieWithUnit * serieWithUnit = [GCStatsDataSerieWithUnit dataSerieWithUnit:field.unit];
+    
+    for (GCHistoryAggregatedDataHolder*holder in aggregatedStats) {
+        if( after == nil || [holder isAfter:after]){
+            GCNumberWithUnit * nu = [holder preferredNumberWithUnit:field];
+            if( nu ){
+                [serieWithUnit addNumberWithUnit:nu forDate:holder.date];
+            }
+        }
+    }
+    [serieWithUnit.serie sortByDate];
+    return [GCSimpleGraphCachedDataSource barGraphView:serieWithUnit field:field calendarConfig:calendarConfig after:after];
+    
 }
 
 +(GCSimpleGraphCachedDataSource*)calendarView:(GCHistoryFieldDataSerie*)fieldserie
@@ -223,10 +249,36 @@
 
 }
 
+
 +(GCSimpleGraphCachedDataSource*)barGraphView:(GCHistoryFieldDataSerie*)fieldserie                                      calendarConfig:(GCStatsCalendarAggregationConfig*)calendarConfig
                                         after:(NSDate*)afterdate{
+    NSDictionary * dict = [fieldserie.history.serie aggregatedStatsByCalendarUnit:calendarConfig.calendarUnit
+                                                                    referenceDate:calendarConfig.referenceDate
+                                                                      andCalendar:calendarConfig.calendar];
+
+    GCStatsDataSerie * serie = nil;
+    if ([fieldserie.config.activityField canSum]) {
+        serie = dict[STATS_SUM];
+    }else{
+        serie = dict[STATS_AVG];
+    }
+    
+    GCStatsDataSerieWithUnit * serieWithUnit = [GCStatsDataSerieWithUnit dataSerieWithUnit:fieldserie.history.unit xUnit:fieldserie.history.xUnit andSerie:serie];
+    
+    return [self barGraphView:serieWithUnit
+                        field:fieldserie.field
+               calendarConfig:calendarConfig
+                        after:afterdate];
+
+}
+
++(GCSimpleGraphCachedDataSource*)barGraphView:(GCStatsDataSerieWithUnit*)serieWithUnit
+                                        field:(GCField*)field
+                               calendarConfig:(GCStatsCalendarAggregationConfig*)calendarConfig
+                                        after:(NSDate*)afterdate{
+    
     GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource dataSourceWithStandardColors];
-    cache.xUnit = [fieldserie xUnit];
+    cache.xUnit = [serieWithUnit xUnit];
     NSCalendarUnit aUnit = calendarConfig.calendarUnit;
     switch (aUnit) {
         case NSCalendarUnitWeekOfYear:
@@ -244,20 +296,12 @@
 
     NSMutableArray * series = [NSMutableArray arrayWithCapacity:1];
 
-    cache.title = [fieldserie title];
-
-    NSDictionary * dict = [fieldserie.history.serie aggregatedStatsByCalendarUnit:aUnit
-                                                                    referenceDate:calendarConfig.referenceDate
-                                                                      andCalendar:calendarConfig.calendar];
-
+    cache.title = field.displayName;
     gcGraphType type = gcGraphStep;
 
-    GCStatsDataSerie * serie = nil;
-    if ([fieldserie.config.activityField canSum]) {
-        serie = dict[STATS_SUM];
-    }else{
+    GCStatsDataSerie * serie = serieWithUnit.serie;
+    if (!field.canSum) {
         cache.title =[NSString stringWithFormat:@"%@ %@", calendarConfig.calendarUnitDescription, cache.title];
-        serie = dict[STATS_AVG];
     }
     UIColor * color = [GCViewConfig colorForGraphElement:gcSkinGraphColorBarGraph];
     NSMutableArray * adjusted = [NSMutableArray arrayWithCapacity:serie.count];
@@ -321,7 +365,7 @@
     GCSimpleGraphDataHolder * plot = [GCSimpleGraphDataHolder dataHolder:[GCStatsDataSerie dataSerieWithPoints:adjusted]
                                                                     type:type
                                                                    color:color
-                                                                 andUnit:[fieldserie yUnit:0]];
+                                                                 andUnit:serieWithUnit.unit];
     if (plot) {
         gcStatsRange range = plot.range;
         range.y_min = plot_y_min    ;

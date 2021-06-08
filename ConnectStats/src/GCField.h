@@ -27,6 +27,7 @@
 #import "GCFields.h"
 
 @class GCFieldCache;
+@class GCActivityType;
 
 @interface GCField : NSObject<NSCopying,NSSecureCoding>
 
@@ -44,6 +45,9 @@
  */
 +(GCField*)fieldForKey:(NSString*)field andActivityType:(NSString*)activityType;
 +(GCField*)fieldForFlag:(gcFieldFlag)fieldFlag andActivityType:(NSString *)activityType;
++(GCField*)fieldForKey:(NSString*)field andActivityTypeDetail:(GCActivityType*)activityType;
++(GCField*)fieldForFlag:(gcFieldFlag)fieldFlag andActivityTypeDetail:(GCActivityType *)activityType;
+
 
 -(BOOL)isEqualToField:(GCField*)other;
 -(NSComparisonResult)compare:(GCField*)other;

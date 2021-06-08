@@ -49,15 +49,22 @@
 //        indexed by field list of holder x [ buckets ] (field summary for wow, mom )
 //        indexed by cluster serie of date x field (graphs or total by location, cluster)
 
+@class GCActivityTypeSelection;
+
 NS_ASSUME_NONNULL_BEGIN
 
-@interface GCHistoryAggregatedActivityStats : NSObject<NSFastEnumeration>
+@interface GCHistoryAggregatedStats : NSObject<NSFastEnumeration>
 
-+(GCHistoryAggregatedActivityStats*)aggregatedActivityStatsForActivityType:(NSString*)activityType;
++(GCHistoryAggregatedStats*)aggregatedStatsForActivityType:(NSString*)activityType;
++(GCHistoryAggregatedStats*)aggregatedStatsForActivityTypeDetail:(GCActivityType*)activityType;
++(GCHistoryAggregatedStats*)aggregatedStatsForActivityTypeSelection:(GCActivityTypeSelection*)activityType;
 
 @property (nonatomic,retain) NSArray<GCActivity*> * activities;
-@property (nonatomic,retain) NSString * activityType;
+@property (nonatomic,readonly) NSString * activityType; //DEPRECATED_MSG_ATTRIBUTE("Use Detail");
+@property (nonatomic,readonly) GCActivityType * activityTypeDetail; //DEPRECATED_MSG_ATTRIBUTE( "Use Selection")
+@property (nonatomic,retain) GCActivityTypeSelection * activityTypeSelection;
 @property (nonatomic,assign) BOOL useFilter;
+@property (nonatomic,readonly) NSDate * lastDate;
 
 -(void)aggregate:(NSCalendarUnit)aUnit referenceDate:(nullable NSDate*)refOrNil ignoreMode:(gcIgnoreMode)ignoreMode;
 -(void)aggregate:(NSCalendarUnit)aUnit referenceDate:(nullable NSDate*)refOrNil cutOff:(nullable NSDate*)cutOff ignoreMode:(gcIgnoreMode)ignoreMode;
@@ -66,7 +73,9 @@ NS_ASSUME_NONNULL_BEGIN
 -(nullable GCHistoryAggregatedDataHolder*)dataForDate:(NSDate*)date;
 -(void)setActivitiesFromOrganizer:(GCActivitiesOrganizer*)organizer;
 
-+(NSArray<GCField*>*)defaultFieldsForActivityType:(NSString*)activityType;
+-(void)setActivities:(NSArray<GCActivity*>*)activities andFields:(NSArray<GCField*>*)fields;
+
++(NSArray<GCField*>*)defaultFieldsForActivityTypeDetail:(GCActivityType*)activityType;
 @end
 
 NS_ASSUME_NONNULL_END

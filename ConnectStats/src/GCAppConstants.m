@@ -97,7 +97,6 @@ NSString * const CONFIG_GARMIN_LAST_SOURCE       = @"config_garmin_last_source";
 NSString * const CONFIG_GARMIN_USE_MODERN        = @"config_garmin_use_modern_v3";
 NSString * const CONFIG_STRAVA_ENABLE            = @"config_strava_enable";
 NSString * const CONFIG_STRAVA_SEGMENTS          = @"config_strava_segments";
-NSString * const CONFIG_SHARING_STRAVA_AUTO      = @"config_sharing_strava_auto";
 NSString * const CONFIG_SHARING_STRAVA_PRIVATE   = @"config_sharing_strava_private";
 NSString * const CONFIG_HEALTHKIT_ENABLE         = @"config_healthkit_enable";
 NSString * const CONFIG_HEALTHKIT_WORKOUT        = @"config_healthkit_workout";
@@ -107,6 +106,11 @@ NSString * const CONFIG_HEALTHKIT_SOURCE_CHECKED = @"config_healthkit_source_che
 NSString * const CONFIG_CONNECTSTATS_TOKEN       = @"config_connectstats_token";
 NSString * const CONFIG_CONNECTSTATS_TOKEN_ID    = @"config_connectstats_token_id";
 NSString * const CONFIG_CONNECTSTATS_USER_ID     = @"config_connectstats_user_id";
+
+//NSString * const  CONFIG_NOTIFICATION_ENABLED      = @"config_notification_enabled_dev";
+NSString * const  CONFIG_NOTIFICATION_PUSH_TYPE    = @"config_notification_push_type";
+NSString * const  CONFIG_NOTIFICATION_DEVICE_TOKEN = @"config_notification_devicetoken";
+
 
 NSString * const CONFIG_GARMIN_FIT_DOWNLOAD      = @"config_garmin_fit_download";
 NSString * const CONFIG_GARMIN_FIT_MERGE         = @"config_garmin_fit_merge";

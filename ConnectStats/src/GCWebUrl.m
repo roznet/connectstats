@@ -127,7 +127,7 @@ NSString * GCWebConnectStatsPrefixForConfig(gcWebConnectStatsConfig config){
         case gcWebConnectStatsConfigProductionConnectStatsApp:
             return @"https://connectstats.app/prod";
         case gcWebConnectStatsConfigLocalProdTesting:
-            return @"https://server.ro-z.me/prod";
+            return @"https://brice-imac.ro-z.me/prod";
         case gcWebConnectStatsConfigLocalDevTesting:
             return @"https://localhost.ro-z.me/dev";
         case gcWebConnectStatsConfigRemoteDevTesting:
@@ -190,6 +190,16 @@ NSString * GCWebConnectStatsSearch(gcWebConnectStatsConfig config){
     }else{
         return [NSString stringWithFormat:@"%@/api/connectstats/search",url];
     }
+}
+NSString * GCWebConnectStatsRegisterNotification(gcWebConnectStatsConfig config){
+    NSString * url = GCWebConnectStatsPrefixForConfig(useSimulator ? gcWebConnectStatsConfigLocalProdTesting : config);
+#if GC_USE_SANDBOX_APN
+    // Debug build should register with dev server for notification
+    if( ! useSimulator && config == gcWebConnectStatsConfigProductionConnectStatsApp){
+        url = GCWebConnectStatsPrefixForConfig(gcWebConnectStatsConfigRemoteDevTesting);
+    }
+#endif
+    return [NSString stringWithFormat:@"%@/api/notifications/register",url];
 }
 
 NSString * GCWebConnectStatsFitFile(gcWebConnectStatsConfig config){

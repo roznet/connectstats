@@ -35,17 +35,28 @@ extern const NSCalendarUnit kCalendarUnitNone;
 
 @interface GCStatsCalendarAggregationConfig : NSObject
 
-@property (nonatomic,assign) NSCalendarUnit calendarUnit;
 @property (nonatomic,retain,nullable) NSDate * referenceDate;
 @property (nonatomic,retain) NSCalendar * calendar;
 
-@property (nonatomic,readonly) NSDateFormatter * dateFormatter;
+/**
+ * Calendar unit for the aggregation: weekly/monthly/yearly
+ */
+@property (nonatomic,assign) NSCalendarUnit calendarUnit;
 @property (nonatomic,readonly) NSString * calendarUnitDescription;
 @property (nonatomic,retain) NSString * calendarUnitKey;
+
+@property (nonatomic,readonly) NSDateFormatter * dateFormatter;
+
+
+/**
+ * Period type to indicate if we use rolling, calendar or to date
+ */
 @property (nonatomic,assign) gcPeriodType periodType;
 @property (nonatomic,retain) NSString * periodTypeKey;
 
+
 @property (nonatomic,readonly) gcHistoryStats historyStats;
+
 /// Cut off date to use in to date calculation.
 /// usually last date of last activity (could be change to current time later)
 @property (nonatomic,readonly,nullable) NSDate * cutOff;

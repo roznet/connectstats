@@ -113,6 +113,7 @@
     _activityListViewController.detailController = _activityDetailViewController;
     _calendarViewController = [[KalViewController alloc] init];
     _calendarDataSource = [[GCCalendarDataSource alloc] init];
+    _calendarDataSource.presentingViewController = _calendarViewController;
     _calendarViewController.dataSource = _calendarDataSource;
     _calendarViewController.delegate = _calendarDataSource;
     _fieldListViewController = [[GCStatsMultiFieldViewController alloc] initWithStyle:UITableViewStylePlain];
@@ -192,6 +193,7 @@
 -(void)viewDidAppear:(BOOL)animated{
 
     [super viewDidAppear:animated];
+    
     [GCAppGlobal startSuccessful];
 
 }

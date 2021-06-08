@@ -139,19 +139,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-
-    //self.tableView.backgroundColor = [GCViewConfig defaultBackgroundColor];
-
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
     self.refreshControl = [[[UIRefreshControl alloc] init] autorelease];
     self.refreshControl.attributedTitle = nil;
     [self.refreshControl addTarget:self action:@selector(refreshData) forControlEvents:UIControlEventValueChanged];
-
-    // Get ready with current activity
-    [self selectNewActivity:[[GCAppGlobal organizer] currentActivity]];
 
     CGFloat height = 20.;
     if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) {
@@ -170,6 +161,15 @@
     [super viewWillAppear:animated];
 
     self.tableView.tableHeaderView.backgroundColor = [GCViewConfig cellBackgroundLighterForActivity:self.activity];
+    
+    // Get ready with current activity
+    [self selectNewActivity:[[GCAppGlobal organizer] currentActivity]];
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    
+    RZLog(RZLogInfo, @"display detail");
 }
 
 -(void)viewWillDisappear:(BOOL)animated{

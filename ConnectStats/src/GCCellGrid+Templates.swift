@@ -264,6 +264,132 @@ extension GCCellGrid {
     }
 
     
+    @objc func setupAggregatedComparison(field:GCField,
+                                         dataHolder : GCHistoryAggregatedDataHolder,
+                                         comparisonHolder: GCHistoryAggregatedDataHolder?,
+                                         index : Int,
+                                         multiFieldConfig : GCStatsMultiFieldConfig,
+                                         activityType : GCActivityType,
+                                         geometry : RZNumberWithUnitGeometry,
+                                         wide :Bool = false
+    ){
+        let fields = activityType.summaryFields()
+        
+        let colCount : UInt = wide ? 5 : 3
+        let rowCount : UInt = wide ? 2 : UInt(fields.count)
+
+        self.setup(forRows: rowCount, andCols:colCount)
+        if( index % 2 == 0){
+            GCViewConfig.setupGradient(forCellsEven: self)
+        }else{
+            GCViewConfig.setupGradient(forCellsOdd: self)
+        }
+        
+        if let date = dataHolder.date {
+            let dateFmt = multiFieldConfig.calendarConfig.formattedDate(date)
+            let dateAttributed = NSAttributedString(string: dateFmt, attributes: GCViewConfig.attribute(rzAttribute.field))
+            self.label(forRow: 0, andCol: 0)?.attributedText = dateAttributed
+        }
+        
+        if let comparisonDate = comparisonHolder?.date {
+            let comparisonDateFmt = multiFieldConfig.calendarConfig.formattedDate(comparisonDate)
+            let comparisonDateAttributed = NSAttributedString(string: comparisonDateFmt, attributes: GCViewConfig.attribute(rzAttribute.secondaryField))
+            
+            var title = "ΔM-1"
+            if multiFieldConfig.calendarConfig.calendarUnit == .weekOfYear {
+                title = "ΔW-1"
+            }else if multiFieldConfig.calendarConfig.calendarUnit == .year {
+                title = "ΔY-1"
+            }
+            self.label(forRow: 1, andCol: 0)?.attributedText = NSAttributedString(string:title , attributes: GCViewConfig.attribute(rzAttribute.secondaryField))
+            self.label(forRow: 2, andCol: 0)?.attributedText = comparisonDateAttributed
+        }
+        
+        var row : UInt = 0
+        let mainCount : UInt = 2
+        var fieldIdx : UInt = 0
+        
+        let preferred = dataHolder.preferredAggregatedType(for: field)
+        let aggregatedStats = [ preferred, .max, .cnt, .wvg, .min]
+        
+        for stat in aggregatedStats {
+            if let nu = (stat == preferred) ? dataHolder.preferredNumber(withUnit: field) : dataHolder.number(withUnit: field, statType: stat){
+                if nu.isValidValue() && nu.value != 0.0 {
+                    if var comparisonNu = (stat == preferred) ? comparisonHolder?.preferredNumber(withUnit: field) : comparisonHolder?.number(withUnit: field, statType: stat){
+                        var showPositive : Bool = true
+                        if comparisonNu.unit == nu.unit {
+                            switch multiFieldConfig.comparisonMetric {
+                            case .percent:
+                                comparisonNu = GCNumberWithUnit(name: "percent", andValue:  (nu.value/comparisonNu.value - 1.0) * 100.0 )
+                                showPositive = comparisonNu.value > 0
+                            case .valueDifference:
+                                comparisonNu = GCNumberWithUnit(unit: nu.unit, andValue:  nu.value-comparisonNu.value )
+                                showPositive = nu.unit.betterIsMin() ? comparisonNu.value < 0 : comparisonNu.value > 0
+                            default:
+                                showPositive = nu.unit.betterIsMin() ? (nu.value < comparisonNu.value) : (nu.value > comparisonNu.value )
+                            }
+                        }
+                        
+                        if comparisonNu.value.isFinite {
+                            let comparisonCellView = GCCellFieldValueView(numberWithUnit: comparisonNu,
+                                                                          geometry: geometry,
+                                                                          field: field,
+                                                                          icon: .hide)
+                            if multiFieldConfig.comparisonMetric != .value {
+                                comparisonCellView.sign = RZNumberWithUnitGeometry.DisplaySign.always
+                            }else {
+                                comparisonCellView.sign = RZNumberWithUnitGeometry.DisplaySign.natural
+                            }
+                            comparisonCellView.displayField = .hide
+                            comparisonCellView.iconInset = 4.0
+                            comparisonCellView.fieldAttribute = GCViewConfig.attribute(rzAttribute.secondaryField)
+                            comparisonCellView.numberAttribute = GCViewConfig.attribute(rzAttribute.secondaryValue)
+                            comparisonCellView.unitAttribute = GCViewConfig.attribute(rzAttribute.secondaryUnit)
+                            
+                            if showPositive {
+                                comparisonCellView.numberAttribute[ NSAttributedString.Key.foregroundColor] = UIColor.systemGreen
+                            }else{
+                                comparisonCellView.numberAttribute[ NSAttributedString.Key.foregroundColor] = UIColor.systemRed
+                            }
+                            
+                            self.setupView(comparisonCellView, forRow: row, andColumn: 2)
+                        }
+                    }
+                    
+                    let cellView = GCCellFieldValueView(numberWithUnit: nu,
+                                                        geometry: geometry,
+                                                        field: field,
+                                                        primaryField: field,
+                                                        icon: .hide)
+                    cellView.sign = .natural
+                    cellView.displayField = .right
+                    //cellView.displayNumber = .right
+                    cellView.iconInset = 4.0
+                    cellView.overrideFieldName = dataHolder.describe(stat)
+                    
+                    if fieldIdx < mainCount {
+                        cellView.fieldAttribute = GCViewConfig.attribute(rzAttribute.secondaryField)
+                        cellView.numberAttribute = GCViewConfig.attribute(rzAttribute.value)
+                        cellView.unitAttribute = GCViewConfig.attribute(rzAttribute.unit)
+                    }else{
+                        cellView.fieldAttribute = GCViewConfig.attribute(rzAttribute.secondaryField)
+                        cellView.numberAttribute = GCViewConfig.attribute(rzAttribute.secondaryValue)
+                        cellView.unitAttribute = GCViewConfig.attribute(rzAttribute.secondaryUnit)
+                    }
+                    
+                    
+                    self.setupView(cellView, forRow: row, andColumn: 1)
+                }else{
+                    self.reset(forRow: row, andCol: 2)
+                }
+            }
+            row += 1
+            fieldIdx += 1
+        }
+        
+    }
+
+    
     //MARK: - Detail Activity view
     
     func setupActivityDetailsColumn(fields : [GCField], activity : GCActivity, geometry : RZNumberWithUnitGeometry, column : UInt ){
@@ -344,7 +470,7 @@ extension GCCellGrid {
     }
 
     
-    @objc func setupFieldStatistics(dataHolder : GCHistoryFieldDataHolder, histStats which: gcHistoryStats, geometry: RZNumberWithUnitGeometry){
+    @objc func setupFieldStatistics(dataHolder : GCHistoryFieldSummaryDataHolder, histStats which: gcHistoryStats, geometry: RZNumberWithUnitGeometry){
         let field = dataHolder.field
 
         let mainFieldName = field.displayName()
@@ -402,7 +528,7 @@ extension GCCellGrid {
     
 }
 
-extension GCHistoryFieldDataHolder {
+extension GCHistoryFieldSummaryDataHolder {
     func relevantNumbers(histStats which: gcHistoryStats) -> (main: GCNumberWithUnit?, extra : GCNumberWithUnit?, extraLabel: String?) {
         var rv : (main: GCNumberWithUnit?, extra : GCNumberWithUnit?, extraLabel: String?)
         if field.canSum {

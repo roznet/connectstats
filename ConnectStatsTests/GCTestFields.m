@@ -119,23 +119,33 @@
 -(void)testActivityTypes{
     
     
-    NSArray * allParents = [GCActivityType allParentTypes];
+    NSArray * allParents = [GCActivityType allPrimaryTypes];
+    gcFieldFlag distanceFlag = gcFieldFlagSumDistance;
+    gcFieldFlag speedFlag = gcFieldFlagWeightedMeanSpeed;
+    
     for (GCActivityType * parent in allParents) {
         XCTAssertNotEqualObjects(parent, [GCActivityType all]);
-        NSArray * subs = [GCActivityType allTypesForParent:parent];
-        XCTAssertTrue([parent isSameParentType:[GCActivityType all]]);
+        NSArray<GCActivityType*> * subs = [GCActivityType allTypesWithSamePrimaryTypeAs:parent];
+        XCTAssertTrue([parent hasSamePrimaryType:[GCActivityType all]]);
+        GCField * distanceField = [GCField fieldForFlag:distanceFlag andActivityTypeDetail:parent];
+        GCField * speedField = [GCField fieldForFlag:speedFlag andActivityTypeDetail:parent];
+        XCTAssertEqualObjects(distanceField, [GCField fieldForFlag:distanceFlag andActivityType:parent.key]);
+        XCTAssertEqualObjects(speedField, [GCField fieldForFlag:speedFlag andActivityType:parent.key]);
         for (GCActivityType * sub in subs) {
             XCTAssertEqualObjects(sub.parentType, parent);
-            XCTAssertTrue([sub isSameParentType:parent]);
-            XCTAssertTrue([parent isSameParentType:sub]);
+            XCTAssertTrue([sub hasSamePrimaryType:parent]);
+            XCTAssertTrue([parent hasSamePrimaryType:sub]);
             XCTAssertEqualObjects(sub.primaryActivityType, parent);
             XCTAssertEqualObjects(sub.rootType, [GCActivityType all]);
             
-            XCTAssertFalse([[GCActivityType day] isSameParentType:sub]);
-            XCTAssertFalse([[GCActivityType day] isSameParentType:parent]);
+            XCTAssertFalse([[GCActivityType day] hasSamePrimaryType:sub]);
+            XCTAssertFalse([[GCActivityType day] hasSamePrimaryType:parent]);
+            
+            XCTAssertEqualObjects(distanceField, [GCField fieldForFlag:distanceFlag andActivityTypeDetail:sub]);
+            XCTAssertEqualObjects(speedField, [GCField fieldForFlag:speedFlag andActivityTypeDetail:sub]);
         }
     }
-    XCTAssertFalse([[GCActivityType day] isSameParentType:[GCActivityType all]]);
+    XCTAssertFalse([[GCActivityType day] hasSamePrimaryType:[GCActivityType all]]);
     
     XCTAssertEqualObjects([GCActivityType running].parentType,  [GCActivityType all]);
     XCTAssertEqualObjects([GCActivityType cycling].parentType,  [GCActivityType all]);

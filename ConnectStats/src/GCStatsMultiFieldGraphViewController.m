@@ -57,7 +57,6 @@
 }
 -(void)dealloc{
     [_cache release];
-    [_scatterStats detach:self];
     [_scatterStats release];
     [_gestures release];
     [_legendView release];
@@ -65,17 +64,16 @@
     [_rulerView release];
     [_maturityButton release];
     [_fieldOrder release];
-
+    [_x_field release];
+    
     [super dealloc];
 }
 
 -(void)publishEvent{
     GCField * x  = self.historyFieldConfig.x_activityField;
-    NSString * t = self.historyFieldConfig.activityType;
     GCField * f  = self.historyFieldConfig.activityField;
 
     NSDictionary * params= @{@"XField": x ?: @"None",
-                            @"ActivityType": t ?: @"None",
                             @"Field": f ?: @"None"};
     [Flurry logEvent:EVENT_GRAPH_HISTORY withParameters:params];
 }
@@ -112,11 +110,13 @@
 
 -(void)configureGraph{
     if (self.x_field) {
-        [_scatterStats attach:self];
-
-        GCHistoryFieldDataSerieConfig * config = [GCHistoryFieldDataSerieConfig configWithField:self.historyFieldConfig.activityField xField:self.x_field  filter:false fromDate:[self.maturityButton currentFromDate]];
-        //[scatterStats setupForField:self.config.activityField xField:self.x_field type:self.config.activityType fromDate:[self.maturityButton currentFromDate]];
-        [self.scatterStats setupAndLoadForConfig:config withThread:[GCAppGlobal worker]];
+        dispatch_async([GCAppGlobal worker], ^(){
+            GCHistoryFieldDataSerieConfig * config = [GCHistoryFieldDataSerieConfig configWithField:self.historyFieldConfig.activityField xField:self.x_field  filter:false fromDate:[self.maturityButton currentFromDate]];
+            [self.scatterStats setupAndLoadForConfig:config andOrganizer:[GCAppGlobal organizer]];
+            dispatch_async(dispatch_get_main_queue(), ^(){
+                [self notifyCallBack:self.scatterStats info:nil];
+            });
+        });
     }
 }
 

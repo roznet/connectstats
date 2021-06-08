@@ -417,7 +417,7 @@
     FMDatabase * db = [FMDatabase databaseWithPath:fp];
     [db open];
     [GCHealthOrganizer ensureDbStructure:db];
-    GCHealthOrganizer * health = [[[GCHealthOrganizer alloc] initWithDb:db andThread:nil] autorelease];
+    GCHealthOrganizer * health = [[[GCHealthOrganizer alloc] initTestModeWithDb:db andThread:nil] autorelease];
     
     NSString * theString = [NSString stringWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"user.json" forClass:[self class]] encoding:NSUTF8StringEncoding error:&error];
     XCTAssertNotNil(theString, @"Could read file without error %@", error);
@@ -531,7 +531,7 @@
     NSMutableDictionary<GCField*,GCNumberWithUnit*>*tmp = [NSMutableDictionary dictionary];
     for (GCField*field in act.allFields) {
         if( field.isCalculatedField ){
-            tmp[field] = [act numberWithUnitForField:field];
+            tmp[field] = [[act numberWithUnitForField:field] ;
         }
     }
     NSDictionary<GCField*,GCActivityCalculatedValue*>*calculated = [NSDictionary dictionaryWithDictionary:tmp];

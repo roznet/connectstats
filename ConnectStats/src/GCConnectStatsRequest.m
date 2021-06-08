@@ -28,6 +28,8 @@
 #import "GCConnectStatsRequest.h"
 #import "GCAppGlobal.h"
 #import "GCWebUrl.h"
+#import "ConnectStats-Swift.h"
+
 @import RZUtils;
 @import RZExternal;
 @import WebKit;
@@ -188,6 +190,10 @@
                   
                   if( self.userId != 0 && self.tokenId !=0){
                       [[GCAppGlobal profile] serviceSuccess:gcServiceConnectStats set:YES];
+                      if( [GCAppGlobal profile].pushNotificationEnabled){
+                          [[GCAppGlobal web] addRequest:RZReturnAutorelease([[GCConnectStatsRequestRegisterNotifications alloc] init])];
+                      }
+
                   }
                   [GCAppGlobal saveSettings];
               }
@@ -254,7 +260,10 @@
             dispatch_async(dispatch_get_main_queue(), ^(){
                 [GCAppGlobal saveSettings];
             });
-            
+            if( [GCAppGlobal profile].pushNotificationEnabled){
+                // if first time/new login and notification enabled, register
+                [GCConnectStatsRequestRegisterNotifications register];
+            }
             dispatch_async([GCAppGlobal worker], ^(){
                 [self signInConnectStatsStep];
             });
@@ -264,7 +273,6 @@
             [self.navigationController popViewControllerAnimated:YES];
         });
     }];
-
 }
 
 -(NSURLRequest*)preparedUrlRequest:(NSString*)path params:(NSDictionary*)parameters{

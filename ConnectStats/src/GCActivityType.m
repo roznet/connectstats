@@ -76,6 +76,9 @@ static GCActivityTypes * _activityTypesCache = nil;
         rv.key = key;
         rv.typeId = typeId;
         rv.parentType = parent;
+        if( ![rv.key isKindOfClass:[NSString class]]){
+            NSLog(@"What???");
+        }
 
     }
     return rv;
@@ -162,9 +165,36 @@ static GCActivityTypes * _activityTypesCache = nil;
     return [self.key isEqualToString:activityTypeString];
 }
 
+
+
 -(NSInteger)sortOrder{
     // for now, typeid happens to be not too bad
     return self.typeId;
+}
+
+-(NSComparisonResult)compare:(GCActivityType*)other{
+    if( [other isKindOfClass:[self class]]){
+        NSInteger thisPrimarySortOrder = self.primaryActivityType.sortOrder;
+        NSInteger otherPrimarySortOrder = other.primaryActivityType.sortOrder;
+
+        if( thisPrimarySortOrder == otherPrimarySortOrder ){
+            NSInteger thisSortOrder = self.sortOrder;
+            NSInteger otherSortOrder = other.sortOrder;
+            if( thisSortOrder == otherSortOrder){
+                return NSOrderedSame;
+            }else if( thisSortOrder < otherSortOrder){
+                return NSOrderedAscending;
+            }else{
+                return NSOrderedDescending;
+            }
+        }else if( thisPrimarySortOrder < otherPrimarySortOrder){
+            return NSOrderedAscending;
+        }else{
+            return NSOrderedDescending;
+        }
+    }else{
+        return NSOrderedAscending;
+    }
 }
 
 -(GCActivityType*)rootType{
@@ -194,7 +224,7 @@ static GCActivityTypes * _activityTypesCache = nil;
     return [self.rootType isEqualToActivityType:other.rootType];
 }
 
--(BOOL)isSameParentType:(GCActivityType*)other{
+-(BOOL)hasSamePrimaryType:(GCActivityType*)other{
     if (self.isRootType || other.isRootType) {
         return [self isSameRootType:other];
     }
@@ -207,8 +237,8 @@ static GCActivityTypes * _activityTypesCache = nil;
         return true;
     }
 
-    // same parent. Already know won't be root type as covered by first if
-    if( self.parentType.typeId == other.parentType.typeId){
+    // full logic check
+    if( self.primaryActivityType.typeId == other.primaryActivityType.typeId){
         return true;
     }
 
@@ -237,6 +267,10 @@ static GCActivityTypes * _activityTypesCache = nil;
 }
 
 #pragma mark - Properties
+
+-(gcIgnoreMode)ignoreMode{
+    return [self.key isEqualToString:GC_TYPE_DAY] ? gcIgnoreModeDayFocus : gcIgnoreModeActivityFocus;
+}
 
 -(BOOL)isPacePreferred{
     if( [GCFields pacePreferredForActivityType:self.key]){
@@ -325,11 +359,11 @@ static GCActivityTypes * _activityTypesCache = nil;
 +(nonnull NSArray<GCActivityType*>*)allTypes{
     return [[GCActivityType activityTypes] allTypes];
 }
-+(nonnull NSArray<GCActivityType*>*)allParentTypes{
-    return [[GCActivityType activityTypes] allParentTypes];
++(nonnull NSArray<GCActivityType*>*)allPrimaryTypes{
+    return [[GCActivityType activityTypes] allPrimaryTypes];
 }
-+(nonnull NSArray<GCActivityType*>*)allTypesForParent:(nonnull GCActivityType*)parentType{
-    return [[GCActivityType activityTypes] allTypesForParent:parentType];
++(nonnull NSArray<GCActivityType*>*)allTypesWithSamePrimaryTypeAs:(nonnull GCActivityType*)parentType{
+    return [[GCActivityType activityTypes] allTypesWithSamePrimaryTypeAs:parentType];
 }
 
 -(nonnull NSArray<GCField*>*)summaryFields{

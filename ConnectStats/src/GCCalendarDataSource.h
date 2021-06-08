@@ -54,13 +54,15 @@ typedef NS_ENUM(NSUInteger, gcCalendarTableDisplay) {
     gcCalendarTableDisplayEnd
 };
 
-@class GCHistoryAggregatedActivityStats;
+@class GCHistoryAggregatedStats;
 
 @interface GCCalendarDataSource : NSObject<KalDataSource,GCCellGridDelegate,UITableViewDelegate,GCViewActivityTypeButtonDelegate,RZChildObject>
 
 @property (nonatomic,assign) gcCalendarDisplay display;
 @property (nonatomic,assign) gcCalendarTableDisplay tableDisplay;
 @property (nonatomic,readonly) BOOL extendedDisplay;
+
+@property (nonatomic,weak) UIViewController * presentingViewController;
 
 -(void)toggleDisplay;
 -(void)toggleTableDisplay;

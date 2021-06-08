@@ -28,7 +28,7 @@
 #import "GCFormattedField.h"
 #import "GCViewConfig.h"
 #import "GCAppGlobal.h"
-#import "GCHistoryAggregatedActivityStats.h"
+#import "GCHistoryAggregatedStats.h"
 #import "GCTestIconsCell.h"
 #import "GCTestUISamples.h"
 

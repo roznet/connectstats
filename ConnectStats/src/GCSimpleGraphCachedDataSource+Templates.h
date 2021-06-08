@@ -31,6 +31,8 @@
 @class GCHistoryFieldDataSerie;
 @class GCStatsDerivedHistory;
 @class GCStatsCalendarAggregationConfig;
+@class GCHistoryAggregatedStats;
+@class GCStatsMultiFieldConfig;
 
 @interface GCSimpleGraphCachedDataSource (Templates)
 +(GCSimpleGraphCachedDataSource*)dataSourceWithStandardColors;
@@ -38,6 +40,10 @@
 +(GCSimpleGraphCachedDataSource*)fieldHistoryCacheFrom:(GCHistoryFieldDataSerie*)history andMovingAverage:(NSUInteger)samples;
 +(GCSimpleGraphCachedDataSource*)historyView:(GCHistoryFieldDataSerie*)fieldserie calendarConfig:(GCStatsCalendarAggregationConfig*)aUnit graphChoice:(gcGraphChoice)graphChoice after:(NSDate*)date;
 +(GCSimpleGraphCachedDataSource*)fieldHistoryHistogramFrom:(GCHistoryFieldDataSerie*)history width:(CGFloat)width;
++(GCSimpleGraphCachedDataSource*)aggregatedView:(GCHistoryAggregatedStats*)aggregatedStats
+                                          field:(GCField*)field
+                               multiFieldConfig:(GCStatsMultiFieldConfig*)multiFieldConfig
+                                          after:(NSDate*)date;
 +(GCSimpleGraphCachedDataSource*)performanceAnalysis:(GCHistoryPerformanceAnalysis*)perfAnalysis width:(CGFloat)width;
 +(GCSimpleGraphCachedDataSource*)derivedData:(GCField*)field forDate:(NSDate*)date width:(CGFloat)width;
 

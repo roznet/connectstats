@@ -122,7 +122,7 @@ class GCStravaRequestStreams: GCStravaRequestBase {
     
     func parseLaps(data : Data ){
         if let parser = GCStravaActivityLapsParser(data, withPoints: self.points, in: self.activity) {
-            GCAppGlobal.organizer().registerActivity(self.activity.activityId, withTrackpoints: self.points, andLaps: parser.laps)
+            GCAppGlobal.organizer().registerActivity(self.activity, withTrackpoints: self.points, andLaps: parser.laps)
         }
         self.points = nil
         DispatchQueue.main.async {

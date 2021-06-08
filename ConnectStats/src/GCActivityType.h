@@ -70,17 +70,18 @@
 /**
  Will compare to activity type string
  */
--(BOOL)isEqualToString:(nonnull NSString*)activityTypeString;
+-(BOOL)isEqualToString:(nonnull NSString*)activityTypeString DEPRECATED_MSG_ATTRIBUTE("Use GCActivitType");
 /**
- Determine if of same parent type. If either is root, then yes, as root is parent to all.
+ Determine if of same primary type. If either is root, then yes, as root is parent to all.
  Not that if one is parent of the other, then it will return true.
 
  @param other another type
  @return true or false if same parent
  */
--(BOOL)isSameParentType:(nonnull GCActivityType*)other;
+-(BOOL)hasSamePrimaryType:(nonnull GCActivityType*)other;
 
 -(NSInteger)sortOrder;
+-(NSComparisonResult)compare:(nonnull GCActivityType*)other;
 
 // Access Convenience
 +(nonnull GCActivityType*)running;
@@ -104,8 +105,8 @@
 
  @return array of types that are parent of other types
  */
-+(nonnull NSArray<GCActivityType*>*)allParentTypes;
-+(nonnull NSArray<GCActivityType*>*)allTypesForParent:(nonnull GCActivityType*)parentType;
++(nonnull NSArray<GCActivityType*>*)allPrimaryTypes;
++(nonnull NSArray<GCActivityType*>*)allTypesWithSamePrimaryTypeAs:(nonnull GCActivityType*)parentType;
 
 /**
  Some activity like to display speed as pace
@@ -117,6 +118,10 @@
 -(BOOL)isPacePreferred;
 -(BOOL)isSki;
 -(BOOL)isElevationLossPreferred;
+/**
+ ignore mode to match given type, typically day or activity for everything else
+ */
+-(gcIgnoreMode)ignoreMode;
 
 -(nonnull GCUnit*)preferredSpeedDisplayUnit;
 

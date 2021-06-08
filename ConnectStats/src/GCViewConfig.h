@@ -160,5 +160,5 @@ typedef NS_ENUM(NSUInteger, gcMapType) {
 +(NSString*)describeGarminSource:(gcGarminDownloadSource)source;
 +(NSArray<NSString*>*)validChoicesForConnectStatsServiceUse;
 +(NSArray<NSString*>*)validChoicesForConnectStatsConfig;
-
++(NSArray<NSString*>*)validChoicesForConnectStatsNotificationType;
 @end

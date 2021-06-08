@@ -45,6 +45,8 @@
 #import "GCStatsDerivedHistoryViewController.h"
 #import "ConnectStats-Swift.h"
 @import RZUtilsSwift;
+@import RZUtilsTouch;
+@import RZUtilsTouchSwift;
 
 @interface GCStatsMultiFieldViewController ()
 @property (nonatomic,retain) GCHistoryPerformanceAnalysis * performanceAnalysis;
@@ -56,6 +58,7 @@
 @property (nonatomic,retain) UIViewController * popoverViewController;
 @property (nonatomic,retain) RZNumberWithUnitGeometry * geometry;
 @property (nonatomic,retain) UIBarButtonItem * rightMostButtonItem;
+@property (nonatomic,assign) BOOL matchPrimaryType;
 @end
 
 @implementation GCStatsMultiFieldViewController
@@ -98,6 +101,10 @@
     return [GCViewConfig is2021Style];
 }
 
+-(NSString*)activityType{
+    return self.activityTypeDetail.primaryActivityType.key;
+}
+
 #pragma mark - UIViewController
 
 - (void)viewDidLoad
@@ -115,7 +122,27 @@
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
 
+    RZLog(RZLogInfo, @"display stats");
+    
     [GCAppGlobal startupRefreshIfNeeded];
+    
+    dispatch_async([GCAppGlobal worker], ^(){
+        [[GCAppGlobal organizer] ensureDetailsLoaded];
+    });
+    
+    dispatch_async([GCAppGlobal worker], ^(){
+        [[GCAppGlobal derived] ensureDetailsLoaded];
+    });
+
+    /*
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^(){
+        NSIndexPath * indexPath = [NSIndexPath indexPathForRow:1 inSection:0];
+        
+        [self.tableView addTooltipAt:indexPath within:self.tabBarController.view];
+        self.tableView.scrollEnabled = false;
+        //[self addTooltipInfoWithView:self.tableView];
+    });*/
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -383,7 +410,7 @@
         [doGraph retain];
     }
 
-    GCHistoryFieldDataHolder * data = [self.fieldStats dataForField:field];
+    GCHistoryFieldSummaryDataHolder * data = [self.fieldStats dataForField:field];
     
     if( self.isNewStyle ){
         [cell setupFieldStatisticsWithDataHolder:data histStats:self.multiFieldConfig.historyStats geometry:self.geometry];
@@ -541,6 +568,9 @@
     BOOL ignoreNotify = ([theParent isKindOfClass:[GCActivitiesOrganizer class]] && theInfo.stringInfo != nil);
     BOOL skipSetup = [theParent isKindOfClass:[GCHistoryFieldDataSerie class]];
 
+    if( theParent == self){
+        skipSetup = true;
+    }
     if (!ignoreNotify) {
         if (!skipSetup) {
             [self setupForCurrentActivityAndViewChoice:self.viewChoice];
@@ -579,8 +609,11 @@
     return self.multiFieldConfig.viewChoice;
 }
 
--(NSString*)activityType{
-    return self.multiFieldConfig.activityType;
+-(GCActivityType*)activityTypeDetail{
+    return self.multiFieldConfig.activityTypeDetail;
+}
+-(GCActivityTypeSelection*)activityTypeSelection{
+    return self.multiFieldConfig.activityTypeSelection;
 }
 
 -(NSString*)displayActivityType{
@@ -691,16 +724,11 @@
 #pragma mark - Setup data
 
 -(void)setupFieldStats{
-    GCActivityMatchBlock filter = nil;
-    if (![self.activityType isEqualToString:GC_TYPE_ALL]) {
-        filter = ^(GCActivity*act){
-            return [act.activityType isEqualToString:self.activityType];
-        };
-    }
+    
     gcIgnoreMode ignoreMode = [self.activityType isEqualToString:GC_TYPE_DAY] ? gcIgnoreModeDayFocus : gcIgnoreModeActivityFocus;
     NSArray * useActivities = self.useFilter ? [[GCAppGlobal organizer] filteredActivities] : [[GCAppGlobal organizer] activities];
     GCHistoryFieldSummaryStats * vals = [GCHistoryFieldSummaryStats fieldStatsWithActivities:useActivities
-                                                                                    matching:filter
+                                                                                    activityTypeSelection:self.multiFieldConfig.activityTypeSelection
                                                                                referenceDate:self.multiFieldConfig.calendarConfig.referenceDate
                                                                                   ignoreMode:ignoreMode
                                          ];
@@ -745,7 +773,7 @@
     for (GCField * field in self.allFields) {
         GCHistoryFieldDataSerieConfig * config = [GCHistoryFieldDataSerieConfig configWithFilter:self.useFilter field:field];
         GCHistoryFieldDataSerie * stats = [[GCHistoryFieldDataSerie alloc] initFromConfig:config];
-        [stats loadFromOrganizer];
+        [stats loadFromOrganizer:[GCAppGlobal organizer]];
         newSeries[field] = stats;
         [stats release];
     }
@@ -757,13 +785,14 @@
     GCHistoryFieldDataSerie * stats = self.fieldDataSeries[field];
     if (!stats) {
         if (field) {
-            NSMutableDictionary * newSeries = self.fieldDataSeries?[NSMutableDictionary dictionaryWithDictionary:self.fieldDataSeries]:[NSMutableDictionary dictionary];
-
-            GCHistoryFieldDataSerieConfig * config = [GCHistoryFieldDataSerieConfig configWithFilter:self.useFilter field:field];
-            stats = [[[GCHistoryFieldDataSerie alloc] initAndLoadFromConfig:config withThread:[GCAppGlobal worker]] autorelease];
-            [stats attach:self];
-            newSeries[field] = stats;
-            self.fieldDataSeries = [NSDictionary dictionaryWithDictionary:newSeries];
+            dispatch_async([GCAppGlobal worker], ^(){
+                NSMutableDictionary * newSeries = self.fieldDataSeries?[NSMutableDictionary dictionaryWithDictionary:self.fieldDataSeries]:[NSMutableDictionary dictionary];
+                GCHistoryFieldDataSerieConfig * config = [GCHistoryFieldDataSerieConfig configWithFilter:self.useFilter field:field];
+                GCHistoryFieldDataSerie * one = [GCHistoryFieldDataSerie historyFieldDataSerieLoadedFromConfig:config andOrganizer:[GCAppGlobal organizer]];
+                newSeries[field] = one;
+                self.fieldDataSeries = [NSDictionary dictionaryWithDictionary:newSeries];
+                [self notifyCallBack:self info:nil];
+            });
         }
     }
 
@@ -771,21 +800,15 @@
 }
 
 -(void)clearFieldDataSeries{
-    for (GCField * field in self.fieldDataSeries) {
-        GCHistoryFieldDataSerie * one = self.fieldDataSeries[field];
-        [one detach:self];
-    }
     self.fieldDataSeries = nil;
 }
 
 -(void)setupAggregatedStats{
 
-    [self fieldDataSerieFor:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:self.activityType]];
-
-    GCHistoryAggregatedActivityStats * vals = [GCHistoryAggregatedActivityStats aggregatedActivityStatsForActivityType:self.activityType];
+    GCHistoryAggregatedStats * vals = [GCHistoryAggregatedStats aggregatedStatsForActivityTypeDetail:self.activityTypeDetail];
     vals.useFilter = self.useFilter;
     [vals setActivitiesFromOrganizer:[GCAppGlobal organizer]];
-    vals.activityType = self.activityType;
+    //vals.activityType = self.activityType;
     gcIgnoreMode ignoreMode = [self.activityType isEqualToString:GC_TYPE_DAY] ? gcIgnoreModeDayFocus : gcIgnoreModeActivityFocus;
     [vals aggregate:self.multiFieldConfig.calendarConfig.calendarUnit
       referenceDate:self.multiFieldConfig.calendarConfig.referenceDate
@@ -794,7 +817,7 @@
     self.aggregatedStats = vals;
     
     self.geometry = [RZNumberWithUnitGeometry geometry];
-    GCActivityType * type = [GCActivityType activityTypeForKey:self.activityType];
+    GCActivityType * type = self.activityTypeDetail;
     for (GCHistoryAggregatedDataHolder * holder in vals) {
         [GCCellGrid adjustAggregatedWithDataHolder:holder activityType:type geometry:self.geometry];
     }
@@ -806,27 +829,28 @@
 
 -(void)setupForCurrentActivityAndViewChoice:(gcViewChoice)choice{
     GCStatsMultiFieldConfig * nconfig = [GCStatsMultiFieldConfig fieldListConfigFrom:self.multiFieldConfig];
-    nconfig.activityType = [[GCAppGlobal organizer] currentActivity].activityType;
-    nconfig.viewChoice = choice;
-    [self setupForFieldListConfig:nconfig];
-}
--(void)setupForCurrentActivityType:(NSString*)aType andViewChoice:(gcViewChoice)choice{
-    GCStatsMultiFieldConfig * nconfig = [GCStatsMultiFieldConfig fieldListConfigFrom:self.multiFieldConfig];
-    nconfig.activityType = aType;
+    nconfig.activityTypeSelection = RZReturnAutorelease([[GCActivityTypeSelection alloc] initWithActivityType:[[GCAppGlobal organizer] currentActivity].activityType]);
     nconfig.viewChoice = choice;
     [self setupForFieldListConfig:nconfig];
 }
 
--(void)setupForCurrentActivityType:(NSString*)aType andFilter:(BOOL)aFilter{
+-(void)setupForCurrentActivityType:(NSString*)aType andViewChoice:(gcViewChoice)choice{
     GCStatsMultiFieldConfig * nconfig = [GCStatsMultiFieldConfig fieldListConfigFrom:self.multiFieldConfig];
-    nconfig.activityType = aType;
+    nconfig.activityTypeSelection = RZReturnAutorelease([[GCActivityTypeSelection alloc] initWithActivityType:aType]);
+    nconfig.viewChoice = choice;
+    [self setupForFieldListConfig:nconfig];
+}
+
+-(void)setupForCurrentActivityTypeSelection:(GCActivityTypeSelection*)selection andFilter:(BOOL)aFilter{
+    GCStatsMultiFieldConfig * nconfig = [GCStatsMultiFieldConfig fieldListConfigFrom:self.multiFieldConfig];
+    nconfig.activityTypeSelection = selection;
     nconfig.useFilter = aFilter;
     [self setupForFieldListConfig:nconfig];
 }
 
 -(void)setupForCurrentActivityType:(NSString*)aType filter:(BOOL)aFilter andViewChoice:(gcViewChoice)choice{
     GCStatsMultiFieldConfig * nconfig = [GCStatsMultiFieldConfig fieldListConfigFrom:self.multiFieldConfig];
-    nconfig.activityType = aType;
+    nconfig.activityTypeSelection = RZReturnAutorelease([[GCActivityTypeSelection alloc] initWithActivityType:aType]);
     nconfig.useFilter = aFilter;
     nconfig.viewChoice = choice;
     [self setupForFieldListConfig:nconfig];

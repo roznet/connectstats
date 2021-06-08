@@ -25,9 +25,9 @@
 
 
 
-#import "GCHistoryFieldDataHolder.h"
+#import "GCHistoryFieldSummaryDataHolder.h"
 
-@interface GCHistoryFieldDataHolder ()
+@interface GCHistoryFieldSummaryDataHolder ()
 
 @property (nonatomic,retain) GCUnit * unit;
 @property (nonatomic,assign) double * sum;
@@ -41,8 +41,8 @@
 
 @end
 
-@implementation GCHistoryFieldDataHolder
--(GCHistoryFieldDataHolder*)init{
+@implementation GCHistoryFieldSummaryDataHolder
+-(GCHistoryFieldSummaryDataHolder*)init{
     self = [super init];
     if (self) {
         _sum    = calloc(sizeof(double), gcHistoryStatsEnd);

@@ -79,7 +79,6 @@
 }
 
 -(void)dealloc{
-    [_dataSerie detach:self];
     [_dataSerie release];
     [_performanceAnalysis release];
     [_dataSource release];
@@ -99,7 +98,6 @@
     self.dataSource = nil;
     self.performanceAnalysis = nil;
 
-    [self.dataSerie detach:self];
     self.dataSerie = nil;
 
     self.fieldConfig = dataSerie.config;
@@ -150,11 +148,17 @@
 }
 
 -(BOOL)buildDataSerie{
-    [self.dataSerie detach:self];
+    
     self.dataSerie = nil;
 
-    self.dataSerie = [[[GCHistoryFieldDataSerie alloc] initAndLoadFromConfig:self.fieldConfig withThread:self.worker] autorelease];
-    [self.dataSerie attach:self];
+    if( self.worker){
+        dispatch_async(self.worker, ^(){
+            self.dataSerie = [GCHistoryFieldDataSerie historyFieldDataSerieLoadedFromConfig:self.fieldConfig andOrganizer:[GCAppGlobal organizer]];
+            [self notifyCallBack:self.dataSerie info:nil];
+        });
+    }else{
+        self.dataSerie = [GCHistoryFieldDataSerie historyFieldDataSerieLoadedFromConfig:self.fieldConfig andOrganizer:[GCAppGlobal organizer]];
+    }
 
     return self.worker == nil;
 }

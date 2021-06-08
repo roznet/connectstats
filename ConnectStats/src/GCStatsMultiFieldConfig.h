@@ -32,6 +32,7 @@
 @class GCHistoryFieldDataSerie;
 @class GCDerivedDataSerie;
 @class GCDerivedGroupedSeries;
+@class GCActivityTypeSelection;
 
 typedef NS_ENUM(NSUInteger, gcComparisonMetric) {
     gcComparisonMetricNone,
@@ -42,7 +43,9 @@ typedef NS_ENUM(NSUInteger, gcComparisonMetric) {
 
 @interface GCStatsMultiFieldConfig : NSObject
 
-@property (nonatomic,retain) NSString * activityType;
+@property (nonatomic,readonly) NSString * activityType;// DEPRECATED_MSG_ATTRIBUTE("Use Type Detail");
+@property (nonatomic,readonly) GCActivityType * activityTypeDetail;// DEPRECATED_MSG_ATTRIBUTE("Use Type Selection");
+@property (nonatomic,retain) GCActivityTypeSelection * activityTypeSelection;
 /**
  *  ViewChoice, decide what you display: all, monthly, weekly, yearly, summary
  */
@@ -94,5 +97,5 @@ typedef NS_ENUM(NSUInteger, gcComparisonMetric) {
 -(BOOL)nextView;
 
 -(void)nextSummaryCumulativeField;
-
+-(NSDate*)selectAfterDateFrom:(NSDate*)lastDate;
 @end

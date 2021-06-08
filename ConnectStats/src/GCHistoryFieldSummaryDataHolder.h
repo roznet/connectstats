@@ -1,8 +1,8 @@
 //  MIT License
 //
-//  Created on 11/07/2020 for ConnectStats
+//  Created on 09/10/2020 for ConnectStats
 //
-//  Copyright (c) 2020 Brice Test User
+//  Copyright (c) 2020 Brice Rosenzweig
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -25,11 +25,34 @@
 
 
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import "GCField.h"
+#import "GCAppConstants.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface GCStatsMultiFieldConfigViewController2 : UITableViewController
+//
+// For each field, sum/avg queried from db
+@interface GCHistoryFieldSummaryDataHolder : NSObject
+
+@property (nonatomic,retain) GCField * field;
+@property (nonatomic,readonly) NSString * displayField;
+
+-(GCNumberWithUnit*)maxWithUnit:(gcHistoryStats)which;
+-(GCNumberWithUnit*)minWithUnit:(gcHistoryStats)which;
+
+-(nullable GCNumberWithUnit*)averageWithUnit:(gcHistoryStats)which;
+-(GCNumberWithUnit*)sumWithUnit:(gcHistoryStats)which;
+-(GCNumberWithUnit*)countWithUnit:(gcHistoryStats)which;
+-(GCNumberWithUnit*)weightedSumWithUnit:(gcHistoryStats)which;
+-(nullable GCNumberWithUnit*)weightedAverageWithUnit:(gcHistoryStats)which;
+-(double)count:(gcHistoryStats)which;
+
+-(void)addNumberWithUnit:(GCNumberWithUnit*)num DEPRECATED_MSG_ATTRIBUTE("use sum or avg");
+-(void)addNumberWithUnit:(GCNumberWithUnit*)num withTimeWeight:(double)tw distWeight:(double)dw for:(gcHistoryStats)which;
+
+// Used for testing
+-(void)addSumWithUnit:(GCNumberWithUnit*)num andCount:(NSUInteger)count for:(gcHistoryStats)which;
 
 @end
 

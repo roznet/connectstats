@@ -40,10 +40,19 @@
 @property (nonatomic,retain) dispatch_queue_t worker;
 @property (nonatomic,assign) gcHealthZoneSource preferredSource;
 
--(instancetype)init NS_DESIGNATED_INITIALIZER;
+-(instancetype)init;
 -(GCHealthOrganizer*)initWithDb:(FMDatabase*)db andThread:(dispatch_queue_t)thread NS_DESIGNATED_INITIALIZER;
 
--(GCHealthOrganizer*)initForTest NS_DESIGNATED_INITIALIZER;
+-(GCHealthOrganizer*)initTestModeWithDb:(FMDatabase*)db andThread:(dispatch_queue_t)thread;
+
+
+/**
+ * call this function when details should be loaded
+ * typically when the ui is ready, it can be called multiple time
+ * @return true if details already loaded, false if this actually triggered the load
+ */
+-(BOOL)ensureDetailsLoaded;
+
 
 +(void)ensureDbStructure:(FMDatabase*)db;
 

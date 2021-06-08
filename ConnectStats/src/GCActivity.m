@@ -57,7 +57,10 @@ NSString * GC_TRACKPOINTS_MATCHED = @"__TrackPointsMatched__";
 NSString * kGCActivityNotifyDownloadDone = @"kGCActivityNotifyDownloadDone";
 NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady";
 
-@interface GCActivity ()
+@interface GCActivity (){
+    BOOL _downloadRequested;
+    BOOL _skipAlwaysFlag;
+}
 
 @property (nonatomic,retain) NSString * activityType;// DEPRECATED_MSG_ATTRIBUTE("use GCActivityType.");
 @property (nonatomic,retain) GCActivityType * activityTypeDetail;// DEPRECATED_MSG_ATTRIBUTE("use detail of GCActivityType.");
@@ -75,7 +78,6 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 @property (nonatomic,retain) NSDictionary<GCField*,GCActivitySummaryValue*> * summaryData;
 @property (nonatomic,retain) NSDictionary<GCField*,GCActivityCalculatedValue*> * calculatedFields;
 @property (nonatomic,retain) NSDictionary<GCField*,GCTrackPointExtraIndex*> * cachedExtraTracksIndexes;
-
 
 @property (nonatomic,assign) double sumDistance;
 @property (nonatomic,assign) double sumDuration;
@@ -179,7 +181,17 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     if (!self.metaData) {
         self.metaData = dict;
     }else{
-        self.metaData = [self.metaData dictionaryByAddingEntriesFromDictionary:dict];
+        NSMutableDictionary * newMetaData = [NSMutableDictionary dictionaryWithDictionary:self.metaData];
+        for (NSString * key in dict) {
+            GCActivityMetaValue * newValue = dict[key];
+            GCActivityMetaValue * existing = self.metaData[key];
+            if( self.metaData[key] == nil || ![existing isEqualToValue:newValue]){
+                self.hasUnsavedChanges = true;
+            }
+            newMetaData[key] = newValue;
+        }
+        
+        self.metaData = newMetaData;
     }
 }
 -(void)addEntriesToCalculatedFields:(NSDictionary<GCField*,GCActivityCalculatedValue*> *)dict{
@@ -248,7 +260,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 
 }
 
-#pragma mark - Primary Field Access
+#pragma mark - Primary Field Access/Read
 
 /**
  Return summary value for field. Mostly for internal use
@@ -272,29 +284,6 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 
 -(GCUnit*)distanceDisplayUnit{
     return [[GCUnit kilometer] unitForGlobalSystem];
-}
-
--(BOOL)changeActivityType:(GCActivityType*)newActivityType{
-    BOOL changed = false;
-    if( newActivityType && ( !self.activityType || ![newActivityType isEqualToActivityType:self.activityTypeDetail] ) ){
-        NSString * newSubRoot = newActivityType.primaryActivityType.key;
-        changed = true;
-        if( self.activityType && ![newSubRoot isEqualToString:self.activityType] ){
-            self.activityType = newSubRoot;
-            NSMutableDictionary * newSummary = [NSMutableDictionary dictionary];
-            for (GCField * field in self.summaryData) {
-                GCActivitySummaryValue * sumValue = self.summaryData[field];
-                GCField * newField = [field correspondingFieldForActivityType:newSubRoot];
-                newSummary[newField] = sumValue;
-            }
-            // We are not changing any values, so should not need to change the directly stored data like speed, etc
-            self.summaryData = [NSDictionary dictionaryWithDictionary:newSummary];
-        }else{
-            self.activityType = newSubRoot;
-        }
-        self.activityTypeDetail = newActivityType;
-    }
-    return changed;
 }
 
 /**
@@ -351,12 +340,82 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
             if( val == nil && [field.activityType isEqualToString:GC_TYPE_ALL]){
                 GCField * typedField = [field correspondingFieldForActivityType:self.activityType];
                 val = self.summaryData[ typedField ];
+                if( !val ){
+                    val = self.calculatedFields[ typedField ];
+                }
             }
             rv = val.numberWithUnit;
         }
     }
     return rv;
 }
+
+-(GCActivityMetaValue*)metaValueForField:(NSString*)field{
+    GCActivityMetaValue * rv = _metaData[field];
+    if( rv == nil){
+        if( [field isEqualToString:GC_META_ACTIVITYTYPE] ){
+            rv = [GCActivityMetaValue activityMetaValueForDisplay:self.activityTypeDetail.displayName andField:GC_META_ACTIVITYTYPE];
+        }else if ([field isEqualToString:GC_META_SERVICE]){
+            rv = [GCActivityMetaValue activityMetaValueForDisplay:self.service.displayName andField:GC_META_ACTIVITYTYPE];
+        }
+    }
+    return rv;
+}
+
+-(GCNumberWithUnit*)numberWithUnitForFieldInStoreUnit:(GCField *)field{
+    switch (field.fieldFlag) {
+        case gcFieldFlagWeightedMeanSpeed:
+            return [[self numberWithUnitForField:field] convertToUnit:[GCUnit unitForKey:STOREUNIT_SPEED]];
+        case gcFieldFlagSumDistance:
+            return [[self numberWithUnitForField:field] convertToUnit:[GCUnit unitForKey:STOREUNIT_DISTANCE]];
+        case gcFieldFlagSumDuration:
+            return [[self numberWithUnitForField:field] convertToUnit:[GCUnit unitForKey:STOREUNIT_ELAPSED]];
+        default:
+            return [self numberWithUnitForField:field];
+    }
+}
+
+-(double)summaryFieldValueInStoreUnit:(gcFieldFlag)fieldFlag{
+    switch (fieldFlag) {
+        case gcFieldFlagWeightedMeanHeartRate:
+            return self.weightedMeanHeartRate;
+        case gcFieldFlagWeightedMeanSpeed:
+            return self.weightedMeanSpeed;
+        case gcFieldFlagSumDuration:
+            return self.sumDuration;
+        case gcFieldFlagSumDistance:
+            return self.sumDistance;
+            
+        default:
+            return 0.0;
+    }
+}
+
+#pragma mark - Primary Field Access/Write
+
+-(BOOL)changeActivityType:(GCActivityType*)newActivityType{
+    BOOL changed = false;
+    if( newActivityType && ( !self.activityType || ![newActivityType isEqualToActivityType:self.activityTypeDetail] ) ){
+        NSString * newSubRoot = newActivityType.primaryActivityType.key;
+        changed = true;
+        if( self.activityType && ![newSubRoot isEqualToString:self.activityType] ){
+            self.activityType = newSubRoot;
+            NSMutableDictionary * newSummary = [NSMutableDictionary dictionary];
+            for (GCField * field in self.summaryData) {
+                GCActivitySummaryValue * sumValue = self.summaryData[field];
+                GCField * newField = [field correspondingFieldForActivityType:newSubRoot];
+                newSummary[newField] = sumValue;
+            }
+            // We are not changing any values, so should not need to change the directly stored data like speed, etc
+            self.summaryData = [NSDictionary dictionaryWithDictionary:newSummary];
+        }else{
+            self.activityType = newSubRoot;
+        }
+        self.activityTypeDetail = newActivityType;
+    }
+    return changed;
+}
+
 
 -(BOOL)setNumberWithUnit:(GCNumberWithUnit*)nu forField:(GCField*)field{
     BOOL rv = false;
@@ -437,34 +496,6 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     return rv;
 }
 
--(GCNumberWithUnit*)numberWithUnitForFieldInStoreUnit:(GCField *)field{
-    switch (field.fieldFlag) {
-        case gcFieldFlagWeightedMeanSpeed:
-            return [[self numberWithUnitForField:field] convertToUnit:[GCUnit unitForKey:STOREUNIT_SPEED]];
-        case gcFieldFlagSumDistance:
-            return [[self numberWithUnitForField:field] convertToUnit:[GCUnit unitForKey:STOREUNIT_DISTANCE]];
-        case gcFieldFlagSumDuration:
-            return [[self numberWithUnitForField:field] convertToUnit:[GCUnit unitForKey:STOREUNIT_ELAPSED]];
-        default:
-            return [self numberWithUnitForField:field];
-    }
-}
-
--(double)summaryFieldValueInStoreUnit:(gcFieldFlag)fieldFlag{
-    switch (fieldFlag) {
-        case gcFieldFlagWeightedMeanHeartRate:
-            return self.weightedMeanHeartRate;
-        case gcFieldFlagWeightedMeanSpeed:
-            return self.weightedMeanSpeed;
-        case gcFieldFlagSumDuration:
-            return self.sumDuration;
-        case gcFieldFlagSumDistance:
-            return self.sumDistance;
-            
-        default:
-            return 0.0;
-    }
-}
 -(void)setSummaryField:(gcFieldFlag)fieldFlag inStoreUnitValue:(double)value{
     switch (fieldFlag) {
         case gcFieldFlagWeightedMeanHeartRate:
@@ -487,6 +518,46 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
             break;
     }
 
+}
+
+
+-(void)updateSummaryFieldFromSummaryData{
+    for (GCField * field in self.summaryData) {
+        GCActivitySummaryValue * value = self.summaryData[field];
+        if (field.fieldFlag!= gcFieldFlagNone) {
+            GCNumberWithUnit * nu = value.numberWithUnit;
+            [self setSummaryField:field.fieldFlag with:nu];
+            self.flags |= field.fieldFlag;
+        }
+    }
+}
+
+-(void)updateSummaryData:(NSDictionary<GCField *,GCActivitySummaryValue *> *)summary{
+    if( self.summaryData == nil){
+        self.summaryData = summary;
+    }else{
+        self.summaryData = summary;
+    }
+    [self updateSummaryFieldFromSummaryData];
+}
+
+-(void)updateMetaData:(NSDictionary<NSString *,GCActivityMetaValue *> *)meta{
+    if( self.metaData == nil){
+        self.metaData = meta;
+    }else{
+        self.metaData = meta;
+    }
+    [self skipAlways];
+}
+
+-(void)updateActivityTypeFromMetaData{
+    GCActivityMetaValue * activityTypeMeta = self.metaData[GC_META_ACTIVITYTYPE];
+    if( activityTypeMeta ){
+        GCActivityType * activityType = [GCActivityType activityTypeForKey:activityTypeMeta.key];
+        if( activityType ) {
+            self.activityTypeDetail = activityType;
+        }
+    }
 }
 
 #pragma mark - Test on Fields
@@ -514,22 +585,77 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
         [GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:self.activityType],
     ];
 }
--(NSArray<NSString*>*)allFieldsKeys{
-    NSArray<GCField*> * rv = [self allFields];
-    
-    NSMutableArray<NSString*>*final = [NSMutableArray arrayWithCapacity:rv.count];
-    
-    for (GCField * f in rv) {
-        [final addObject:f.key];
-    }
-    return final;
-}
 
 -(NSString*)displayName{
     if (([_activityName isEqualToString:@"Untitled"] || [_activityName isEqualToString:@""]) && ![_location isEqualToString:@""]){
         return _location;
     }
     return _activityName ?:@"";
+}
+
+-(BOOL)isCompleted:(gcServicePhase)phase for:(gcService)serv{
+    NSUInteger flag = (phase == gcServicePhaseSummary) ? 0b01 : 0b10;
+    switch( serv ){
+        case gcServiceGarmin:
+            flag <<= 4;
+            break;
+        case gcServiceStrava:
+            flag <<= 8;
+            break;
+        default:
+            break;
+    }
+    return (self.serviceStatus & flag) == flag;
+}
+
+-(NSString*)serviceStatusDescription{
+    NSMutableArray * info = [NSMutableArray array];
+    
+    NSArray<NSString*> * names = @[ @"connectstats", @"garmin", @"strava"];
+    for(size_t i=0;i<3;i++){
+        NSUInteger flag  = self.serviceStatus >> (i*4);
+        if( (flag & 0b11) != 0){
+            NSMutableArray * one = [[NSMutableArray alloc] init];;
+            
+            if( (flag & 0b01) == 0b01){
+                [one addObject:@"S"];
+            }
+            if( (flag & 0b10) == 0b10){
+                [one addObject:@"T"];
+            }
+            
+            [info addObject:[NSString stringWithFormat:@"%@(%@)", names[i], [one componentsJoinedByString:@","]]];
+            RZRelease(one);
+        }
+    }
+    return [info componentsJoinedByString:@" "];
+}
+
+-(BOOL)markCompleted:(gcServicePhase)phase for:(gcService)serv{
+    NSUInteger flag = (phase == gcServicePhaseSummary) ? 0b01 : 0b10;
+    switch( serv ){
+        case gcServiceGarmin:
+            flag <<= 4;
+            break;
+        case gcServiceStrava:
+            flag <<= 8;
+            break;
+        default:
+            break;
+    }
+    BOOL rv = (self.serviceStatus & flag) == flag;
+    if( ! rv){
+        self.hasUnsavedChanges = true;
+    }
+    self.serviceStatus |= flag;
+    return rv;
+}
+
+-(void)clearAllCompleted{
+    if( self.serviceStatus != 0){
+        self.hasUnsavedChanges = true;
+    }
+    self.serviceStatus = 0;
 }
 
 #pragma mark - GCField Access methods
@@ -622,7 +748,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     }
     return  rv;
 }
-
+/*
 -(NSString*)formatValue:(double)val forField:(GCField*)field{
     GCUnit * unit = [self displayUnitForField:field];
     return [unit formatDouble:val];
@@ -632,16 +758,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     GCUnit * unit = [self displayUnitForField:field];
     return [unit formatDoubleNoUnits:val];
 }
-
--(NSString*)formattedValue:(GCField*)field{
-    return [[self numberWithUnitForField:field] formatDouble] ?: @"";
-}
-
--(NSString*)formatNumberWithUnit:(GCNumberWithUnit*)nu forField:(GCField*)which{
-    GCUnit * unit = [self displayUnitForField:which];
-    return [[nu convertToUnit:unit] formatDouble];
-}
-
+*/
 -(NSDate*)startTime{
     return self.date;
 }
@@ -692,7 +809,7 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     if (self.useDb != nil) {
         return self.useDb;
     }
-    return [GCAppGlobal db];
+    return self.settings.organizer.db;
 }
 -(void)setDb:(FMDatabase*)adb{
     self.useDb = adb;
@@ -842,30 +959,21 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     GCTrackPoint * lastTrack = nil;
     BOOL firstDone = false;
     
-    for (id data in aTrack) {
+    for (GCTrackPoint * point in aTrack) {
         @autoreleasepool {
-            GCTrackPoint * npoint = nil;
-            GCTrackPoint * point = nil;
             if(!firstDone){
                 self.cachedExtraTracksIndexes = nil;
             }
             
-            if ([data isKindOfClass:[GCTrackPoint class]]) {
-                point = data;
+            if (point.time==nil) {
+                point.time = [self.date dateByAddingTimeInterval:point.elapsed];
                 if (point.time==nil) {
-                    point.time = [self.date dateByAddingTimeInterval:point.elapsed];
-                    if (point.time==nil) {
-                        countBadLaps++;
-                        continue;
-                    }
+                    countBadLaps++;
+                    continue;
                 }
-                [point recordExtraIn:self];
-            }else if ([data isKindOfClass:[NSDictionary class]]){
-                // If parsing from dict, reset extra indexes to rebuild
-                // with fields we get in dict
-                npoint = [[GCTrackPoint alloc] initWithDictionary:data forActivity:self];
-                point = npoint;
             }
+            [point recordExtraIn:self];
+            
             if (lastTrack) {
                 //[lastTrack updateWithNextPoint:point];
             }
@@ -888,7 +996,6 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
                 [trackData addObject:point];
                 self.trackFlags |= point.trackFlags;
             }
-            [npoint release];
             firstDone = true;
         }
     }
@@ -908,6 +1015,10 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     [GCFieldsCalculated addCalculatedFieldsToLaps:self.lapsCache forActivity:self];
     
     if([self updateSummaryFromTrackpoints:self.trackpointsCache missingOnly:TRUE]){
+        if( self.db ){
+            RZLog(RZLogInfo, @"%@ had new summary from trackpoint, saving to db", self);
+            [self saveToDb:self.db];
+        }
         rv = true;
     }
     
@@ -932,25 +1043,29 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     // save main activities if needed
     if( rv ){
         
-        if (![db executeUpdate:@"UPDATE gc_activities SET trackFlags = ? WHERE activityId=?",@(_trackFlags), _activityId]){
-            RZLog(RZLogError, @"db update %@",[db lastErrorMessage]);
-        }
         if ([trackdb tableExists:@"gc_activities"]) {
             if (![trackdb executeUpdate:@"UPDATE gc_activities SET trackFlags = ? WHERE activityId=?",@(_trackFlags), _activityId]){
                 RZLog(RZLogError, @"db update %@",[db lastErrorMessage]);
             }
         }
-        if (![db executeUpdate:@"UPDATE gc_activities SET BeginLatitude = ?, BeginLongitude = ? WHERE activityId=?",
-              @(self.beginCoordinate.latitude), @(self.beginCoordinate.longitude), _activityId]){
-            RZLog(RZLogError, @"db update %@",[db lastErrorMessage]);
+        if( db ){
+            if (![db executeUpdate:@"UPDATE gc_activities SET trackFlags = ? WHERE activityId=?",@(_trackFlags), _activityId]){
+                RZLog(RZLogError, @"db update %@",[db lastErrorMessage]);
+            }
+            if (![db executeUpdate:@"UPDATE gc_activities SET BeginLatitude = ?, BeginLongitude = ? WHERE activityId=?",
+                  @(self.beginCoordinate.latitude), @(self.beginCoordinate.longitude), _activityId]){
+                RZLog(RZLogError, @"db update %@",[db lastErrorMessage]);
+            }
+            
+            [self saveToDb:self.db];
         }
-
-        [self saveToDb:self.db];
-    
+        
         if ([[GCAppGlobal profile] configGetBool:CONFIG_ENABLE_DERIVED defaultValue:[GCAppGlobal connectStatsVersion]]) {
-            dispatch_async([GCAppGlobal worker],^(){
-                [[GCAppGlobal derived] processActivities:@[self]];
-            });
+            if( self.settings.worker ){
+                dispatch_async(self.settings.worker,^(){
+                    [[GCAppGlobal derived] processActivities:@[self]];
+                });
+            }
         }
     }
     return rv;
@@ -1265,13 +1380,6 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 
             }
             // attempt to download weather at same time
-            if (_downloadMethod == gcDownloadMethod13|| _downloadMethod == gcDownloadMethodModern) {
-                // DISABLE STRAVA UPLOAD
-                if ([[GCAppGlobal profile] configGetBool:CONFIG_SHARING_STRAVA_AUTO defaultValue:false]) {
-                    [[GCAppGlobal profile] configSet:CONFIG_SHARING_STRAVA_AUTO boolVal:false];
-                    [GCAppGlobal saveSettings];
-                }
-            }
             if(_downloadMethod == gcDownloadMethodConnectStats){
                 if (![self hasWeather]) {
                     [[GCAppGlobal web] connectStatsDownloadWeather:self];
@@ -1623,56 +1731,6 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
     }
 }
 
--(GCActivityMetaValue*)metaValueForField:(NSString*)field{
-    GCActivityMetaValue * rv = _metaData[field];
-    if( rv == nil){
-        if( [field isEqualToString:GC_META_ACTIVITYTYPE] ){
-            rv = [GCActivityMetaValue activityMetaValueForDisplay:self.activityTypeDetail.displayName andField:GC_META_ACTIVITYTYPE];
-        }else if ([field isEqualToString:GC_META_SERVICE]){
-            rv = [GCActivityMetaValue activityMetaValueForDisplay:self.service.displayName andField:GC_META_ACTIVITYTYPE];
-        }
-    }
-    return rv;
-}
-
--(void)updateSummaryFieldFromSummaryData{
-    for (GCField * field in self.summaryData) {
-        GCActivitySummaryValue * value = self.summaryData[field];
-        if (field.fieldFlag!= gcFieldFlagNone) {
-            GCNumberWithUnit * nu = value.numberWithUnit;
-            [self setSummaryField:field.fieldFlag with:nu];
-            self.flags |= field.fieldFlag;
-        }
-    }
-}
-
--(void)updateSummaryData:(NSDictionary<GCField *,GCActivitySummaryValue *> *)summary{
-    if( self.summaryData == nil){
-        self.summaryData = summary;
-    }else{
-        self.summaryData = summary;
-    }
-    [self updateSummaryFieldFromSummaryData];
-}
-
--(void)updateMetaData:(NSDictionary<NSString *,GCActivityMetaValue *> *)meta{
-    if( self.metaData == nil){
-        self.metaData = meta;
-    }else{
-        self.metaData = meta;
-    }
-    [self skipAlways];
-}
-
--(void)updateActivityTypeFromMetaData{
-    GCActivityMetaValue * activityTypeMeta = self.metaData[GC_META_ACTIVITYTYPE];
-    if( activityTypeMeta ){
-        GCActivityType * activityType = [GCActivityType activityTypeForKey:activityTypeMeta.key];
-        if( activityType ) {
-            self.activityTypeDetail = activityType;
-        }   
-    }
-}
 
 -(BOOL)skipAlways{
     GCActivityMetaValue * val = self.metaData[GC_IGNORE_SKIP_ALWAYS];

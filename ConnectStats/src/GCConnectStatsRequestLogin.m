@@ -28,6 +28,7 @@
 #import "GCConnectStatsRequestLogin.h"
 #import "GCWebUrl.h"
 #import "GCAppGlobal.h"
+#import "ConnectStats-Swift.h"
 
 typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
     GCConnectStatsRequestLoginStageAPICheck,
@@ -75,8 +76,12 @@ typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
             case GCConnectStatsRequestLoginStageValidateUser:
             {
                 NSString * path = GCWebConnectStatsValidateUser([GCAppGlobal webConnectsStatsConfig]);
+                NSUInteger type = [GCAppGlobal profile].pushNotificationType;
                 NSDictionary *parameters = @{
                                              @"token_id" : @(self.tokenId),
+                                             @"notification_device_token": [[GCAppGlobal profile] configGetString:CONFIG_NOTIFICATION_DEVICE_TOKEN defaultValue:@""],
+                                             @"notification_enabled" : @([GCAppGlobal profile].pushNotificationEnabled),
+                                             @"notification_push_type" : @( type ),
                                              };
                 
                 return [self preparedUrlRequest:path params:parameters];
@@ -139,6 +144,7 @@ typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
                 NSDictionary * info = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:nil];
                 if( [info isKindOfClass:[NSDictionary class]] && [info[@"cs_user_id"] respondsToSelector:@selector(integerValue)] && [info[@"cs_user_id"] integerValue] == self.userId){
                     RZLog(RZLogInfo, @"Validated user %@", info[@"cs_user_id"]);
+                    [GCConnectStatsRequestRegisterNotifications register];
                 }else{
                     RZLog(RZLogWarning, @"Invalid user %@ != %@", info[@"cs_user_id"], @(self.userId));
                 }
@@ -147,6 +153,11 @@ typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
         }
     }
 }
+
+-(BOOL)priorityRequest{
+    return true;
+}
+
 
 -(id<GCWebRequest>)nextReq{
     // later check logic to see if reach existing.

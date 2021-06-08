@@ -105,7 +105,6 @@ void checkVersion(void){
     [_urlToOpen release];
     [_actions release];
     [_health release];
-    [_segments release];
     [_credentials release];
     [_remoteStatus release];
     [_locationManager release];
@@ -123,14 +122,18 @@ void checkVersion(void){
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    RZLogDebuggerOutput();
 
     RZLog(RZLogInfo, @"=========== %@ %@ ==== %@ ===============",
           [[NSBundle mainBundle] infoDictionary][@"CFBundleExecutable"],
           [[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"],
           [RZSystemInfo systemDescription]);
-
+    
     RZSimNeedle();
     
+    if( launchOptions.count > 0){
+        RZLog(RZLogInfo,@"launchOptions: %@", launchOptions);
+    }
     [self credentialsForService:@"flurry" andKey:@"connectstats"];
 #if !TARGET_IPHONE_SIMULATOR
 	NSString *applicationCode = [GCAppDelegate connectStatsVersion] ? [self credentialsForService:@"flurry" andKey:@"connectstats"] : [self credentialsForService:@"flurry" andKey:@"healthstats"];
@@ -210,9 +213,18 @@ void checkVersion(void){
         }else{
             RZLog(RZLogInfo, @"Launch Invalid UserActivity %@", dict);
         }
+    }else if (launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]){
+        RZLog(RZLogInfo, @"Remote Notification %@", launchOptions);
     }
-    
+    [self registerForPushNotifications];
     [self remoteStatusCheck];
+        
+    
+    /* FOR TESTING
+    [self application:application didReceiveRemoteNotification:@{} fetchCompletionHandler:^(UIBackgroundFetchResult res){
+        RZLog(RZLogInfo, @"completed with %@", @(res));
+    }];
+     */
     return YES;
 }
 

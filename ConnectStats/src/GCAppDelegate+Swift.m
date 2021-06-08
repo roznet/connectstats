@@ -25,6 +25,9 @@
 
 #import "GCAppDelegate+Swift.h"
 #import "ConnectStats-Swift.h"
+#import "GCWebConnect+Requests.h"
+
+@import UserNotifications;
 
 #define GC_STARTING_FILE @"starting.log"
 
@@ -33,7 +36,75 @@ BOOL kOpenTemporary = false;
 @implementation GCAppDelegate (Swift)
 
 -(void)handleAppRating{
+    
     [self initiateAppRating];
+}
+
+-(void)registerForPushNotifications{
+    [GCConnectStatsRequestRegisterNotifications register];
+}
+
+-(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler{
+    if( userInfo[@"activity_id"] != nil){
+        RZLog(RZLogInfo,@"remote notification for activity %@",userInfo[@"activity_id"]);
+    }else{
+        RZLog(RZLogInfo,@"remote notification %@", userInfo);
+    }
+    application.applicationIconBadgeNumber = 1;
+    RZPerformance * notificationPerf = [RZPerformance start];
+    
+    self.web.notificationHandler = ^(gcWebNotification notification){
+        switch( notification ){
+            case gcWebNotificationEnd:
+            {
+                RZLog(RZLogInfo,@"web update completed successfully %@", notificationPerf);
+                self.web.notificationHandler = nil;
+                completionHandler(UIBackgroundFetchResultNewData);
+                break;
+            }
+            case gcWebNotificationError:
+            {
+                RZLog(RZLogInfo,@"web update completed with error %@", notificationPerf);
+                self.web.notificationHandler = nil;
+                completionHandler(UIBackgroundFetchResultFailed);
+                break;
+            }
+            default:
+                RZLog(RZLogInfo,@"still going %@", self.web.currentDebugDescription);
+                break;
+        }
+    };
+    
+    if( ! [self.web servicesBackgroundUpdate]){
+        self.web.notificationHandler = nil;
+        completionHandler(UIBackgroundFetchResultNoData);
+    }
+}
+
+
+-(void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken{
+    const uint8_t * data = deviceToken.bytes;
+    
+    NSMutableString * token = [NSMutableString string];
+    for (NSUInteger i=0; i<deviceToken.length; i++) {
+        [token appendFormat:@"%02hhX", data[i]];
+    }
+    NSString * existingToken = [[GCAppGlobal profile] configGetString:CONFIG_NOTIFICATION_DEVICE_TOKEN defaultValue:@""];
+    if( ![token isEqualToString:existingToken] ){
+        RZLog(RZLogInfo,@"remote notification registered with new token: %@", token);
+        [[GCAppGlobal profile] configSet:CONFIG_NOTIFICATION_DEVICE_TOKEN stringVal:token];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [GCAppGlobal saveSettings];
+            GCConnectStatsRequestRegisterNotifications * req = RZReturnAutorelease([[GCConnectStatsRequestRegisterNotifications alloc] init]);
+            [[GCAppGlobal web] addRequest:req];
+        });
+    }else{
+        RZLog(RZLogInfo,@"remote notification registered with same token: %@", token);
+    }
+}
+
+-(void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error{
+    RZLog(RZLogError,@"Failed to register %@", error);
 }
 
 -(void)handleFitFile:(NSData*)fitData{
@@ -45,7 +116,7 @@ BOOL kOpenTemporary = false;
         }else{
             
             [self.organizer registerActivity:fitAct forActivityId:fitAct.activityId];
-            [self.organizer registerActivity:fitAct.activityId withTrackpoints:fitAct.trackpoints andLaps:fitAct.laps];
+            [self.organizer registerActivity:fitAct withTrackpoints:fitAct.trackpoints andLaps:fitAct.laps];
         }
         dispatch_async(dispatch_get_main_queue(), ^(){
             [self handleFitFileDone:fitAct.activityId];
@@ -96,6 +167,7 @@ BOOL kOpenTemporary = false;
         
         [self settingsUpdateCheckPostStart];
         [self startSuccessfulSwift];
+        //[UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     }
 }
 

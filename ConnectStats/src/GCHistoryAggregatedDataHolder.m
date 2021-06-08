@@ -260,7 +260,7 @@
 -(nullable GCNumberWithUnit*)preferredNumberWithUnit:(GCField*)field{
     gcAggregatedType type = [self preferredAggregatedTypeForField:field];
     
-    if( field.fieldFlag == gcFieldFlagWeightedMeanSpeed){
+    if( [field.unit.referenceUnitKey isEqualToString:@"mps"] ){
         // Special case for speed, override
         GCNumberWithUnit * durationN = [self numberWithUnit:[GCField fieldForFlag:gcFieldFlagSumDuration andActivityType:field.activityType] statType:gcAggregatedSum];
         GCNumberWithUnit * distanceN = [self numberWithUnit:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:field.activityType] statType:gcAggregatedSum];
@@ -308,10 +308,32 @@
 
 -(BOOL)hasField:(GCField *)field{
     for (GCField * one in self.fields) {
-        if( [field isEqualToField:one] ){
+        if( [field matchesField:one] ){
             return true;
         }
     }
     return false;
+}
+
+-(BOOL)isAfter:(NSDate*)after{
+    return [after compare:self.date] != NSOrderedDescending;
+}
+
+-(NSString*)describe:(gcAggregatedType)type{
+    switch (type) {
+        case gcAggregatedAvg:
+            return NSLocalizedString(@"Avg", "gcAggregatedType");
+        case gcAggregatedCnt:
+            return NSLocalizedString(@"Cnt", "gcAggregatedType");
+        case gcAggregatedSum:
+            return NSLocalizedString(@"Sum", "gcAggregatedType");
+        case gcAggregatedMax:
+            return NSLocalizedString(@"Max", "gcAggregatedType");
+        case gcAggregatedMin:
+            return NSLocalizedString(@"Min", "gcAggregatedType");
+        default:
+            return NSLocalizedString(@"", "gcAggregatedType");
+            break;
+    }
 }
 @end

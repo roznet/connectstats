@@ -96,8 +96,8 @@
         "repositoryURL": "https://github.com/roznet/rzexternal",
         "state": {
           "branch": null,
-          "revision": "13707fe878e88d0dec93bb2b654bca8cadd271bf",
-          "version": "1.0.2"
+          "revision": "8196de67f9481c7f2a1ba2d5bf7886fe89f63ce4",
+          "version": "1.0.3"
         }
       },
       {
@@ -105,8 +105,8 @@
         "repositoryURL": "https://github.com/roznet/rzutils.git",
         "state": {
           "branch": null,
-          "revision": "6bbd760c29ff2ba8c85736e0c4c3416bd52629a2",
-          "version": "1.0.12"
+          "revision": "2f4e7b1e052d39ff5ef6ca1499751aae7f9928a1",
+          "version": "1.0.14"
         }
       },
       {
@@ -123,8 +123,8 @@
         "repositoryURL": "https://github.com/roznet/rzutils-touch.git",
         "state": {
           "branch": null,
-          "revision": "8dfb8e43574e8340abfddf831583cbc5985017c1",
-          "version": "1.0.1"
+          "revision": "5a396243777c14257c4e0b23c9f2229fd25252ae",
+          "version": "1.0.2"
         }
       },
       {

@@ -34,10 +34,11 @@
 
 #import "GCTestUISamples.h"
 
-#import "GCHistoryFieldDataHolder.h"
+#import "GCHistoryFieldSummaryDataHolder.h"
 #import "GCHistoryFieldSummaryStats.h"
 
 #import "GCTestAppGlobal.h"
 #import "GCGarminLoginSSORequest.h"
-
-
+#import "GCConnectStatsRequest.h"
+#import "GCConnectStatsSearchJsonParser.h"
+#import "GCConnectStatsRequestFitFile.h"

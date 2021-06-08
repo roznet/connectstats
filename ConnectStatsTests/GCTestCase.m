@@ -71,7 +71,7 @@
     [GCActivitiesOrganizer ensureDbStructure:db];
     [GCHealthOrganizer ensureDbStructure:db];
     GCActivitiesOrganizer * organizer = [[[GCActivitiesOrganizer alloc] initTestModeWithDb:db] autorelease];
-    GCHealthOrganizer * health = [[[GCHealthOrganizer alloc] initWithDb:db andThread:nil] autorelease];
+    GCHealthOrganizer * health = [[[GCHealthOrganizer alloc] initTestModeWithDb:db andThread:nil] autorelease];
     organizer.health = health;
 
     return organizer;
@@ -85,8 +85,33 @@
     [GCDerivedOrganizer ensureDbStructure:deriveddb];
     
     [[GCAppGlobal profile] configSet:CONFIG_ENABLE_DERIVED boolVal:false];
-    GCDerivedOrganizer * derived = [[GCDerivedOrganizer alloc] initForTestModeWithDb:deriveddb thread:nil andFilePrefix:name];
+    GCDerivedOrganizer * derived = [[GCDerivedOrganizer alloc] initTestModeWithDb:deriveddb thread:nil andFilePrefix:name];
     return derived;
+}
+
+-(GCActivitiesOrganizer*)createTemporaryInMemoryOrganizer{
+    FMDatabase * memDb = [FMDatabase databaseWithPath:nil];
+    [memDb open];
+    [GCActivitiesOrganizer ensureDbStructure:memDb];
+
+    GCActivitiesOrganizer * rv = RZReturnAutorelease([[GCActivitiesOrganizer alloc] initTestModeWithDb:memDb]);
+    return rv;
+}
+
+-(GCActivitiesOrganizer*)setupSampleState:(NSString*)name{
+    [RZFileOrganizer createEditableCopyOfFile:name forClass:[self class]];
+    FMDatabase * db = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:name]];
+    
+    [db open];
+    [GCActivitiesOrganizer ensureDbStructure:db];
+    GCActivitiesOrganizer * rv = RZReturnAutorelease([[GCActivitiesOrganizer alloc] initTestModeWithDb:db]);
+    
+    return rv;
+}
+
+
+-(void)setupForTest:(GCActivity*)act{
+    act.settings.worker = nil;
 }
 
 @end

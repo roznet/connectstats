@@ -148,7 +148,7 @@
         @"test_activity_cycling_1404395287.db", // GCTestsActivities testActivityCalculated
         
         @"activities_duplicate.db", // GCTestsPerformance testPerformanceOrganizerLoad
-        @"activities_stats.db", // GCTestsPerformance testPerformanceOrganizerStatistics
+        @"test_activities_stats.db", // GCTestsPerformance testPerformanceOrganizerStatistics
     ];
     
     

@@ -246,9 +246,9 @@
             });
             self.status = GCWebStatusOK;
             if (self.trackpointsSwim && self.lapsSwim) {
-                [[GCAppGlobal organizer] registerActivity:self.activity.activityId withTrackpoints:self.trackpointsSwim andLaps:self.lapsSwim];
+                [[GCAppGlobal organizer] registerActivity:self.activity withTrackpoints:self.trackpointsSwim andLaps:self.lapsSwim];
             }else{
-                [[GCAppGlobal organizer] registerActivity:self.activity.activityId withTrackpoints:self.trackpoints andLaps:self.laps];
+                [[GCAppGlobal organizer] registerActivity:self.activity withTrackpoints:self.trackpoints andLaps:self.laps];
             }
             [self processMergeFitFile];
         }else{
@@ -304,7 +304,7 @@
         self.track13Stage = gcTrack13RequestEnd+1;
         self.status = GCWebStatusOK;
         // register with empty trackpoints so it does not try to download again
-        [[GCAppGlobal organizer] registerActivity:self.activity.activityId withTrackpoints:self.trackpoints andLaps:self.laps];
+        [[GCAppGlobal organizer] registerActivity:self.activity withTrackpoints:self.trackpoints andLaps:self.laps];
         dispatch_async(dispatch_get_main_queue(), ^(){
             [self processDone];
         } );
