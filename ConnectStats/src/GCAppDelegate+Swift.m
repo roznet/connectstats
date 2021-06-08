@@ -95,8 +95,9 @@ BOOL kOpenTemporary = false;
         [[GCAppGlobal profile] configSet:CONFIG_NOTIFICATION_DEVICE_TOKEN stringVal:token];
         dispatch_async(dispatch_get_main_queue(), ^(){
             [GCAppGlobal saveSettings];
+            GCConnectStatsRequestRegisterNotifications * req = RZReturnAutorelease([[GCConnectStatsRequestRegisterNotifications alloc] init]);
+            [[GCAppGlobal web] addRequest:req];
         });
-        
     }else{
         RZLog(RZLogInfo,@"remote notification registered with same token: %@", token);
     }

@@ -67,8 +67,6 @@
                 NSMutableArray * swimPoints = nil;
 
                 NSUInteger lapIdx = 0;
-
-                GCTrackPoint * last = nil;
                 
                 for (NSDictionary * one in foundLaps) {
                     if([one isKindOfClass:[NSDictionary class]]){
@@ -88,9 +86,7 @@
                                     GCTrackPoint * swim = [[GCTrackPoint alloc] initWithDictionary:length forActivity:act];
                                     swim.lapIndex = lapIdx;
                                     [swimPoints addObject:swim];
-                                    [swim release];
-                                    
-                                    last = swim;
+                                    [swim release];                                    
                                 }
                             }
                             [lapsSwim addObject:lap];

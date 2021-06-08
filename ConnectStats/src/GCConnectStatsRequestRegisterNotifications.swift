@@ -66,8 +66,8 @@ class GCConnectStatsRequestRegisterNotifications : GCConnectStatsRequest {
                         if setting.authorizationStatus == .authorized {
                             DispatchQueue.main.async {
                                 RZSLog.info("Push notification granted, registering")
+                                // This will call didregister on app delegate and create a request if the token changed
                                 UIApplication.shared.registerForRemoteNotifications()
-                                GCAppGlobal.web().add(GCConnectStatsRequestRegisterNotifications())
                             }
                         }else{
                             RZSLog.info("Push notification not authorized, disabling")
