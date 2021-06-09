@@ -47,7 +47,7 @@
         }
       },
       {
-        "package": "fmdb",
+        "package": "FMDB",
         "repositoryURL": "https://github.com/ccgus/fmdb",
         "state": {
           "branch": null,
@@ -65,7 +65,7 @@
         }
       },
       {
-        "package": "keychain-swift",
+        "package": "KeychainSwift",
         "repositoryURL": "https://github.com/evgenyneu/keychain-swift",
         "state": {
           "branch": null,
@@ -92,7 +92,7 @@
         }
       },
       {
-        "package": "rzexternal",
+        "package": "RZExternal",
         "repositoryURL": "https://github.com/roznet/rzexternal",
         "state": {
           "branch": null,
@@ -101,7 +101,7 @@
         }
       },
       {
-        "package": "rzutils",
+        "package": "RZUtils",
         "repositoryURL": "https://github.com/roznet/rzutils.git",
         "state": {
           "branch": null,
@@ -110,7 +110,7 @@
         }
       },
       {
-        "package": "rzutils-macos",
+        "package": "RZUtilsMacOS",
         "repositoryURL": "https://github.com/roznet/rzutils-macos",
         "state": {
           "branch": null,
@@ -119,7 +119,7 @@
         }
       },
       {
-        "package": "rzutils-touch",
+        "package": "RZUtilsTouch",
         "repositoryURL": "https://github.com/roznet/rzutils-touch.git",
         "state": {
           "branch": null,
@@ -128,7 +128,7 @@
         }
       },
       {
-        "package": "swifter",
+        "package": "Swifter",
         "repositoryURL": "https://github.com/httpswift/swifter.git",
         "state": {
           "branch": null,
