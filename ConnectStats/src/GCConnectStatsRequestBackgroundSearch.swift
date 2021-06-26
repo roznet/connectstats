@@ -53,7 +53,8 @@ class GCConnectStatsRequestBackgroundSearch: GCConnectStatsRequest {
             let params : [AnyHashable: Any] = [
                 "token_id": self.tokenId,
                 "start":self.start,
-                "limit":Self.kActivityRequestCount
+                "limit":Self.kActivityRequestCount,
+                "background":1
             ]
             return self.preparedUrlRequest(path, params: params)
         }
