@@ -4,7 +4,6 @@ target 'ConnectStats' do
   use_frameworks!
   pod 'GoogleMaps', :inhibit_warnings => true
   pod 'Flurry-iOS-SDK/FlurrySDK'
-  pod 'GenericJSON'
   pod 'Armchair', '>= 0.3', :inhibit_warnings => true
   target 'ConnectStatsXCTests' do
     pod 'CHCSVParser', :inhibit_warnings => true
@@ -14,7 +13,6 @@ target 'HealthStats' do
   use_frameworks!
   pod 'GoogleMaps', :inhibit_warnings => true
   pod 'Flurry-iOS-SDK/FlurrySDK'
-  pod 'GenericJSON'
   pod 'Armchair', '>= 0.3', :inhibit_warnings => true
 end
 target 'ConnectStatsTestApp' do
@@ -22,12 +20,10 @@ target 'ConnectStatsTestApp' do
   pod 'Flurry-iOS-SDK/FlurrySDK'
   pod 'GoogleMaps', :inhibit_warnings => true
   pod 'CHCSVParser', :inhibit_warnings => true
-  pod 'GenericJSON'
 end
 target 'FitFileExplorer' do
   use_frameworks!
   platform :osx, '10.14'
-  pod 'GenericJSON'
   pod 'Armchair', '>= 0.3', :inhibit_warnings => true
 end
 

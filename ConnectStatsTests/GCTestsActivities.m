@@ -531,7 +531,7 @@
     NSMutableDictionary<GCField*,GCNumberWithUnit*>*tmp = [NSMutableDictionary dictionary];
     for (GCField*field in act.allFields) {
         if( field.isCalculatedField ){
-            tmp[field] = [[act numberWithUnitForField:field] ;
+            tmp[field] = [act numberWithUnitForField:field];
         }
     }
     NSDictionary<GCField*,GCActivityCalculatedValue*>*calculated = [NSDictionary dictionaryWithDictionary:tmp];
