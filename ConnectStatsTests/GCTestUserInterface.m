@@ -136,6 +136,8 @@
 }
 
 -(void)testStatsConfig{
+    [GCViewConfig setSkin:[GCViewConfigSkin skinForName:kGCSkinName2021]];
+    
     GCStatsMultiFieldConfig * config = [GCStatsMultiFieldConfig fieldListConfigFrom:nil];
     config.activityTypeSelection = RZReturnAutorelease([[GCActivityTypeSelection alloc] initWithActivityType:GC_TYPE_RUNNING]);
     
