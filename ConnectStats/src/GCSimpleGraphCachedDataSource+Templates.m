@@ -296,7 +296,7 @@
 
     NSMutableArray * series = [NSMutableArray arrayWithCapacity:1];
 
-    cache.title = field.displayName;
+    cache.title = [field displayNameWithUnits:serieWithUnit.unit];
     gcGraphType type = gcGraphStep;
 
     GCStatsDataSerie * serie = serieWithUnit.serie;
