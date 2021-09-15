@@ -1038,6 +1038,7 @@
 		42CE39471CA680E900919292 /* GCDerivedGroupedSeries.m in Sources */ = {isa = PBXBuildFile; fileRef = 42CE39451CA680E900919292 /* GCDerivedGroupedSeries.m */; };
 		42D037C1168AF48300789E7D /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D037C0168AF48300789E7D /* CFNetwork.framework */; };
 		42D037C3168AF55900789E7D /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42D037C2168AF55900789E7D /* SystemConfiguration.framework */; };
+		42D1512B26F1F27C00CE8647 /* GenericJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 42D1512A26F1F27C00CE8647 /* GenericJSON */; };
 		42D1D2001DEE66DB00F13D52 /* FITWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D1D1FF1DEE66DB00F13D52 /* FITWindowController.swift */; };
 		42D223962567E6B3009BCACE /* GCCellGrid+Templates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D223952567E6B3009BCACE /* GCCellGrid+Templates.swift */; };
 		42D223972567E6B3009BCACE /* GCCellGrid+Templates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D223952567E6B3009BCACE /* GCCellGrid+Templates.swift */; };
@@ -2298,6 +2299,7 @@
 				4211D4BE2598B33900967874 /* OAuthSwift in Frameworks */,
 				42B5E2FF1BA5B7BF000FAE4E /* libsqlite3.tbd in Frameworks */,
 				42BD32A3258BC88B004D5E0F /* DeviceGuru in Frameworks */,
+				42D1512B26F1F27C00CE8647 /* GenericJSON in Frameworks */,
 				42CBD0A325E415150024BD28 /* RZExternalUniversal in Frameworks */,
 				422DCC1E258A6325000DEE4B /* RZUtilsTestInfra in Frameworks */,
 				42B5E2D01BA5B589000FAE4E /* HealthKit.framework in Frameworks */,
@@ -4487,6 +4489,7 @@
 				42A95C3F259A18E400A52DB6 /* RZExternal */,
 				42DB6CBC25D5611D003AC195 /* ZIPFoundation */,
 				42CBD0A225E415150024BD28 /* RZExternalUniversal */,
+				42D1512A26F1F27C00CE8647 /* GenericJSON */,
 			);
 			productName = ConnectStatsTestApp;
 			productReference = 42B5E1B91BA5AEC9000FAE4E /* ConnectStatsTestApp.app */;
@@ -6584,7 +6587,7 @@
 				CODE_SIGN_ENTITLEMENTS = ConnectStats/ConnectStats.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 7.1.0.1;
+				CURRENT_PROJECT_VERSION = 7.1.0.2;
 				DEVELOPMENT_TEAM = M7QSSF3624;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -6639,7 +6642,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 7.1.0.1;
+				CURRENT_PROJECT_VERSION = 7.1.0.2;
 				DEVELOPMENT_TEAM = M7QSSF3624;
 				ENABLE_BITCODE = YES;
 				ENABLE_TESTABILITY = NO;
@@ -7376,6 +7379,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4211D572259A0BDA00967874 /* XCRemoteSwiftPackageReference "rzexternal" */;
 			productName = RZExternalUniversal;
+		};
+		42D1512A26F1F27C00CE8647 /* GenericJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4221EDE626F091D3006049DE /* XCRemoteSwiftPackageReference "generic-json-swift" */;
+			productName = GenericJSON;
 		};
 		42DB6CB625D56107003AC195 /* ZIPFoundation */ = {
 			isa = XCSwiftPackageProductDependency;
