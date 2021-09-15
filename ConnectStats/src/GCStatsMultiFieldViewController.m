@@ -687,8 +687,6 @@
 }
 
 -(void)configLongPress:(UIGestureRecognizer*)gesture{
-    NSLog(@"Config Long Press");
-    
     if( gesture.state == UIGestureRecognizerStateBegan){
         GCStatsMultiFieldConfigViewController * controller=[[[GCStatsMultiFieldConfigViewController alloc] initWithNibName:@"GCStatsMultiFieldConfigViewController" bundle:nil] autorelease];
         controller.multiFieldViewController = self;

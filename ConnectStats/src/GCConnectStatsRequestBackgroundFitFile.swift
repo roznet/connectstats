@@ -40,7 +40,8 @@ class GCConnectStatsRequestBackgroundFitFile: GCConnectStatsRequestFitFile {
            let aid = self.activity.service.serviceId(fromActivityId: self.activity.activityId){
             let params : [AnyHashable:Any] = [
                 "token_id": self.tokenId,
-                "activity_id": aid
+                "activity_id": aid,
+                "background":1
             ]
             return self.preparedUrlRequest(path, params: params)
         }

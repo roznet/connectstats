@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_1" orientation="portrait" appearance="light"/>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_0" orientation="portrait" appearance="dark"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -22,18 +22,18 @@
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
-            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Fn-KP-WWz">
-                    <rect key="frame" x="342" y="54" width="37" height="30"/>
+                    <rect key="frame" x="318" y="54" width="37" height="30"/>
                     <state key="normal" title="Done"/>
                     <connections>
                         <action selector="done:" destination="-1" eventType="touchUpInside" id="KXD-Dg-hib"/>
                     </connections>
                 </button>
                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="esS-Ri-oXM">
-                    <rect key="frame" x="67.5" y="135" width="279" height="32"/>
+                    <rect key="frame" x="55.666666666666629" y="135" width="279" height="32"/>
                     <segments>
                         <segment title="Weekly"/>
                         <segment title="Monthly"/>
@@ -45,7 +45,7 @@
                     </connections>
                 </segmentedControl>
                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="v9i-Dv-sfU">
-                    <rect key="frame" x="81.5" y="94" width="251" height="32"/>
+                    <rect key="frame" x="69.666666666666686" y="94" width="251" height="32"/>
                     <segments>
                         <segment title="Summary"/>
                         <segment title="Aggregate"/>
@@ -56,7 +56,7 @@
                     </connections>
                 </segmentedControl>
                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="CkL-O0-emO">
-                    <rect key="frame" x="69.5" y="176" width="275" height="32"/>
+                    <rect key="frame" x="57.666666666666629" y="176" width="275" height="32"/>
                     <segments>
                         <segment title="All"/>
                         <segment title="Last 3M"/>
@@ -68,7 +68,7 @@
                     </connections>
                 </segmentedControl>
                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="cLV-dy-ZfV">
-                    <rect key="frame" x="95" y="217" width="224" height="32"/>
+                    <rect key="frame" x="83" y="217" width="224" height="32"/>
                     <segments>
                         <segment title="Calendar"/>
                         <segment title="Rolling"/>
@@ -79,11 +79,11 @@
                     </connections>
                 </segmentedControl>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="ycw-Hc-iaR">
-                    <rect key="frame" x="0.0" y="268" width="414" height="584"/>
+                    <rect key="frame" x="0.0" y="268" width="390" height="532"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                 </tableView>
                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="neD-Zc-8VE">
-                    <rect key="frame" x="20" y="53.5" width="93" height="32"/>
+                    <rect key="frame" x="20" y="53.666666666666657" width="93" height="32"/>
                     <segments>
                         <segment title="" image="858-line-chart"/>
                         <segment title="" image="859-bar-chart"/>

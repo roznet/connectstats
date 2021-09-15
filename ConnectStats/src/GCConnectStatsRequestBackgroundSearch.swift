@@ -53,7 +53,8 @@ class GCConnectStatsRequestBackgroundSearch: GCConnectStatsRequest {
             let params : [AnyHashable: Any] = [
                 "token_id": self.tokenId,
                 "start":self.start,
-                "limit":Self.kActivityRequestCount
+                "limit":Self.kActivityRequestCount,
+                "background":1
             ]
             return self.preparedUrlRequest(path, params: params)
         }
@@ -65,7 +66,7 @@ class GCConnectStatsRequestBackgroundSearch: GCConnectStatsRequest {
     }
 
     @objc override func process() {
-        guard let data = self.theString.data(using: .utf8)
+        guard let data = self.theString?.data(using: .utf8)
         else {
             RZSLog.info("invalid data skipping background update")
             self.processDone()

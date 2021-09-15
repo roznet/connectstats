@@ -178,18 +178,22 @@ static BOOL kDerivedEnabled = true;
 }
 
 -(void)loadFromDb{
-    self.derivedSeries = [NSMutableDictionary dictionaryWithCapacity:10];
 
     if ( kDerivedEnabled) {
         RZPerformance * perf = [RZPerformance start];
         FMDatabase * db = [self deriveddb];
         if( db ){
+            NSMutableDictionary * newDerivedSeries = [NSMutableDictionary dictionaryWithCapacity:10];
             FMResultSet * res= [db executeQuery:@"SELECT * FROM gc_derived_series"];
             while ([res next]) {
                 GCDerivedDataSerie * serie = [GCDerivedDataSerie derivedDataSerieFromResultSet:res];
                 serie.fileNamePrefix = self.derivedFilePrefix;
-                self.derivedSeries[serie.key] = serie;
+                newDerivedSeries[serie.key] = serie;
             }
+            @synchronized (self.derivedSeries) {
+                self.derivedSeries = newDerivedSeries;
+            }
+            
             [self loadProcesseActivities];
             
             [self loadHistoricalFileSeries];
@@ -348,15 +352,17 @@ static BOOL kDerivedEnabled = true;
 
     NSMutableDictionary * byField = [NSMutableDictionary dictionary];
 
-    for (NSString * key in self.derivedSeries) {
-        GCDerivedDataSerie * serie = self.derivedSeries[key];
-        if (!serie.isEmpty && match(serie)) {
-            GCDerivedGroupedSeries * grouped = byField[serie.field];
-            if (grouped == nil) {
-                grouped = [GCDerivedGroupedSeries groupedSeriesStartingWith:serie];
-                byField[serie.field] = grouped;
-            }else{
-                [grouped addSerie:serie];
+    @synchronized (self.derivedSeries) {
+        for (NSString * key in self.derivedSeries) {
+            GCDerivedDataSerie * serie = self.derivedSeries[key];
+            if (!serie.isEmpty && match(serie)) {
+                GCDerivedGroupedSeries * grouped = byField[serie.field];
+                if (grouped == nil) {
+                    grouped = [GCDerivedGroupedSeries groupedSeriesStartingWith:serie];
+                    byField[serie.field] = grouped;
+                }else{
+                    [grouped addSerie:serie];
+                }
             }
         }
     }
@@ -528,10 +534,11 @@ static BOOL kDerivedEnabled = true;
 -(void)loadProcesseActivities{
     FMDatabase * db = [self deriveddb];
     FMResultSet * res = [db executeQuery:@"SELECT * FROM gc_derived_activity_processed"];
-    self.processedActivities = [NSMutableDictionary dictionary];
+    NSMutableDictionary * newProcessedActivities = [NSMutableDictionary dictionary];
     while ([res next]) {
-        self.processedActivities[ [res stringForColumn:@"activityId"] ] = @([res intForColumn:@"version"]);
+        newProcessedActivities[ [res stringForColumn:@"activityId"] ] = @([res intForColumn:@"version"]);
     }
+    self.processedActivities = newProcessedActivities;
 }
 
 -(BOOL)recordProcessedActivity:(NSString*)aId{

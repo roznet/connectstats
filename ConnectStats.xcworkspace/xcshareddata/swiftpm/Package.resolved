@@ -42,8 +42,8 @@
         "repositoryURL": "https://github.com/roznet/FitFileParser.git",
         "state": {
           "branch": null,
-          "revision": "f880f4f5a9ed1dbf347964847c0e9c6eb3f60518",
-          "version": "1.4.3"
+          "revision": "f142941777e5bf1dcb2af0762b7987146df819c8",
+          "version": "1.4.5"
         }
       },
       {
@@ -53,6 +53,15 @@
           "branch": null,
           "revision": "61e51fde7f7aab6554f30ab061cc588b28a97d04",
           "version": "2.7.7"
+        }
+      },
+      {
+        "package": "GenericJSON",
+        "repositoryURL": "https://github.com/zoul/generic-json-swift.git",
+        "state": {
+          "branch": null,
+          "revision": "a137894b2a217abe489cdf1ea287e6f7819b1051",
+          "version": "2.0.1"
         }
       },
       {
@@ -105,8 +114,8 @@
         "repositoryURL": "https://github.com/roznet/rzutils.git",
         "state": {
           "branch": null,
-          "revision": "2f4e7b1e052d39ff5ef6ca1499751aae7f9928a1",
-          "version": "1.0.14"
+          "revision": "6cbe33ffd6926a1f2a17b22dfc4fd1d0f5cc01a4",
+          "version": "1.0.15"
         }
       },
       {

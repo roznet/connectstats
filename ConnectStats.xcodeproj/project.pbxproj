@@ -74,6 +74,8 @@
 		42200E9D17EEF0EC0078B45A /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42200E9C17EEF0EC0078B45A /* StoreKit.framework */; };
 		42200ED817F8270D0078B45A /* GCGarminActivityTrack13Request.m in Sources */ = {isa = PBXBuildFile; fileRef = 42200ED717F8270D0078B45A /* GCGarminActivityTrack13Request.m */; };
 		42200EDB17F831B30078B45A /* GCGarminActivityLapsParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42200EDA17F831B30078B45A /* GCGarminActivityLapsParser.m */; };
+		4221EDE826F091D3006049DE /* GenericJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 4221EDE726F091D3006049DE /* GenericJSON */; };
+		4221EDEA26F09219006049DE /* GenericJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 4221EDE926F09219006049DE /* GenericJSON */; };
 		42247AC121E26242005148F9 /* GarminDataDefinitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42247AC021E26242005148F9 /* GarminDataDefinitions.swift */; };
 		42247AC921E2683C005148F9 /* GarminDataInterpreter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42247AC821E2683C005148F9 /* GarminDataInterpreter.swift */; };
 		42247ACD21E29B09005148F9 /* FitFileExplorerActivities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42247ACC21E29B09005148F9 /* FitFileExplorerActivities.swift */; };
@@ -2209,6 +2211,7 @@
 				422DCC30258A6348000DEE4B /* RZUtilsSwift in Frameworks */,
 				422DCC36258A6357000DEE4B /* FitFileParser in Frameworks */,
 				422DCC34258A6350000DEE4B /* FMDB in Frameworks */,
+				4221EDEA26F09219006049DE /* GenericJSON in Frameworks */,
 				425D249D259E08DC0003574F /* KeychainSwift in Frameworks */,
 				422DCC32258A6348000DEE4B /* RZUtilsUniversal in Frameworks */,
 				4211D578259A0BDA00967874 /* RZExternalUniversal in Frameworks */,
@@ -2239,6 +2242,7 @@
 				42AB66DD16DAD01900C633BD /* libz.dylib in Frameworks */,
 				422DCB71258A2779000DEE4B /* RZUtilsUniversal in Frameworks */,
 				42AB66DB16DAD00400C633BD /* libstdc++.dylib in Frameworks */,
+				4221EDE826F091D3006049DE /* GenericJSON in Frameworks */,
 				42BD31AE258B53C7004D5E0F /* DeviceGuru in Frameworks */,
 				42AB66D916DACFF000C633BD /* libicucore.dylib in Frameworks */,
 				42AB66D716DACFD500C633BD /* ImageIO.framework in Frameworks */,
@@ -4369,6 +4373,7 @@
 				4211D577259A0BDA00967874 /* RZExternalUniversal */,
 				425D249C259E08DC0003574F /* KeychainSwift */,
 				42DB6CD325D561A5003AC195 /* ZIPFoundation */,
+				4221EDE926F09219006049DE /* GenericJSON */,
 			);
 			productName = FitFileExplorer;
 			productReference = 4253B4561CD49F7E00437E6A /* FitFileExplorer.app */;
@@ -4423,6 +4428,7 @@
 				4211D575259A0BDA00967874 /* RZExternal */,
 				42DB6CB625D56107003AC195 /* ZIPFoundation */,
 				424BDAD325E2E25400EC7DBE /* RZExternalUniversal */,
+				4221EDE726F091D3006049DE /* GenericJSON */,
 			);
 			productName = GarminConnect;
 			productReference = 428FF70915F36888007A88FA /* ConnectStats.app */;
@@ -4624,6 +4630,7 @@
 				4211D572259A0BDA00967874 /* XCRemoteSwiftPackageReference "rzexternal" */,
 				425D249B259E08DC0003574F /* XCRemoteSwiftPackageReference "keychain-swift" */,
 				42DB6CB525D56107003AC195 /* XCRemoteSwiftPackageReference "ZIPFoundation" */,
+				4221EDE626F091D3006049DE /* XCRemoteSwiftPackageReference "generic-json-swift" */,
 			);
 			productRefGroup = 428FF70A15F36888007A88FA /* Products */;
 			projectDirPath = "";
@@ -6577,7 +6584,7 @@
 				CODE_SIGN_ENTITLEMENTS = ConnectStats/ConnectStats.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 7.0.0.2;
+				CURRENT_PROJECT_VERSION = 7.1.0.1;
 				DEVELOPMENT_TEAM = M7QSSF3624;
 				ENABLE_BITCODE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -6599,7 +6606,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 7.0;
+				MARKETING_VERSION = 7.1;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "$(inherited)";
 				OTHER_LDFLAGS = (
@@ -6632,7 +6639,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 7.0.0.2;
+				CURRENT_PROJECT_VERSION = 7.1.0.1;
 				DEVELOPMENT_TEAM = M7QSSF3624;
 				ENABLE_BITCODE = YES;
 				ENABLE_TESTABILITY = NO;
@@ -6654,7 +6661,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 7.0;
+				MARKETING_VERSION = 7.1;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -7074,12 +7081,20 @@
 				minimumVersion = 1.0.3;
 			};
 		};
+		4221EDE626F091D3006049DE /* XCRemoteSwiftPackageReference "generic-json-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/zoul/generic-json-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.1;
+			};
+		};
 		422DCB6D258A2779000DEE4B /* XCRemoteSwiftPackageReference "rzutils" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/roznet/rzutils.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.14;
+				minimumVersion = 1.0.15;
 			};
 		};
 		422DCB84258A27EF000DEE4B /* XCRemoteSwiftPackageReference "fmdb" */ = {
@@ -7103,7 +7118,7 @@
 			repositoryURL = "https://github.com/roznet/FitFileParser.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.4.3;
+				minimumVersion = 1.4.5;
 			};
 		};
 		422DCD72258A74DF000DEE4B /* XCRemoteSwiftPackageReference "rzutils-macos" */ = {
@@ -7181,6 +7196,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4211D572259A0BDA00967874 /* XCRemoteSwiftPackageReference "rzexternal" */;
 			productName = RZExternalUniversal;
+		};
+		4221EDE726F091D3006049DE /* GenericJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4221EDE626F091D3006049DE /* XCRemoteSwiftPackageReference "generic-json-swift" */;
+			productName = GenericJSON;
+		};
+		4221EDE926F09219006049DE /* GenericJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4221EDE626F091D3006049DE /* XCRemoteSwiftPackageReference "generic-json-swift" */;
+			productName = GenericJSON;
 		};
 		422DCB6E258A2779000DEE4B /* RZUtilsSwift */ = {
 			isa = XCSwiftPackageProductDependency;
