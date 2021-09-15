@@ -71,7 +71,7 @@
     }
 }
 
--(double)axisKnobSizeFor:(double)range numberOfKnobs:(NSUInteger)n{
+-(double)axisKnobSizeFor:(NSUInteger)n min:(double)x_min max:(double)x_max{
     return 1.;
 }
 
