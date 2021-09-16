@@ -153,7 +153,6 @@
                                       
                                       @"leftTorqueEffectiveness": @[ @"WeightedMeanLeftTorqueEffectiveness", @"", @"percent"],
                                       @"leftPedalSmoothness": @[ @"WeightedMeanLeftPedalSmoothness", @"", @"percent"],
-                                      @"totalNumberOfStrokes": @[ @"SumStrokes", @"", @"dimensionless"],
                                       
                                       /* SWIMMING */
                                       @"averageSwimCadence": @[ @"WeightedMeanSwimCadence", @"", @"strokesPerMinute"],

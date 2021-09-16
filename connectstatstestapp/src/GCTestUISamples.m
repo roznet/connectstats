@@ -88,6 +88,7 @@
 
     NSMutableArray * rv = [NSMutableArray array];
     @autoreleasepool {
+        
         [GCTestAppGlobal setupSampleState:@"sample_activities.db"];
         
         NSString * filter = nil;
@@ -568,24 +569,24 @@
     [choice setupTrackStats:trackStats];
     one = [GCSimpleGraphCachedDataSource trackFieldFrom:trackStats];
     one.xAxisIsVertical = false;
-    [rv addObject:one];
+    [rv addObject:one]; //[0]
 
     one = [GCSimpleGraphCachedDataSource trackFieldFrom:trackStats];
     one.xAxisIsVertical = true;
-    [rv addObject:one];
+    [rv addObject:one]; //[1]
 
 
     activity.settings.treatGapAsNoValueInSeries = NO;
     choice = [GCTrackFieldChoiceHolder trackFieldChoice:hr xField:speed];
     [choice setupTrackStats:trackStats];
     one = [GCSimpleGraphCachedDataSource trackFieldFrom:trackStats];
-    [rv addObject:one];
+    [rv addObject:one]; //[2]
 
     choice = [GCTrackFieldChoiceHolder trackFieldChoice:hr xField:nil];
     choice.zoneCalculator = nil;
     [choice setupTrackStats:trackStats];
     one = [GCSimpleGraphCachedDataSource trackFieldFrom:trackStats];
-    [rv addObject:one];
+    [rv addObject:one]; //[3]
 
     activity.settings.treatGapAsNoValueInSeries = YES;
     [trackStats setNeedsForRecalculate];
