@@ -143,6 +143,8 @@
                         [self testServiceEnd];
                     }
                 });
+            }else{
+                [self testServiceEnd];
             }
         }else{
             [self testServiceEnd];
