@@ -140,6 +140,9 @@
 {
     [super viewDidLoad];
     
+    [self.tableView registerNib:[UINib nibWithNibName:@"GCCellActivity" bundle:[NSBundle mainBundle]]
+         forCellReuseIdentifier:@"GCCellActivity"];
+
     self.refreshControl = [[[UIRefreshControl alloc] init] autorelease];
     self.refreshControl.attributedTitle = nil;
     [self.refreshControl addTarget:self action:@selector(refreshData) forControlEvents:UIControlEventValueChanged];
@@ -429,10 +432,17 @@
     UITableViewCell * rv = nil;
 
     if (indexPath.section == GCVIEW_DETAIL_TITLE_SECTION) {
-        GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
-        [cell setupDetailHeader:self.activity];
-
-        rv = cell;
+        BOOL newStyle = [GCViewConfig is2021Style];
+        if( newStyle ){
+            GCCellActivity * cell = [self.tableView dequeueReusableCellWithIdentifier:@"GCCellActivity" forIndexPath:indexPath];
+            [cell setupFor:self.activity];
+            rv = cell;
+        }else{
+            GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
+            [cell setupDetailHeader:self.activity];
+            
+            rv = cell;
+        }
     }else if (indexPath.section == GCVIEW_DETAIL_AVGMINMAX_SECTION) {
         if( self.isNewStyle ){
             rv = [self tableView:tableView fieldCellForRowAtIndexPath:indexPath];
@@ -530,7 +540,7 @@
 
     if (indexPath.section == GCVIEW_DETAIL_AVGMINMAX_SECTION) {
         if( self.isNewStyle ){
-            [GCViewConfig sizeForNumberOfRows:3];
+            return [GCViewConfig sizeForNumberOfRows:3];
             /*
             if( self.isWide){
                 if( (indexPath.row / 2) < self.organizedFields.groupedPrimaryFields.count ){
@@ -556,7 +566,12 @@
     }else if(indexPath.section==GCVIEW_DETAIL_GRAPH_SECTION){
         return high ? 200. : 150.;
     }else if(indexPath.section == GCVIEW_DETAIL_TITLE_SECTION){
-        return [GCViewConfig sizeForNumberOfRows:3];
+        BOOL newStyle = [GCViewConfig is2021Style];
+        if( newStyle ){
+            return [GCViewConfig sizeForNumberOfRows:4] * 1.1;
+        }else{
+            return [GCViewConfig sizeForNumberOfRows:3];
+        }
     }
     return [GCViewConfig sizeForNumberOfRows:3];
 }
@@ -634,7 +649,7 @@
 }
 
 #pragma mark - Table Header
-
+/*
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     return nil;
 }
@@ -645,7 +660,7 @@
 -(NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
     return nil;
 }
-
+*/
 
 #pragma mark - Setup and call back
 
