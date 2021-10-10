@@ -107,8 +107,8 @@
     }
 }
 
--(void)viewDidLoad{
-    [super viewDidLoad];
+-(void)loadView{
+    [super loadView];
     
     self.delegate = self;
 
