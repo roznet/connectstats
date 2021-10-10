@@ -99,6 +99,7 @@ extension GCSettingsBugReport {
                     archiveSucess = false
                 }
             }
+            /* derived is too big
             if let currentDerivedPath = GCAppGlobal.profile().currentDerivedDatabasePath() {
                 let dbURL = URL( fileURLWithPath:RZFileOrganizer.writeableFilePath(currentDerivedPath ))
                 do {
@@ -108,6 +109,7 @@ extension GCSettingsBugReport {
                     archiveSucess = false
                 }
             }
+             */
         }
         
         if let settingsPath = RZFileOrganizer.writeableFilePathIfExists("settings.plist") {
