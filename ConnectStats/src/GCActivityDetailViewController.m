@@ -433,7 +433,7 @@
 
     if (indexPath.section == GCVIEW_DETAIL_TITLE_SECTION) {
         BOOL newStyle = [GCViewConfig is2021Style];
-        if( newStyle ){
+        if( false ){
             GCCellActivity * cell = [self.tableView dequeueReusableCellWithIdentifier:@"GCCellActivity" forIndexPath:indexPath];
             [cell setupFor:self.activity];
             rv = cell;
@@ -568,7 +568,8 @@
     }else if(indexPath.section == GCVIEW_DETAIL_TITLE_SECTION){
         BOOL newStyle = [GCViewConfig is2021Style];
         if( newStyle ){
-            return [GCViewConfig sizeForNumberOfRows:4] * 1.1;
+            return [GCViewConfig sizeForNumberOfRows:3];
+            //return [GCViewConfig sizeForNumberOfRows:4] * 1.1;
         }else{
             return [GCViewConfig sizeForNumberOfRows:3];
         }
