@@ -208,8 +208,7 @@ NSString * kBugNoCommonId = @"-1";
         }
     }
     if( self.archiveSuccess ){
-        RZLogReset();
-        RZLog(RZLogInfo,@"BugReport sent, log reset");
+        RZLog(RZLogInfo,@"BugReport sent");
     }else{
         RZLog(RZLogInfo,@"BugReport not complete, keeping old log");
     }
