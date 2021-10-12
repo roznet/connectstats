@@ -432,17 +432,10 @@
     UITableViewCell * rv = nil;
 
     if (indexPath.section == GCVIEW_DETAIL_TITLE_SECTION) {
-        BOOL newStyle = [GCViewConfig is2021Style];
-        if( false ){
-            GCCellActivity * cell = [self.tableView dequeueReusableCellWithIdentifier:@"GCCellActivity" forIndexPath:indexPath];
-            [cell setupFor:self.activity];
-            rv = cell;
-        }else{
-            GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
-            [cell setupDetailHeader:self.activity];
-            
-            rv = cell;
-        }
+        GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
+        [cell setupDetailHeader:self.activity];
+        
+        rv = cell;
     }else if (indexPath.section == GCVIEW_DETAIL_AVGMINMAX_SECTION) {
         if( self.isNewStyle ){
             rv = [self tableView:tableView fieldCellForRowAtIndexPath:indexPath];
