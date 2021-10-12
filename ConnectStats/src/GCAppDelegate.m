@@ -445,11 +445,11 @@ void checkVersion(void){
     [self.locationManager requestWhenInUseAuthorization];
 }
 
--(void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status{
-    if( status == kCLAuthorizationStatusAuthorizedWhenInUse ){
+-(void)locationManagerDidChangeAuthorization:(CLLocationManager *)manager{
+    if( manager.authorizationStatus == kCLAuthorizationStatusAuthorizedWhenInUse){
         [self.locationManager requestLocation];
     }else{
-        RZLog(RZLogInfo,@"Location Request denied %@", @(status));
+        RZLog(RZLogInfo,@"Location Request denied %@", @(manager.authorizationStatus));
     }
 }
 

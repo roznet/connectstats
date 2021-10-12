@@ -39,6 +39,8 @@
 @property (nonatomic,retain)  GCCalendarDataSource * calendarDataSource;
 
 @property (nonatomic,retain) UITabBarItem * settingsItem;
+
+@property (nonatomic,assign) BOOL started;
 @end
 
 @implementation GCTabBarController
@@ -104,8 +106,10 @@
         }
     }
 }
+
 -(void)loadView{
     [super loadView];
+    
     self.delegate = self;
 
     _activityListViewController = [[GCActivityListViewController		alloc] init];
@@ -187,9 +191,16 @@
     [calendarNav release];
     [statsNav release];
     [settingsNav release];
-
-    [self startWorkflow];
 }
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    if( ! self.started ){
+        [self startWorkflow];
+        self.started = true;
+    };
+}
+
 -(void)viewDidAppear:(BOOL)animated{
 
     [super viewDidAppear:animated];

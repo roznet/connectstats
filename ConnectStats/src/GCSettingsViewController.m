@@ -669,7 +669,7 @@
             case  GC_SETTINGS_BUGREPORT:
             {
                 gridcell = [GCCellGrid cellGrid:tableView];
-                [gridcell setupForRows:2 andCols:1];
+                [gridcell setupForRows:1 andCols:1];
 
                 RZLogStatus stat = RZLogCheckStatus();
                 NSArray * errors = [GCActivitiesCacheManagement errorFiles];
@@ -677,28 +677,7 @@
 
                 NSAttributedString * title = [GCViewConfig attributedString:NSLocalizedString(@"Send Bug Report or Feedback", @"Settings") attribute:@selector(attributeBold16)];
 
-                NSString * msg = NSLocalizedString(@"No Diagnostics to report", @"Settings");
-                if (stat.exists || errors.count) {
-                    msg = NSLocalizedString(@"No errors detected",@"Settings");
-                    if (stat.errors !=0 || stat.crashes !=0 ) {
-                        NSMutableString * msgm = [NSMutableString string];
-                        if (stat.errors > 0) {
-                            [msgm appendFormat:@"%d Errors", (int)stat.errors];
-                        }
-                        if (stat.crashes > 0) {
-                            [msgm appendFormat:@" %d Crashes", (int)stat.crashes];
-                        }
-                        [msgm appendString:@" detected"];
-                        msg = msgm;
-                    }
-                }
-
-                NSAttributedString * details = [[[NSAttributedString alloc] initWithString:msg
-                                                                                attributes:[GCViewConfig attribute14Gray]] autorelease];
-
                 [gridcell labelForRow:0 andCol:0].attributedText = title;
-                [gridcell labelForRow:1 andCol:0].attributedText = details;
-                //[GCViewConfig setupGradientForDetails:gridcell.gradientLayer];
                 rv = gridcell;
                 break;
             }

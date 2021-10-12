@@ -83,7 +83,7 @@
         _activityDetailViewController.navigationItem.leftBarButtonItem = self.displayModeButtonItem;
 
         self.viewControllers = @[activityNav,detailNav];
-        self.preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
+        self.preferredDisplayMode = UISplitViewControllerDisplayModeAutomatic;
         self.presentsWithGesture = true;
         [activityNav release];
         [detailNav release];

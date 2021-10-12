@@ -85,7 +85,7 @@
     [self checkSimulatorUrl];
     
     // =========== DONT CHECKIN ======
-    //[self cleanWritableFiles];
+    [self cleanWritableFiles];
 
     RZSimNeedle();
     [NSTimeZone setDefaultTimeZone:[NSTimeZone timeZoneWithName:@"Europe/London"]];
