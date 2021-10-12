@@ -144,7 +144,8 @@ extension GCSettingsBugReport {
     @objc func createBugReportDictionary(extra : [String:String] ) -> [String:String] {
         
         let applicationName = GCAppGlobal.connectStatsVersion() ? "ConnectStats" : "HealthStats"
-        let versionString = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String
+        let buildString = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String
+        let versionString = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
         let device = UIDevice()
         let deviceGuru = DeviceGuru()
         let commonid = GCAppGlobal.configGet(CONFIG_BUG_COMMON_ID, defaultValue: kBugNoCommonId) ?? kBugNoCommonId
@@ -154,6 +155,7 @@ extension GCSettingsBugReport {
             "systemVersion": device.systemVersion,
             "applicationName" : applicationName,
             "version" : versionString ?? "Unknown Version",
+            "build" : buildString ?? "Unknown Build",
             "platformString": deviceGuru.hardwareDescription() ?? "Unknown Device",
             "commonid" : commonid
         ]
