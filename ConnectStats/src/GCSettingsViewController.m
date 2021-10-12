@@ -669,7 +669,7 @@
             case  GC_SETTINGS_BUGREPORT:
             {
                 gridcell = [GCCellGrid cellGrid:tableView];
-                [gridcell setupForRows:2 andCols:1];
+                [gridcell setupForRows:1 andCols:1];
 
                 RZLogStatus stat = RZLogCheckStatus();
                 NSArray * errors = [GCActivitiesCacheManagement errorFiles];
@@ -678,8 +678,6 @@
                 NSAttributedString * title = [GCViewConfig attributedString:NSLocalizedString(@"Send Bug Report or Feedback", @"Settings") attribute:@selector(attributeBold16)];
 
                 [gridcell labelForRow:0 andCol:0].attributedText = title;
-                [gridcell labelForRow:1 andCol:0].attributedText = nil;
-                //[GCViewConfig setupGradientForDetails:gridcell.gradientLayer];
                 rv = gridcell;
                 break;
             }
