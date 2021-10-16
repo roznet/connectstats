@@ -124,8 +124,9 @@ void checkVersion(void){
 {
     RZLogDebuggerOutput();
 
-    RZLog(RZLogInfo, @"=========== %@ %@ ==== %@ ===============",
+    RZLog(RZLogInfo, @"=========== %@ %@ (%@) ==== %@ ===============",
           [[NSBundle mainBundle] infoDictionary][@"CFBundleExecutable"],
+          [[NSBundle mainBundle] infoDictionary][@"CFBundleShortVersionString"],
           [[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"],
           [RZSystemInfo systemDescription]);
     
