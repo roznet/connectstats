@@ -147,7 +147,6 @@ void checkVersion(void){
     BOOL ok = [self startInit];
     if (!ok) {
         RZLog(RZLogError, @"Multiple failure to start");
-        return [self multipleFailureStart];
     }
 
     [GCAppGlobal setApplicationDelegate:self];
