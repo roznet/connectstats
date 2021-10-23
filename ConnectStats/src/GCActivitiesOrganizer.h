@@ -68,6 +68,14 @@ typedef BOOL (^gcActivityOrganizerMatchBlock)(GCActivity*);
 -(GCActivitiesOrganizer*)initTestModeWithDb:(FMDatabase*)aDb loadDetails:(BOOL)loadDetails NS_DESIGNATED_INITIALIZER;
 
 /**
+ * call this function when ready to load data
+ * typically when the ui is about to start
+ * @return true if details already loaded, false if this actually triggered the load
+ */
+-(BOOL)ensureSummaryLoaded;
+
+
+/**
  * call this function when details should be loaded
  * typically when the ui is ready, it can be called multiple time
  * @return true if details already loaded, false if this actually triggered the load

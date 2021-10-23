@@ -148,6 +148,9 @@ void checkVersion(void){
     BOOL ok = [self startInit];
     if (!ok) {
         RZLog(RZLogError, @"Multiple failure to start");
+#pragma message "Figure out how to identify properly"
+        //[self multipleFailureStart];
+        [self startSuccessful];
     }
 
     [GCAppGlobal setApplicationDelegate:self];
@@ -180,8 +183,11 @@ void checkVersion(void){
 
     // This will trigger load from db in background,
     // make sure all setup first
+    // Note organizer will only load basic summary, everything else (details, health, derived) will
+    // be only loaded if/when the UI starts by a further call to ensureDetailLoaded on each of below
     self.organizer = [[[GCActivitiesOrganizer alloc] initWithDb:self.db andThread:self.worker] autorelease];
     self.health = [[[GCHealthOrganizer alloc] initWithDb:self.db andThread:self.worker] autorelease];
+    
     self.web = [[[GCWebConnect alloc] init] autorelease] ;
     self.web.worker = self.worker;
     // Force initial login

@@ -57,6 +57,8 @@ class GCConnectStatsRequestBackgroundSearch: GCConnectStatsRequest {
                 "background":1
             ]
             return self.preparedUrlRequest(path, params: params)
+        }else{
+            RZSLog.warning("Not signed in")
         }
         return nil
     }

@@ -96,15 +96,6 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         self.db = aDb;
         self.reverseGeocoder = RZReturnAutorelease([[GCWebReverseGeocode alloc]initWithOrganizer:self andDel:self]);
         self.worker = thread;
-        if (aDb) {
-            if (thread) {
-                dispatch_async(thread,^(){
-                    [self loadFromDb];
-                });
-            }else{
-                [self loadFromDb];
-            }
-        }
     }
     return self;
 }
@@ -414,6 +405,18 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     }
 }
 
+-(BOOL)ensureSummaryLoaded{
+    if (self.db) {
+        if (self.worker) {
+            dispatch_async(self.worker,^(){
+                [self loadFromDb];
+            });
+        }else{
+            [self loadFromDb];
+        }
+    }
+}
+
 -(BOOL)ensureDetailsLoaded{
     @synchronized (self) {
         self.loadDetailsNeeded = true;
@@ -445,11 +448,6 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     // Load process will have several stages:
     //   - always load summary first
     //   - when ui starts: load the details
-    
-    self.loadCompleted = false;
-    self.loadDetailsCompleted = false;
-    self.loadSummaryCompleted = false;
-
     [self loadSummaryFromDb];
     // If test mode load details, otherwise wait for signal it's needed
     // Typically from the ui

@@ -29,6 +29,7 @@
 @import RZExternal;
 #import "GCViewIcons.h"
 #import "GCWebConnect+Requests.h"
+#import "GCService.h"
 
 @interface GCTabBarController ()
 @property (nonatomic,retain)  GCActivityListViewController * activityListViewController;
@@ -89,7 +90,7 @@
 -(void)startWorkflowConnectStats{
     NSInteger last_version = [GCAppGlobal configGetInt:CONFIG_LAST_USED_VERSION defaultValue:0];
     if (last_version == 0) {
-
+        RZLog(RZLogInfo,@"First run, presenting service page");
         NSString * msg = NSLocalizedString(@"Setup your service, enter your user name and password to start downloading your activities", @"Initial");
 
         [self presentSimpleAlertWithTitle:NSLocalizedString(@"Welcome", @"Initial") message:msg];
@@ -101,6 +102,15 @@
 
     }else{
         if ([[GCAppGlobal profile] profileRequireSetup]) {
+            RZLog(RZLogInfo,@"Incomplete profile, presenting service page");
+            for (gcService service=0; service<gcServiceEnd; service++) {
+                GCService * serviceObj = [GCService service:service];
+                if ([[GCAppGlobal profile] serviceEnabled:service]) {
+                    RZLog(RZLogInfo, @"Enabled:  %@", [serviceObj statusDescription] );
+                }
+            }
+            RZLog(RZLogInfo,@"Garmin: %@", [[GCAppGlobal profile] serviceIncomplete:gcServiceGarmin] ? @"Incomplete" : @"Complete");
+
             self.selectedIndex = 4;
             [self.settingsViewController showServices];
         }

@@ -41,6 +41,8 @@
 @property (nonatomic,assign) NSUInteger userId;
 @property (nonatomic,retain) OAuth1Controller * oauth1Controller;
 @property (nonatomic,retain) WKWebView * webView;
+#pragma message "Temporary remove before PROD"
+@property (nonatomic,assign) BOOL signinMissingFlag;
 @end
 
 @implementation GCConnectStatsRequest
@@ -138,6 +140,19 @@
         [self checkToken];
     }
     BOOL rv = self.oauthToken != nil && self.oauthTokenSecret != nil && self.userId != 0 && self.tokenId != 0;
+        
+    if( rv ){
+        if( self.signinMissingFlag){
+            self.signinMissingFlag = false;
+            RZLog(RZLogInfo, @"signedIn true: %@ %@ userId=%@ tokenId=%@", self.oauthToken, self.oauthTokenSecret, @(self.userId), @(self.tokenId));
+        }
+    }else{
+        if( !self.signinMissingFlag ){
+            self.signinMissingFlag = true;
+            RZLog(RZLogInfo, @"signedIn false: %@ %@ userId=%@ tokenId=%@", self.oauthToken, self.oauthTokenSecret, @(self.userId), @(self.tokenId));
+        }
+    }
+    
     if( rv && ! self.oauth1Controller){
         [self buildOAuthController];
     }

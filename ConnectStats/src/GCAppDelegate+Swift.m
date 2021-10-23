@@ -141,12 +141,13 @@ BOOL kOpenTemporary = false;
     NSError * e = nil;
 
     if (filename) {
-
         NSString * sofar = [NSString stringWithContentsOfFile:filename
                                             encoding:NSUTF8StringEncoding error:&e];
 
         if (sofar) {
+#pragma message "Temporary remove before PROD"
             attempts = MAX(1, [sofar integerValue]+1);
+            RZLog(RZLogInfo, @"starting.log attempt %@ -> %@", sofar, @(attempts));
         }else{
             RZLog(RZLogError, @"Failed to read initfile %@", e.localizedDescription);
         }
