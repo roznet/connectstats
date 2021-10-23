@@ -79,6 +79,8 @@ NS_INLINE GCAppDelegate * _appDelegate(void) {
     }
     RZLog(RZLogInfo,@"scene connect %@", [options componentsJoinedByString:@" "]);
     
+    [[GCAppGlobal organizer] ensureSummaryLoaded];
+    
     if( [scene isKindOfClass:[UIWindowScene class]]){
         UIWindowScene * windowScene = (UIWindowScene*)scene;
 

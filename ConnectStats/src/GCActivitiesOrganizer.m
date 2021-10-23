@@ -283,6 +283,40 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 
 #pragma mark - load and update
 
+-(BOOL)ensureSummaryLoaded{
+    if (self.db) {
+        if (self.worker) {
+            dispatch_async(self.worker,^(){
+                [self loadFromDb];
+            });
+        }else{
+            [self loadFromDb];
+        }
+    }
+    return self.loadSummaryCompleted;
+}
+
+
+-(void)loadFromDb{
+    if (!_db) {
+        if (!self.info) {
+            [self buildInfoDictionary];
+        }
+        self.allActivities = @[];
+
+        return;
+    }
+    // Load process will have several stages:
+    //   - always load summary first
+    //   - when ui starts: load the details
+    [self loadSummaryFromDb];
+    // If test mode load details, otherwise wait for signal it's needed
+    // Typically from the ui
+    if( self.loadDetailsNeeded ){
+        [self loadDetailsFromDb];
+    }
+}
+
 -(void)loadSummaryFromDb {
     @synchronized (self) {
         // load startime means we are currently running
@@ -369,6 +403,25 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     }
 }
 
+-(BOOL)ensureDetailsLoaded{
+    @synchronized (self) {
+        self.loadDetailsNeeded = true;
+        if( self.loadDetailsCompleted){
+            // nothing to do
+            return true;
+        }
+    }
+    if( self.worker){
+        dispatch_async(self.worker, ^(){
+            [self loadDetailsFromDb];
+        });
+    }else{
+        [self loadDetailsFromDb];
+    }
+    
+    return false;
+}
+
 -(void)loadDetailsFromDb{
     @synchronized (self) {
         // something already running or summary not finished, no point
@@ -405,58 +458,6 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     }
 }
 
--(BOOL)ensureSummaryLoaded{
-    if (self.db) {
-        if (self.worker) {
-            dispatch_async(self.worker,^(){
-                [self loadFromDb];
-            });
-        }else{
-            [self loadFromDb];
-        }
-    }
-}
-
--(BOOL)ensureDetailsLoaded{
-    @synchronized (self) {
-        self.loadDetailsNeeded = true;
-        if( self.loadDetailsCompleted){
-            // nothing to do
-            return true;
-        }
-    }
-    if( self.worker){
-        dispatch_async(self.worker, ^(){
-            [self loadDetailsFromDb];
-        });
-    }else{
-        [self loadDetailsFromDb];
-    }
-    
-    return false;
-}
-
--(void)loadFromDb{
-    if (!_db) {
-        if (!self.info) {
-            [self buildInfoDictionary];
-        }
-        self.allActivities = @[];
-
-        return;
-    }
-    // Load process will have several stages:
-    //   - always load summary first
-    //   - when ui starts: load the details
-    [self loadSummaryFromDb];
-    // If test mode load details, otherwise wait for signal it's needed
-    // Typically from the ui
-    if( self.loadDetailsNeeded ){
-        [self loadDetailsFromDb];
-    }
-}
-
-
 -(void)postNotificationListChanged{
     dispatch_async(dispatch_get_main_queue(), ^(){
         [[NSNotificationCenter defaultCenter] postNotificationName:kNotifyOrganizerListChanged object:nil];
@@ -474,6 +475,10 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 -(void)updateForNewProfile{
     self.db = [GCAppGlobal db];
     _currentActivityIndex = 0;
+    self.loadSummaryCompleted = false;
+    self.loadDetailsCompleted = false;
+    self.loadCompleted = false;
+    
     dispatch_async([GCAppGlobal worker],^(){
         [self loadFromDb];
         [self postNotificationReset];
