@@ -30,8 +30,9 @@
 #import "GCAppGlobal.h"
 #import "GCAppDelegate.h"
 #import "ConnectStats-Swift.h"
+#import "GCAppDelegate+Swift.h"
 #import "GCActivity+CSSearch.h"
-
+#import "GCSettingsBugReportViewController.h"
 #ifdef GC_TEST_APP
 @class GCTabBarController;
 @class GCSplitViewController;
@@ -79,8 +80,7 @@ NS_INLINE GCAppDelegate * _appDelegate(void) {
     }
     RZLog(RZLogInfo,@"scene connect %@", [options componentsJoinedByString:@" "]);
     
-    [[GCAppGlobal organizer] ensureSummaryLoaded];
-    
+
     if( [scene isKindOfClass:[UIWindowScene class]]){
         UIWindowScene * windowScene = (UIWindowScene*)scene;
 
@@ -89,17 +89,25 @@ NS_INLINE GCAppDelegate * _appDelegate(void) {
         //self.window = [[[SmudgyWindow alloc] initWithFrame:windowScene.coordinateSpace.bounds] autorelease];
         _window.windowScene = windowScene;
 #ifndef GC_TEST_APP
-        if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad)
-        {
-            // The device is an iPad
-            _splitViewController = [[GCSplitViewController alloc]init];
-            _window.rootViewController = _splitViewController;
-        }
-        else
-        {
-            // The device is an iPhone
-            _tabBarController = [[GCTabBarController alloc] init];
-            _window.rootViewController = _tabBarController;
+        BOOL ok = [_appDelegate() startInit];
+        if( ok ){
+            [[GCAppGlobal organizer] ensureSummaryLoaded];
+
+            if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad)
+            {
+                // The device is an iPad
+                _splitViewController = [[GCSplitViewController alloc]init];
+                _window.rootViewController = _splitViewController;
+            }
+            else
+            {
+                // The device is an iPhone
+                _tabBarController = [[GCTabBarController alloc] init];
+                _window.rootViewController = _tabBarController;
+            }
+        }else{
+            RZLog(RZLogError, @"Multiple failure to start");
+            [self multipleFailureStart];
         }
 #endif
         // first use, update, etc workflow
@@ -183,6 +191,21 @@ NS_INLINE GCAppDelegate * _appDelegate(void) {
     RZLog(RZLogInfo, @"Scene user activity %@", userActivity);
     GCAppDelegate * delegate = _appDelegate();
     [delegate handleUserActivity:userActivity];
+}
+
+-(BOOL)multipleFailureStart{
+    GCSettingsBugReportViewController * bug =[[[GCSettingsBugReportViewController alloc] initWithNibName:nil bundle:nil] autorelease];
+    bug.includeActivityFiles = true;
+    bug.includeErrorFiles = true;
+    _window.rootViewController = bug;
+
+    [_appDelegate() startSuccessful];
+
+    //Tested by forcing multiple Failure
+    [bug presentSimpleAlertWithTitle:NSLocalizedString(@"Repeated Failure to start", @"Error")
+                             message:NSLocalizedString(@"The app seem to not have started multiple times. You can send a bug report, next attempt will try again", @"Error")];
+
+    return YES;
 }
 
 

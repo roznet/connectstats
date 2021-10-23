@@ -26,6 +26,7 @@
 #import "GCAppDelegate+Swift.h"
 #import "ConnectStats-Swift.h"
 #import "GCWebConnect+Requests.h"
+#import "GCSettingsBugReportViewController.h"
 
 @import UserNotifications;
 
@@ -145,9 +146,7 @@ BOOL kOpenTemporary = false;
                                             encoding:NSUTF8StringEncoding error:&e];
 
         if (sofar) {
-#pragma message "Temporary remove before PROD"
             attempts = MAX(1, [sofar integerValue]+1);
-            RZLog(RZLogInfo, @"starting.log attempt %@ -> %@", sofar, @(attempts));
         }else{
             RZLog(RZLogError, @"Failed to read initfile %@", e.localizedDescription);
         }

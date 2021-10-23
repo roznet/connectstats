@@ -31,7 +31,6 @@
 #include <execinfo.h>
 @import RZExternal;
 #include "GCMapGoogleViewController.h"
-#import "GCSettingsBugReportViewController.h"
 #import "GCWebConnect+Requests.h"
 #import "GCAppActions.h"
 #import "GCActivityType.h"
@@ -145,13 +144,6 @@ void checkVersion(void){
 #endif
     [self handleAppRating];
     [GCMapGoogleViewController provideAPIKey:[self credentialsForService:@"googlemaps" andKey:@"api_key"]];
-    BOOL ok = [self startInit];
-    if (!ok) {
-        RZLog(RZLogError, @"Multiple failure to start");
-#pragma message "Figure out how to identify properly"
-        //[self multipleFailureStart];
-        [self startSuccessful];
-    }
 
     [GCAppGlobal setApplicationDelegate:self];
 
@@ -725,35 +717,12 @@ void checkVersion(void){
 
 }
 
+
 -(void)startupRefreshIfNeeded{
     if (self.needsStartupRefresh && [self.profiles configGetBool:CONFIG_REFRESH_STARTUP defaultValue:[GCAppGlobal healthStatsVersion]]) {
         [self searchRecentActivities];
     }
     self.needsStartupRefresh = false;
-}
-
--(BOOL)multipleFailureStart{
-    [Flurry logEvent:EVENT_MULTIPLE_FAILURE];
-    _window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    GCSettingsBugReportViewController * bug =[[[GCSettingsBugReportViewController alloc] initWithNibName:nil bundle:nil] autorelease];
-    bug.includeActivityFiles = true;
-    bug.includeErrorFiles = true;
-    _window.rootViewController = bug;
-
-    self.settings = [NSMutableDictionary dictionaryWithDictionary:[RZFileOrganizer loadDictionary:@"settings.plist"]];
-    self.profiles = [GCAppProfiles profilesFromSettings:_settings];
-    [self setupWorkerThread];
-    self.db = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:[_profiles currentDatabasePath]]];
-    [_db open];
-
-    [self startSuccessful];
-    [_window makeKeyAndVisible];
-
-    //Tested by forcing multiple Failure
-    [bug presentSimpleAlertWithTitle:NSLocalizedString(@"Repeated Failure to start", @"Error")
-                             message:NSLocalizedString(@"The app seem to not have started multiple times. You can send a bug report, next attempt will try again", @"Error")];
-
-    return YES;
 }
 
 -(NSDictionary<NSString*,NSString*>*)credentialsForService:(NSString*)service{
