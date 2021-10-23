@@ -180,7 +180,7 @@ class GCTestAggregatedStats: XCTestCase {
         guard let db = GCTestsSamples.sampleActivityDatabase("test_activities_stats.db") else { XCTAssertTrue(false); return [] }
         let organizer = GCActivitiesOrganizer(testModeWithDb: db)
         
-        let all = organizer.activities()
+        let all = organizer.activities
         
         var focusbucket : DateBucket? = nil
         

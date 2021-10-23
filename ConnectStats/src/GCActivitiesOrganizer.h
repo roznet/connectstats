@@ -101,7 +101,10 @@ typedef BOOL (^gcActivityOrganizerMatchBlock)(GCActivity*);
 
 -(NSUInteger)countOfActivities;
 
-@property (nonatomic,readonly) NSArray<GCActivity*>*activities;
+/**
+ * only writable for testing
+ */
+@property (nonatomic,retain) NSArray<GCActivity*>*activities;
 
 -(NSArray<GCActivity*>*)activitiesWithin:(NSTimeInterval)time of:(NSDate*)date;
 -(NSArray<GCActivity*>*)activitiesMatching:(gcActivityOrganizerMatchBlock)match withLimit:(NSUInteger)limit;

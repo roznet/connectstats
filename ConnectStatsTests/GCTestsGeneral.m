@@ -146,7 +146,7 @@
 
     [tmp addObject:act];
     [act release];
-    [organizer setActivities:[NSArray arrayWithArray:tmp]];
+    organizer.activities = [NSArray arrayWithArray:tmp];
 }
 
 
@@ -757,7 +757,7 @@
         [a1 addObject:act];
         [act release];
     }
-    [organizer setActivities:[NSArray arrayWithArray:a1]];
+    organizer.activities = [NSArray arrayWithArray:a1];
     NSArray * t1 = [NSArray arrayWithObjects:@"a", @"c", @"d", nil];
     NSArray * t2 = [NSArray arrayWithObjects:@"aa",@"cc", @"dd", nil];
     NSArray * t3 = [NSArray arrayWithObjects:@"d", @"e", nil];
@@ -799,7 +799,7 @@
             [self fldFor:@"WeightedMeanSpeed" act:act]:[self sumVal:[self fldFor:@"WeightedMeanSpeed" act:act] val:[[sample objectAtIndex:4] doubleValue] uom:[sample objectAtIndex:5]]}];
         [activities addObject:act];
     }
-    [organizer setActivities:activities];
+    organizer.activities = activities;
     XCTAssertEqual([organizer countOfFilteredActivities], samples.count);
     
     [organizer filterForQuickFilter];
@@ -860,7 +860,7 @@
         }];
         [activities addObject:act];
     }
-    [organizer setActivities:activities];
+    organizer.activities = activities;
     
     GCField * speedField = [GCField fieldForKey:@"WeightedMeanSpeed" andActivityType:GC_TYPE_ALL];
     GCField * distField  = [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:GC_TYPE_ALL];

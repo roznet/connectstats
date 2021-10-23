@@ -73,7 +73,7 @@ class GCTestActivityFitFile: XCTestCase {
                         activities.append(activity)
                         //print( "\(activity) \(activity.summaryData)")
                         var downloaded : GCActivity? = nil
-                        for act in organizer.activities() {
+                        for act in organizer.activities {
                             if act.date == messageStart && act.activityType == activity.activityType{
                                 downloaded = act
                                 break

@@ -839,7 +839,9 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     self.allActivities = activities;
     NSMutableSet<NSString*>*set = RZReturnAutorelease([[NSMutableSet alloc] init]);
     for (GCActivity * act in activities) {
-        [set addObject:act.activityId];
+        if( act.activityId){
+            [set addObject:act.activityId];
+        }
     }
     self.existingActivityIds = set;
 }
