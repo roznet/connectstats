@@ -58,6 +58,12 @@ typedef NS_ENUM(NSUInteger, gcWebService) {
     gcWebServiceEnd
 };
 
+typedef NS_ENUM(NSUInteger, gcRequestMode) {
+    gcRequestModeDownloadAndProcess,
+    gcRequestModeDownloadAndCache,
+    gcRequestModeProcessCache
+};
+
 @protocol GCWebRequestDelegate <NSObject>
 
 -(void)processDone:(nullable id)req;

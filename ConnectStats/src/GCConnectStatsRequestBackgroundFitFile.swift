@@ -29,8 +29,10 @@ import UIKit
 import RZUtilsSwift
 
 class GCConnectStatsRequestBackgroundFitFile: GCConnectStatsRequestFitFile {
+    let requestMode : gcRequestMode
     
-    override init(activity: GCActivity) {
+    @objc init(activity: GCActivity, requestMode : gcRequestMode) {
+        self.requestMode = requestMode
         super.init(activity:activity)
     }
     
@@ -82,7 +84,7 @@ class GCConnectStatsRequestBackgroundFitFile: GCConnectStatsRequestFitFile {
 
     @discardableResult
     @objc static func test(activity: GCActivity, path : String) -> GCActivity?{
-        let req = GCConnectStatsRequestBackgroundFitFile(activity: activity)
+        let req = GCConnectStatsRequestBackgroundFitFile(activity: activity, requestMode:.processCache)
         
         var isDirectory :ObjCBool = false
         let filename = req.fitFileName

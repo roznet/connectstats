@@ -29,36 +29,46 @@ import UIKit
 import RZUtilsSwift
 
 class GCConnectStatsRequestBackgroundSearch: GCConnectStatsRequest {
+    
     static let kActivityRequestCount : UInt = 20
     private var searchMore : Bool = false
     private let start : UInt
+    private let requestMode : gcRequestMode
+    
     // by default try to download up to 5 tracks/activities
     var loadTracks = 5
     var addedActivities : [GCActivity] = []
     
-    override init() {
+    @objc init(requestMode : gcRequestMode) {
         self.start = 0
+        self.requestMode = requestMode
         super.init()
     }
     
     init(nextWith current: GCConnectStatsRequestBackgroundSearch) {
         self.start = current.start + Self.kActivityRequestCount
+        self.requestMode = current.requestMode
         super.init(nextWith: current)
         
     }
     
     @objc override func preparedUrlRequest() -> URLRequest? {
-        if self.isSignedIn(),
-           let path = GCWebConnectStatsSearch(GCAppGlobal.webConnectsStatsConfig()){
-            let params : [AnyHashable: Any] = [
-                "token_id": self.tokenId,
-                "start":self.start,
-                "limit":Self.kActivityRequestCount,
-                "background":1
-            ]
-            return self.preparedUrlRequest(path, params: params)
-        }else{
-            RZSLog.warning("Not signed in")
+        switch self.requestMode {
+        case .downloadAndProcess,.downloadAndCache:
+            if self.isSignedIn(),
+               let path = GCWebConnectStatsSearch(GCAppGlobal.webConnectsStatsConfig()){
+                let params : [AnyHashable: Any] = [
+                    "token_id": self.tokenId,
+                    "start":self.start,
+                    "limit":Self.kActivityRequestCount,
+                    "background":1
+                ]
+                return self.preparedUrlRequest(path, params: params)
+            }else{
+                RZSLog.warning("Not signed in")
+            }
+        default:
+            return nil
         }
         return nil
     }
@@ -73,7 +83,6 @@ class GCConnectStatsRequestBackgroundSearch: GCConnectStatsRequest {
             RZSLog.info("invalid data skipping background update")
             self.processDone()
             return
-
         }
         
         guard self.checkNoErrors()
@@ -107,7 +116,7 @@ class GCConnectStatsRequestBackgroundSearch: GCConnectStatsRequest {
             RZSLog.info("Found new activities, background downloading trackpoints for \(addedActivities.count) activities")
             for act in addedActivities {
                 if self.loadTracks > 0 {
-                    let req = GCConnectStatsRequestBackgroundFitFile(activity: act)
+                    let req = GCConnectStatsRequestBackgroundFitFile(activity: act, requestMode: self.requestMode)
                     GCAppGlobal.web().add(req)
                     self.loadTracks -= 1
                 }
@@ -125,7 +134,7 @@ class GCConnectStatsRequestBackgroundSearch: GCConnectStatsRequest {
     
     @discardableResult
     @objc static func test(organizer: GCActivitiesOrganizer, path : String) -> GCActivitiesOrganizer{
-        let search = GCConnectStatsRequestBackgroundSearch()
+        let search = GCConnectStatsRequestBackgroundSearch(requestMode: .processCache)
         
         var isDirectory : ObjCBool = false
         

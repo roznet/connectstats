@@ -54,7 +54,7 @@ BOOL kOpenTemporary = false;
     application.applicationIconBadgeNumber = 1;
     RZPerformance * notificationPerf = [RZPerformance start];
     
-    [self startSuccessful];
+    [[GCAppGlobal organizer] ensureMinimumLoaded];
     
     self.web.notificationHandler = ^(gcWebNotification notification){
         switch( notification ){

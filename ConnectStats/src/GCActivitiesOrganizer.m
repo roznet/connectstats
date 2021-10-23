@@ -54,6 +54,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 @property (nonatomic,retain) FMDatabase * tennisdbCache;
 @property (nonatomic,retain) NSDictionary<NSString*,NSMutableDictionary*> * info;
 @property (nonatomic,retain) NSMutableDictionary * duplicateActivityIds;
+@property (nonatomic,retain) NSMutableSet<NSString*>*existingActivityIds;
 
 @property (nonatomic,assign) NSUInteger nextForGeocoding;
 @property (nonatomic,assign) BOOL geocoding;
@@ -137,6 +138,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     [_info release];
     [_filteredActivityType release];
     [_duplicateActivityIds release];
+    [_existingActivityIds release];
     [_storedHealth release];
     [_activityIdToActivityType release];
     [_loadStartTime release];
@@ -283,6 +285,19 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 
 #pragma mark - load and update
 
+-(BOOL)ensureMinimumLoaded{
+    if( self.db){
+        if(self.worker){
+            dispatch_async(self.worker, ^(){
+                [self loadExisting];
+            });
+        }else{
+            [self loadExisting];
+        }
+    }
+    return true;
+}
+
 -(BOOL)ensureSummaryLoaded{
     if (self.db) {
         if (self.worker) {
@@ -317,6 +332,40 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     }
 }
 
+-(void)loadExisting{
+    RZPerformance * perf = [RZPerformance start];
+    [self loadDuplicate];
+    
+    if( self.existingActivityIds == nil){
+        NSMutableSet * existing = [NSMutableSet set];
+        FMResultSet * res = nil;
+        res = [_db executeQuery:@"SELECT activityId FROM gc_activities"];
+        while( [res next]){
+            [existing addObject:[res stringForColumn:@"activityId"]];
+        }
+        self.existingActivityIds = existing;
+    }
+    RZLog(RZLogInfo, @"Loaded minimum %d activities %@",(int)self.existingActivityIds.count, perf);
+}
+
+-(void)loadDuplicate{
+    if( self.duplicateActivityIds == nil){
+        NSMutableDictionary * duplicates = [NSMutableDictionary dictionary];
+        FMResultSet * res = nil;
+        if ([_db tableExists:@"gc_duplicate_activities"]) {
+            res = [_db executeQuery:@"SELECT * FROM gc_duplicate_activities"];
+            while ([res next]) {
+                NSString * activityId = [res stringForColumn:@"activityId"];
+                NSString * duplicateActivityId = [res stringForColumn:@"duplicateActivityId"];
+                // some account somehow had duplicate as healthkit
+                if( ![duplicateActivityId hasPrefix:@"__healthkit__"]){
+                    duplicates[activityId] = duplicateActivityId;
+                }
+            }
+        }
+        self.duplicateActivityIds = duplicates;
+    }
+}
 -(void)loadSummaryFromDb {
     @synchronized (self) {
         // load startime means we are currently running
@@ -329,23 +378,11 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     
     unsigned mem_start = [RZMemory memoryInUse];
     
-    NSMutableDictionary * duplicates = [NSMutableDictionary dictionary];
-    FMResultSet * res = nil;
-    if ([_db tableExists:@"gc_duplicate_activities"]) {
-        res = [_db executeQuery:@"SELECT * FROM gc_duplicate_activities"];
-        while ([res next]) {
-            NSString * activityId = [res stringForColumn:@"activityId"];
-            NSString * duplicateActivityId = [res stringForColumn:@"duplicateActivityId"];
-            // some account somehow had duplicate as healthkit
-            if( ![duplicateActivityId hasPrefix:@"__healthkit__"]){
-                duplicates[activityId] = duplicateActivityId;
-            }
-        }
-    }
-    self.duplicateActivityIds = duplicates;
+    [self loadDuplicate];
 
     NSMutableArray * m_activities = [NSMutableArray array];
-
+    NSMutableSet * existing = [NSMutableSet set];
+    FMResultSet * res = nil;
     res = [_db executeQuery:@"SELECT * FROM gc_activities ORDER BY BeginTimestamp DESC"];
     if (res == nil) {
         RZLog(RZLogError, @"db error: %@", [_db lastErrorMessage]);
@@ -376,10 +413,12 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         [self recordActivityType:act];
         
         [m_activities addObject:act];
+        [existing addObject:act.activityId];
         [act release];
     }
     [res close];
     self.allActivities = [NSArray arrayWithArray:m_activities];
+    self.existingActivityIds = existing;
     
     if (!self.testMode) {
         RZLog(RZLogInfo, @"Loaded summary %d activities [%.1f sec %@]",(int)[_allActivities count], [[NSDate date] timeIntervalSinceDate:self.loadStartTime],
@@ -529,6 +568,8 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
             return [[obj2 date] compare:[obj1 date]];
         }];
         self.allActivities = [NSArray arrayWithArray:m_activities];
+        [self.existingActivityIds addObject:act.activityId];
+        
         [self recordActivityType:act];
         [self notifyOnMainThread:aId];
         [_reverseGeocoder start];
@@ -665,12 +706,15 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
             NSUInteger preCount = self.allActivities.count;
             
             NSMutableArray * fixed = [NSMutableArray arrayWithCapacity:preCount];
+            NSMutableSet<NSString*>*existing = [NSMutableSet set];
             for (GCActivity * one in self.allActivities) {
                 if( ! found[one.activityId]){
                     [fixed addObject:one];
+                    [existing addObject:one.activityId];
                 }
             }
             self.allActivities = fixed;
+            self.existingActivityIds = existing;
             RZLog(RZLogInfo, @"Found %lu duplicates (%lu activities left)", (unsigned long)dupCount, (unsigned long)self.allActivities.count );
             
         }
@@ -713,6 +757,10 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 }
 
 #pragma mark - access
+
+-(BOOL)containsActivityId:(NSString*)aId{
+    return [self.existingActivityIds containsObject:aId];
+}
 
 -(GCActivity*)activityForId:(NSString*)aId{
     for (GCActivity * act in _allActivities) {
@@ -789,6 +837,11 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 }
 -(void)setActivities:(NSArray*)activities{
     self.allActivities = activities;
+    NSMutableSet<NSString*>*set = RZReturnAutorelease([[NSMutableSet alloc] init]);
+    for (GCActivity * act in activities) {
+        [set addObject:act.activityId];
+    }
+    self.existingActivityIds = set;
 }
 
 -(NSArray*)activitiesMatching:(gcActivityOrganizerMatchBlock)match withLimit:(NSUInteger)limit{
@@ -1207,6 +1260,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     _currentActivityIndex = 0;
     [GCAppGlobal saveSettings];
     self.allActivities = [NSMutableArray arrayWithCapacity:_allActivities.count];
+    self.existingActivityIds = [NSMutableSet set];
     self.duplicateActivityIds = [NSMutableDictionary dictionary];
     [self notify];
 
@@ -1215,17 +1269,19 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 -(void)deleteActivitiesInTrash{
     if (self.activitiesTrash.count) {
         NSMutableArray * newActivities = [NSMutableArray arrayWithCapacity:_allActivities.count];
-
+        NSMutableSet * newExisting = [NSMutableSet set];
         NSMutableDictionary * toDelete = [NSMutableDictionary dictionaryWithObjects:_activitiesTrash forKeys:_activitiesTrash];
 
         for (GCActivity * act in _allActivities) {
             if (toDelete[act.activityId] == nil) {
                 [newActivities addObject:act];
+                [newExisting addObject:act.activityId];
             }else{
                 act.settings.organizer = nil;
             }
         }
         self.allActivities = [NSArray arrayWithArray:newActivities];
+        self.existingActivityIds = newExisting;
         if (self.currentActivityIndex >= newActivities.count) {
             self.currentActivityIndex = 0;
         }
@@ -1284,6 +1340,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     _currentActivityIndex = 0;
     NSMutableArray * array = [NSMutableArray arrayWithArray:_allActivities];
     [array removeObjectAtIndex:idx];
+    [self.existingActivityIds removeObject:activityId];
     self.allActivities = [NSArray arrayWithArray:array];
     [self notify];
 }
@@ -1339,6 +1396,11 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         NSArray * end   = [self.allActivities subarrayWithRange:NSMakeRange(idxto, self.allActivities.count-idxto)];
         self.allActivities = [start arrayByAddingObjectsFromArray:end];
     }
+    [self.existingActivityIds removeAllObjects];
+    for (GCActivity * act in self.allActivities) {
+        [self.existingActivityIds addObject:act.activityId];
+    }
+    
     [self notify];
 }
 
