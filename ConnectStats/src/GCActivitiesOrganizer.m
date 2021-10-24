@@ -76,6 +76,8 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 @property (nonatomic,retain) GCHealthOrganizer * storedHealth;
 
 
+-(GCActivitiesOrganizer*)initTestModeWithDb:(FMDatabase*)aDb loadDetails:(BOOL)loadDetails loadMinimum:(BOOL)minimum NS_DESIGNATED_INITIALIZER;
+
 @end
 
 @implementation GCActivitiesOrganizer
@@ -102,20 +104,33 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 }
 
 -(GCActivitiesOrganizer*)initTestModeWithDb:(FMDatabase*)aDb{
-    return [self initTestModeWithDb:aDb loadDetails:true];
+    return [self initTestModeWithDb:aDb loadDetails:true loadMinimum:false];
 }
 
 -(GCActivitiesOrganizer*)initTestModeWithDb:(FMDatabase*)aDb loadDetails:(BOOL)loadDetails{
+    return [self initTestModeWithDb:aDb loadDetails:loadDetails loadMinimum:false];
+}
+
+-(GCActivitiesOrganizer*)initTestModeMinimumWithDb:(FMDatabase*)aDb{
+    return [self initTestModeWithDb:aDb loadDetails:false loadMinimum:false];
+}
+
+-(GCActivitiesOrganizer*)initTestModeWithDb:(FMDatabase*)aDb loadDetails:(BOOL)loadDetails loadMinimum:(BOOL)minimum {
     self = [super init];
     if (self) {
         self.testMode = true;
         self.loadDetailsNeeded = loadDetails;
         self.db = aDb;
         [self setReverseGeocoder:nil];
-        [self loadFromDb];
+        if( minimum ){
+            [self ensureMinimumLoaded];
+        }else{
+            [self loadFromDb];
+        }
     }
     return self;
 }
+
 -(void)dealloc{
     for (GCActivity * act in _allActivities) {
         act.settings.organizer = nil;
@@ -381,7 +396,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     [self loadDuplicate];
 
     NSMutableArray * m_activities = [NSMutableArray array];
-    NSMutableSet * existing = [NSMutableSet set];
+    self.existingActivityIds = [NSMutableSet set];
     FMResultSet * res = nil;
     res = [_db executeQuery:@"SELECT * FROM gc_activities ORDER BY BeginTimestamp DESC"];
     if (res == nil) {
@@ -413,12 +428,11 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         [self recordActivityType:act];
         
         [m_activities addObject:act];
-        [existing addObject:act.activityId];
+        [self.existingActivityIds addObject:act.activityId];
         [act release];
     }
     [res close];
     self.allActivities = [NSArray arrayWithArray:m_activities];
-    self.existingActivityIds = existing;
     
     if (!self.testMode) {
         RZLog(RZLogInfo, @"Loaded summary %d activities [%.1f sec %@]",(int)[_allActivities count], [[NSDate date] timeIntervalSinceDate:self.loadStartTime],

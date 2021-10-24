@@ -163,7 +163,7 @@ BOOL kOpenTemporary = false;
 -(void)startSuccessful{
     static BOOL once = false;
     if (!once) {
-        RZLog(RZLogInfo, @"Started");
+        RZLog(RZLogInfo, @"UI Started");
         [RZFileOrganizer removeEditableFile:GC_STARTING_FILE];
         once = true;
         

@@ -65,7 +65,11 @@ typedef BOOL (^gcActivityOrganizerMatchBlock)(GCActivity*);
  * testmode will trigger load of database on current thread in synchronous method and disable all notificaitons,
  *  if loadDetails is false will only load summary else will load everything
  */
--(GCActivitiesOrganizer*)initTestModeWithDb:(FMDatabase*)aDb loadDetails:(BOOL)loadDetails NS_DESIGNATED_INITIALIZER;
+-(GCActivitiesOrganizer*)initTestModeWithDb:(FMDatabase*)aDb loadDetails:(BOOL)loadDetails;
+/**
+ * testmode will trigger load of minimum databaseon current thread in synchronous method and disable all notificaitons
+ */
+-(GCActivitiesOrganizer*)initTestModeMinimumWithDb:(FMDatabase*)aDb;
 
 /**
  * call this function when ready to load data
