@@ -27,10 +27,102 @@
 
 import Foundation
 import OAuthSwift
+import RZUtilsSwift
+import UIKit
 
-extension GCAppSceneDelegate {
-    @objc func handleOAuth(_ url : URL){
-        return OAuthSwift.handle(url: url)
+@objc class GCAppSceneDelegate : UIResponder, UIWindowSceneDelegate{
+    
+    private var tabBarController : GCTabBarController? = nil
+    private var splitViewController : GCSplitViewController? = nil
+    
+    private var appDelegate : GCAppDelegate { return UIApplication.shared.delegate as! GCAppDelegate }
+    
+    var window : UIWindow? = nil
+    @objc var actionDelegate : GCAppActionDelegate? { return tabBarController ?? splitViewController }
+    
+    func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+        RZSLog.info("scene connect")
+        
+        if let scene = scene as? UIWindowScene {
+            window = UIWindow(windowScene: scene)
+            if( appDelegate.startInit() ){
+                
+                if( UIDevice.current.userInterfaceIdiom == .pad){
+                    splitViewController = GCSplitViewController()
+                    window?.rootViewController = splitViewController
+                }else{
+                    tabBarController = GCTabBarController()
+                    window?.rootViewController = tabBarController
+                }
+            }else{
+                self.multipleFailureStart()
+            }
+            window?.makeKeyAndVisible()
+        }else{
+            RZSLog.info("connect to non window scene \(scene)")
+        }
     }
     
+    func sceneDidDisconnect(_ scene: UIScene) {
+        RZSLog.info("scene disconnect")
+        GCAppGlobal.saveSettings()
+    }
+    
+    func sceneDidBecomeActive(_ scene: UIScene) {
+        RZSLog.info("scene active")
+        
+        GCAppGlobal.organizer().ensureSummaryLoaded()
+        
+        let worker = GCAppGlobal.worker()
+        worker.async {
+            GCAppGlobal.organizer().ensureDetailsLoaded()
+        }
+        worker.async {
+            GCAppGlobal.derived().ensureDetailsLoaded()
+        }
+        worker.async {
+            GCAppGlobal.health().ensureDetailsLoaded()
+        }
+        UIApplication.shared.applicationIconBadgeNumber = 0
+        
+        
+    }
+    
+    func sceneWillResignActive(_ scene: UIScene) {
+        RZSLog.info("scene resign actvie")
+        GCAppGlobal.saveSettings()
+    }
+    
+    func sceneWillEnterForeground(_ scene: UIScene) {
+        RZSLog.info("scene foreground")
+    }
+    
+    func sceneDidEnterBackground(_ scene: UIScene) {
+        RZSLog.info("scene background")
+        GCAppGlobal.saveSettings()
+    }
+    
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        RZSLog.info("context \(URLContexts)")
+        
+        for context in URLContexts {
+            if context.url.path.hasSuffix(".fit"){
+                appDelegate.handleOpen(context.url)
+                break
+            }
+            if context.url.path == "/oauth/strava" {
+                OAuthSwift.handle(url: context.url)
+            }
+        }
+    }
+
+    func multipleFailureStart() {
+        let bugcontroller = GCSettingsBugReportViewController(nibName: nil, bundle: nil)
+        bugcontroller.includeErrorFiles = true
+        bugcontroller.includeActivityFiles = true
+        
+        window?.rootViewController = bugcontroller
+        
+        appDelegate.startSuccessful()
+    }
 }

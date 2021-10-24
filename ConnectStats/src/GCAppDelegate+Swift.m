@@ -173,4 +173,22 @@ BOOL kOpenTemporary = false;
     }
 }
 
+-(GCAppSceneDelegate*)currentSceneDelegate{
+    NSSet<UIScene*> * scenes = [[UIApplication sharedApplication] connectedScenes];
+    GCAppSceneDelegate * delegate = nil;
+    
+    for (UIScene * scene in scenes) {
+        if( [scene.delegate isKindOfClass:[GCAppSceneDelegate class]] ){
+            delegate = (GCAppSceneDelegate*)scene.delegate;
+            break;
+        }
+    }
+    return delegate;
+}
+
+-(NSObject<GCAppActionDelegate>*)actionDelegate{
+    return [[self currentSceneDelegate] actionDelegate];
+}
+
+
 @end

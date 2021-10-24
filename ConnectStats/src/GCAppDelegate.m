@@ -40,7 +40,6 @@
 #import "GCWeather.h"
 #import "GCActivity+CalculatedTracks.h"
 #import "GCConnectStatsStatus.h"
-#import "GCAppSceneDelegate.h"
 
 
 static BOOL connectStatsVersion = false;
@@ -514,23 +513,6 @@ void checkVersion(void){
     [GCFields setFieldCache:cache];
     [GCActivityType setFieldCache:cache];
 
-}
-
--(GCAppSceneDelegate*)currentSceneDelegate{
-    NSSet<UIScene*> * scenes = [[UIApplication sharedApplication] connectedScenes];
-    GCAppSceneDelegate * delegate = nil;
-    
-    for (UIScene * scene in scenes) {
-        if( [scene.delegate isKindOfClass:[GCAppSceneDelegate class]] ){
-            delegate = (GCAppSceneDelegate*)scene.delegate;
-            break;
-        }
-    }
-    return delegate;
-}
-
--(NSObject<GCAppActionDelegate>*)actionDelegate{
-    return [[self currentSceneDelegate] actionDelegate];
 }
 
 

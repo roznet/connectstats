@@ -25,6 +25,7 @@
 
 #import "GCAppDelegate.h"
 
+
 // Isolate swift setups
 @interface GCAppDelegate (Swift)
 
@@ -34,4 +35,7 @@
 -(BOOL)startInit;
 -(void)startSuccessful;
 -(void)registerForPushNotifications;
+
+-(NSObject<GCAppActionDelegate>*)actionDelegate;
+
 @end

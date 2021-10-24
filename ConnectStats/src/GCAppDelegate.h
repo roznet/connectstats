@@ -66,7 +66,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)startupRefreshIfNeeded;
 -(void)searchRecentActivities;
 
--(NSObject<GCAppActionDelegate>*)actionDelegate;
+
 -(NSArray<NSDictionary*>*)recentRemoteMessages;
 -(void)recentRemoteMessagesReceived;
 

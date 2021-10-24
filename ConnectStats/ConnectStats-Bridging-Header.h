@@ -19,6 +19,7 @@
 #import "GCHealthOrganizer.h"
 #import "GCDerivedOrganizer.h"
 #import "GCAppDelegate.h"
+#import "GCAppDelegate+Swift.h"
 #import "GCWebReverseGeocode.h"
 
 #import "GCViewIcons.h"
@@ -37,7 +38,6 @@
 #import "GCActivitiesCacheManagement.h"
 
 #import "GCWebRequestStandard.h"
-#import "GCAppSceneDelegate.h"
 
 #import "GCStravaActivityListParser.h"
 #import "GCStravaActivityLapsParser.h"
@@ -55,3 +55,5 @@
 #import "GCConnectStatsRequest.h"
 #import "GCConnectStatsSearchJsonParser.h"
 #import "GCConnectStatsRequestFitFile.h"
+
+#import "GCSettingsBugReportViewController.h"
