@@ -39,6 +39,7 @@
 #import "GCViewConfig.h"
 #import "GCConnectStatsRequestFitFile.h"
 #import "GCFieldInfo.h"
+#import "ConnectStats-Swift.h"
 
 @import ObjectiveC;
 
@@ -121,6 +122,14 @@
 }
 
 #pragma mark - Actions
+
+-(void)actionStartBackgroundDownloadAndCache{
+    [[GCAppGlobal web] addRequest:RZReturnAutorelease([[GCConnectStatsRequestBackgroundSearch alloc] initWithRequestMode:gcRequestModeDownloadAndCache])];
+}
+
+-(void)actionStartBackgroundProcessCache{
+    [[GCAppGlobal web] addRequest:RZReturnAutorelease([[GCConnectStatsRequestBackgroundSearch alloc] initWithRequestMode:gcRequestModeProcessCache])];
+}
 
 
 -(void)actionDumpCountriesCoord{

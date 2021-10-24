@@ -37,5 +37,6 @@
 -(void)registerForPushNotifications;
 
 -(NSObject<GCAppActionDelegate>*)actionDelegate;
+-(void)ensureDbStructure:(FMDatabase*)db;
 
 @end

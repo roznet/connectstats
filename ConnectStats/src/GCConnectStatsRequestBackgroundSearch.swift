@@ -158,12 +158,4 @@ class GCConnectStatsRequestBackgroundSearch: GCConnectStatsRequest {
         }
         return organizer
     }
-
-    @objc static func ensureDbStructure(db : FMDatabase) {
-        if( !db.tableExists("gc_notification_cache") ){
-            if( !db.executeUpdate("CREATE TABLE gc_notification_cache (notification_id TEXT, cache_file TEXT, request_class TEXT, notification_info TEXT, received REAL, processed REAL )", withArgumentsIn: [])){
-                RZSLog.error("Failed to create notification table \(String(describing: db.lastErrorMessage))")
-            }
-        }
-    }
 }

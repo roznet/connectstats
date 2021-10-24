@@ -54,6 +54,7 @@ typedef BOOL (^gcActivityOrganizerMatchBlock)(GCActivity*);
 @property (nonatomic,retain,nullable) NSString * filteredActivityType;
 @property (nonatomic,retain) GCHealthOrganizer * health;
 @property (nonatomic,readonly,nullable) CLLocation * currentActivityLocation;
+@property (nonatomic,readonly) BOOL fullyLoaded;
 
 -(GCActivitiesOrganizer*)initWithDb:(FMDatabase*)aDb;
 -(GCActivitiesOrganizer*)initWithDb:(FMDatabase*)aDb andThread:(nullable dispatch_queue_t)thread NS_DESIGNATED_INITIALIZER;

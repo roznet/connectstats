@@ -100,7 +100,15 @@
        [[GCAppGlobal profile] serviceSuccess:gcServiceConnectStats] ){
         // Run on main queue as it accesses a navigation Controller
         dispatch_async(dispatch_get_main_queue(), ^(){
-            [self addRequest:RZReturnAutorelease([[GCConnectStatsRequestBackgroundSearch alloc] initWithRequestMode:gcRequestModeDownloadAndCache])];
+            gcRequestMode mode = gcRequestModeDownloadAndCache;
+            
+            if( [GCAppGlobal organizer].fullyLoaded ){
+                mode = gcRequestModeDownloadAndProcess;
+                RZLog(RZLogInfo, @"organizer fully loaded, download and process mode");
+            }else{
+                RZLog(RZLogInfo, @"organizer not yet loaded, download and cache");
+            }
+            [self addRequest:RZReturnAutorelease([[GCConnectStatsRequestBackgroundSearch alloc] initWithRequestMode:mode])];
         });
         rv = true;
     }

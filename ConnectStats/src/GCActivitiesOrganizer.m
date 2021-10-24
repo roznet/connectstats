@@ -299,6 +299,9 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 }
 
 #pragma mark - load and update
+-(BOOL)fullyLoaded{
+    return self.loadSummaryCompleted == true || self.loadDetailsCompleted == true;
+}
 
 -(BOOL)ensureMinimumLoaded{
     if( self.db){
@@ -947,7 +950,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 +(void)ensureDbStructure:(FMDatabase*)db{
     [GCActivity ensureDbStructure:db];
     [GCFields ensureDbStructure:db];
-
+    
     if (![db tableExists:@"gc_list_activity_types"]) {
         [db executeUpdate:@"CREATE TABLE gc_list_activity_types (activityTypeDetail TEXT, description TEXT, activityTypeParent TEXT, activityType TEXT )"];
     }

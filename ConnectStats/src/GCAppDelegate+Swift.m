@@ -190,5 +190,11 @@ BOOL kOpenTemporary = false;
     return [[self currentSceneDelegate] actionDelegate];
 }
 
+-(void)ensureDbStructure:(FMDatabase*)db{
+    [GCActivitiesOrganizer ensureDbStructure:db];
+    [GCHealthOrganizer ensureDbStructure:db];
+
+    [GCConnectStatsRequestRegisterNotifications ensureDbStructureWithDb:db];
+}
 
 @end

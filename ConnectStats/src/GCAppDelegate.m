@@ -158,8 +158,7 @@ void checkVersion(void){
     // Wrap in autorelease pool to ensure no left over db object are released
     // later while db operation happening on worker
     @autoreleasepool {
-        [GCActivitiesOrganizer ensureDbStructure:_db];
-        [GCHealthOrganizer ensureDbStructure:_db];
+        [self ensureDbStructure:self.db];
     }
 
     [self setupFieldCache];
@@ -681,8 +680,9 @@ void checkVersion(void){
         [self.profiles addOrSelectProfile:pName];
         self.db = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:[self.profiles currentDatabasePath]]];
         [self.db open];
-        [GCActivitiesOrganizer ensureDbStructure:_db];
-        [GCHealthOrganizer ensureDbStructure:_db];
+        @autoreleasepool {
+            [self ensureDbStructure:_db];
+        }
         [self setupFieldCache];
         [_organizer updateForNewProfile];
         [_health updateForNewProfile];
