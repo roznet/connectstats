@@ -34,22 +34,24 @@ class GCConnectStatsRequestBackgroundSearch: GCConnectStatsRequest {
     private var searchMore : Bool = false
     private let start : UInt
     private let requestMode : gcRequestMode
+    private let cache : GCWebRequestCache
     
     // by default try to download up to 5 tracks/activities
     var loadTracks = 5
     var addedActivities : [GCActivity] = []
     
-    @objc init(requestMode : gcRequestMode) {
+    @objc init(requestMode : gcRequestMode, cacheDb : FMDatabase) {
         self.start = 0
         self.requestMode = requestMode
+        self.cache = GCWebRequestCache(db: cacheDb, classname: String(describing: type(of: self)))
         super.init()
     }
     
     init(nextWith current: GCConnectStatsRequestBackgroundSearch) {
         self.start = current.start + Self.kActivityRequestCount
         self.requestMode = current.requestMode
+        self.cache = current.cache
         super.init(nextWith: current)
-        
     }
     
     @objc override func preparedUrlRequest() -> URLRequest? {
@@ -76,41 +78,7 @@ class GCConnectStatsRequestBackgroundSearch: GCConnectStatsRequest {
     func searchFileName(page : UInt) -> String {
         return "last_connectstats_search_\(page).json"
     }
-    
-    func cache(data : Data, filename : String, classname : String){
-        let cacheFile = "cache_\(classname)_\(filename)"
-        let db = GCAppGlobal.db()
-        
-        do {
-            try data.write(to: URL(fileURLWithPath: RZFileOrganizer.writeableFilePath(cacheFile)), options: .atomic)
-            try db.executeUpdate("INSERT INTO gc_notification_cache (cache_file,request_class,received) VALUES (?,?,?)", values: [cacheFile,classname, NSDate()])
-        }catch{
-            RZSLog.error("Failed to cache data for \(filename) and \(classname): \(error)")
-        }
-    }
-    
-    @discardableResult
-    func cache(retrieve classname : String, cb : (Data)->Void) -> Bool{
-        let db = GCAppGlobal.db()
-        var notificationid : Int? = nil
-        var rv = false
-        if let res = db.executeQuery("SELECT * FROM gc_notification_cache WHERE processed IS NULL AND request_class = ? ORDER BY received LIMIT 1", withArgumentsIn: [classname]) {
-            if ( res.next() ){
-                notificationid = Int(res.longLongInt(forColumn: "notification_id"))
-                if let filename = res.string(forColumn: "cache_file"),
-                   let data = try? Data(contentsOf: URL(fileURLWithPath: RZFileOrganizer.writeableFilePath(filename))) {
-                    cb(data)
-                    rv = true
-                }
-            }
-        
-        }
-        if let notificationid = notificationid {
-            db.executeUpdate("UPDATE gc_notification_cache SET processed = ? WHERE notification_id = \(notificationid)", withArgumentsIn: [NSDate()])
-        }
-        return rv
-    }
-    
+
     func processSaveDataToCache() {
         guard let data = self.theString?.data(using: .utf8)
         else {
@@ -119,15 +87,16 @@ class GCConnectStatsRequestBackgroundSearch: GCConnectStatsRequest {
             return
         }
         
-        self.cache(data: data, filename: self.searchFileName(page: self.start), classname: String(describing: type(of: self)))
+        self.cache.save(data: data, filename: self.searchFileName(page: self.start))
         
         self.processDone()
     }
     
     func processDataFromCache(){
-        self.searchMore = self.cache(retrieve: String(describing: type(of: self)) ){
+        self.searchMore = self.cache.retrieve() {
             data in
             self.process(parse: data)
+            return true
         }
         if( !self.searchMore ){
             self.processDone()
@@ -209,7 +178,7 @@ class GCConnectStatsRequestBackgroundSearch: GCConnectStatsRequest {
     
     @discardableResult
     @objc static func test(organizer: GCActivitiesOrganizer, path : String) -> GCActivitiesOrganizer{
-        let search = GCConnectStatsRequestBackgroundSearch(requestMode: .processCache)
+        let search = GCConnectStatsRequestBackgroundSearch(requestMode: .processCache, cacheDb: organizer.db)
         
         var isDirectory : ObjCBool = false
         
@@ -236,7 +205,7 @@ class GCConnectStatsRequestBackgroundSearch: GCConnectStatsRequest {
     
     @discardableResult
     @objc static func test(organizer: GCActivitiesOrganizer, path : String, mode: gcRequestMode) -> GCActivitiesOrganizer{
-        let search = GCConnectStatsRequestBackgroundSearch(requestMode: .processCache)
+        let search = GCConnectStatsRequestBackgroundSearch(requestMode: .processCache, cacheDb: organizer.db)
         
         var isDirectory : ObjCBool = false
         
@@ -246,13 +215,14 @@ class GCConnectStatsRequestBackgroundSearch: GCConnectStatsRequest {
                 fileURL.appendPathComponent(search.searchFileName(page: 0))
             }
             if( mode == .processCache){
-                search.cache(retrieve: String(describing: type(of: search)) ){
+                search.cache.retrieve(){
                     data in
                     let parser = GCConnectStatsSearchJsonParser(data: data)
                     if parser.success {
                         search.loadTracks = 0
                         search.addActivities(from: parser, to: organizer)
                     }
+                    return true
                 }
             }else{
                 if let data = try? Data(contentsOf: fileURL) {

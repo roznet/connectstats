@@ -391,6 +391,9 @@
 		424BDABA25E2DA7C00EC7DBE /* GCActivity+Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424BDAB825E2DA7C00EC7DBE /* GCActivity+Location.swift */; };
 		424BDABB25E2DA7C00EC7DBE /* GCActivity+Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424BDAB825E2DA7C00EC7DBE /* GCActivity+Location.swift */; };
 		424BDAD425E2E25400EC7DBE /* RZExternalUniversal in Frameworks */ = {isa = PBXBuildFile; productRef = 424BDAD325E2E25400EC7DBE /* RZExternalUniversal */; };
+		424C26B1272ED6FB00943DE2 /* GCWebRequestCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424C26B0272ED6FB00943DE2 /* GCWebRequestCache.swift */; };
+		424C26B2272ED6FB00943DE2 /* GCWebRequestCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424C26B0272ED6FB00943DE2 /* GCWebRequestCache.swift */; };
+		424C26B3272ED6FB00943DE2 /* GCWebRequestCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424C26B0272ED6FB00943DE2 /* GCWebRequestCache.swift */; };
 		424D08C01DC5DA4E000B4620 /* GCAppPasswordManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424D08BF1DC5DA4E000B4620 /* GCAppPasswordManager.swift */; };
 		424F1A7B21E20477009DD368 /* FITAppGlobal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424F1A7A21E20477009DD368 /* FITAppGlobal.swift */; };
 		424F92D61B1072FD0075C5F1 /* GCDebugActionsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 422637A41AFF6C5F005461E3 /* GCDebugActionsTableViewController.m */; };
@@ -1496,6 +1499,7 @@
 		424B7F4616CFBE2F000B38AD /* GCSettingsHelpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCSettingsHelpViewController.h; path = src/GCSettingsHelpViewController.h; sourceTree = "<group>"; };
 		424B7F4716CFBE2F000B38AD /* GCSettingsHelpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCSettingsHelpViewController.m; path = src/GCSettingsHelpViewController.m; sourceTree = "<group>"; };
 		424BDAB825E2DA7C00EC7DBE /* GCActivity+Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "GCActivity+Location.swift"; path = "src/GCActivity+Location.swift"; sourceTree = "<group>"; };
+		424C26B0272ED6FB00943DE2 /* GCWebRequestCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GCWebRequestCache.swift; path = src/GCWebRequestCache.swift; sourceTree = "<group>"; };
 		424D08BF1DC5DA4E000B4620 /* GCAppPasswordManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GCAppPasswordManager.swift; path = src/GCAppPasswordManager.swift; sourceTree = "<group>"; };
 		424F1A7A21E20477009DD368 /* FITAppGlobal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FITAppGlobal.swift; path = src/FITAppGlobal.swift; sourceTree = "<group>"; };
 		424F9DB817C35BDD001C73B1 /* GCHealthZoneCalculator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCHealthZoneCalculator.h; path = src/GCHealthZoneCalculator.h; sourceTree = "<group>"; };
@@ -3463,6 +3467,7 @@
 				4233EAE5166B89A300185978 /* Garmin */,
 				42B8587A229DB643009E309A /* ConnectStats */,
 				4250039418BAC6B10030AA8A /* GCWebRequest.h */,
+				424C26B0272ED6FB00943DE2 /* GCWebRequestCache.swift */,
 				4226B4271F65E2ED009E1104 /* GCWebRequestStandard.h */,
 				4226B4281F65E2ED009E1104 /* GCWebRequestStandard.m */,
 				428FF79B15FB412C007A88FA /* GCWebConnect.h */,
@@ -5518,6 +5523,7 @@
 				422FAF9219A1DD6000D09773 /* GCFieldsCalculatedFromTrack.m in Sources */,
 				422FAF9319A1DD6000D09773 /* GCStravaActivityListParser.m in Sources */,
 				424340FE1B741652001E22BB /* GCActivity+CSSearch.m in Sources */,
+				424C26B3272ED6FB00943DE2 /* GCWebRequestCache.swift in Sources */,
 				42BFC2561DCF50FB00EAD40E /* GCGarminRequestModernSearch.m in Sources */,
 				42843EE824AD20C400E60609 /* GCStatsCalendarAggregationConfig.m in Sources */,
 				42E1A74F24277FF9006C868A /* GCActivity+BestRolling.m in Sources */,
@@ -5805,6 +5811,7 @@
 				426CC4711BAEB9920033978C /* GCAppActions.m in Sources */,
 				42804DEB16D5215D009E4EEF /* GCActivity+CalculatedLaps.m in Sources */,
 				4202638B261B6C27005D36A2 /* GCActivityTypeSelection.swift in Sources */,
+				424C26B1272ED6FB00943DE2 /* GCWebRequestCache.swift in Sources */,
 				42CE39461CA680E900919292 /* GCDerivedGroupedSeries.m in Sources */,
 				4255765F16D8C8D10080F8CE /* GCActivityMetaValue.m in Sources */,
 				4255766316D8CA850080F8CE /* GCActivityCalculatedValue.m in Sources */,
@@ -5978,6 +5985,7 @@
 				42BD329D258BC856004D5E0F /* GCSettingsBugReport.swift in Sources */,
 				42B5E26A1BA5B216000FAE4E /* GCHealthKitWorkoutParser.m in Sources */,
 				42B5E26C1BA5B216000FAE4E /* GCHealthKitDayDetailParser.m in Sources */,
+				424C26B2272ED6FB00943DE2 /* GCWebRequestCache.swift in Sources */,
 				42B5E26D1BA5B216000FAE4E /* GCHealthKitRequest.m in Sources */,
 				42ABD30D241CE31F00D805DF /* GCConnectStatsStatus.m in Sources */,
 				42EA5BDE2066EB0200F4617B /* GCGarminRequestModernActivityTypes.m in Sources */,

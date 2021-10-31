@@ -108,7 +108,7 @@
             }else{
                 RZLog(RZLogInfo, @"organizer not yet loaded, download and cache");
             }
-            [self addRequest:RZReturnAutorelease([[GCConnectStatsRequestBackgroundSearch alloc] initWithRequestMode:mode])];
+            [self addRequest:RZReturnAutorelease([[GCConnectStatsRequestBackgroundSearch alloc] initWithRequestMode:mode cacheDb:[GCAppGlobal db]])];
         });
         rv = true;
     }

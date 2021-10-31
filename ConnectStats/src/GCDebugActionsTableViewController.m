@@ -124,11 +124,11 @@
 #pragma mark - Actions
 
 -(void)actionStartBackgroundDownloadAndCache{
-    [[GCAppGlobal web] addRequest:RZReturnAutorelease([[GCConnectStatsRequestBackgroundSearch alloc] initWithRequestMode:gcRequestModeDownloadAndCache])];
+    [[GCAppGlobal web] addRequest:RZReturnAutorelease([[GCConnectStatsRequestBackgroundSearch alloc] initWithRequestMode:gcRequestModeDownloadAndCache cacheDb:[GCAppGlobal db]])];
 }
 
 -(void)actionStartBackgroundProcessCache{
-    [[GCAppGlobal web] addRequest:RZReturnAutorelease([[GCConnectStatsRequestBackgroundSearch alloc] initWithRequestMode:gcRequestModeProcessCache])];
+    [[GCAppGlobal web] addRequest:RZReturnAutorelease([[GCConnectStatsRequestBackgroundSearch alloc] initWithRequestMode:gcRequestModeProcessCache cacheDb:[GCAppGlobal db]])];
 }
 
 

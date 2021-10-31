@@ -28,7 +28,7 @@
 #import "GCTestCase.h"
 #import "GCTestsHelper.h"
 #import "GCAppGlobal.h"
-
+#import "ConnectStats-Swift.h"
 @interface GCTestCase  ()
 @property (nonatomic,retain) GCTestsHelper * helper;
 @end
@@ -70,6 +70,7 @@
     [db open];
     [GCActivitiesOrganizer ensureDbStructure:db];
     [GCHealthOrganizer ensureDbStructure:db];
+    [GCConnectStatsRequestRegisterNotifications ensureDbStructureWithDb:db];
     GCActivitiesOrganizer * organizer = [[[GCActivitiesOrganizer alloc] initTestModeWithDb:db] autorelease];
     GCHealthOrganizer * health = [[[GCHealthOrganizer alloc] initTestModeWithDb:db andThread:nil] autorelease];
     organizer.health = health;
