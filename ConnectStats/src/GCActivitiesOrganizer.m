@@ -112,7 +112,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 }
 
 -(GCActivitiesOrganizer*)initTestModeMinimumWithDb:(FMDatabase*)aDb{
-    return [self initTestModeWithDb:aDb loadDetails:false loadMinimum:false];
+    return [self initTestModeWithDb:aDb loadDetails:false loadMinimum:true];
 }
 
 -(GCActivitiesOrganizer*)initTestModeWithDb:(FMDatabase*)aDb loadDetails:(BOOL)loadDetails loadMinimum:(BOOL)minimum {

@@ -1103,6 +1103,7 @@
         }
     }
 
+    // ==== Test background download and process
     // now delete one fit activity, to make sure background reload will bring it back
     NSString * deletedActivityId = save_fit.allKeys.firstObject;
     [organizer_light deleteActivityId:deletedActivityId];
@@ -1117,7 +1118,7 @@
         }
     }
     // Do the background refresh, without details loaded, to simulate background refresh
-    [GCConnectStatsRequestBackgroundSearch testWithOrganizer:organizer_light path:bundlePath];
+    [GCConnectStatsRequestBackgroundSearch testWithOrganizer:organizer_light path:bundlePath mode:gcRequestModeDownloadAndProcess];
     
     // Right now activity was reconstructed from fit
     GCActivity * current = [organizer_light activityForId:deletedActivityId];
@@ -1160,6 +1161,48 @@
         }
         XCTAssertEqual(after.summaryData.count,before.count, @"%@ after full reload has all information", after);
     }
+    
+    // ==== Test cache
+    // Now try to do the same exercise fully in backgorund without anything loaded and in two step
+    // delete one fit activity, reload minimum, save cache, reload details, process cache
+    
+    [organizer_light deleteActivityId:deletedActivityId];
+    // reload it
+    organizer_light = RZReturnAutorelease([[GCActivitiesOrganizer alloc] initTestModeMinimumWithDb:db]);
+    XCTAssertEqual(organizer_light.countOfActivities, 0, "Started with no activities loaded");
+    XCTAssertFalse( organizer_light.fullyLoaded );
+    // Do the background refresh, without details loaded, to simulate background refresh
+    [GCConnectStatsRequestBackgroundSearch testWithOrganizer:organizer_light path:bundlePath mode:gcRequestModeDownloadAndCache];
+
+    // Nothing got updated
+    XCTAssertEqual(organizer_light.countOfActivities, 0, "Started with no activities loaded");
+    XCTAssertFalse( organizer_light.fullyLoaded );
+
+    // Now load
+    [organizer_light ensureSummaryLoaded];
+    [organizer_light ensureDetailsLoaded];
+
+    for (NSString * activityId in save_fit) {
+        if( [activityId isEqualToString:deletedActivityId]){
+            XCTAssertNil([organizer_light activityForId:activityId]);
+        }else{
+            GCActivity * after  = [organizer_light activityForId:activityId];
+            before = save_gar[activityId];
+            XCTAssertEqual(after.summaryData.count,before.count,@"%@ summary loaded same details", after);
+        }
+    }
+
+    // Now process cache
+    [GCConnectStatsRequestBackgroundSearch testWithOrganizer:organizer_light path:bundlePath mode:gcRequestModeProcessCache];
+    
+    // Right now activity was reconstructed properly
+    current = [organizer_light activityForId:deletedActivityId];
+    before = nil;
+    
+    XCTAssertNotNil(current);
+    before = save_cs[deletedActivityId];
+    XCTAssertEqual(current.summaryData.count,before.count, @"In memory reconstruction match original");
+
     
     [exampleFieldValue release];
 }

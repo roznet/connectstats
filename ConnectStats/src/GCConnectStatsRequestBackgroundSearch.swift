@@ -89,15 +89,16 @@ class GCConnectStatsRequestBackgroundSearch: GCConnectStatsRequest {
         }
     }
     
+    @discardableResult
     func cache(retrieve classname : String, cb : (Data)->Void) -> Bool{
         let db = GCAppGlobal.db()
         var notificationid : Int? = nil
         var rv = false
-        if let res = db.executeQuery("SELECT * FROM gc_notification_cache WHERE processed = NULL AND request_class = ? ORDER BY received LIMIT 1", withArgumentsIn: []) {
+        if let res = db.executeQuery("SELECT * FROM gc_notification_cache WHERE processed IS NULL AND request_class = ? ORDER BY received LIMIT 1", withArgumentsIn: [classname]) {
             if ( res.next() ){
                 notificationid = Int(res.longLongInt(forColumn: "notification_id"))
                 if let filename = res.string(forColumn: "cache_file"),
-                   let data = try? Data(contentsOf: URL(fileURLWithPath: filename)) {
+                   let data = try? Data(contentsOf: URL(fileURLWithPath: RZFileOrganizer.writeableFilePath(filename))) {
                     cb(data)
                     rv = true
                 }
@@ -231,5 +232,52 @@ class GCConnectStatsRequestBackgroundSearch: GCConnectStatsRequest {
             }
         }
         return organizer
+    }
+    
+    @discardableResult
+    @objc static func test(organizer: GCActivitiesOrganizer, path : String, mode: gcRequestMode) -> GCActivitiesOrganizer{
+        let search = GCConnectStatsRequestBackgroundSearch(requestMode: .processCache)
+        
+        var isDirectory : ObjCBool = false
+        
+        if FileManager.default.fileExists(atPath:path, isDirectory: &isDirectory) {
+            var fileURL = URL(fileURLWithPath: path)
+            if isDirectory.boolValue {
+                fileURL.appendPathComponent(search.searchFileName(page: 0))
+            }
+            if( mode == .processCache){
+                search.cache(retrieve: String(describing: type(of: search)) ){
+                    data in
+                    let parser = GCConnectStatsSearchJsonParser(data: data)
+                    if parser.success {
+                        search.loadTracks = 0
+                        search.addActivities(from: parser, to: organizer)
+                    }
+                }
+            }else{
+                if let data = try? Data(contentsOf: fileURL) {
+                    switch mode {
+                    case .downloadAndCache:
+                        search.theString = String(data: data, encoding: .utf8)
+                        search.processSaveDataToCache()
+                    case .downloadAndProcess:
+                        let parser = GCConnectStatsSearchJsonParser(data: data)
+                        if parser.success {
+                            search.loadTracks = 0
+                            search.addActivities(from: parser, to: organizer)
+                        }
+                        if isDirectory.boolValue && search.addedActivities.count > 0 {
+                            for act in search.addedActivities {
+                                GCConnectStatsRequestBackgroundFitFile.test(activity: act, path: path)
+                            }
+                        }
+                    default:
+                        break
+                    }
+                }
+            }
+        }
+        return organizer
+        
     }
 }
