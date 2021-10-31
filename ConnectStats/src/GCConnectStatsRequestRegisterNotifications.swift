@@ -140,5 +140,4 @@ class GCConnectStatsRequestRegisterNotifications : GCConnectStatsRequest {
             }
         }
     }
-
 }
