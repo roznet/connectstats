@@ -160,7 +160,7 @@ class GCConnectStatsRequestBackgroundSearch: GCConnectStatsRequest {
             RZSLog.info("Found new activities, background downloading trackpoints for \(addedActivities.count) activities")
             for act in addedActivities {
                 if self.loadTracks > 0 {
-                    let req = GCConnectStatsRequestBackgroundFitFile(activity: act, requestMode: self.requestMode)
+                    let req = GCConnectStatsRequestBackgroundFitFile(activity: act, requestMode: self.requestMode, cacheDb: organizer.db)
                     GCAppGlobal.web().add(req)
                     self.loadTracks -= 1
                 }

@@ -369,7 +369,6 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
             }else{
                 [self downloadNoUrl];
             }
-
         }else{
             self.remoteDownload = RZReturnAutorelease([[RZRemoteDownload alloc] initWithURLRequest:preparedUrlRequest andDelegate:self]);
         }
