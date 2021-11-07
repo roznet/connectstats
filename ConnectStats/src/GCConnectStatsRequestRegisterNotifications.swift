@@ -136,4 +136,5 @@ class GCConnectStatsRequestRegisterNotifications : GCConnectStatsRequest {
     @objc static func ensureDbStructure(db : FMDatabase) {
         GCWebRequestCache.ensureDbStructure(db: db)
     }
+    
 }

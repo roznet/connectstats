@@ -79,7 +79,7 @@ class GCConnectStatsRequestBackgroundFitFile: GCConnectStatsRequestFitFile {
             }
             self.stage = gcRequestStage.parsing
             GCAppGlobal.worker().async {
-                self.processParse(filename)
+                self.processParseData(theData, filePath: fileurl.path)
             }
 
         case .downloadAndCache:
@@ -94,7 +94,15 @@ class GCConnectStatsRequestBackgroundFitFile: GCConnectStatsRequestFitFile {
 
     // this is only called if noURL/no data, for cache processing
     @objc override func process(_ theString: String?, encoding: UInt, andDelegate delegate: GCWebRequestDelegate) {
-        
+        let searchMore = self.cache.retrieve() {
+            data in
+            self.processParseData(data, filePath: self.fitFileName)
+            self.processDone()
+            return true
+        }
+        if( !searchMore ){
+            self.processDone()
+        }
     }
     
     @objc override var nextReq: GCWebRequestStandard? {
@@ -106,7 +114,7 @@ class GCConnectStatsRequestBackgroundFitFile: GCConnectStatsRequestFitFile {
     }
 
     @discardableResult
-    @objc static func test(activity: GCActivity, path : String) -> GCActivity?{
+    @objc static func test(activity: GCActivity, path : String, mode:gcRequestMode) -> GCActivity?{
         let req = GCConnectStatsRequestBackgroundFitFile(activity: activity, requestMode:.processCache, cacheDb: activity.db!)
         
         var isDirectory : ObjCBool = false

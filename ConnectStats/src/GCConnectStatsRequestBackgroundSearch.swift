@@ -195,7 +195,7 @@ class GCConnectStatsRequestBackgroundSearch: GCConnectStatsRequest {
                 }
                 if isDirectory.boolValue && search.addedActivities.count > 0 {
                     for act in search.addedActivities {
-                        GCConnectStatsRequestBackgroundFitFile.test(activity: act, path: path)
+                        GCConnectStatsRequestBackgroundFitFile.test(activity: act, path: path, mode: .downloadAndProcess)
                     }
                 }
             }
@@ -238,7 +238,7 @@ class GCConnectStatsRequestBackgroundSearch: GCConnectStatsRequest {
                         }
                         if isDirectory.boolValue && search.addedActivities.count > 0 {
                             for act in search.addedActivities {
-                                GCConnectStatsRequestBackgroundFitFile.test(activity: act, path: path)
+                                GCConnectStatsRequestBackgroundFitFile.test(activity: act, path: path, mode: .downloadAndProcess)
                             }
                         }
                     default:
