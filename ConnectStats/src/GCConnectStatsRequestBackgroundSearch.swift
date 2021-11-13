@@ -177,33 +177,6 @@ class GCConnectStatsRequestBackgroundSearch: GCConnectStatsRequest {
     }
     
     @discardableResult
-    @objc static func test(organizer: GCActivitiesOrganizer, path : String) -> GCActivitiesOrganizer{
-        let search = GCConnectStatsRequestBackgroundSearch(requestMode: .processCache, cacheDb: organizer.db)
-        
-        var isDirectory : ObjCBool = false
-        
-        if FileManager.default.fileExists(atPath:path, isDirectory: &isDirectory) {
-            var fileURL = URL(fileURLWithPath: path)
-            if isDirectory.boolValue {
-                fileURL.appendPathComponent(search.searchFileName(page: 0))
-            }
-            if let data = try? Data(contentsOf: fileURL) {
-                let parser = GCConnectStatsSearchJsonParser(data: data)
-                if parser.success {
-                    search.loadTracks = 0
-                    search.addActivities(from: parser, to: organizer)
-                }
-                if isDirectory.boolValue && search.addedActivities.count > 0 {
-                    for act in search.addedActivities {
-                        GCConnectStatsRequestBackgroundFitFile.test(activity: act, path: path, mode: .downloadAndProcess)
-                    }
-                }
-            }
-        }
-        return organizer
-    }
-    
-    @discardableResult
     @objc static func test(organizer: GCActivitiesOrganizer, path : String, mode: gcRequestMode) -> GCActivitiesOrganizer{
         let search = GCConnectStatsRequestBackgroundSearch(requestMode: .processCache, cacheDb: organizer.db)
         
