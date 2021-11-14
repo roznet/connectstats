@@ -149,7 +149,7 @@ extension GCSettingsBugReport {
         let device = UIDevice()
         let deviceGuru = DeviceGuru()
         let commonid = GCAppGlobal.configGet(CONFIG_BUG_COMMON_ID, defaultValue: kBugNoCommonId) ?? kBugNoCommonId
-        
+
         var rv : [String:String] = [
             "systemName" : device.systemName,
             "systemVersion": device.systemVersion,
@@ -159,8 +159,18 @@ extension GCSettingsBugReport {
             "platformString": deviceGuru.hardwareDescription() ?? "Unknown Device",
             "commonid" : commonid
         ]
-        extra.forEach { (k,v) in rv[k] = v }
         
+        if let buildString = buildString,
+            let versionString = versionString {
+            if buildString.hasPrefix(versionString) {
+                rv["version"] = buildString
+            }else{
+                rv["version"] = "\(versionString) (\(buildString))"
+            }
+        }
+
+        extra.forEach { (k,v) in rv[k] = v }
+
         if( commonid != kBugNoCommonId ){
             RZSLog.info("Had previous bug report: id=\(commonid)")
         }
