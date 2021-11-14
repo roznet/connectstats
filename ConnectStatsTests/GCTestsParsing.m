@@ -62,6 +62,7 @@
 
 -(void)testEnvironementSetup{
     XCTAssertNotNil([NSProcessInfo processInfo].environment[@"RZ_REFERENCE_OBJECT_DIR"], @"Environment setup right");
+    NSError * error = nil;
     
     BOOL report = false;
     NSString * path = [NSProcessInfo processInfo].environment[@"RZ_REFERENCE_OBJECT_DIR"];
@@ -69,7 +70,6 @@
         report = true;
         NSLog(@"RZ_REFERENCE_OBJECT_DIR not set");
     }else{
-        NSError * error = nil;
         NSArray<NSString*>*files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:&error];
         if( files ){
             NSLog(@"Success found %@ files at RZ_REFERENCE_OBJECT_DIR=%@", @(files.count), path);
@@ -78,7 +78,28 @@
             report = true;
         }
     }
-    
+    NSString * filepath = [@__FILE__ stringByDeletingLastPathComponent];
+    NSLog( @"From self: %@", filepath);
+    NSArray<NSString*>*files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:filepath error:&error];
+    if( files ){
+        for (NSString * one in files) {
+            NSString * full = [filepath stringByAppendingPathComponent:one];
+            NSLog( @"%@", full);
+            if( [one isEqualToString:@"samples"]){
+                NSArray<NSString*>*samplefiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:full error:&error];
+                if( samplefiles){
+                    for (NSString * sub in samplefiles) {
+                        NSString * fullsample = [full stringByAppendingPathComponent:sub];
+                        NSLog( @"%@", fullsample);
+                    }
+                }else{
+                    NSLog(@"Failed %@ %@", full, error);
+                }
+            }
+        }
+    }else{
+        NSLog(@"Failed %@ %@", filepath, error);
+    }
     if( report ){
         NSLog(@"From %@", @__FILE__);
         for (NSString * var in [NSProcessInfo processInfo].environment) {
