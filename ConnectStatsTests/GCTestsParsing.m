@@ -60,6 +60,15 @@
 
 #pragma mark - Parse Single Activities
 
+-(void)testEnvironementSetup{
+    XCTAssertNotNil([NSProcessInfo processInfo].environment[@"RZ_REFERENCE_OBJECT_DIR"], @"Environment setup right");
+    
+    if( [NSProcessInfo processInfo].environment[@"RZ_REFERENCE_OBJECT_DIR"] == nil ){
+        for (NSString * var in [NSProcessInfo processInfo].environment) {
+            NSLog(@"ENV[%@] = %@", var, [NSProcessInfo processInfo].environment[var] );
+        }
+    }
+}
 
 -(void)testActivityParsingModern{
     // Add test for
