@@ -63,7 +63,24 @@
 -(void)testEnvironementSetup{
     XCTAssertNotNil([NSProcessInfo processInfo].environment[@"RZ_REFERENCE_OBJECT_DIR"], @"Environment setup right");
     
-    if( [NSProcessInfo processInfo].environment[@"RZ_REFERENCE_OBJECT_DIR"] == nil ){
+    BOOL report = false;
+    NSString * path = [NSProcessInfo processInfo].environment[@"RZ_REFERENCE_OBJECT_DIR"];
+    if( path == nil ){
+        report = true;
+        NSLog(@"RZ_REFERENCE_OBJECT_DIR not set");
+    }else{
+        NSError * error = nil;
+        NSArray<NSString*>*files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:&error];
+        if( files ){
+            NSLog(@"Success found %@ files at RZ_REFERENCE_OBJECT_DIR=%@", @(files.count), path);
+        }else{
+            NSLog(@"Failed to find files at RZ_REFERENCE_OBJECT_DIR=%@ with error %@", path, error);
+            report = true;
+        }
+    }
+    
+    if( report ){
+        NSLog(@"From %@", @__FILE__);
         for (NSString * var in [NSProcessInfo processInfo].environment) {
             NSLog(@"ENV[%@] = %@", var, [NSProcessInfo processInfo].environment[var] );
         }
