@@ -95,13 +95,13 @@ class FITAppGlobal {
         return ""
     }
     static func setCurrentLoginName(_ name : String){
-        if !self.shared.keychain.set(name, forKey: ConfigParameters.loginName.rawValue) {
+        if !self.shared.keychain.set(name, forKey: ConfigParameters.loginName.rawValue, withAccess: .accessibleAfterFirstUnlock) {
             RZSLog.error( "failed to save username" )
         }
     }
     
     static func setCurrentPassword(_ name : String){
-        if !self.shared.keychain.set(name, forKey: ConfigParameters.password.rawValue) {
+        if !self.shared.keychain.set(name, forKey: ConfigParameters.password.rawValue, withAccess: .accessibleAfterFirstUnlock) {
             RZSLog.error("failed to save password")
         }
     }
