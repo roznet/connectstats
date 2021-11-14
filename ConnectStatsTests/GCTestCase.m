@@ -59,8 +59,13 @@
     [super tearDown];
 }
 
-+(BOOL)recordModeGlobal{
-    return false;
+-(RZRegressionManager*)regressionManager{
+    
+    RZRegressionManager * manager = [RZRegressionManager managerForTestClass:[self class]
+                                                               directoryName:@"ReferenceObjects"
+                                                           referenceFilePath:[RZFileOrganizer bundleFilePath:@"ReferenceObjects" forClass:[self class]]];
+    manager.recordMode = false;
+    return manager;
 }
 
 -(GCActivitiesOrganizer*)createEmptyOrganizer:(NSString*)dbname{

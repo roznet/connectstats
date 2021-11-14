@@ -1,5 +1,5 @@
 #!/bin/sh
 
-brew install cocoapods
+HOMEBREW_NO_AUTO_UPDATE=1 brew install cocoapods
 
 pod install

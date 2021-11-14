@@ -666,8 +666,7 @@
 
     [perfAnalysis calculate];
     
-    RZRegressionManager * manager = [RZRegressionManager managerForTestClass:[self class]];
-    manager.recordMode = [GCTestCase recordModeGlobal];
+    RZRegressionManager * manager = [self regressionManager];
     //manager.recordMode = true;
     NSSet<Class>*classes =[NSSet setWithObjects:[GCStatsDataSerieWithUnit class], nil];
     NSError * error = nil;

@@ -60,54 +60,6 @@
 
 #pragma mark - Parse Single Activities
 
--(void)testEnvironementSetup{
-    XCTAssertNotNil([NSProcessInfo processInfo].environment[@"RZ_REFERENCE_OBJECT_DIR"], @"Environment setup right");
-    NSError * error = nil;
-    
-    BOOL report = false;
-    NSString * path = [NSProcessInfo processInfo].environment[@"RZ_REFERENCE_OBJECT_DIR"];
-    if( path == nil ){
-        report = true;
-        NSLog(@"RZ_REFERENCE_OBJECT_DIR not set");
-    }else{
-        NSArray<NSString*>*files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:path error:&error];
-        if( files ){
-            NSLog(@"Success found %@ files at RZ_REFERENCE_OBJECT_DIR=%@", @(files.count), path);
-        }else{
-            NSLog(@"Failed to find files at RZ_REFERENCE_OBJECT_DIR=%@ with error %@", path, error);
-            report = true;
-        }
-    }
-    NSString * filepath = [@__FILE__ stringByDeletingLastPathComponent];
-    NSLog( @"From self: %@", filepath);
-    NSArray<NSString*>*files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:filepath error:&error];
-    if( files ){
-        for (NSString * one in files) {
-            NSString * full = [filepath stringByAppendingPathComponent:one];
-            NSLog( @"%@", full);
-            if( [one isEqualToString:@"samples"]){
-                NSArray<NSString*>*samplefiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:full error:&error];
-                if( samplefiles){
-                    for (NSString * sub in samplefiles) {
-                        NSString * fullsample = [full stringByAppendingPathComponent:sub];
-                        NSLog( @"%@", fullsample);
-                    }
-                }else{
-                    NSLog(@"Failed %@ %@", full, error);
-                }
-            }
-        }
-    }else{
-        NSLog(@"Failed %@ %@", filepath, error);
-    }
-    if( report ){
-        NSLog(@"From %@", @__FILE__);
-        for (NSString * var in [NSProcessInfo processInfo].environment) {
-            NSLog(@"ENV[%@] = %@", var, [NSProcessInfo processInfo].environment[var] );
-        }
-    }
-}
-
 -(void)testActivityParsingModern{
     // Add test for
     NSArray * activityIds = @[
@@ -123,8 +75,7 @@
         @"2545022458", // in fit_files: running, 2018, running pwer from garmin, fit
     ];
     
-    RZRegressionManager * manager = [RZRegressionManager managerForTestClass:[self class]];
-    manager.recordMode = [GCTestCase recordModeGlobal];
+    RZRegressionManager * manager = [self regressionManager];
     //manager.recordMode = true;
     
     NSSet<Class>*classes =[NSSet setWithObjects:[GCStatsDataSerieWithUnit class], nil];
@@ -186,7 +137,7 @@
     [modernAct saveToDb:db];
     
     XCTAssertGreaterThan(modernAct.trackpoints.count, 1);
-    BOOL recordMode = [GCTestCase recordModeGlobal];
+    BOOL recordMode = false;
     //recordMode = true;
     //[[modernAct exportCsv] writeToFile:[RZFileOrganizer writeableFilePath:@"t.csv"] atomically:YES encoding:NSUTF8StringEncoding error:nil];
     [self compareStatsCheckSavedFor:modernAct identifier:@"modernAct" cmd:_cmd recordMode:recordMode];
@@ -226,7 +177,7 @@
         [parsedAct saveToDb:db];
         
         XCTAssertGreaterThan(parsedAct.trackpoints.count, 1);
-        bool recordMode = [GCTestCase recordModeGlobal];
+        bool recordMode = false;
         //recordMode = true;
         
         NSString * identifier = [NSString stringWithFormat:@"parse_reload_%@", activityId];
@@ -702,8 +653,7 @@
             }
         }
     }
-    RZRegressionManager * manager = [RZRegressionManager managerForTestClass:[self class]];
-    manager.recordMode = [GCTestCase recordModeGlobal];
+    RZRegressionManager * manager = [self regressionManager];
     //manager.recordMode = true;
     
     NSError * error = nil;
@@ -774,8 +724,7 @@
     
     NSDictionary * rv = [organizer fieldsSeries:@[ hrField, paceField, hf] matching:nil useFiltered:NO ignoreMode:gcIgnoreModeActivityFocus];
     
-    RZRegressionManager * manager = [RZRegressionManager managerForTestClass:[self class]];
-    manager.recordMode = [GCTestCase recordModeGlobal];
+    RZRegressionManager * manager = [self regressionManager];
     //manager.recordMode = true;
     
     NSError * error = nil;
@@ -1458,7 +1407,7 @@
 }
 
 -(void)compareStatsCheckSavedFor:(GCActivity*)act identifier:(NSString*)label cmd:(SEL)sel recordMode:(BOOL)record{
-    RZRegressionManager * manager = [RZRegressionManager managerForTestClass:[self class]];
+    RZRegressionManager * manager = [self regressionManager];
     manager.recordMode = record;
 
     NSSet<Class>*classes = [NSSet setWithObjects:[NSDictionary class], [GCField class], [GCTrackFieldChoiceHolder class], [NSArray class], nil];

@@ -171,8 +171,7 @@
             XCTAssertNotEqualObjects(check, config);
         }
     }
-    RZRegressionManager * manager = [RZRegressionManager managerForTestClass:[self class]];
-    manager.recordMode = [GCTestCase recordModeGlobal];
+    RZRegressionManager * manager = [self regressionManager];
     //manager.recordMode = true;
     
     NSArray * generated = [configs arrayByMappingBlock:^(GCStatsMultiFieldConfig * config) {

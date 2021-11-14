@@ -74,11 +74,6 @@
             value = "1"
             isEnabled = "YES">
          </EnvironmentVariable>
-         <EnvironmentVariable
-            key = "RZ_REFERENCE_OBJECT_DIR"
-            value = "$(SOURCE_ROOT)/ConnectStatsTests/samples/ReferenceObjects"
-            isEnabled = "YES">
-         </EnvironmentVariable>
       </EnvironmentVariables>
    </LaunchAction>
    <ProfileAction
