@@ -84,6 +84,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)versionSummary;
 
 -(void)settingsUpdateCheckPostStart;
+
 @end
 
 NS_ASSUME_NONNULL_END

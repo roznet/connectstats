@@ -40,6 +40,7 @@
 #import "GCWeather.h"
 #import "GCActivity+CalculatedTracks.h"
 #import "GCConnectStatsStatus.h"
+#import "GCService.h"
 
 
 static BOOL connectStatsVersion = false;
@@ -537,7 +538,39 @@ void checkVersion(void){
             [[self.actionDelegate currentNavigationController] presentViewController:alert animated:YES completion:nil];
         }
     }
+
     
+    if( needToSaveSettings ){
+        [self saveSettings];
+    }
+
+}
+
+-(void)settingsUpdateBeforeFirstUpdate{
+    BOOL needToSaveSettings = false;
+    
+    // don't use isFirstTimeForFeature as it's possible this is called in the background and will not succeed
+    if( [self checkIfForFeatureIsRequired:@"FIX_KEY_CHAIN_AFTER_FIRST_UNLOCK"]){
+        BOOL succeeded = false;
+        BOOL atLeastOne = false;
+        NSArray<GCService*>* services = @[ [GCService service:gcServiceGarmin], [GCService service:gcServiceConnectStats] ];
+        for (GCService * service in services) {
+            if( [[GCAppGlobal profile] serviceEnabled:service.service] ){
+                atLeastOne = true;
+                NSString * pwd = [[GCAppGlobal profile] currentPasswordForService:service.service];
+                if( pwd && pwd.length > 0){
+                    [[GCAppGlobal profile] setPassword:pwd forService:service.service];
+                    succeeded = true;
+                    RZLog(RZLogInfo, @"Updated password keychain after first unlock for %@", service);
+                }
+            }
+        }
+        
+        if( !atLeastOne || succeeded){
+            // Will save feature as seen
+            [self isFirstTimeForFeature:@"FIX_KEY_CHAIN_AFTER_FIRST_UNLOCK"];
+        }
+    }
     if( needToSaveSettings ){
         [self saveSettings];
     }
@@ -639,6 +672,12 @@ void checkVersion(void){
     }
 }
 
+
+-(BOOL)checkIfForFeatureIsRequired:(NSString*)feature{
+    NSDictionary * dict = self.settings[CONFIG_FEATURES_SEEN];
+    return dict[feature] == nil;
+}
+
 -(BOOL)isFirstTimeForFeature:(NSString*)feature{
     BOOL rv = false;
     NSDictionary * dict = self.settings[CONFIG_FEATURES_SEEN];
@@ -669,6 +708,8 @@ void checkVersion(void){
     }
 }
 -(void)searchRecentActivities{
+    
+    [self settingsUpdateBeforeFirstUpdate];
     [self.web servicesSearchRecentActivities];
 }
 

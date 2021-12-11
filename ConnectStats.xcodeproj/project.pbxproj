@@ -385,6 +385,7 @@
 		4248ED9B1DCFFB5600254216 /* GCFieldCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 422B343C1CA7321200B345CD /* GCFieldCache.m */; };
 		4248ED9C1DCFFC6C00254216 /* GCFieldsCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 42018E9518F1877E0089AB7A /* GCFieldsCategory.m */; };
 		4248ED9D1DCFFD2400254216 /* GCFieldsForCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 4212088F1C6E860700E0470D /* GCFieldsForCategory.m */; };
+		424B19652761232E00660A04 /* GCSettingsLogTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424B19642761232E00660A04 /* GCSettingsLogTableViewController.swift */; };
 		424B7F2A16CB049A000B38AD /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 424B7F2916CB049A000B38AD /* Security.framework */; };
 		424B7F4816CFBE30000B38AD /* GCSettingsHelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 424B7F4716CFBE2F000B38AD /* GCSettingsHelpViewController.m */; };
 		424BDAB925E2DA7C00EC7DBE /* GCActivity+Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424BDAB825E2DA7C00EC7DBE /* GCActivity+Location.swift */; };
@@ -1495,6 +1496,7 @@
 		42461D221922D169001B03C7 /* GCStravaActivityLapsParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCStravaActivityLapsParser.m; path = src/GCStravaActivityLapsParser.m; sourceTree = "<group>"; };
 		4248DC891ED1E6ED00470DEB /* FITDataViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FITDataViewController.swift; path = src/FITDataViewController.swift; sourceTree = "<group>"; };
 		4248ED991DCFF6E100254216 /* FitFileExplorer-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "FitFileExplorer-Prefix.pch"; path = "src/FitFileExplorer-Prefix.pch"; sourceTree = "<group>"; };
+		424B19642761232E00660A04 /* GCSettingsLogTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GCSettingsLogTableViewController.swift; path = src/GCSettingsLogTableViewController.swift; sourceTree = "<group>"; };
 		424B7F2916CB049A000B38AD /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		424B7F4616CFBE2F000B38AD /* GCSettingsHelpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCSettingsHelpViewController.h; path = src/GCSettingsHelpViewController.h; sourceTree = "<group>"; };
 		424B7F4716CFBE2F000B38AD /* GCSettingsHelpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCSettingsHelpViewController.m; path = src/GCSettingsHelpViewController.m; sourceTree = "<group>"; };
@@ -2330,6 +2332,7 @@
 			children = (
 				42F23B37183D7E6D004918BB /* GCSettingsLogViewController.h */,
 				42F23B38183D7E6D004918BB /* GCSettingsLogViewController.m */,
+				424B19642761232E00660A04 /* GCSettingsLogTableViewController.swift */,
 				42E186ED16AB620900D4513B /* GCSettingsBugReportViewController.h */,
 				42E186EE16AB620A00D4513B /* GCSettingsBugReportViewController.m */,
 				4235DF9916558F3C00DE316A /* GCSettingsCacheManagementViewController.h */,
@@ -5696,6 +5699,7 @@
 				42959CF018D9016200C0B841 /* GCStravaActivityStreamsParser.m in Sources */,
 				42D4CA8224952616003F3AB7 /* GCStatsDerivedHistoryViewController.m in Sources */,
 				4231A2B81603BF9C00C02D79 /* GCActivityDetailViewController.m in Sources */,
+				424B19652761232E00660A04 /* GCSettingsLogTableViewController.swift in Sources */,
 				423493FF160479FA00A770D6 /* GCHistoryFieldDataSerie.m in Sources */,
 				42D8BECC256FD20E0051903E /* GCActivityOrganizedFields.swift in Sources */,
 				426A7F4A1C426A95000C5BCC /* GCTrackPointExtraIndex.m in Sources */,
