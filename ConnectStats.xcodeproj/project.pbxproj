@@ -386,6 +386,12 @@
 		4248ED9C1DCFFC6C00254216 /* GCFieldsCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 42018E9518F1877E0089AB7A /* GCFieldsCategory.m */; };
 		4248ED9D1DCFFD2400254216 /* GCFieldsForCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 4212088F1C6E860700E0470D /* GCFieldsForCategory.m */; };
 		424B19652761232E00660A04 /* GCSettingsLogTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424B19642761232E00660A04 /* GCSettingsLogTableViewController.swift */; };
+		424B1968276625A400660A04 /* GCLogEntryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424B1966276625A400660A04 /* GCLogEntryTableViewCell.swift */; };
+		424B1969276625A400660A04 /* GCLogEntryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424B1966276625A400660A04 /* GCLogEntryTableViewCell.swift */; };
+		424B196A276625A400660A04 /* GCLogEntryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424B1966276625A400660A04 /* GCLogEntryTableViewCell.swift */; };
+		424B196B276625A400660A04 /* GCLogEntryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 424B1967276625A400660A04 /* GCLogEntryTableViewCell.xib */; };
+		424B196C276625A400660A04 /* GCLogEntryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 424B1967276625A400660A04 /* GCLogEntryTableViewCell.xib */; };
+		424B196D276625A400660A04 /* GCLogEntryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 424B1967276625A400660A04 /* GCLogEntryTableViewCell.xib */; };
 		424B7F2A16CB049A000B38AD /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 424B7F2916CB049A000B38AD /* Security.framework */; };
 		424B7F4816CFBE30000B38AD /* GCSettingsHelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 424B7F4716CFBE2F000B38AD /* GCSettingsHelpViewController.m */; };
 		424BDAB925E2DA7C00EC7DBE /* GCActivity+Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424BDAB825E2DA7C00EC7DBE /* GCActivity+Location.swift */; };
@@ -1497,6 +1503,8 @@
 		4248DC891ED1E6ED00470DEB /* FITDataViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FITDataViewController.swift; path = src/FITDataViewController.swift; sourceTree = "<group>"; };
 		4248ED991DCFF6E100254216 /* FitFileExplorer-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "FitFileExplorer-Prefix.pch"; path = "src/FitFileExplorer-Prefix.pch"; sourceTree = "<group>"; };
 		424B19642761232E00660A04 /* GCSettingsLogTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GCSettingsLogTableViewController.swift; path = src/GCSettingsLogTableViewController.swift; sourceTree = "<group>"; };
+		424B1966276625A400660A04 /* GCLogEntryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GCLogEntryTableViewCell.swift; path = src/GCLogEntryTableViewCell.swift; sourceTree = "<group>"; };
+		424B1967276625A400660A04 /* GCLogEntryTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = GCLogEntryTableViewCell.xib; path = src/GCLogEntryTableViewCell.xib; sourceTree = "<group>"; };
 		424B7F2916CB049A000B38AD /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		424B7F4616CFBE2F000B38AD /* GCSettingsHelpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCSettingsHelpViewController.h; path = src/GCSettingsHelpViewController.h; sourceTree = "<group>"; };
 		424B7F4716CFBE2F000B38AD /* GCSettingsHelpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCSettingsHelpViewController.m; path = src/GCSettingsHelpViewController.m; sourceTree = "<group>"; };
@@ -4292,6 +4300,8 @@
 				42A425DE2556C4E800E4AFBE /* GCCellFieldValueView.swift */,
 				42E04E5725398099005FFD5E /* GCCellRoundedPatternView.swift */,
 				42D5798D25603E3E004A540F /* GCCellFieldValueColumnView.swift */,
+				424B1966276625A400660A04 /* GCLogEntryTableViewCell.swift */,
+				424B1967276625A400660A04 /* GCLogEntryTableViewCell.xib */,
 			);
 			name = Specialized;
 			sourceTree = "<group>";
@@ -4668,6 +4678,7 @@
 				42939CEB23AAD79600D2403A /* fit_map.json in Resources */,
 				422CCE8E1B7EAB7200A4DAEB /* TabBar.xcassets in Resources */,
 				42FC98DC261C6A4D00ACF6E1 /* GCActivityTypeSelectionViewController.xib in Resources */,
+				424B196D276625A400660A04 /* GCLogEntryTableViewCell.xib in Resources */,
 				422FAFD219A1DD6000D09773 /* Media.xcassets in Resources */,
 				42827B6D25FCA8E9003E676A /* Calendar.xcassets in Resources */,
 				4245DC821BE80D0400D5B68E /* Cells.xcassets in Resources */,
@@ -4755,6 +4766,7 @@
 				427B20AB1621B5CF00D5C3C5 /* Localizable.strings in Resources */,
 				423F9FBF19ACCBD60057DB5A /* Media.xcassets in Resources */,
 				42656CEB24CE0129004E9EE6 /* GCStatsMultiFieldConfigViewController.xib in Resources */,
+				424B196B276625A400660A04 /* GCLogEntryTableViewCell.xib in Resources */,
 				42560711169A112E008E9DC3 /* version.plist in Resources */,
 				42827B6B25FCA8E9003E676A /* Calendar.xcassets in Resources */,
 				42939CE923AAD79600D2403A /* fit_map.json in Resources */,
@@ -4932,6 +4944,7 @@
 				42B5E4851BA5BA2D000FAE4E /* strava_list_2.json in Resources */,
 				42C3118624731877004DF872 /* activity_1027746730.json in Resources */,
 				426B95A01C4A49FF00426CD2 /* activitylaps_1008868846.json in Resources */,
+				424B196C276625A400660A04 /* GCLogEntryTableViewCell.xib in Resources */,
 				42C3118924731877004DF872 /* activityweather_1027746730.json in Resources */,
 				42B5E4861BA5BA2D000FAE4E /* strava_list_3.json in Resources */,
 				42B5E4891BA5BA2D000FAE4E /* strava_list_6.json in Resources */,
@@ -5376,6 +5389,7 @@
 				422FAECB19A1DD6000D09773 /* GCGarminLoginSimulatorRequest.m in Sources */,
 				42D8AF261B26001E00ADDD31 /* GCHealthKitWorkoutParser.m in Sources */,
 				422F284220557DD000187478 /* GCField+Convert.m in Sources */,
+				424B196A276625A400660A04 /* GCLogEntryTableViewCell.swift in Sources */,
 				42BFC2671DCF51F100EAD40E /* GCUnitTrainingZone.m in Sources */,
 				422FAECF19A1DD6000D09773 /* GCSettingsReloadViewController.m in Sources */,
 				42A425B72556BF8500E4AFBE /* GCField+Icons.swift in Sources */,
@@ -5700,6 +5714,7 @@
 				42D4CA8224952616003F3AB7 /* GCStatsDerivedHistoryViewController.m in Sources */,
 				4231A2B81603BF9C00C02D79 /* GCActivityDetailViewController.m in Sources */,
 				424B19652761232E00660A04 /* GCSettingsLogTableViewController.swift in Sources */,
+				424B1968276625A400660A04 /* GCLogEntryTableViewCell.swift in Sources */,
 				423493FF160479FA00A770D6 /* GCHistoryFieldDataSerie.m in Sources */,
 				42D8BECC256FD20E0051903E /* GCActivityOrganizedFields.swift in Sources */,
 				426A7F4A1C426A95000C5BCC /* GCTrackPointExtraIndex.m in Sources */,
@@ -6042,6 +6057,7 @@
 				42B5E2971BA5B216000FAE4E /* GCGarminRequest.m in Sources */,
 				42D4CA892496622E003F3AB7 /* GCStatsDerivedAnalysisConfig.m in Sources */,
 				422F284020557DD000187478 /* GCField+Convert.m in Sources */,
+				424B1969276625A400660A04 /* GCLogEntryTableViewCell.swift in Sources */,
 				422CC8831E6ACA1700195414 /* FITFitValueStatistics.swift in Sources */,
 				42A9F54A261A031000669119 /* GCActivityType+Icon.m in Sources */,
 				422DCC8D258A656B000DEE4B /* FITFitEnumMap.m in Sources */,

@@ -41,8 +41,8 @@ class GCSettingsLogTableViewController: UITableViewController {
         let message : String
         let raw : String
         
-        var dateString : String { return "\(self.level) \(self.time) \(self.pid)"}
-        var fileString : String { return "\(filename):\(line) \(method)"}
+        var dateString : String { return "\(self.time) \(self.pid)"}
+        var fileString : String { return "\(method) \(filename):\(line)"}
         var messageString : String { return self.message}
      
         var color : UIColor {
@@ -50,10 +50,12 @@ class GCSettingsLogTableViewController: UITableViewController {
         }
     }
     
+    //
+    
     func parseLog() -> [LogEntry] {
         var rv : [ LogEntry ] = []
         let pattern = "([0-9]+-[0-9]+-[0-9]+ [:.0-9]+) ([:0-9a-f]+) [-EW] (INFO|ERR |WARN):([A-Za-z0-9.+]+):([0-9]+):([^;]+); (.*)"
-        //let pattern = "([0-9]+-[0-9]+-[0-9]+ [:.0-9]+) ([:0-9a-f]+)"
+
         if let log = RZLogFileContent(),
            
             let regexp = try? NSRegularExpression(pattern: pattern, options: .caseInsensitive){
@@ -88,6 +90,8 @@ class GCSettingsLogTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.tableView.register(UINib(nibName: "GCLogEntryTableViewCell", bundle: Bundle.main), forCellReuseIdentifier: "GCLogEntryTableViewCell")
+
         self.logEntries = self.parseLog()
         
         // Uncomment the following line to preserve selection between presentations
@@ -123,16 +127,18 @@ class GCSettingsLogTableViewController: UITableViewController {
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = GCCellGrid(tableView) else {
+        
+        
+        guard let cell = self.tableView.dequeueReusableCell(withIdentifier: "GCLogEntryTableViewCell", for: indexPath) as? GCLogEntryTableViewCell else {
             return UITableViewCell()
         }
         
         let entry = self.logEntries[indexPath.row]
-        
-        cell.setup(forRows: 3, andCols: 1)
-        cell.label(forRow: 0, andCol: 0).text = entry.dateString
-        cell.label(forRow: 1, andCol: 0).text = entry.fileString
-        cell.label(forRow: 2, andCol: 0).text = entry.messageString
+        cell.contentView.isUserInteractionEnabled = false
+        cell.level.text = entry.level
+        cell.timestamp.text = entry.dateString
+        cell.method.text = entry.fileString
+        cell.message.text = entry.messageString
 
         return cell
     }
