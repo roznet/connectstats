@@ -15,7 +15,7 @@
         "repositoryURL": "https://github.com/InderKumarRathore/DeviceGuru",
         "state": {
           "branch": "master",
-          "revision": "127b1e74e48160ead451771fe2fdebe05debbd04",
+          "revision": "e78159d98ae2f933b800a4a7b2ac31c2b79ed41e",
           "version": null
         }
       },
@@ -159,8 +159,8 @@
         "repositoryURL": "https://github.com/weichsel/ZIPFoundation.git",
         "state": {
           "branch": null,
-          "revision": "cf10bbff6ac3b873e97b36b9784c79866a051a8e",
-          "version": "0.9.12"
+          "revision": "7254c74b49cec2cb81520523ba993c671f71b066",
+          "version": "0.9.14"
         }
       }
     ]
