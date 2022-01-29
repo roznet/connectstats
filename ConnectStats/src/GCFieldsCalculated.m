@@ -238,6 +238,9 @@ static NSArray * _calculatedFields = nil;
     NSArray<GCField*> * inputF = [self inputFieldsForActivity:act];
     for (GCField * f in inputF) {
         if (![act hasField:f]) {
+            if( f.isHealthField ){
+                return [[GCAppGlobal health] hasHealthData];
+            }
             return false;
         }
     }
@@ -251,6 +254,9 @@ static NSArray * _calculatedFields = nil;
     }
     for (GCField * f in inputF) {
         if( ![trackPoint hasField:f inActivity:act] ){
+            if( f.isHealthField ){
+                return [[GCAppGlobal health] hasHealthData];
+            }
             return false;
         }
     }
@@ -264,13 +270,25 @@ static NSArray * _calculatedFields = nil;
         NSMutableArray * inputs = [NSMutableArray arrayWithCapacity:inputF.count];
 
         for (GCField * f in inputF) {
-            [inputs addObject:[act numberWithUnitForField:f]];
+            GCNumberWithUnit * arg = nil;
+
+            if( f.isHealthField ){
+                arg = [[GCAppGlobal health] measureForDate:act.date andField:f].value;
+            }else{
+                arg = [act numberWithUnitForField:f];
+            }
+            
+            if( arg ){
+                [inputs addObject:arg];
+            }
         }
-        GCNumberWithUnit * val = [self evaluateWithInputs:inputs];
-        if (val) {
-            rv = [[[GCActivityCalculatedValue alloc] init] autorelease];
-            rv.numberWithUnit = val;
-            rv.field = [self fieldInActivity:act];
+        if( inputs.count == inputF.count){
+            GCNumberWithUnit * val = [self evaluateWithInputs:inputs];
+            if (val) {
+                rv = [[[GCActivityCalculatedValue alloc] init] autorelease];
+                rv.numberWithUnit = val;
+                rv.field = [self fieldInActivity:act];
+            }
         }
     }
     return rv;
@@ -284,16 +302,24 @@ static NSArray * _calculatedFields = nil;
         NSMutableArray * inputs = [NSMutableArray arrayWithCapacity:inputF.count];
 
         for (GCField * f in inputF) {
-            GCNumberWithUnit * arg = [trackPoint numberWithUnitForField:f inActivity:act];
+            GCNumberWithUnit * arg = nil;
+            
+            if( f.isHealthField ){
+                arg = [[GCAppGlobal health] measureForDate:act.date andField:f].value;
+            }else{
+                arg = [trackPoint numberWithUnitForField:f inActivity:act];
+            }
             
             if (arg) {
                 [inputs addObject:arg];
             }
         }
-        GCNumberWithUnit * val = [self evaluateWithInputs:inputs];
-        rv = [[[GCActivityCalculatedValue alloc] init] autorelease];
-        rv.numberWithUnit = val;
-        rv.field = [GCField fieldForKey:[self fieldKey] andActivityType:act.activityType];
+        if( inputs.count == inputF.count){
+            GCNumberWithUnit * val = [self evaluateWithInputs:inputs];
+            rv = [[[GCActivityCalculatedValue alloc] init] autorelease];
+            rv.numberWithUnit = val;
+            rv.field = [GCField fieldForKey:[self fieldKey] andActivityType:act.activityType];
+        }
     }
     return rv;
 
@@ -379,10 +405,10 @@ static NSArray * _calculatedFields = nil;
 }
 
 -(NSArray<NSString*>*)inputFields{
-    return @[@"WeightedMeanSpeed",@"WeightedMeanPower"];
+    return @[@"WeightedMeanSpeed",@"WeightedMeanPower", GC_HEALTH_PREFIX @"weight" ];
 }
 -(NSArray*)inputFieldsTrackPoint{
-    return @[@(gcFieldFlagWeightedMeanSpeed), @(gcFieldFlagPower)];
+    return @[@(gcFieldFlagWeightedMeanSpeed), @(gcFieldFlagPower), GC_HEALTH_PREFIX @"weight" ];
 }
 -(GCNumberWithUnit*)evaluateWithInputs:(NSArray<GCNumberWithUnit*> *)inputs{
     if (![self ensureInputs:inputs]) {
@@ -391,11 +417,13 @@ static NSArray * _calculatedFields = nil;
 
     GCNumberWithUnit * speed = inputs[0];
     GCNumberWithUnit * pow = inputs[1];
+    GCNumberWithUnit * weight = inputs[2];
 
     if( pow.value == 0.){
         return nil;
     }
-    double val =  [speed convertToUnit:GCUnit.mps].value / pow.value * 10000.0;
+    
+    double val =  [speed convertToUnit:GCUnit.mps].value / pow.value * [weight convertToUnit:GCUnit.kilogram].value * 100.0;
 
     return [GCNumberWithUnit numberWithUnitName:@"dimensionless" andValue:val];
 }

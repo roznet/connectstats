@@ -31,6 +31,9 @@
 
 @class GCHealthZoneCalculator;
 
+extern NSString * kNotifyHealthLoadComplete;
+extern NSString * kNotifyHealthLoadNewData;
+
 @interface GCHealthOrganizer : NSObject
 
 @property (nonatomic,retain) NSArray * measures;

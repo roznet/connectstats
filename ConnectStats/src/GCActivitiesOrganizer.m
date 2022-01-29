@@ -99,6 +99,8 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         self.db = aDb;
         self.reverseGeocoder = RZReturnAutorelease([[GCWebReverseGeocode alloc]initWithOrganizer:self andDel:self]);
         self.worker = thread;
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateForNewHealthData:) name:kNotifyHealthLoadComplete object:nil];
     }
     return self;
 }
@@ -132,6 +134,8 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 }
 
 -(void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
     for (GCActivity * act in _allActivities) {
         act.settings.organizer = nil;
     }
@@ -541,6 +545,14 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     });
 }
 
+-(void)updateForNewHealthData:(NSNotification*)notification{
+    // If new Health Data may have to recalculate fields
+    
+    for (GCActivity * one in self.allActivities) {
+        [GCFieldsCalculated addCalculatedFields:one];
+    }
+
+}
 #pragma mark - Register new activities
 
 /**

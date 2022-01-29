@@ -31,6 +31,9 @@
 #import "GCField.h"
 #import "GCActivitiesOrganizer.h"
 
+NSString * kNotifyHealthLoadComplete = @"kNotifyHealthLoadComplete";
+NSString * kNotifyHealthLoadNewData = @"kNotifyHealthLoadNewData";
+
 @interface GCHealthOrganizer ()
 
 @property (nonatomic,assign) BOOL loadDetailsCompleted;
@@ -178,6 +181,10 @@
     @synchronized (self) {
         self.loadDetailsCompleted = true;
     }
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNotifyHealthLoadComplete object:nil];
+    });
+
 }
 
 -(BOOL)hasHealthData{
@@ -259,7 +266,7 @@
 
 -(GCHealthMeasure*)measureForDate:(NSDate*)aDate andField:(GCField*)aField{
     for (GCHealthMeasure * one in self.measures) {
-        if ([one.field isEqualToField:aField] && [one.date compare:aDate]==NSOrderedAscending) {
+        if ([one.field matchesField:aField] && [one.date compare:aDate]==NSOrderedAscending) {
             return one;
         }
     }
