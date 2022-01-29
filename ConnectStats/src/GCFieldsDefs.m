@@ -77,6 +77,7 @@ NSString * CALC_NORMALIZED_POWER       = @"__CalcNormalizedPower";
 NSString * CALC_NONZERO_POWER          = @"__CalcNonZeroAvgPower";
 NSString * CALC_METABOLIC_EFFICIENCY   = @"__CalcMetabolicEfficiency";
 NSString * CALC_EFFICIENCY_FACTOR      = @"__CalcEfficiencyFactor";
+NSString * CALC_RUNNING_EFFECTIVENESS  = @"__CalcRunningEffectiveness";
 NSString * CALC_ENERGY                 = @"__CalcEnergy";
 NSString * CALC_STRIDE_LENGTH          = @"__CalcStrideLength";
 NSString * CALC_DEVELOPMENT            = @"__CalcRotationDevelopment";

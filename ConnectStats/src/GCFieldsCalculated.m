@@ -122,13 +122,15 @@ static NSArray * _calculatedFields = nil;
 
 +(NSArray*)calculatedFields{
     if (_calculatedFields==nil) {
-        _calculatedFields = [@[
-                             [[[GCFieldCalcKiloJoules alloc] init] autorelease],
-                             [[[GCFieldCalcStrideLength alloc] init] autorelease],
-                             [[[GCFieldCalcMetabolicEfficiency alloc] init] autorelease],
-                             [[[GCFieldCalcRotationDevelopment alloc] init] autorelease],
-                             [[[GCFieldCalcElevationGradient alloc] init] autorelease]
-                             ] retain];
+        _calculatedFields = @[
+            RZReturnAutorelease([[GCFieldCalcKiloJoules alloc] init]),
+            RZReturnAutorelease([[GCFieldCalcStrideLength alloc] init]),
+            RZReturnAutorelease([[GCFieldCalcMetabolicEfficiency alloc] init]),
+            RZReturnAutorelease([[GCFieldCalcRotationDevelopment alloc] init]),
+            RZReturnAutorelease([[GCFieldCalcElevationGradient alloc] init]),
+            RZReturnAutorelease([[GCFieldCalcRunningEffectiveness alloc] init])
+        ] ;
+        RZRetain(_calculatedFields);
     }
     return _calculatedFields;
 }
@@ -360,6 +362,47 @@ static NSArray * _calculatedFields = nil;
 -(NSString*)unitName{
     return @"percent";
 }
+@end
+
+
+#pragma mark - runningefficiency
+
+@implementation GCFieldCalcRunningEffectiveness
+-(BOOL)validForActivity:(GCActivity*)act{
+    return [act.activityTypeDetail hasSamePrimaryType:GCActivityType.running];
+}
+-(NSString*)fieldKey{
+    return CALC_RUNNING_EFFECTIVENESS;
+}
+-(NSString*)displayName{
+    return @"Running Effectiveness";
+}
+
+-(NSArray<NSString*>*)inputFields{
+    return @[@"WeightedMeanSpeed",@"WeightedMeanPower"];
+}
+-(NSArray*)inputFieldsTrackPoint{
+    return @[@(gcFieldFlagWeightedMeanSpeed), @(gcFieldFlagPower)];
+}
+-(GCNumberWithUnit*)evaluateWithInputs:(NSArray<GCNumberWithUnit*> *)inputs{
+    if (![self ensureInputs:inputs]) {
+        return nil;
+    }
+
+    GCNumberWithUnit * speed = inputs[0];
+    GCNumberWithUnit * pow = inputs[1];
+
+    if( pow.value == 0.){
+        return nil;
+    }
+    double val =  [speed convertToUnit:GCUnit.mps].value / pow.value * 10000.0;
+
+    return [GCNumberWithUnit numberWithUnitName:@"dimensionless" andValue:val];
+}
+-(NSString*)unitName{
+    return @"dimensionless";
+}
+
 @end
 
 #pragma mark - efficiencyFactor

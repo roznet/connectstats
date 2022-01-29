@@ -158,6 +158,7 @@ extern NSString * CALC_ENERGY                ;
 extern NSString * CALC_STRIDE_LENGTH         ;
 extern NSString * CALC_DEVELOPMENT           ;
 extern NSString * CALC_ELEVATION_GRADIENT    ;
+extern NSString * CALC_RUNNING_EFFECTIVENESS ;
 extern NSString * CALC_VERTICAL_SPEED          ;
 extern NSString * CALC_ASCENT_SPEED            ;
 extern NSString * CALC_DESCENT_SPEED           ;
