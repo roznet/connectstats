@@ -222,6 +222,20 @@ NS_INLINE GCViewConfigSkin * _current_skin(){
                                                             NSFontAttributeName: [GCViewConfig systemFontOfSize:20.0],
                                                             
                                                             }];
+
+    if( viewController.navigationController ){
+        viewController.navigationController.navigationBar.translucent = YES;
+        viewController.navigationController.view.backgroundColor = backgroundColor;
+        viewController.navigationController.navigationBar.barStyle = UIBarStyleDefault;
+        viewController.navigationController.navigationBar.barTintColor = backgroundColor;
+        viewController.navigationController.navigationBar.tintColor = foregroundColor;
+        viewController.navigationController.navigationBar.titleTextAttributes = @{
+            NSForegroundColorAttributeName: [GCViewConfig defaultColor:gcSkinDefaultColorPrimaryText],
+            NSFontAttributeName: [GCViewConfig systemFontOfSize:20.0],
+            
+        };
+    }
+    
     if( viewController.tabBarController ){
         viewController.tabBarController.tabBar.barTintColor = backgroundColor;
         viewController.tabBarController.tabBar.tintColor = foregroundColor;
