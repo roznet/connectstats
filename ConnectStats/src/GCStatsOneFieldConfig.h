@@ -69,6 +69,8 @@ typedef NS_ENUM(NSUInteger, gcOneFieldSecondGraph) {
 @property (nonatomic,readonly) NSArray<GCField*>*fieldsForAggregation;
 
 +(GCStatsOneFieldConfig*)configFromMultiFieldConfig:(GCStatsMultiFieldConfig*)multiFieldConfig forY:(GCField*)field andX:(GCField*)xfield;
++(GCStatsOneFieldConfig*)fieldListConfigFrom:(GCStatsOneFieldConfig*)other;
+-(GCStatsOneFieldConfig*)sameFieldListConfig;
 
 
 -(BOOL)isEqualToConfig:(GCStatsOneFieldConfig*)other;

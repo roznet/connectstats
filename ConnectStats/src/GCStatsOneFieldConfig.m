@@ -41,6 +41,25 @@
     }
     return rv;
 }
+
+-(NSString*)description{
+    return [NSString stringWithFormat:@"<%@: %@ %@ %@>",
+            NSStringFromClass([self class]),
+            self.field,
+            self.x_field ?: @"<XField Nil>",
+            self.multiFieldConfig
+    ];
+}
+
++(GCStatsOneFieldConfig*)fieldListConfigFrom:(GCStatsOneFieldConfig*)other{
+    GCStatsOneFieldConfig * rv = [GCStatsOneFieldConfig configFromMultiFieldConfig:other.multiFieldConfig forY:other.field andX:other.x_field];
+    rv.secondGraphChoice = other.secondGraphChoice;
+    return rv;
+}
+-(GCStatsOneFieldConfig*)sameFieldListConfig{
+    return [GCStatsOneFieldConfig fieldListConfigFrom:self];
+}
+
 -(void)dealloc{
     [_x_field release];
     [_field release];
@@ -73,6 +92,10 @@
     return [self.field isEqualToField:other.field] && [self.x_field isEqualToField:other.x_field] &&
     self.secondGraphChoice == other.secondGraphChoice && self.viewChoice == other.viewChoice &&
     [self.multiFieldConfig isEqualToConfig:other.multiFieldConfig];
+}
+
+-(gcViewChoice)viewChoice{
+    return self.multiFieldConfig.viewChoice;
 }
 
 -(NSString *)viewDescription{

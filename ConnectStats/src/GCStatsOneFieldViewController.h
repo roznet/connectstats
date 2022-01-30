@@ -49,9 +49,9 @@
 @property (nonatomic,retain) GCStatsOneFieldConfig * oneFieldConfig;
 @property (nonatomic,retain) NSArray<GCFieldsForCategory*> * fieldOrder;
 @property (nonatomic,readonly) BOOL isNewStyle;
+@property (nonatomic,copy) void (^updateCallback)(void);
 
--(void)setupForConfig:(GCStatsOneFieldConfig*)oneFieldConfig;
-//-(void)setupForViewChoice:(gcViewChoice)choice;
+-(void)setupForFieldListConfig:(GCStatsOneFieldConfig*)oneFieldConfig;
 -(void)changeXField:(GCField*)xField;
 
 @end

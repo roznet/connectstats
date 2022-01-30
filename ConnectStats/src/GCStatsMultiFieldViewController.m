@@ -290,7 +290,7 @@
         GCStatsOneFieldViewController *statsViewController = [[GCStatsOneFieldViewController alloc] initWithStyle:UITableViewStylePlain];
         statsViewController.fieldOrder = self.fieldOrder;
         
-        [statsViewController setupForConfig:[GCStatsOneFieldConfig configFromMultiFieldConfig:self.multiFieldConfig forY:field andX:xfield]];
+        [statsViewController setupForFieldListConfig:[GCStatsOneFieldConfig configFromMultiFieldConfig:self.multiFieldConfig forY:field andX:xfield]];
         
         [UIViewController setupEdgeExtendedLayout:statsViewController];
         
