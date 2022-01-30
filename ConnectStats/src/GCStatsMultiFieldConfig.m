@@ -343,46 +343,53 @@
             break;
         }
         case gcViewChoiceCalendar:
-        {   // View monthly, weekly or yearly aggregated stats
-            // :          all,  last3m, last6m, last1y, todate
-            // viewConfig last1y
-            // periodType cal,             todate
-            // metrics    none, val, pct,  none, val, pct
-            // graph W|M  bar,  cum, cum,  bar,  cum, cum
-
-            self.viewConfig = gcStatsViewConfigLast1Y;
-            NSCalendarUnit calUnit = self.calendarConfig.calendarUnit;
-            if (calUnit == NSCalendarUnitWeekOfYear) {
-                self.viewConfig = gcStatsViewConfigLast1Y;
-            }else if(calUnit == NSCalendarUnitMonth){
-                self.viewConfig = gcStatsViewConfigLast1Y;
-            }else if(calUnit == NSCalendarUnitYear){
-                self.viewConfig = gcStatsViewConfigAll;
-            }
-            
-            self.comparisonMetric++;
-            if( self.comparisonMetric == gcComparisonMetricValueDifference || self.comparisonMetric == gcComparisonMetricPercent ){
-                self.graphChoice = gcGraphChoiceCumulative;
-            }else{
-                self.graphChoice = gcGraphChoiceBarGraph;
-            }
-            
-            if( self.comparisonMetric == gcComparisonMetricValue){
-                self.comparisonMetric = gcComparisonMetricNone;
-                if( self.calendarConfig.periodType == gcPeriodToDate ){
-                    self.calendarConfig.periodType = gcPeriodCalendar;
-                    rv = true;
-                }else if( self.calendarConfig.periodType == gcPeriodCalendar){
-                    self.calendarConfig.periodType = gcPeriodToDate;
-                }
-            }
-            
+        {
+            rv = [self nextViewConfigCalendar];
             break;
         }
     }
 
     return rv;
 }
+
+-(BOOL)nextViewConfigCalendar{
+    BOOL rv = false;
+    // View monthly, weekly or yearly aggregated stats
+    // :          all,  last3m, last6m, last1y, todate
+    // viewConfig last1y
+    // periodType cal,             todate
+    // metrics    none, val, pct,  none, val, pct
+    // graph W|M  bar,  cum, cum,  bar,  cum, cum
+    
+    self.viewConfig = gcStatsViewConfigLast1Y;
+    NSCalendarUnit calUnit = self.calendarConfig.calendarUnit;
+    if (calUnit == NSCalendarUnitWeekOfYear) {
+        self.viewConfig = gcStatsViewConfigLast1Y;
+    }else if(calUnit == NSCalendarUnitMonth){
+        self.viewConfig = gcStatsViewConfigLast1Y;
+    }else if(calUnit == NSCalendarUnitYear){
+        self.viewConfig = gcStatsViewConfigAll;
+    }
+    
+    self.comparisonMetric++;
+    if( self.comparisonMetric == gcComparisonMetricValueDifference || self.comparisonMetric == gcComparisonMetricPercent ){
+        self.graphChoice = gcGraphChoiceCumulative;
+    }else{
+        self.graphChoice = gcGraphChoiceBarGraph;
+    }
+    
+    if( self.comparisonMetric == gcComparisonMetricValue){
+        self.comparisonMetric = gcComparisonMetricNone;
+        if( self.calendarConfig.periodType == gcPeriodToDate ){
+            self.calendarConfig.periodType = gcPeriodCalendar;
+            rv = true;
+        }else if( self.calendarConfig.periodType == gcPeriodCalendar){
+            self.calendarConfig.periodType = gcPeriodToDate;
+        }
+    }
+    return rv;
+}
+
 -(BOOL)nextViewConfigOldStyle{
     BOOL rv = false;
     

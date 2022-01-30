@@ -59,7 +59,8 @@
 @property (nonatomic,assign) BOOL scatterStatsLock;
 @property (nonatomic,retain) RZNumberWithUnitGeometry * geometry;
 @property (nonatomic,readonly) GCStatsMultiFieldConfig * multiFieldConfig;
-
+@property (nonatomic,retain) UIViewController * popoverViewController;
+@property (nonatomic,retain) UIBarButtonItem * rightMostButtonItem;
 
 @end
 
@@ -76,17 +77,20 @@
 }
 
 -(void)dealloc{
-    [_activityStats release];
+    [_fieldDataSerie release];
     [_summarizedHistory release];
     [_average release];
     [_quartiles release];
-    [_scatterStats release];
+    [_fieldDataSerieXY release];
     [_aggregatedStats release];
     
     [_oneFieldConfig release];
     [_performanceAnalysis release];
     [_fieldOrder release];
     [_geometry release];
+    [_popoverViewController release];
+    [_rightMostButtonItem release];
+    
     [super dealloc];
 }
 -(GCStatsMultiFieldConfig*)multiFieldConfig{
@@ -110,8 +114,8 @@
 }
 
 -(void)clearAll{
-    self.activityStats = nil;
-    self.scatterStats = nil;
+    self.fieldDataSerie = nil;
+    self.fieldDataSerieXY = nil;
     //self.summarizedHistory = nil;
     self.aggregatedStats = nil;
     self.quartiles = nil;
@@ -120,10 +124,10 @@
 
 -(void)calculate{
     GCHistoryFieldDataSerie * stats = [GCHistoryFieldDataSerie historyFieldDataSerieLoadedFromConfig:self.oneFieldConfig.historyConfig andOrganizer:[GCAppGlobal organizer]];
-    self.activityStats = stats;
+    self.fieldDataSerie = stats;
     if (self.oneFieldConfig.x_field) {
             GCHistoryFieldDataSerie * xystats = [GCHistoryFieldDataSerie historyFieldDataSerieLoadedFromConfig:self.oneFieldConfig.historyConfigXY andOrganizer:[GCAppGlobal organizer]];
-            self.scatterStats = xystats;
+            self.fieldDataSerieXY = xystats;
     }
     GCStatsCalendarAggregationConfig * calendarConfig = self.oneFieldConfig.calendarConfig;
     /*self.summarizedHistory = [_activityStats.history.serie aggregatedStatsByCalendarUnit:calendarConfig.calendarUnit
@@ -144,8 +148,8 @@
         [GCCellGrid adjustAggregatedWithDataHolder:holder activityType:type geometry:self.geometry];
     }
 
-    self.quartiles = [_activityStats.history.serie quantiles:4];
-    self.average = [_activityStats.history.serie standardDeviation];
+    self.quartiles = [_fieldDataSerie.history.serie quantiles:4];
+    self.average = [_fieldDataSerie.history.serie standardDeviation];
 }
 -(void)notifyCallBack:(id)theParent info:(RZDependencyInfo*)theInfo{
 
@@ -159,7 +163,7 @@
         dispatch_async([GCAppGlobal worker], ^(){
             if (self.oneFieldConfig.x_field) {
                     GCHistoryFieldDataSerie * xystats = [GCHistoryFieldDataSerie historyFieldDataSerieLoadedFromConfig:self.oneFieldConfig.historyConfigXY andOrganizer:[GCAppGlobal organizer]];
-                    self.scatterStats = xystats;
+                    self.fieldDataSerieXY = xystats;
             }
             [self notifyCallBack:self info:nil];
         });
@@ -170,25 +174,43 @@
 {
     [super viewDidLoad];
 
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:[GCViewConfig viewChoiceDesc:self.oneFieldConfig.viewChoice
-                                                                                          calendarConfig:self.oneFieldConfig.calendarConfig] style:UIBarButtonItemStylePlain
-                                                                     target:self action:@selector(toggleViewChoice)];
-    self.navigationItem.rightBarButtonItem = anotherButton;
-    [anotherButton release];
+    [self setupBarButtonItem];
     movingAverageSample = 0;
 }
+
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [GCViewConfig setupViewController:self];
 }
 
 
--(void)toggleViewChoice{
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - Configuration Update from UI
+
+-(void)setupBarButtonItem{
+//    UIBarButtonItem *anotherButton = [[UIBarButtonItem alloc] initWithTitle:[GCViewConfig viewChoiceDesc:self.oneFieldConfig.viewChoice
+//                                                                                          calendarConfig:self.oneFieldConfig.calendarConfig] style:UIBarButtonItemStylePlain
+//                                                                     target:self action:@selector(toggleViewChoice)];
+//    self.navigationItem.rightBarButtonItem = anotherButton;
+//    [anotherButton release];
+    
+    self.rightMostButtonItem = [self.oneFieldConfig viewChoiceButtonForTarget:self action:@selector(nextView) longPress:@selector(configLongPress:)];
+    UIBarButtonItem * cal = [self.oneFieldConfig viewConfigButtonForTarget:self action:@selector(nextViewConfig) longPress:@selector(configLongPress:)];
+    if( self.rightMostButtonItem ){
+        self.navigationItem.rightBarButtonItems = cal ? @[self.rightMostButtonItem,cal] : @[ self.rightMostButtonItem ];
+    }
+
+    if (self.useFilter) {
+        (self.navigationController.navigationBar.topItem).title = [GCAppGlobal organizer].lastSearchString;
+    }
+}
+
+-(void)nextView{
     [self.oneFieldConfig nextView];
     
     [self clearAll];
@@ -199,14 +221,40 @@
         });
     });
     
-    self.navigationItem.rightBarButtonItem.title = self.oneFieldConfig.viewDescription;
+    [self setupBarButtonItem];
 
     [self.tableView reloadData];
 }
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+-(void)nextViewConfig{
+    [self.oneFieldConfig nextViewConfig];
+    
+    [self clearAll];
+    dispatch_async([GCAppGlobal worker], ^(){
+        [self calculate];
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [self.tableView reloadData];
+        });
+    });
+    
+    [self setupBarButtonItem];
+}
+
+-(void)configLongPress:(UIGestureRecognizer*)gesture{
+    if( gesture.state == UIGestureRecognizerStateBegan){
+        GCStatsOneFieldConfigViewController * controller=[[[GCStatsOneFieldConfigViewController alloc] initWithNibName:@"GCStatsOneFieldConfigViewController" bundle:nil] autorelease];
+        controller.oneFieldViewController = self;
+        controller.modalPresentationStyle = UIModalPresentationPopover;
+        self.popoverViewController = controller;
+        RZAutorelease([[UIPopoverPresentationController alloc] initWithPresentedViewController:controller
+                                                                      presentingViewController:self.presentingViewController]);
+        controller.popoverPresentationController.barButtonItem = self.rightMostButtonItem;
+        [self presentViewController:controller animated:YES completion:nil];
+    }
+
+}
+
+-(BOOL)useFilter{
+    return self.multiFieldConfig.useFilter;
 }
 
 #pragma mark - Table view data source
@@ -238,7 +286,7 @@
         }
     }else if(section == GC_S_GRAPH){
         if (_oneFieldConfig.viewChoice == gcViewChoiceFields) {
-            if ( _activityStatsLock == false && _scatterStatsLock==false && [_activityStats ready] && [_scatterStats ready]) {
+            if ( _activityStatsLock == false && _scatterStatsLock==false && [_fieldDataSerie ready] && [_fieldDataSerieXY ready]) {
                 return 2;
             }
         }else{
@@ -283,14 +331,14 @@
 
             GCSimpleGraphCachedDataSource * cache = nil;
             if (self.oneFieldConfig.secondGraphChoice == gcOneFieldSecondGraphHistory) {
-                cache = [GCSimpleGraphCachedDataSource aggregatedView:self.aggregatedStats field:self.oneFieldConfig.field multiFieldConfig:self.multiFieldConfig after:self.oneFieldConfig.historyConfig.fromDate];
-                /*cache = [GCSimpleGraphCachedDataSource historyView:_activityStats
-                                                      calendarConfig:[GCStatsCalendarAggregationConfig globalConfigFor:NSCalendarUnitMonth]
-                                                       graphChoice:gcGraphChoiceBarGraph
-                                                             after:nil];
-                 */
+                cache = [self.multiFieldConfig dataSourceForFieldDataSerie:self.fieldDataSerie];
+                if (self.multiFieldConfig.graphChoice == gcGraphChoiceCumulative) {// This is Cumulative graph, needs legend
+                    cell.legend = true;
+                }else{
+                    cell.legend = false;
+                }
             }else if(self.oneFieldConfig.secondGraphChoice == gcOneFieldSecondGraphHistogram){
-                cache = [GCSimpleGraphCachedDataSource fieldHistoryHistogramFrom:_activityStats width:tableView.frame.size.width];
+                cache = [GCSimpleGraphCachedDataSource fieldHistoryHistogramFrom:_fieldDataSerie width:tableView.frame.size.width];
             }else if(self.oneFieldConfig.secondGraphChoice == gcOneFieldSecondGraphPerformance){
                 NSDate *from=[[[GCAppGlobal organizer] lastActivity].date dateByAddingGregorianComponents:[NSDateComponents dateComponentsFromString:@"-6m"]];
                 self.performanceAnalysis = [GCHistoryPerformanceAnalysis performanceAnalysisFromDate:from forField:self.oneFieldConfig.field];
@@ -303,17 +351,17 @@
             return cell;
         }else{
             GCCellSimpleGraph * cell = [GCCellSimpleGraph graphCell:tableView];
-
+            
             if (_oneFieldConfig.viewChoice==gcViewChoiceFields) {
-                GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource scatterPlotCacheFrom:_scatterStats];
+                GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource scatterPlotCacheFrom:_fieldDataSerieXY];
                 [cell setDataSource:cache andConfig:cache];
             }else{
-                if ([_activityStats ready]) {
-                    GCSimpleGraphCachedDataSource * cache = nil;
+                if ([_fieldDataSerie ready]) {
+                    GCSimpleGraphCachedDataSource * cache = [self.multiFieldConfig dataSourceForFieldDataSerie:self.fieldDataSerie];
                     NSCalendarUnit unit = _oneFieldConfig.calendarConfig.calendarUnit;
                     //FIXME: check to use Field
                     gcGraphChoice choice = [GCViewConfig graphChoiceForField:_oneFieldConfig.field andUnit:unit];
-                    cache = [GCSimpleGraphCachedDataSource historyView:_activityStats
+                    cache = [GCSimpleGraphCachedDataSource historyView:_fieldDataSerie
                                                           calendarConfig:self.oneFieldConfig.calendarConfig
                                                            graphChoice:choice after:nil];
                     [cell setDataSource:cache andConfig:cache];
@@ -336,12 +384,12 @@
     }else{
         GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
         if (indexPath.section == GC_S_NAME) {
-            [cell setupStatsHeaders:self.activityStats];
+            [cell setupStatsHeaders:self.fieldDataSerie];
         }else if (indexPath.section == GC_S_AVERAGE){
-            [cell setupStatsAverageStdDev:self.average for:self.activityStats];
+            [cell setupStatsAverageStdDev:self.average for:self.fieldDataSerie];
 
         }else if (indexPath.section == GC_S_QUARTILES){
-            [cell setupStatsQuartile:indexPath.row in:self.quartiles for:self.activityStats];
+            [cell setupStatsQuartile:indexPath.row in:self.quartiles for:self.fieldDataSerie];
         }
         // Configure the cell...
         return cell;
@@ -360,9 +408,9 @@
         if (_oneFieldConfig.viewChoice==gcViewChoiceFields) {
             if (indexPath.row == 0) {
                 GCStatsMultiFieldGraphViewController * viewController = [[GCStatsMultiFieldGraphViewController alloc] initWithNibName:nil bundle:nil];
-                viewController.scatterStats = _scatterStats;
+                viewController.scatterStats = _fieldDataSerieXY;
                 viewController.fieldOrder = self.fieldOrder;
-                viewController.x_field = _scatterStats.config.x_activityField;
+                viewController.x_field = _fieldDataSerieXY.config.x_activityField;
                 /*GCStatsGraphOptionViewController * optionsController = [[GCStatsGraphOptionViewController alloc] initWithStyle:UITableViewStyleGrouped];
                 optionsController.graphViewController = viewController;
                  */
@@ -384,7 +432,7 @@
             //FIXME: use gcfield instead of key
             gcGraphChoice choice = [GCViewConfig graphChoiceForField:_oneFieldConfig.field andUnit:self.oneFieldConfig.calendarConfig.calendarUnit];
 
-            [graph setupForHistoryField:self.activityStats graphChoice:choice andConfig:_oneFieldConfig];
+            [graph setupForHistoryField:self.fieldDataSerie graphChoice:choice andConfig:_oneFieldConfig];
             
             graph.canSum = [_oneFieldConfig.field canSum];
 

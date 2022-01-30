@@ -85,7 +85,7 @@
     [_performanceAnalysis release];
     [_aggregatedStats release];
     [_fieldOrder release];
-    [_fieldStats release];
+    [_fieldSummaryStats release];
     [_fieldDataSeries release];
     [_rightMostButtonItem release];
     [_allFields release];
@@ -410,7 +410,7 @@
         [doGraph retain];
     }
 
-    GCHistoryFieldSummaryDataHolder * data = [self.fieldStats dataForField:field];
+    GCHistoryFieldSummaryDataHolder * data = [self.fieldSummaryStats dataForField:field];
     
     if( self.isNewStyle ){
         [cell setupFieldStatisticsWithDataHolder:data histStats:self.multiFieldConfig.historyStats geometry:self.geometry];
@@ -754,11 +754,11 @@
     self.allFields = [NSArray arrayWithArray:limitFields];
 
     self.fieldOrder = [GCFields categorizeAndOrderFields:self.allFields];
-    self.fieldStats = vals;
+    self.fieldSummaryStats = vals;
 
     self.geometry = [RZNumberWithUnitGeometry geometry];
     
-    [GCCellGrid adjustFieldStatisticsWithSummaryStats:self.fieldStats histStats:gcHistoryStatsAll geometry:self.geometry];
+    [GCCellGrid adjustFieldStatisticsWithSummaryStats:self.fieldSummaryStats histStats:gcHistoryStatsAll geometry:self.geometry];
     
     dispatch_async(dispatch_get_main_queue(), ^(){
         [self updateDone];
@@ -859,7 +859,7 @@
     self.multiFieldConfig = nConfig;
     [self clearFieldDataSeries];
     if (self.viewChoice == gcViewChoiceFields || self.viewChoice == gcViewChoiceSummary) {
-        [self setFieldStats:nil];
+        [self setFieldSummaryStats:nil];
         [self setFieldOrder:nil];
         [self setupFieldStats];
         [self setupTestModeFieldDataSeries];
@@ -885,7 +885,7 @@
         }
 
         if (self.viewChoice == gcViewChoiceFields || self.viewChoice == gcViewChoiceSummary) {
-            [self setFieldStats:nil];
+            [self setFieldSummaryStats:nil];
             [self setFieldOrder:nil];
             dispatch_async([GCAppGlobal worker],^(){
                 [self setupFieldStats];

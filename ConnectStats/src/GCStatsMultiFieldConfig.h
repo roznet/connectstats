@@ -59,6 +59,9 @@ typedef NS_ENUM(NSUInteger, gcComparisonMetric) {
 
 @property (nonatomic,assign) BOOL useFilter;
 
+/**
+ * graph choice cumulative, bar, distribuction
+ */
 @property (nonatomic,assign) gcGraphChoice graphChoice;
 @property (nonatomic,retain) NSString * graphChoiceKey;
 
@@ -91,6 +94,7 @@ typedef NS_ENUM(NSUInteger, gcComparisonMetric) {
 /// Iterate through the different configuration for the current view
 /// depending on the view will iterate though historyStats filter or calChoice.
 -(BOOL)nextViewConfig;
+-(BOOL)nextViewConfigCalendar;
 
 /// Iterate through the different view, summary, all, calendar(weekly,monthly,annual)
 /// return true if cycle complete and back to first view

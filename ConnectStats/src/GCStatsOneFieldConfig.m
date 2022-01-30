@@ -35,6 +35,7 @@
     GCStatsOneFieldConfig * rv  = [[[GCStatsOneFieldConfig alloc] init] autorelease];
     if(rv){
         rv.multiFieldConfig = [GCStatsMultiFieldConfig   fieldListConfigFrom:multiFieldConfig];
+        rv.multiFieldConfig.viewChoice = gcViewChoiceCalendar;
         rv.field = field;
         rv.x_field = xfield;
     }
@@ -60,9 +61,6 @@
 -(GCStatsCalendarAggregationConfig *)calendarConfig{
     return self.multiFieldConfig.calendarConfig;
 }
--(NSString *)viewDescription{
-    return self.multiFieldConfig.viewDescription;
-}
 
 -(NSString*)activityType{
     return self.multiFieldConfig.activityType;
@@ -76,9 +74,32 @@
     self.secondGraphChoice == other.secondGraphChoice && self.viewChoice == other.viewChoice &&
     [self.multiFieldConfig isEqualToConfig:other.multiFieldConfig];
 }
+
+-(NSString *)viewDescription{
+    // Only cycle through calendar for view Choice in single field
+    
+    return [GCViewConfig viewChoiceDesc:gcViewChoiceCalendar calendarConfig:self.calendarConfig];
+}
+
+/**
+ *  Viewchoice will be equivalent of calendar and only rotating through calendar unit
+ */
 -(bool)nextView{
     BOOL done = [self.calendarConfig nextCalendarUnit];
+    if( self.calendarConfig.calendarUnit == kCalendarUnitNone){
+        self.calendarConfig.calendarUnit = NSCalendarUnitWeekOfYear;
+        done = true;
+    }
     return done;
+}
+
+/**
+ *  Switch from
+ *
+ */
+
+-(BOOL)nextViewConfig{
+    return [self.multiFieldConfig nextViewConfigCalendar];
 }
 
 -(GCHistoryFieldDataSerieConfig*)historyConfig{
@@ -87,6 +108,26 @@
 -(GCHistoryFieldDataSerieConfig*)historyConfigXY{
     return [GCHistoryFieldDataSerieConfig configWithField:self.field xField:self.x_field filter:self.multiFieldConfig.useFilter fromDate:nil];
 
+}
+
+-(UIBarButtonItem*)viewChoiceButtonForTarget:(id)target action:(SEL)sel longPress:(SEL)longPressSel{
+    NSString * title = self.viewDescription;
+    
+    UIButton * button = [UIButton buttonWithType:UIButtonTypeSystem];
+    [button setTitle:title forState:UIControlStateNormal];
+    [button addGestureRecognizer:RZReturnAutorelease([[UITapGestureRecognizer alloc] initWithTarget:target action:sel])];
+    if(longPressSel){
+        [button addGestureRecognizer:RZReturnAutorelease(([[UILongPressGestureRecognizer alloc] initWithTarget:target action:longPressSel]))];
+    }
+    
+    UIBarButtonItem * rv = RZReturnAutorelease([[UIBarButtonItem alloc] initWithCustomView:button]);
+
+    return rv;
+}
+
+-(UIBarButtonItem*)viewConfigButtonForTarget:(id)target action:(SEL)sel longPress:(SEL)longPressSel{
+    // Same as multiConfig for now
+    return [self.multiFieldConfig viewConfigButtonForTarget:target action:sel longPress:longPressSel];
 }
 
 

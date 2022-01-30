@@ -40,7 +40,7 @@
 
 @interface GCStatsMultiFieldViewController : UITableViewController<RZChildObject,GCViewActivityTypeButtonDelegate,GCCellSimpleGraphDelegate,GCStatsMultiFieldConfigViewDelegate,GCStatsDerivedHistoryViewDelegate>
 
-@property (nonatomic,retain) GCHistoryFieldSummaryStats * fieldStats;
+@property (nonatomic,retain) GCHistoryFieldSummaryStats * fieldSummaryStats;
 @property (nonatomic,retain) GCHistoryAggregatedStats * aggregatedStats;
 @property (nonatomic,retain) NSArray<GCFieldsForCategory*> * fieldOrder;
 @property (nonatomic,retain) NSArray<GCField*> * allFields;

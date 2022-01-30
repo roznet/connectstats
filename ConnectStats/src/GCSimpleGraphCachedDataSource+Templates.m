@@ -188,8 +188,19 @@
         NSDate * dateKey = keys[i];
 
         GCStatsDataSerie * serie = dict[dateKey];
-        GCStatsDataSerie * cumul = cumulative ? [serie cumulativeValue] : serie;
+        GCStatsDataSerie * cumul = serie;
+        
         if (cumulative) {
+            gcStatsRunning which = gcStatsRunningAvg;
+            if( [fieldserie.field canSum] ){
+                which = gcStatsRunningSum;
+            }else if( [fieldserie.field isMax] ){
+                which = gcStatsRunningMax;
+            }else if( [fieldserie.field isMin] ){
+                which = gcStatsRunningMin;
+            }
+            cumul = [serie running:which];
+            
             double last = [cumul lastObject].y_data;
             if (bestSerie == nil) {
                 bestLast = last;

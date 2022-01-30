@@ -588,6 +588,12 @@
 		42863D62264695B900A3FCB5 /* GCConnectStatsRequestRegisterNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42863D61264695B900A3FCB5 /* GCConnectStatsRequestRegisterNotifications.swift */; };
 		42863D63264695B900A3FCB5 /* GCConnectStatsRequestRegisterNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42863D61264695B900A3FCB5 /* GCConnectStatsRequestRegisterNotifications.swift */; };
 		42863D64264695B900A3FCB5 /* GCConnectStatsRequestRegisterNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42863D61264695B900A3FCB5 /* GCConnectStatsRequestRegisterNotifications.swift */; };
+		42868B0A27A5AE52005C4FE9 /* GCStatsOneFieldConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42868B0827A5AE52005C4FE9 /* GCStatsOneFieldConfigViewController.swift */; };
+		42868B0B27A5AE52005C4FE9 /* GCStatsOneFieldConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42868B0827A5AE52005C4FE9 /* GCStatsOneFieldConfigViewController.swift */; };
+		42868B0C27A5AE52005C4FE9 /* GCStatsOneFieldConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42868B0827A5AE52005C4FE9 /* GCStatsOneFieldConfigViewController.swift */; };
+		42868B0D27A5AE52005C4FE9 /* GCStatsOneFieldConfigViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42868B0927A5AE52005C4FE9 /* GCStatsOneFieldConfigViewController.xib */; };
+		42868B0E27A5AE52005C4FE9 /* GCStatsOneFieldConfigViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42868B0927A5AE52005C4FE9 /* GCStatsOneFieldConfigViewController.xib */; };
+		42868B0F27A5AE52005C4FE9 /* GCStatsOneFieldConfigViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42868B0927A5AE52005C4FE9 /* GCStatsOneFieldConfigViewController.xib */; };
 		4287DC101BDB88FE00C54A51 /* GCStatsMultiFieldConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 4237869D1972D582006CBD4D /* GCStatsMultiFieldConfig.m */; };
 		42880C462381EEE00030C3C1 /* track_cs_5582.fit in Resources */ = {isa = PBXBuildFile; fileRef = 42880C3A2381EEDF0030C3C1 /* track_cs_5582.fit */; };
 		42880C472381EEE00030C3C1 /* track_cs_5611.fit in Resources */ = {isa = PBXBuildFile; fileRef = 42880C452381EEDF0030C3C1 /* track_cs_5611.fit */; };
@@ -1692,6 +1698,8 @@
 		4285F0E11719CB1800A1FAA8 /* GCSettingsFilterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCSettingsFilterViewController.h; path = src/GCSettingsFilterViewController.h; sourceTree = "<group>"; };
 		4285F0E21719CB1800A1FAA8 /* GCSettingsFilterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = GCSettingsFilterViewController.m; path = src/GCSettingsFilterViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		42863D61264695B900A3FCB5 /* GCConnectStatsRequestRegisterNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GCConnectStatsRequestRegisterNotifications.swift; path = src/GCConnectStatsRequestRegisterNotifications.swift; sourceTree = "<group>"; };
+		42868B0827A5AE52005C4FE9 /* GCStatsOneFieldConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GCStatsOneFieldConfigViewController.swift; path = src/GCStatsOneFieldConfigViewController.swift; sourceTree = "<group>"; };
+		42868B0927A5AE52005C4FE9 /* GCStatsOneFieldConfigViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = GCStatsOneFieldConfigViewController.xib; path = src/GCStatsOneFieldConfigViewController.xib; sourceTree = "<group>"; };
 		42880C3A2381EEDF0030C3C1 /* track_cs_5582.fit */ = {isa = PBXFileReference; lastKnownFileType = file; path = track_cs_5582.fit; sourceTree = "<group>"; };
 		42880C452381EEDF0030C3C1 /* track_cs_5611.fit */ = {isa = PBXFileReference; lastKnownFileType = file; path = track_cs_5611.fit; sourceTree = "<group>"; };
 		4289CD872668C09B003BC3EB /* GCConnectStatsRequestBackgroundFitFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GCConnectStatsRequestBackgroundFitFile.swift; path = src/GCConnectStatsRequestBackgroundFitFile.swift; sourceTree = "<group>"; };
@@ -2587,6 +2595,8 @@
 				422D900617A276F100C131DC /* GCStatsGraphOptionViewController.m */,
 				42656CE824CE0129004E9EE6 /* GCStatsMultiFieldConfigViewController.swift */,
 				42656CE924CE0129004E9EE6 /* GCStatsMultiFieldConfigViewController.xib */,
+				42868B0827A5AE52005C4FE9 /* GCStatsOneFieldConfigViewController.swift */,
+				42868B0927A5AE52005C4FE9 /* GCStatsOneFieldConfigViewController.xib */,
 			);
 			name = Options;
 			sourceTree = "<group>";
@@ -4695,6 +4705,7 @@
 				422CCE851B7EA8C100A4DAEB /* Weather.xcassets in Resources */,
 				429184C4231B13EA00FD6525 /* Colors-iOS13.xcassets in Resources */,
 				42BAB8D4231C07E700639928 /* credentials.json in Resources */,
+				42868B0F27A5AE52005C4FE9 /* GCStatsOneFieldConfigViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4774,6 +4785,7 @@
 				422CCE7E1B7EA7A600A4DAEB /* Services.xcassets in Resources */,
 				422CCE811B7EA81500A4DAEB /* Fields.xcassets in Resources */,
 				428C70361A4AF52500243DC0 /* ConnectStatsLaunchScreen.xib in Resources */,
+				42868B0D27A5AE52005C4FE9 /* GCStatsOneFieldConfigViewController.xib in Resources */,
 				422CCE841B7EA8C100A4DAEB /* Weather.xcassets in Resources */,
 				42E04E502538C34B005FFD5E /* GCCellActivity.xib in Resources */,
 				422CCE871B7EAA3000A4DAEB /* Navigation.xcassets in Resources */,
@@ -5013,6 +5025,7 @@
 				42D5798825603B5B004A540F /* activities_types_samples.db in Resources */,
 				42B5E4A11BA5BA2D000FAE4E /* strava_stream_121861761.json in Resources */,
 				42B5E4A01BA5BA2D000FAE4E /* strava_stream_121861724.json in Resources */,
+				42868B0E27A5AE52005C4FE9 /* GCStatsOneFieldConfigViewController.xib in Resources */,
 				42B5E4781BA5BA2D000FAE4E /* test_activity_running_835175535.db in Resources */,
 				42939CEA23AAD79600D2403A /* fit_map.json in Resources */,
 			);
@@ -5443,6 +5456,7 @@
 				42D4CA8A2496622E003F3AB7 /* GCStatsDerivedAnalysisConfig.m in Sources */,
 				42D5799025603E3E004A540F /* GCCellFieldValueColumnView.swift in Sources */,
 				4289CD8A2668C09B003BC3EB /* GCConnectStatsRequestBackgroundFitFile.swift in Sources */,
+				42868B0C27A5AE52005C4FE9 /* GCStatsOneFieldConfigViewController.swift in Sources */,
 				422FAF0719A1DD6000D09773 /* GCMapLegendView.m in Sources */,
 				42CDF8692413E05C003930A4 /* GCTrackPoint+Swim.m in Sources */,
 				422F521F1DFB56BF00DD5551 /* GCActivity+Fields.m in Sources */,
@@ -5768,6 +5782,7 @@
 				4244675F1849E2D8009F807E /* GCLapCompound.m in Sources */,
 				42AA288F1637F6AB0054F84A /* GCActivitySearchElement.m in Sources */,
 				422549571EE7361F004F4AE5 /* FITFitStatisticsWeight.swift in Sources */,
+				42868B0A27A5AE52005C4FE9 /* GCStatsOneFieldConfigViewController.swift in Sources */,
 				422C70AE1642B677003779E0 /* GCHistoryAggregatedStats.m in Sources */,
 				422F3BB126173F2100BE3417 /* GCActivityAutoLapChoiceHolder.m in Sources */,
 				424BDAB925E2DA7C00EC7DBE /* GCActivity+Location.swift in Sources */,
@@ -6053,6 +6068,7 @@
 				4277C0BE23BC7C9B00C1B1B9 /* GCConnectStatsActivityTCXParser.m in Sources */,
 				42C0589821D04B0900109D54 /* RZFitFieldValueExtensions.swift in Sources */,
 				42CDF8682413E05C003930A4 /* GCTrackPoint+Swim.m in Sources */,
+				42868B0B27A5AE52005C4FE9 /* GCStatsOneFieldConfigViewController.swift in Sources */,
 				42B5E2951BA5B216000FAE4E /* GCGarminActivityLapsParser.m in Sources */,
 				42B5E2971BA5B216000FAE4E /* GCGarminRequest.m in Sources */,
 				42D4CA892496622E003F3AB7 /* GCStatsDerivedAnalysisConfig.m in Sources */,
@@ -7138,7 +7154,7 @@
 			repositoryURL = "https://github.com/roznet/rzutils.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.16;
+				minimumVersion = 1.0.17;
 			};
 		};
 		422DCB84258A27EF000DEE4B /* XCRemoteSwiftPackageReference "fmdb" */ = {

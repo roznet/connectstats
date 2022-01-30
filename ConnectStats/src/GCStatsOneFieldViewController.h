@@ -33,8 +33,14 @@
 
 @interface GCStatsOneFieldViewController : UITableViewController<RZChildObject>
 
-@property (nonatomic,retain) GCHistoryFieldDataSerie * activityStats;
-@property (nonatomic,retain) GCHistoryFieldDataSerie * scatterStats;
+/**
+ * main field serie for oneFieldConfig.field
+ */
+@property (nonatomic,retain) GCHistoryFieldDataSerie * fieldDataSerie;
+/**
+ * field serie xy for scatter plots with y = oneFieldConfig.field and x = oneFieldConfig.x_field
+ */
+@property (nonatomic,retain) GCHistoryFieldDataSerie * fieldDataSerieXY;
 @property (nonatomic,retain) GCHistoryAggregatedStats * aggregatedStats;
 @property (nonatomic,retain) GCHistoryPerformanceAnalysis * performanceAnalysis;
 @property (nonatomic,retain) NSDictionary * summarizedHistory DEPRECATED_MSG_ATTRIBUTE("Use aggregatedStats");

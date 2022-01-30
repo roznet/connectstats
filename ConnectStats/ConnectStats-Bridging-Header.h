@@ -30,6 +30,7 @@
 #import "GCTrackPoint+Swim.h"
 
 #import "GCStatsMultiFieldViewController.h"
+#import "GCStatsOneFieldViewController.h"
 #import "GCActivityDetailViewController.h"
 
 #import "GCHistoryAggregatedDataHolder.h"
