@@ -126,7 +126,9 @@
 }
 
 -(GCHistoryFieldDataSerieConfig*)historyConfig{
-    return [GCHistoryFieldDataSerieConfig configWithField:self.field xField:nil filter:self.multiFieldConfig.useFilter fromDate:nil];
+    GCHistoryFieldDataSerieConfig * rv = [GCHistoryFieldDataSerieConfig configWithField:self.field xField:nil filter:self.multiFieldConfig.useFilter fromDate:nil];
+    //rv.fromDate = [self.multiFieldConfig selectAfterDateFrom:(NSDate *)]
+    return rv;
 }
 -(GCHistoryFieldDataSerieConfig*)historyConfigXY{
     return [GCHistoryFieldDataSerieConfig configWithField:self.field xField:self.x_field filter:self.multiFieldConfig.useFilter fromDate:nil];

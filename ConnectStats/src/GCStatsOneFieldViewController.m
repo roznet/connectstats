@@ -51,15 +51,27 @@
 #define GC_S_AGGREGATE 4
 #define GC_S_END 5
 
-@interface GCStatsOneFieldViewController (){
-    NSUInteger movingAverageSample;
-}
+@interface GCStatsOneFieldViewController ()
+
 @property (nonatomic,assign) BOOL activityStatsLock;
 @property (nonatomic,assign) BOOL scatterStatsLock;
 @property (nonatomic,retain) RZNumberWithUnitGeometry * geometry;
 @property (nonatomic,readonly) GCStatsMultiFieldConfig * multiFieldConfig;
 @property (nonatomic,retain) UIViewController * popoverViewController;
 @property (nonatomic,retain) UIBarButtonItem * rightMostButtonItem;
+
+/**
+ * main field serie for oneFieldConfig.field
+ */
+@property (nonatomic,retain) GCHistoryFieldDataSerie * fieldDataSerie;
+/**
+ * field serie xy for scatter plots with y = oneFieldConfig.field and x = oneFieldConfig.x_field
+ */
+@property (nonatomic,retain) GCHistoryFieldDataSerie * fieldDataSerieXY;
+@property (nonatomic,retain) GCHistoryAggregatedStats * aggregatedStats;
+@property (nonatomic,retain) GCHistoryPerformanceAnalysis * performanceAnalysis;
+
+@property (nonatomic,readonly) BOOL isNewStyle;
 
 @end
 
@@ -77,9 +89,6 @@
 
 -(void)dealloc{
     [_fieldDataSerie release];
-    [_summarizedHistory release];
-    [_average release];
-    [_quartiles release];
     [_fieldDataSerieXY release];
     [_aggregatedStats release];
     
@@ -89,6 +98,7 @@
     [_geometry release];
     [_popoverViewController release];
     [_rightMostButtonItem release];
+    [_updateCallback release];
     
     [super dealloc];
 }
@@ -116,24 +126,16 @@
 -(void)clearAll{
     self.fieldDataSerie = nil;
     self.fieldDataSerieXY = nil;
-    //self.summarizedHistory = nil;
     self.aggregatedStats = nil;
-    self.quartiles = nil;
-    self.average = nil;
 }
 
 -(void)calculate{
     GCHistoryFieldDataSerie * stats = [GCHistoryFieldDataSerie historyFieldDataSerieLoadedFromConfig:self.oneFieldConfig.historyConfig andOrganizer:[GCAppGlobal organizer]];
     self.fieldDataSerie = stats;
-    if (self.oneFieldConfig.x_field) {
-            GCHistoryFieldDataSerie * xystats = [GCHistoryFieldDataSerie historyFieldDataSerieLoadedFromConfig:self.oneFieldConfig.historyConfigXY andOrganizer:[GCAppGlobal organizer]];
-            self.fieldDataSerieXY = xystats;
-    }
+    
+    [self calculateXY];
+    
     GCStatsCalendarAggregationConfig * calendarConfig = self.oneFieldConfig.calendarConfig;
-    /*self.summarizedHistory = [_activityStats.history.serie aggregatedStatsByCalendarUnit:calendarConfig.calendarUnit
-                                                                           referenceDate:calendarConfig.referenceDate
-                                                                             andCalendar:calendarConfig.calendar];
-    */
     self.aggregatedStats = [GCHistoryAggregatedStats aggregatedStatsForActivityTypeSelection:self.multiFieldConfig.activityTypeSelection];
     
     [self.aggregatedStats setActivities:[GCAppGlobal organizer].activities andFields:self.oneFieldConfig.fieldsForAggregation];
@@ -147,10 +149,23 @@
     for (GCHistoryAggregatedDataHolder * holder in self.aggregatedStats) {
         [GCCellGrid adjustAggregatedWithDataHolder:holder activityType:type geometry:self.geometry];
     }
-
-    self.quartiles = [_fieldDataSerie.history.serie quantiles:4];
-    self.average = [_fieldDataSerie.history.serie standardDeviation];
 }
+
+-(void)calculateXY{
+    if (self.oneFieldConfig.x_field) {
+        GCHistoryFieldDataSerieConfig * configXY = self.oneFieldConfig.historyConfigXY;
+        // will be nil if all selected
+        configXY.fromDate = [self.multiFieldConfig selectAfterDateFrom:self.fieldDataSerie.lastDate];
+        
+        GCHistoryFieldDataSerie * xystats = [GCHistoryFieldDataSerie historyFieldDataSerieLoadedFromConfig:configXY andOrganizer:[GCAppGlobal organizer]];
+        self.fieldDataSerieXY = xystats;
+    }else{
+        self.fieldDataSerieXY = nil;
+    }
+}
+
+#pragma mark - Notification and changes
+
 -(void)notifyCallBack:(id)theParent info:(RZDependencyInfo*)theInfo{
 
     dispatch_async(dispatch_get_main_queue(), ^(){
@@ -178,7 +193,6 @@
     [super viewDidLoad];
 
     [self setupBarButtonItem];
-    movingAverageSample = 0;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -272,7 +286,7 @@
     }else if(section == GC_S_QUARTILES){
         return 0;
     }else if(section == GC_S_GRAPH){
-        if ( _activityStatsLock == false && _scatterStatsLock == false && [_fieldDataSerie ready] && [_fieldDataSerieXY ready]) {
+        if ( _activityStatsLock == false && _scatterStatsLock == false && self.fieldDataSerie.ready && self.fieldDataSerieXY.ready) {
             return 2;
         }
         return 1;
@@ -332,15 +346,21 @@
         }else{
             GCCellSimpleGraph * cell = [GCCellSimpleGraph graphCell:tableView];
             
-            GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource scatterPlotCacheFrom:_fieldDataSerieXY];
+            NSDate * afterdate = [self.multiFieldConfig selectAfterDateFrom:self.fieldDataSerie.lastDate];
+            
+            if( !RZNilOrEqualToDate(afterdate, self.fieldDataSerieXY.config.fromDate) ){
+                // After Date for scatter point field serie have to be recalculated because
+                // the serie x is not the date
+                RZLog(RZLogInfo, @"Recalculate XY serie because %@ != %@", afterdate, self.fieldDataSerieXY.config.fromDate);
+                [self calculateXY];
+            }
+            GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource scatterPlotCacheFrom:self.fieldDataSerieXY];
             [cell setDataSource:cache andConfig:cache];
 
             return cell;
         }
     }else if(indexPath.section == GC_S_QUARTILES){
-        NSUInteger idx = [_summarizedHistory[STATS_AVG] count]-indexPath.row-1;
         GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
-        [cell setUpForSummarizedHistory:_summarizedHistory atIndex:idx forField:_oneFieldConfig.field calendarConfig:self.oneFieldConfig.calendarConfig];
         return cell;
     }else if( indexPath.section == GC_S_AGGREGATE ){
         return [self tableView:tableView aggregatedCellForRowAtIndexPath:indexPath];
@@ -349,10 +369,7 @@
         if (indexPath.section == GC_S_NAME) {
             [cell setupStatsHeaders:self.fieldDataSerie];
         }else if (indexPath.section == GC_S_AVERAGE){
-            [cell setupStatsAverageStdDev:self.average for:self.fieldDataSerie];
-
         }else if (indexPath.section == GC_S_QUARTILES){
-            [cell setupStatsQuartile:indexPath.row in:self.quartiles for:self.fieldDataSerie];
         }
         // Configure the cell...
         return cell;
@@ -370,9 +387,9 @@
     if (indexPath.section == GC_S_GRAPH) {
         if (indexPath.row == 0) {
             GCStatsMultiFieldGraphViewController * viewController = [[GCStatsMultiFieldGraphViewController alloc] initWithNibName:nil bundle:nil];
-            viewController.scatterStats = _fieldDataSerieXY;
+            viewController.scatterStats = self.fieldDataSerieXY;
             viewController.fieldOrder = self.fieldOrder;
-            viewController.x_field = _fieldDataSerieXY.config.x_activityField;
+            viewController.x_field = self.fieldDataSerieXY.config.x_activityField;
             if ([UIViewController useIOS7Layout]) {
                 [UIViewController setupEdgeExtendedLayout:viewController];
             }
@@ -385,19 +402,6 @@
                 self.oneFieldConfig.secondGraphChoice = gcOneFieldSecondGraphHistory;
             }
             [self.tableView reloadData];
-        }
-    }else if(indexPath.section==GC_S_QUARTILES){
-        NSUInteger n = [_summarizedHistory[STATS_CNT] count];
-        if (indexPath.row < n) {
-            NSUInteger idx = n-indexPath.row-1;
-            GCStatsDataPoint * point = [_summarizedHistory[STATS_CNT] dataPointAtIndex:idx];
-            NSDate * date = [point date];
-            NSNumber * cnt = @(point.y_data);
-            [GCAppGlobal debugStateRecord:@{DEBUGSTATE_LAST_CNT:cnt}];
-
-            NSString * filter = [GCViewConfig filterFor:_oneFieldConfig.calendarConfig date:date andActivityType:_oneFieldConfig.activityType];
-            [GCAppGlobal focusOnListWithFilter:filter];
-
         }
     }
 }
