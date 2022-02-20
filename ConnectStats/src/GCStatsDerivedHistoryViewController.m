@@ -29,7 +29,7 @@
 #import "GCStatsDerivedHistoryViewControllerConsts.h"
 #import "GCStatsDerivedHistory.h"
 #import "GCAppGlobal.h"
-#import "GCStatsDerivedAnalysisConfig.h"
+#import "GCStatsDerivedHistoryConfig.h"
 
 @interface GCStatsDerivedHistoryViewController ()
 @property (nonatomic,retain) NSObject<GCStatsDerivedHistoryViewDelegate>*analysisDelegate;
@@ -204,7 +204,7 @@
             [self.navigationController pushViewController:list animated:YES];
         }else if( indexPath.row == GC_OPTIONS_FIELD){
             
-            GCStatsDerivedAnalysisConfig * derivedAnalysisConfig = self.derivedHistAnalysis.derivedAnalysisConfig;
+            GCStatsDerivedHistoryConfig * derivedAnalysisConfig = self.derivedHistAnalysis.derivedAnalysisConfig;
             NSArray<GCDerivedGroupedSeries*>*series = derivedAnalysisConfig.availableDataSeries;
             NSMutableArray<GCDerivedDataSerie*> * choices = [NSMutableArray array];
             NSMutableArray<NSString*>* labels = [NSMutableArray array];

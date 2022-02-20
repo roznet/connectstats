@@ -33,7 +33,7 @@
 #import "GCStatsDerivedAnalysisViewController.h"
 #import "GCStatsDerivedHistory.h"
 #import "GCStatsDerivedHistoryViewController.h"
-#import "GCStatsDerivedAnalysisConfig.h"
+#import "GCStatsDerivedHistoryConfig.h"
 
 
 @class  GCFieldsForCategory;
@@ -47,7 +47,7 @@
 @property (nonatomic,retain) NSDictionary<GCField*,GCHistoryFieldDataSerie*> * fieldDataSeries;
 @property (nonatomic,retain) GCViewActivityTypeButton * activityTypeButton;
 @property (nonatomic,retain) GCStatsMultiFieldConfig * multiFieldConfig;
-@property (nonatomic,retain) GCStatsDerivedAnalysisConfig * derivedAnalysisConfig;
+@property (nonatomic,retain) GCStatsDerivedHistoryConfig * derivedAnalysisConfig;
 @property (nonatomic,copy) void (^updateCallback)(void);
 @property (nonatomic,readonly) BOOL isNewStyle;
 

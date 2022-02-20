@@ -128,7 +128,6 @@
 		422CE57425DBE87300723D4D /* GCHistoryStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422CE57125DBE87300723D4D /* GCHistoryStatistics.swift */; };
 		422CE58625DC1E1400723D4D /* GCTestAggregatedStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422CE58525DC1E1400723D4D /* GCTestAggregatedStats.swift */; };
 		422D900417A1AE2C00C131DC /* GCViewIcons.m in Sources */ = {isa = PBXBuildFile; fileRef = 422D900317A1AE2C00C131DC /* GCViewIcons.m */; };
-		422D900717A276F100C131DC /* GCStatsGraphOptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 422D900617A276F100C131DC /* GCStatsGraphOptionViewController.m */; };
 		422DCB6F258A2779000DEE4B /* RZUtilsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 422DCB6E258A2779000DEE4B /* RZUtilsSwift */; };
 		422DCB71258A2779000DEE4B /* RZUtilsUniversal in Frameworks */ = {isa = PBXBuildFile; productRef = 422DCB70258A2779000DEE4B /* RZUtilsUniversal */; };
 		422DCB7B258A278E000DEE4B /* RZUtilsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 422DCB7A258A278E000DEE4B /* RZUtilsSwift */; };
@@ -265,7 +264,6 @@
 		422FAF9619A1DD6000D09773 /* GCViewActivityTypeButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B34A2D179C31D500688E9F /* GCViewActivityTypeButton.m */; };
 		422FAF9719A1DD6000D09773 /* GCStravaActivityLapsParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 42461D221922D169001B03C7 /* GCStravaActivityLapsParser.m */; };
 		422FAF9C19A1DD6000D09773 /* GCViewIcons.m in Sources */ = {isa = PBXBuildFile; fileRef = 422D900317A1AE2C00C131DC /* GCViewIcons.m */; };
-		422FAF9D19A1DD6000D09773 /* GCStatsGraphOptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 422D900617A276F100C131DC /* GCStatsGraphOptionViewController.m */; };
 		422FAF9F19A1DD6000D09773 /* GCActivity+UI.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C4159917B1A23800EBBAFB /* GCActivity+UI.m */; };
 		422FAFA119A1DD6000D09773 /* GCHealthZone.m in Sources */ = {isa = PBXBuildFile; fileRef = 425ACBB917C163EE00EB23A3 /* GCHealthZone.m */; };
 		422FAFA419A1DD6000D09773 /* GCActivityTypes.m in Sources */ = {isa = PBXBuildFile; fileRef = 4244676E184B756F009F807E /* GCActivityTypes.m */; };
@@ -565,7 +563,6 @@
 		427F937C1BEDFF3E00C177F9 /* GCStatsMultiFieldGraphViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42E226B21658411D008FFD68 /* GCStatsMultiFieldGraphViewController.m */; };
 		427F937D1BEDFF3E00C177F9 /* GCStatsOneFieldGraphViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4235448116C1A83200AB3E09 /* GCStatsOneFieldGraphViewController.m */; };
 		427F937E1BEDFF4300C177F9 /* GCStatsHistGraphConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 423F9FC819AD2ACA0057DB5A /* GCStatsHistGraphConfig.m */; };
-		427F937F1BEDFF4D00C177F9 /* GCStatsGraphOptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 422D900617A276F100C131DC /* GCStatsGraphOptionViewController.m */; };
 		427F93801BEDFF7000C177F9 /* GCTableHeaderFieldsCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 42018E9F18F32E2F0089AB7A /* GCTableHeaderFieldsCategory.m */; };
 		42804DEB16D5215D009E4EEF /* GCActivity+CalculatedLaps.m in Sources */ = {isa = PBXBuildFile; fileRef = 42804DEA16D5215D009E4EEF /* GCActivity+CalculatedLaps.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		4280C7D12364FC7C00223709 /* GCConnectStatsRequestWeather.m in Sources */ = {isa = PBXBuildFile; fileRef = 4280C7D02364FC7C00223709 /* GCConnectStatsRequestWeather.m */; };
@@ -1066,9 +1063,9 @@
 		42D4CA8224952616003F3AB7 /* GCStatsDerivedHistoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D4CA8124952616003F3AB7 /* GCStatsDerivedHistoryViewController.m */; };
 		42D4CA8324952616003F3AB7 /* GCStatsDerivedHistoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D4CA8124952616003F3AB7 /* GCStatsDerivedHistoryViewController.m */; };
 		42D4CA8524963F90003F3AB7 /* GCStatsDerivedHistoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D4CA8124952616003F3AB7 /* GCStatsDerivedHistoryViewController.m */; };
-		42D4CA882496622E003F3AB7 /* GCStatsDerivedAnalysisConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D4CA872496622E003F3AB7 /* GCStatsDerivedAnalysisConfig.m */; };
-		42D4CA892496622E003F3AB7 /* GCStatsDerivedAnalysisConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D4CA872496622E003F3AB7 /* GCStatsDerivedAnalysisConfig.m */; };
-		42D4CA8A2496622E003F3AB7 /* GCStatsDerivedAnalysisConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D4CA872496622E003F3AB7 /* GCStatsDerivedAnalysisConfig.m */; };
+		42D4CA882496622E003F3AB7 /* GCStatsDerivedHistoryConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D4CA872496622E003F3AB7 /* GCStatsDerivedHistoryConfig.m */; };
+		42D4CA892496622E003F3AB7 /* GCStatsDerivedHistoryConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D4CA872496622E003F3AB7 /* GCStatsDerivedHistoryConfig.m */; };
+		42D4CA8A2496622E003F3AB7 /* GCStatsDerivedHistoryConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 42D4CA872496622E003F3AB7 /* GCStatsDerivedHistoryConfig.m */; };
 		42D5798825603B5B004A540F /* activities_types_samples.db in Resources */ = {isa = PBXBuildFile; fileRef = 42D5797D25603B5B004A540F /* activities_types_samples.db */; };
 		42D5798E25603E3E004A540F /* GCCellFieldValueColumnView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D5798D25603E3E004A540F /* GCCellFieldValueColumnView.swift */; };
 		42D5798F25603E3E004A540F /* GCCellFieldValueColumnView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42D5798D25603E3E004A540F /* GCCellFieldValueColumnView.swift */; };
@@ -1414,8 +1411,6 @@
 		422CE58525DC1E1400723D4D /* GCTestAggregatedStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GCTestAggregatedStats.swift; sourceTree = "<group>"; };
 		422D900217A1AE2C00C131DC /* GCViewIcons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = GCViewIcons.h; path = src/GCViewIcons.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		422D900317A1AE2C00C131DC /* GCViewIcons.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCViewIcons.m; path = src/GCViewIcons.m; sourceTree = "<group>"; };
-		422D900517A276F100C131DC /* GCStatsGraphOptionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCStatsGraphOptionViewController.h; path = src/GCStatsGraphOptionViewController.h; sourceTree = "<group>"; };
-		422D900617A276F100C131DC /* GCStatsGraphOptionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCStatsGraphOptionViewController.m; path = src/GCStatsGraphOptionViewController.m; sourceTree = "<group>"; };
 		422F282C20551AE000187478 /* activity_2545022458.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activity_2545022458.json; sourceTree = "<group>"; };
 		422F283420551AE000187478 /* activitylaps_2545022458.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activitylaps_2545022458.json; sourceTree = "<group>"; };
 		422F283520551AE100187478 /* activitytrack_2545022458.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activitytrack_2545022458.json; sourceTree = "<group>"; };
@@ -2048,8 +2043,8 @@
 		42D4CA8024952616003F3AB7 /* GCStatsDerivedHistoryViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCStatsDerivedHistoryViewController.h; path = src/GCStatsDerivedHistoryViewController.h; sourceTree = "<group>"; };
 		42D4CA8124952616003F3AB7 /* GCStatsDerivedHistoryViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCStatsDerivedHistoryViewController.m; path = src/GCStatsDerivedHistoryViewController.m; sourceTree = "<group>"; };
 		42D4CA84249528B3003F3AB7 /* GCStatsDerivedHistoryViewControllerConsts.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCStatsDerivedHistoryViewControllerConsts.h; path = src/GCStatsDerivedHistoryViewControllerConsts.h; sourceTree = "<group>"; };
-		42D4CA862496622E003F3AB7 /* GCStatsDerivedAnalysisConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCStatsDerivedAnalysisConfig.h; path = src/GCStatsDerivedAnalysisConfig.h; sourceTree = "<group>"; };
-		42D4CA872496622E003F3AB7 /* GCStatsDerivedAnalysisConfig.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCStatsDerivedAnalysisConfig.m; path = src/GCStatsDerivedAnalysisConfig.m; sourceTree = "<group>"; };
+		42D4CA862496622E003F3AB7 /* GCStatsDerivedHistoryConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCStatsDerivedHistoryConfig.h; path = src/GCStatsDerivedHistoryConfig.h; sourceTree = "<group>"; };
+		42D4CA872496622E003F3AB7 /* GCStatsDerivedHistoryConfig.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCStatsDerivedHistoryConfig.m; path = src/GCStatsDerivedHistoryConfig.m; sourceTree = "<group>"; };
 		42D5797D25603B5B004A540F /* activities_types_samples.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = activities_types_samples.db; path = connectstatstestapp/samples/testactivities/activities_types_samples.db; sourceTree = SOURCE_ROOT; };
 		42D5798D25603E3E004A540F /* GCCellFieldValueColumnView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GCCellFieldValueColumnView.swift; path = src/GCCellFieldValueColumnView.swift; sourceTree = "<group>"; };
 		42D8AEF71B1FB2CB00ADDD31 /* collected.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = collected.plist; sourceTree = "<group>"; };
@@ -2490,6 +2485,17 @@
 			path = activity_merge_fit;
 			sourceTree = "<group>";
 		};
+		421E8BF527C291B800A9B264 /* DerivedAnalysis */ = {
+			isa = PBXGroup;
+			children = (
+				42D4CA862496622E003F3AB7 /* GCStatsDerivedHistoryConfig.h */,
+				42D4CA872496622E003F3AB7 /* GCStatsDerivedHistoryConfig.m */,
+				42D4CA6C248D5497003F3AB7 /* GCStatsDerivedHistory.h */,
+				42D4CA6D248D5497003F3AB7 /* GCStatsDerivedHistory.m */,
+			);
+			name = DerivedAnalysis;
+			sourceTree = "<group>";
+		};
 		4225018616641D02002CD429 /* iPhone */ = {
 			isa = PBXGroup;
 			children = (
@@ -2565,12 +2571,16 @@
 		422D8FFF17A1AB1200C131DC /* Lists */ = {
 			isa = PBXGroup;
 			children = (
+				427F93871BEE00B400C177F9 /* GCStatsMultiFieldViewControllerConsts.h */,
 				42D8CB691616D20B00C0521B /* GCStatsOneFieldViewController.h */,
 				42D8CB6A1616D20B00C0521B /* GCStatsOneFieldViewController.m */,
+				42C2A80F24B9A85100E76F60 /* GCStatsMultiFieldConfigViewControllerConsts.h */,
 				42BC5393161E350900576097 /* GCStatsMultiFieldViewController.h */,
 				42BC5394161E350A00576097 /* GCStatsMultiFieldViewController.m */,
+				426EC771246831CC00666068 /* GCStatsDerivedAnalysisViewControllerConsts.h */,
 				429F2094244C60AB002FDDF5 /* GCStatsDerivedAnalysisViewController.h */,
 				429F2095244C60AB002FDDF5 /* GCStatsDerivedAnalysisViewController.m */,
+				42D4CA84249528B3003F3AB7 /* GCStatsDerivedHistoryViewControllerConsts.h */,
 				42D4CA8024952616003F3AB7 /* GCStatsDerivedHistoryViewController.h */,
 				42D4CA8124952616003F3AB7 /* GCStatsDerivedHistoryViewController.m */,
 			);
@@ -2588,17 +2598,15 @@
 			name = Graphs;
 			sourceTree = "<group>";
 		};
-		422D900117A1AB3200C131DC /* Options */ = {
+		422D900117A1AB3200C131DC /* ConfigViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				422D900517A276F100C131DC /* GCStatsGraphOptionViewController.h */,
-				422D900617A276F100C131DC /* GCStatsGraphOptionViewController.m */,
 				42656CE824CE0129004E9EE6 /* GCStatsMultiFieldConfigViewController.swift */,
 				42656CE924CE0129004E9EE6 /* GCStatsMultiFieldConfigViewController.xib */,
 				42868B0827A5AE52005C4FE9 /* GCStatsOneFieldConfigViewController.swift */,
 				42868B0927A5AE52005C4FE9 /* GCStatsOneFieldConfigViewController.xib */,
 			);
-			name = Options;
+			name = ConfigViewControllers;
 			sourceTree = "<group>";
 		};
 		422D900817A27E2000C131DC /* Colors */ = {
@@ -2720,6 +2728,7 @@
 		4240A8B925EA987500E01784 /* StatisticsAndAnalysis */ = {
 			isa = PBXGroup;
 			children = (
+				421E8BF527C291B800A9B264 /* DerivedAnalysis */,
 				42AB681416E007E700C633BD /* SingleActivity */,
 				426F74DB1620299F007B3653 /* ActivityHistory */,
 				422CE57025DBE81D00723D4D /* Statistics */,
@@ -2853,18 +2862,10 @@
 				423F9FC419ACDEA40057DB5A /* GCHistoryFieldDataSerieConfig.m */,
 				425257F819AB905300993F61 /* GCStatsOneFieldConfig.h */,
 				425257F919AB905300993F61 /* GCStatsOneFieldConfig.m */,
-				423F9FC719AD2ACA0057DB5A /* GCStatsHistGraphConfig.h */,
-				423F9FC819AD2ACA0057DB5A /* GCStatsHistGraphConfig.m */,
-				427F93871BEE00B400C177F9 /* GCStatsMultiFieldViewControllerConsts.h */,
-				42C2A80F24B9A85100E76F60 /* GCStatsMultiFieldConfigViewControllerConsts.h */,
 				4237869C1972D582006CBD4D /* GCStatsMultiFieldConfig.h */,
 				4237869D1972D582006CBD4D /* GCStatsMultiFieldConfig.m */,
-				426EC771246831CC00666068 /* GCStatsDerivedAnalysisViewControllerConsts.h */,
-				42D4CA862496622E003F3AB7 /* GCStatsDerivedAnalysisConfig.h */,
-				42D4CA872496622E003F3AB7 /* GCStatsDerivedAnalysisConfig.m */,
-				42D4CA84249528B3003F3AB7 /* GCStatsDerivedHistoryViewControllerConsts.h */,
-				42D4CA6C248D5497003F3AB7 /* GCStatsDerivedHistory.h */,
-				42D4CA6D248D5497003F3AB7 /* GCStatsDerivedHistory.m */,
+				423F9FC719AD2ACA0057DB5A /* GCStatsHistGraphConfig.h */,
+				423F9FC819AD2ACA0057DB5A /* GCStatsHistGraphConfig.m */,
 				42843EE424AD20C400E60609 /* GCStatsCalendarAggregationConfig.h */,
 				42843EE524AD20C400E60609 /* GCStatsCalendarAggregationConfig.m */,
 			);
@@ -3996,7 +3997,7 @@
 			isa = PBXGroup;
 			children = (
 				425257F719AB902D00993F61 /* Config */,
-				422D900117A1AB3200C131DC /* Options */,
+				422D900117A1AB3200C131DC /* ConfigViewControllers */,
 				422D900017A1AB1F00C131DC /* Graphs */,
 				422D8FFF17A1AB1200C131DC /* Lists */,
 			);
@@ -5453,7 +5454,7 @@
 				422FAF0319A1DD6000D09773 /* GCMapGradientPathOverlayView.m in Sources */,
 				422FAF0519A1DD6000D09773 /* GCLap.m in Sources */,
 				422FAF0619A1DD6000D09773 /* GCMapAnnotation.m in Sources */,
-				42D4CA8A2496622E003F3AB7 /* GCStatsDerivedAnalysisConfig.m in Sources */,
+				42D4CA8A2496622E003F3AB7 /* GCStatsDerivedHistoryConfig.m in Sources */,
 				42D5799025603E3E004A540F /* GCCellFieldValueColumnView.swift in Sources */,
 				4289CD8A2668C09B003BC3EB /* GCConnectStatsRequestBackgroundFitFile.swift in Sources */,
 				42868B0C27A5AE52005C4FE9 /* GCStatsOneFieldConfigViewController.swift in Sources */,
@@ -5584,7 +5585,6 @@
 				42A22E0119E8895D004407B8 /* GCHealthSleepBlock.m in Sources */,
 				422FAF9C19A1DD6000D09773 /* GCViewIcons.m in Sources */,
 				42E53AEA25C55879003AF0D1 /* GCAppConstants.m in Sources */,
-				422FAF9D19A1DD6000D09773 /* GCStatsGraphOptionViewController.m in Sources */,
 				42C1080E1B7DE8B000092315 /* GCApplicationContext.m in Sources */,
 				422FAF9F19A1DD6000D09773 /* GCActivity+UI.m in Sources */,
 				4226B42B1F65E2ED009E1104 /* GCWebRequestStandard.m in Sources */,
@@ -5773,7 +5773,7 @@
 				42AAB087184D2A82004B4D15 /* GCActivityTypeListViewController.m in Sources */,
 				4211D48725979A6E00967874 /* GCAppSceneDelegate.swift in Sources */,
 				4201528E1624D5AC004F64EF /* GCMapGradientPathOverlayView.m in Sources */,
-				42D4CA882496622E003F3AB7 /* GCStatsDerivedAnalysisConfig.m in Sources */,
+				42D4CA882496622E003F3AB7 /* GCStatsDerivedHistoryConfig.m in Sources */,
 				42A95B1C16321320000B2082 /* GCLap.m in Sources */,
 				42A95B3A1632DB4B000B2082 /* GCMapAnnotation.m in Sources */,
 				42A95B3D1632FC24000B2082 /* GCMapLegendView.m in Sources */,
@@ -5909,7 +5909,6 @@
 				422637A51AFF6C5F005461E3 /* GCDebugActionsTableViewController.m in Sources */,
 				42A9F549261A031000669119 /* GCActivityType+Icon.m in Sources */,
 				422D900417A1AE2C00C131DC /* GCViewIcons.m in Sources */,
-				422D900717A276F100C131DC /* GCStatsGraphOptionViewController.m in Sources */,
 				42DE53BD19CF438500009130 /* GCHealthKitActivityRequest.m in Sources */,
 				42C4159A17B1A23800EBBAFB /* GCActivity+UI.m in Sources */,
 				425ACBBA17C163EE00EB23A3 /* GCHealthZone.m in Sources */,
@@ -5963,7 +5962,6 @@
 				42B5E5821BA5ECCA000FAE4E /* GCFormattedFieldText.m in Sources */,
 				42B5E5801BA5ECB1000FAE4E /* GCCellGrid+Templates.m in Sources */,
 				42B5E57C1BA5BB5B000FAE4E /* GCSimpleGraphCachedDataSource+Templates.m in Sources */,
-				427F937F1BEDFF4D00C177F9 /* GCStatsGraphOptionViewController.m in Sources */,
 				427F93641BEAA5D100C177F9 /* GCTestUIUnitTest.m in Sources */,
 				42B8588F229DBAC1009E309A /* GCTestServiceConnectStats.m in Sources */,
 				427F937C1BEDFF3E00C177F9 /* GCStatsMultiFieldGraphViewController.m in Sources */,
@@ -6071,7 +6069,7 @@
 				42868B0B27A5AE52005C4FE9 /* GCStatsOneFieldConfigViewController.swift in Sources */,
 				42B5E2951BA5B216000FAE4E /* GCGarminActivityLapsParser.m in Sources */,
 				42B5E2971BA5B216000FAE4E /* GCGarminRequest.m in Sources */,
-				42D4CA892496622E003F3AB7 /* GCStatsDerivedAnalysisConfig.m in Sources */,
+				42D4CA892496622E003F3AB7 /* GCStatsDerivedHistoryConfig.m in Sources */,
 				422F284020557DD000187478 /* GCField+Convert.m in Sources */,
 				424B1969276625A400660A04 /* GCLogEntryTableViewCell.swift in Sources */,
 				422CC8831E6ACA1700195414 /* FITFitValueStatistics.swift in Sources */,

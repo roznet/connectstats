@@ -34,7 +34,6 @@
 #import "GCFields.h"
 #import "GCViewConfig.h"
 @import RZExternal;
-#import "GCStatsGraphOptionViewController.h"
 #import "GCHistoryPerformanceAnalysis.h"
 #import "GCActivitiesOrganizer.h"
 #import "GCStatsCalendarAggregationConfig.h"
@@ -374,9 +373,6 @@
             viewController.scatterStats = _fieldDataSerieXY;
             viewController.fieldOrder = self.fieldOrder;
             viewController.x_field = _fieldDataSerieXY.config.x_activityField;
-            /*GCStatsGraphOptionViewController * optionsController = [[GCStatsGraphOptionViewController alloc] initWithStyle:UITableViewStyleGrouped];
-             optionsController.graphViewController = viewController;
-             */
             if ([UIViewController useIOS7Layout]) {
                 [UIViewController setupEdgeExtendedLayout:viewController];
             }

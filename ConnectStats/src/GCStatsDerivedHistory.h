@@ -29,7 +29,7 @@
 #import "GCHistoryPerformanceAnalysis.h"
 #import "GCLagPeriod.h"
 #import "GCStatsMultiFieldConfig.h"
-#import "GCStatsDerivedAnalysisConfig.h"
+#import "GCStatsDerivedHistoryConfig.h"
 
 @class GCDerivedOrganizer;
 
@@ -48,8 +48,7 @@ typedef NS_ENUM(NSUInteger,gcDerivedHistSmoothing){
 };
 
 @interface GCStatsDerivedHistory : NSObject
-@property (nonatomic,retain) GCStatsMultiFieldConfig * multiFieldConfig;
-@property (nonatomic,retain) GCStatsDerivedAnalysisConfig * derivedAnalysisConfig;
+@property (nonatomic,retain) GCStatsDerivedHistoryConfig * derivedAnalysisConfig;
 
 @property (nonatomic,assign) gcDerivedHistSmoothing longTermSmoothing;
 @property (nonatomic,assign) gcDerivedHistSmoothing shortTermSmoothing;
@@ -75,7 +74,7 @@ typedef NS_ENUM(NSUInteger,gcDerivedHistSmoothing){
 /// by default @[ @0, @60, @1800 ] which are seconds.
 @property (nonatomic,readonly) NSArray<GCNumberWithUnit*>*pointsForGraphs;
 
-+(GCStatsDerivedHistory*)analysisWith:(GCStatsMultiFieldConfig*)multiFieldConfig and:(GCStatsDerivedAnalysisConfig*)derivedConfig;
++(GCStatsDerivedHistory*)analysisWith:(GCStatsDerivedHistoryConfig*)derivedConfig;
 
 -(GCCellSimpleGraph*)tableView:(UITableView *)tableView derivedHistCellForRowAtIndexPath:(NSIndexPath *)indexPath with:(GCDerivedOrganizer*)derived;
 

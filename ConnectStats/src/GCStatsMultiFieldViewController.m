@@ -462,7 +462,7 @@
 
 -(UITableViewCell*)tableView:(UITableView *)tableView derivedHistCellForRowAtIndexPath:(NSIndexPath *)indexPath{
     if( self.derivedHistAnalysis == nil){
-        self.derivedHistAnalysis = [GCStatsDerivedHistory analysisWith:self.multiFieldConfig and:self.derivedAnalysisConfig];
+        self.derivedHistAnalysis = [GCStatsDerivedHistory analysisWith:self.derivedAnalysisConfig];
     }
     
     GCCellSimpleGraph * graphCell = [self.derivedHistAnalysis tableView:tableView derivedHistCellForRowAtIndexPath:indexPath with:[GCAppGlobal derived]];
@@ -879,7 +879,7 @@
         self.multiFieldConfig = nConfig;
         [self clearFieldDataSeries];
         if( self.derivedAnalysisConfig== nil){
-            self.derivedAnalysisConfig = [GCStatsDerivedAnalysisConfig configForActivityType:self.multiFieldConfig.activityType];
+            self.derivedAnalysisConfig = [GCStatsDerivedHistoryConfig configForActivityType:self.multiFieldConfig.activityType];
         }else{
             self.derivedAnalysisConfig.activityType = self.multiFieldConfig.activityType;
         }

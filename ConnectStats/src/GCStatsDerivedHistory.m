@@ -28,11 +28,11 @@
 #import "GCStatsDerivedHistory.h"
 #import "GCAppGlobal.h"
 #import "GCSimpleGraphCachedDataSource+Templates.h"
-#import "GCStatsDerivedAnalysisConfig.h"
+#import "GCStatsDerivedHistoryConfig.h"
 
 @implementation GCStatsDerivedHistory
 
-+(GCStatsDerivedHistory*)analysisWith:(GCStatsMultiFieldConfig*)multiFieldConfig and:(GCStatsDerivedAnalysisConfig*)derivedConfig{
++(GCStatsDerivedHistory*)analysisWith:(GCStatsDerivedHistoryConfig*)derivedConfig{
     GCStatsDerivedHistory * rv = [[[GCStatsDerivedHistory alloc] init] autorelease];
     if( rv){
         rv.lookbackPeriod = [GCLagPeriod periodFor:gcLagPeriodSixMonths];
@@ -40,7 +40,6 @@
         rv.longTermSmoothing = gcDerivedHistSmoothingMax;
         rv.shortTermSmoothing = gcDerivedHistSmoothingMovingAverage;
         //rv.pointsForGraphs = @[ @(0), @(60), @(1800) ];
-        rv.multiFieldConfig = multiFieldConfig;
         rv.derivedAnalysisConfig = derivedConfig;
         rv.longTermPeriod = [GCLagPeriod periodFor:gcLagPeriodTwoWeeks];
         rv.shortTermPeriod = [GCLagPeriod periodFor:gcLagPeriodNone];
@@ -54,7 +53,6 @@
     [_shortTermX release];
     [_longTermX release];
     [_derivedAnalysisConfig release];
-    [_multiFieldConfig release];
     
     [super dealloc];
 }
