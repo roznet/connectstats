@@ -91,6 +91,9 @@ typedef NS_ENUM(NSUInteger, gcComparisonMetric) {
 -(UIBarButtonItem*)viewChoiceButtonForTarget:(id)target action:(SEL)sel longPress:(SEL)longPressSel;
 -(UIBarButtonItem*)viewConfigButtonForTarget:(id)target action:(SEL)sel longPress:(SEL)longPressSel;
 
+-(UIBarButtonItem*)standardButtonSetupWithImage:(UIImage*)image orTitle:(NSString*)title
+                                         target:(id)target action:(SEL)sel longPress:(SEL)longPressSel;
+
 /// Iterate through the different configuration for the current view
 /// depending on the view will iterate though historyStats filter or calChoice.
 /// Full logic iteration

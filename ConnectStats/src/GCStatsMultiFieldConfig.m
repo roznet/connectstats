@@ -48,7 +48,6 @@
         self.viewChoice = gcViewChoiceSummary;
         self.calendarConfig = [GCStatsCalendarAggregationConfig globalConfigFor:NSCalendarUnitWeekOfYear];
         self.activityTypeSelection = RZReturnAutorelease([[GCActivityTypeSelection alloc] initWithActivityTypeDetail:GCActivityType.all matchPrimaryType:true]);
-
     }
     return self;
 }
@@ -517,38 +516,34 @@
 
 #pragma mark - Setups
 
--(UIBarButtonItem*)viewChoiceButtonForTarget:(id)target action:(SEL)sel longPress:(SEL)longPressSel{
-    NSString * title = self.viewDescription;
-    
+-(UIBarButtonItem*)standardButtonSetupWithImage:(UIImage*)image orTitle:(NSString*)title
+                                         target:(id)target action:(SEL)sel longPress:(SEL)longPressSel{
     UIButton * button = [UIButton buttonWithType:UIButtonTypeSystem];
-    [button setTitle:title forState:UIControlStateNormal];
+    
+    if (image) {
+        [button setImage:image forState:UIControlStateNormal];
+        button.imageView.contentMode = UIViewContentModeScaleAspectFit;
+    }else if (title){
+        [button setTitle:title forState:UIControlStateNormal];
+    }
     [button addGestureRecognizer:RZReturnAutorelease([[UITapGestureRecognizer alloc] initWithTarget:target action:sel])];
     if(longPressSel){
         [button addGestureRecognizer:RZReturnAutorelease(([[UILongPressGestureRecognizer alloc] initWithTarget:target action:longPressSel]))];
     }
-    
     UIBarButtonItem * rv = RZReturnAutorelease([[UIBarButtonItem alloc] initWithCustomView:button]);
-
     return rv;
 }
+
+-(UIBarButtonItem*)viewChoiceButtonForTarget:(id)target action:(SEL)sel longPress:(SEL)longPressSel{
+    NSString * title = self.viewDescription;
+    return [self standardButtonSetupWithImage:nil orTitle:title target:target action:sel longPress:longPressSel];
+}
+
 
 -(UIBarButtonItem*)viewConfigButtonForTarget:(id)target action:(SEL)sel longPress:(SEL)longPressSel{
     [self setupButtonInfo];
 
-    UIButton * button = [UIButton buttonWithType:UIButtonTypeSystem];
-    
-    if (self.filterButtonImage) {
-        [button setImage:self.filterButtonImage forState:UIControlStateNormal];
-        button.imageView.contentMode = UIViewContentModeScaleAspectFit;
-    }else if (self.filterButtonTitle){
-        [button setTitle:self.filterButtonTitle forState:UIControlStateNormal];
-    }
-    [button addGestureRecognizer:RZReturnAutorelease([[UITapGestureRecognizer alloc] initWithTarget:target action:sel])];
-    if(longPressSel){
-        [button addGestureRecognizer:RZReturnAutorelease(([[UILongPressGestureRecognizer alloc] initWithTarget:target action:longPressSel]))];
-    }
-    UIBarButtonItem * rv = RZReturnAutorelease([[UIBarButtonItem alloc] initWithCustomView:button]);
-    return rv;
+    return [self standardButtonSetupWithImage:self.filterButtonImage orTitle:self.filterButtonTitle target:target action:sel longPress:longPressSel];
 }
 
 -(void)setupButtonInfo{

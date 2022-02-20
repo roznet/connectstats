@@ -25,6 +25,8 @@
 
 #import "GCStatsOneFieldConfig.h"
 #import "GCStatsMultiFieldConfig.h"
+#import "GCViewIcons.h"
+
 @interface GCStatsOneFieldConfig ()
 @property (nonatomic,retain) GCStatsMultiFieldConfig * multiFieldConfig;
 @end
@@ -132,6 +134,11 @@
         self.calendarConfig.calendarUnit = NSCalendarUnitWeekOfYear;
         done = true;
     }
+    // Year should always use all
+    if( self.calendarConfig.calendarUnit == NSCalendarUnitYear ){
+        self.multiFieldConfig.viewConfig = gcStatsViewConfigAll;
+    }
+    
     return done;
 }
 
@@ -145,23 +152,32 @@
 }
 
 -(UIBarButtonItem*)viewChoiceButtonForTarget:(id)target action:(SEL)sel longPress:(SEL)longPressSel{
-    NSString * title = self.viewDescription;
-    
-    UIButton * button = [UIButton buttonWithType:UIButtonTypeSystem];
-    [button setTitle:title forState:UIControlStateNormal];
-    [button addGestureRecognizer:RZReturnAutorelease([[UITapGestureRecognizer alloc] initWithTarget:target action:sel])];
-    if(longPressSel){
-        [button addGestureRecognizer:RZReturnAutorelease(([[UILongPressGestureRecognizer alloc] initWithTarget:target action:longPressSel]))];
-    }
-    
-    UIBarButtonItem * rv = RZReturnAutorelease([[UIBarButtonItem alloc] initWithCustomView:button]);
-
-    return rv;
+    return [self.multiFieldConfig standardButtonSetupWithImage:nil orTitle:self.viewDescription target:target action:sel longPress:longPressSel];
 }
 
 -(UIBarButtonItem*)viewConfigButtonForTarget:(id)target action:(SEL)sel longPress:(SEL)longPressSel{
+    UIImage * image = nil;
+    NSString * title = nil;
+    
+    switch (self.multiFieldConfig.viewConfig) {
+        case gcStatsViewConfigLast3M:
+            image = [GCViewIcons navigationIconFor:gcIconNavQuarterly];
+            break;
+        case gcStatsViewConfigLast6M:
+            image = [GCViewIcons navigationIconFor:gcIconNavSemiAnnually];
+            break;
+        case gcStatsViewConfigLast1Y:
+            image = [GCViewIcons navigationIconFor:gcIconNavYearly];
+            break;
+        case gcStatsViewConfigAll:
+        case gcStatsViewConfigUnused:
+            image = nil;
+            title = NSLocalizedString(@"All", @"View config");
+            break;
+    }
+    
     // Same as multiConfig for now
-    return [self.multiFieldConfig viewConfigButtonForTarget:target action:sel longPress:longPressSel];
+    return [self.multiFieldConfig standardButtonSetupWithImage:image orTitle:title target:target action:sel longPress:longPressSel];
 }
 
 #pragma  mark - history data series

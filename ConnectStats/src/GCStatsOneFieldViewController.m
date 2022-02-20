@@ -317,49 +317,60 @@
     return cell;
 }
 
+- (UITableViewCell *)tableView:(UITableView *)tableView scatterGraphCellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    GCCellSimpleGraph * cell = [GCCellSimpleGraph graphCell:tableView];
+    
+    NSDate * afterdate = [self.multiFieldConfig selectAfterDateFrom:self.fieldDataSerie.lastDate];
+    
+    if( !RZNilOrEqualToDate(afterdate, self.fieldDataSerieXY.config.fromDate) ){
+        // After Date for scatter point field serie have to be recalculated because
+        // the serie x is not the date
+        RZLog(RZLogInfo, @"Recalculate XY serie because %@ != %@", afterdate, self.fieldDataSerieXY.config.fromDate);
+        [self calculateXY];
+    }
+    GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource scatterPlotCacheFrom:self.fieldDataSerieXY];
+    [cell setDataSource:cache andConfig:cache];
+
+    return cell;
+
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView secondaryGraphCellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    GCCellSimpleGraph * cell = [GCCellSimpleGraph graphCell:tableView];
+
+    GCSimpleGraphCachedDataSource * cache = nil;
+    if (self.oneFieldConfig.secondGraphChoice == gcOneFieldSecondGraphHistory) {
+        cache = [self.multiFieldConfig dataSourceForFieldDataSerie:self.fieldDataSerie];
+        if (self.multiFieldConfig.graphChoice == gcGraphChoiceCumulative) {// This is Cumulative graph, needs legend
+            cell.legend = true;
+        }else{
+            cell.legend = false;
+        }
+    }else if(self.oneFieldConfig.secondGraphChoice == gcOneFieldSecondGraphHistogram){
+        cache = [GCSimpleGraphCachedDataSource fieldHistoryHistogramFrom:self.fieldDataSerie width:tableView.frame.size.width];
+    }else if(self.oneFieldConfig.secondGraphChoice == gcOneFieldSecondGraphPerformance){
+        NSDate *from=[[[GCAppGlobal organizer] lastActivity].date dateByAddingGregorianComponents:[NSDateComponents dateComponentsFromString:@"-6m"]];
+        self.performanceAnalysis = [GCHistoryPerformanceAnalysis performanceAnalysisFromDate:from forField:self.oneFieldConfig.field];
+        
+        [self.performanceAnalysis calculate];
+        
+        cache = [GCSimpleGraphCachedDataSource performanceAnalysis:self.performanceAnalysis width:tableView.frame.size.width];
+    }
+    [cell setDataSource:cache andConfig:cache];
+    return cell;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == GC_S_GRAPH) {
         if (indexPath.row == 1) {
-            GCCellSimpleGraph * cell = [GCCellSimpleGraph graphCell:tableView];
-
-            GCSimpleGraphCachedDataSource * cache = nil;
-            if (self.oneFieldConfig.secondGraphChoice == gcOneFieldSecondGraphHistory) {
-                cache = [self.multiFieldConfig dataSourceForFieldDataSerie:self.fieldDataSerie];
-                if (self.multiFieldConfig.graphChoice == gcGraphChoiceCumulative) {// This is Cumulative graph, needs legend
-                    cell.legend = true;
-                }else{
-                    cell.legend = false;
-                }
-            }else if(self.oneFieldConfig.secondGraphChoice == gcOneFieldSecondGraphHistogram){
-                cache = [GCSimpleGraphCachedDataSource fieldHistoryHistogramFrom:_fieldDataSerie width:tableView.frame.size.width];
-            }else if(self.oneFieldConfig.secondGraphChoice == gcOneFieldSecondGraphPerformance){
-                NSDate *from=[[[GCAppGlobal organizer] lastActivity].date dateByAddingGregorianComponents:[NSDateComponents dateComponentsFromString:@"-6m"]];
-                self.performanceAnalysis = [GCHistoryPerformanceAnalysis performanceAnalysisFromDate:from forField:self.oneFieldConfig.field];
-                
-                [self.performanceAnalysis calculate];
-                
-                cache = [GCSimpleGraphCachedDataSource performanceAnalysis:self.performanceAnalysis width:tableView.frame.size.width];
-            }
-            [cell setDataSource:cache andConfig:cache];
-            return cell;
+            return [self tableView:tableView secondaryGraphCellForRowAtIndexPath:indexPath];
         }else{
-            GCCellSimpleGraph * cell = [GCCellSimpleGraph graphCell:tableView];
-            
-            NSDate * afterdate = [self.multiFieldConfig selectAfterDateFrom:self.fieldDataSerie.lastDate];
-            
-            if( !RZNilOrEqualToDate(afterdate, self.fieldDataSerieXY.config.fromDate) ){
-                // After Date for scatter point field serie have to be recalculated because
-                // the serie x is not the date
-                RZLog(RZLogInfo, @"Recalculate XY serie because %@ != %@", afterdate, self.fieldDataSerieXY.config.fromDate);
-                [self calculateXY];
-            }
-            GCSimpleGraphCachedDataSource * cache = [GCSimpleGraphCachedDataSource scatterPlotCacheFrom:self.fieldDataSerieXY];
-            [cell setDataSource:cache andConfig:cache];
-
-            return cell;
+            return [self tableView:tableView scatterGraphCellForRowAtIndexPath:indexPath];
         }
     }else if(indexPath.section == GC_S_QUARTILES){
+        // Unused now
         GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
         return cell;
     }else if( indexPath.section == GC_S_AGGREGATE ){
