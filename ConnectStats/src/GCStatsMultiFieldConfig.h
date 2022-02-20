@@ -93,8 +93,16 @@ typedef NS_ENUM(NSUInteger, gcComparisonMetric) {
 
 /// Iterate through the different configuration for the current view
 /// depending on the view will iterate though historyStats filter or calChoice.
+/// Full logic iteration
 -(BOOL)nextViewConfig;
+/**
+ * Will iterate through calendar And Configs
+ */
 -(BOOL)nextViewConfigCalendar;
+/**
+ * simple next view config from last 1y, last 3m, all, not other logic
+ */
+-(BOOL)nextViewConfigOnly;
 
 /// Iterate through the different view, summary, all, calendar(weekly,monthly,annual)
 /// return true if cycle complete and back to first view

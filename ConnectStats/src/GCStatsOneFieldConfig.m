@@ -36,6 +36,10 @@
     if(rv){
         rv.multiFieldConfig = [GCStatsMultiFieldConfig   fieldListConfigFrom:multiFieldConfig];
         rv.multiFieldConfig.viewChoice = gcViewChoiceCalendar;
+        // We should always be set different than unused for one field config
+        if( multiFieldConfig.viewConfig == gcStatsViewConfigUnused){
+            rv.multiFieldConfig.viewConfig = gcStatsViewConfigAll;
+        }
         rv.field = field;
         rv.x_field = xfield;
     }
@@ -77,6 +81,8 @@
     return [base arrayByAddingObjectsFromArray:self.field.relatedFields];
 }
 
+#pragma mark - fiels indirection
+
 -(GCStatsCalendarAggregationConfig *)calendarConfig{
     return self.multiFieldConfig.calendarConfig;
 }
@@ -102,6 +108,11 @@
     [self.multiFieldConfig isEqualToConfig:other.multiFieldConfig];
 }
 
+#pragma mark - View choices and config
+/*
+ * View choice will be monthly/weekly/yearly, should use icon for month/week/year
+ * View Config will be last 3m, last 6m, last 1y, all, in text
+ */
 -(gcViewChoice)viewChoice{
     return self.multiFieldConfig.viewChoice;
 }
@@ -130,17 +141,7 @@
  */
 
 -(BOOL)nextViewConfig{
-    return [self.multiFieldConfig nextViewConfigCalendar];
-}
-
--(GCHistoryFieldDataSerieConfig*)historyConfig{
-    GCHistoryFieldDataSerieConfig * rv = [GCHistoryFieldDataSerieConfig configWithField:self.field xField:nil filter:self.multiFieldConfig.useFilter fromDate:nil];
-    //rv.fromDate = [self.multiFieldConfig selectAfterDateFrom:(NSDate *)]
-    return rv;
-}
--(GCHistoryFieldDataSerieConfig*)historyConfigXY{
-    return [GCHistoryFieldDataSerieConfig configWithField:self.field xField:self.x_field filter:self.multiFieldConfig.useFilter fromDate:nil];
-
+    return [self.multiFieldConfig nextViewConfigOnly];
 }
 
 -(UIBarButtonItem*)viewChoiceButtonForTarget:(id)target action:(SEL)sel longPress:(SEL)longPressSel{
@@ -162,6 +163,19 @@
     // Same as multiConfig for now
     return [self.multiFieldConfig viewConfigButtonForTarget:target action:sel longPress:longPressSel];
 }
+
+#pragma  mark - history data series
+
+-(GCHistoryFieldDataSerieConfig*)historyConfig{
+    GCHistoryFieldDataSerieConfig * rv = [GCHistoryFieldDataSerieConfig configWithField:self.field xField:nil filter:self.multiFieldConfig.useFilter fromDate:nil];
+    //rv.fromDate = [self.multiFieldConfig selectAfterDateFrom:(NSDate *)]
+    return rv;
+}
+-(GCHistoryFieldDataSerieConfig*)historyConfigXY{
+    return [GCHistoryFieldDataSerieConfig configWithField:self.field xField:self.x_field filter:self.multiFieldConfig.useFilter fromDate:nil];
+
+}
+
 
 
 @end

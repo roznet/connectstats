@@ -351,7 +351,6 @@
 
     return rv;
 }
-
 -(BOOL)nextViewConfigCalendar{
     BOOL rv = false;
     // View monthly, weekly or yearly aggregated stats
@@ -389,6 +388,28 @@
     }
     return rv;
 }
+
+-(BOOL)nextViewConfigOnly{
+    BOOL rv = false;
+    // View monthly, weekly or yearly aggregated stats
+    // :          all,  last3m, last6m, last1y, todate
+    // viewConfig last1y
+    
+    self.viewConfig++;
+    if( self.viewConfig == gcStatsViewConfigUnused){
+        self.viewConfig = gcStatsViewConfigAll;
+        rv = true;
+    }
+    
+    NSCalendarUnit calUnit = self.calendarConfig.calendarUnit;
+    if(calUnit == NSCalendarUnitMonth && self.viewConfig == gcStatsViewConfigLast3M){
+        self.viewConfig = gcStatsViewConfigLast6M;
+    }else if(calUnit == NSCalendarUnitYear){
+        self.viewConfig = gcStatsViewConfigAll;
+    }
+    return rv;
+}
+
 
 -(BOOL)nextViewConfigOldStyle{
     BOOL rv = false;
