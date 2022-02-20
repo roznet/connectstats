@@ -32,6 +32,9 @@ class GCStatsOneFieldConfigViewController: UIViewController {
     @IBOutlet var viewConfigSegment: UISegmentedControl!
     @IBOutlet var periodSegment: UISegmentedControl!
     @IBOutlet var secondGraphSegment: UISegmentedControl!
+    @IBOutlet var graphTypeSegment: UISegmentedControl!
+    @IBOutlet var xFieldLabel: UILabel!
+    
     
     @IBOutlet var previewTableView: UITableView!
     
@@ -122,20 +125,30 @@ class GCStatsOneFieldConfigViewController: UIViewController {
             switch oneFieldConfig.secondGraphChoice {
             case gcOneFieldSecondGraph.history:
                 secondGraphSegment.selectedSegmentIndex = 0
+                graphTypeSegment.isEnabled = true
             case gcOneFieldSecondGraph.performance:
                 secondGraphSegment.selectedSegmentIndex = 1
+                graphTypeSegment.isEnabled = false
             case gcOneFieldSecondGraph.histogram:
                 secondGraphSegment.selectedSegmentIndex = 2
+                graphTypeSegment.isEnabled = false
             default:
                 secondGraphSegment.selectedSegmentIndex = 0
+                graphTypeSegment.isEnabled = true
             }
             
-//            switch oneFieldConfig.graphChoice {
-//            case gcGraphChoice.cumulative:
-//                graphTypeSegment.selectedSegmentIndex = 0;
-//            default:
-//                graphTypeSegment.selectedSegmentIndex = 1;
-//            }
+            switch oneFieldConfig.graphChoice {
+            case gcGraphChoice.cumulative:
+                graphTypeSegment.selectedSegmentIndex = 0;
+            default:
+                graphTypeSegment.selectedSegmentIndex = 1;
+            }
+            
+            if let xlabel = oneFieldConfig.x_field.displayName() {
+                self.xFieldLabel.text = "X: \(xlabel)"
+            }else{
+                self.xFieldLabel.text = ""
+            }
         }
     }
     
@@ -183,12 +196,12 @@ class GCStatsOneFieldConfigViewController: UIViewController {
                 oneFieldConfig.secondGraphChoice = .histogram
             }
             
-//            let graphIndex = graphTypeSegment.selectedSegmentIndex
-//            if graphIndex == 0{
-//                oneFieldConfig.graphChoice = gcGraphChoice.cumulative
-//            }else{
-//                oneFieldConfig.graphChoice = gcGraphChoice.barGraph
-//            }
+            let graphIndex = graphTypeSegment.selectedSegmentIndex
+            if graphIndex == 0{
+                oneFieldConfig.graphChoice = gcGraphChoice.cumulative
+            }else{
+                oneFieldConfig.graphChoice = gcGraphChoice.barGraph
+            }
             self.oneFieldViewController?.setup(forFieldListConfig: oneFieldConfig)
             self.synchronizeConfigToView()
         }

@@ -2856,8 +2856,6 @@
 		425257F719AB902D00993F61 /* Config */ = {
 			isa = PBXGroup;
 			children = (
-				423F9FC319ACDEA40057DB5A /* GCHistoryFieldDataSerieConfig.h */,
-				423F9FC419ACDEA40057DB5A /* GCHistoryFieldDataSerieConfig.m */,
 				425257F819AB905300993F61 /* GCStatsOneFieldConfig.h */,
 				425257F919AB905300993F61 /* GCStatsOneFieldConfig.m */,
 				4237869C1972D582006CBD4D /* GCStatsMultiFieldConfig.h */,
@@ -3061,6 +3059,8 @@
 		426F74DB1620299F007B3653 /* ActivityHistory */ = {
 			isa = PBXGroup;
 			children = (
+				423F9FC319ACDEA40057DB5A /* GCHistoryFieldDataSerieConfig.h */,
+				423F9FC419ACDEA40057DB5A /* GCHistoryFieldDataSerieConfig.m */,
 				423493FC160477F200A770D6 /* GCHistoryFieldDataSerie.h */,
 				423493FE160479FA00A770D6 /* GCHistoryFieldDataSerie.m */,
 				42B231CE253058680080D743 /* GCHistoryFieldSummaryDataHolder.h */,

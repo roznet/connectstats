@@ -88,6 +88,14 @@
     return self.multiFieldConfig.activityTypeDetail;
 }
 
+-(gcGraphChoice)graphChoice{
+    return self.multiFieldConfig.graphChoice;
+}
+
+-(void)setGraphChoice:(gcGraphChoice)graphChoice{
+    self.multiFieldConfig.graphChoice = graphChoice;
+}
+
 -(BOOL)isEqualToConfig:(GCStatsOneFieldConfig*)other{
     return [self.field isEqualToField:other.field] && [self.x_field isEqualToField:other.x_field] &&
     self.secondGraphChoice == other.secondGraphChoice && self.viewChoice == other.viewChoice &&
