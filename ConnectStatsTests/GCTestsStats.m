@@ -193,7 +193,7 @@
 
     GCActivityTypeSelection * selection = RZReturnAutorelease([[GCActivityTypeSelection alloc] initWithActivityType:activityType]);
     
-    GCHistoryFieldSummaryStats * vals_sum = [GCHistoryFieldSummaryStats fieldStatsWithActivities:organizer.activities
+    GCHistoryFieldSummaryStats * vals_sum = [GCHistoryFieldSummaryStats fieldSummaryStatsWithActivities:organizer.activities
                                                                            activityTypeSelection:selection
                                                                                    referenceDate:nil
                                                                                       ignoreMode:gcIgnoreModeActivityFocus];

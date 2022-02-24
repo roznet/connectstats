@@ -328,7 +328,7 @@
     [stats setActivityTypeSelection:RZReturnAutorelease([[GCActivityTypeSelection alloc] initWithActivityType:GC_TYPE_ALL])];
     [stats aggregate:NSCalendarUnitWeekOfYear referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
 
-    GCHistoryFieldSummaryStats * sumStats = [GCHistoryFieldSummaryStats fieldStatsWithActivities:organizer.activities activityTypeSelection:nil referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
+    GCHistoryFieldSummaryStats * sumStats = [GCHistoryFieldSummaryStats fieldSummaryStatsWithActivities:organizer.activities activityTypeSelection:nil referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
     GCHistoryAggregatedDataHolder * holder = [stats dataForIndex:0];
     
     GCField * hrfield =[GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:GC_TYPE_ALL];

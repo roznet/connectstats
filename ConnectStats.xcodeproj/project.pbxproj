@@ -67,6 +67,12 @@
 		421A765E20275B4D00D12B6C /* activity_2477200414.json in Resources */ = {isa = PBXBuildFile; fileRef = 421A765D20275B4C00D12B6C /* activity_2477200414.json */; };
 		421BD67924D6BED500F47190 /* GCStatsMultiFieldConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42656CE824CE0129004E9EE6 /* GCStatsMultiFieldConfigViewController.swift */; };
 		421E8BF727C2C3F700A9B264 /* GCHistoryStatistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422CE57125DBE87300723D4D /* GCHistoryStatistics.swift */; };
+		421E8BFE27C7E9DA00A9B264 /* GCHistoryFieldSummaryDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421E8BFD27C7E9DA00A9B264 /* GCHistoryFieldSummaryDataSource.swift */; };
+		421E8BFF27C7E9DA00A9B264 /* GCHistoryFieldSummaryDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421E8BFD27C7E9DA00A9B264 /* GCHistoryFieldSummaryDataSource.swift */; };
+		421E8C0027C7E9DA00A9B264 /* GCHistoryFieldSummaryDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421E8BFD27C7E9DA00A9B264 /* GCHistoryFieldSummaryDataSource.swift */; };
+		421E8C0227C7FD8E00A9B264 /* GCHistoryFieldSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421E8C0127C7FD8E00A9B264 /* GCHistoryFieldSelectionViewController.swift */; };
+		421E8C0327C7FD8E00A9B264 /* GCHistoryFieldSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421E8C0127C7FD8E00A9B264 /* GCHistoryFieldSelectionViewController.swift */; };
+		421E8C0427C7FD8E00A9B264 /* GCHistoryFieldSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421E8C0127C7FD8E00A9B264 /* GCHistoryFieldSelectionViewController.swift */; };
 		421F39A81B79EF8900CA7200 /* GCActivityThumbnails.m in Sources */ = {isa = PBXBuildFile; fileRef = 421F39A71B79EF8900CA7200 /* GCActivityThumbnails.m */; };
 		421F39A91B79EF8900CA7200 /* GCActivityThumbnails.m in Sources */ = {isa = PBXBuildFile; fileRef = 421F39A71B79EF8900CA7200 /* GCActivityThumbnails.m */; };
 		421F39AD1B7A117300CA7200 /* GCTrackFieldChoiceHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 421F39AC1B7A117300CA7200 /* GCTrackFieldChoiceHolder.m */; };
@@ -1354,6 +1360,8 @@
 		421A764B2027534A00D12B6C /* activityweather_2477200414.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activityweather_2477200414.json; sourceTree = "<group>"; };
 		421A764C2027534A00D12B6C /* track_2477200414.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = track_2477200414.db; sourceTree = "<group>"; };
 		421A765D20275B4C00D12B6C /* activity_2477200414.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activity_2477200414.json; sourceTree = "<group>"; };
+		421E8BFD27C7E9DA00A9B264 /* GCHistoryFieldSummaryDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GCHistoryFieldSummaryDataSource.swift; path = src/GCHistoryFieldSummaryDataSource.swift; sourceTree = "<group>"; };
+		421E8C0127C7FD8E00A9B264 /* GCHistoryFieldSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GCHistoryFieldSelectionViewController.swift; path = src/GCHistoryFieldSelectionViewController.swift; sourceTree = "<group>"; };
 		421F39A61B79EF8900CA7200 /* GCActivityThumbnails.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCActivityThumbnails.h; path = src/GCActivityThumbnails.h; sourceTree = "<group>"; };
 		421F39A71B79EF8900CA7200 /* GCActivityThumbnails.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCActivityThumbnails.m; path = src/GCActivityThumbnails.m; sourceTree = "<group>"; };
 		421F39AB1B7A117300CA7200 /* GCTrackFieldChoiceHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTrackFieldChoiceHolder.h; path = src/GCTrackFieldChoiceHolder.h; sourceTree = "<group>"; };
@@ -2616,7 +2624,7 @@
 			name = Colors;
 			sourceTree = "<group>";
 		};
-		422D900917A27E2E00C131DC /* Buttons */ = {
+		422D900917A27E2E00C131DC /* ButtonsAndSelections */ = {
 			isa = PBXGroup;
 			children = (
 				4234B5B017895CF2002C3B53 /* GCViewMaturityButton.h */,
@@ -2625,8 +2633,9 @@
 				42B34A2D179C31D500688E9F /* GCViewActivityTypeButton.m */,
 				42FC98D7261C6A4D00ACF6E1 /* GCActivityTypeSelectionViewController.swift */,
 				42FC98D8261C6A4D00ACF6E1 /* GCActivityTypeSelectionViewController.xib */,
+				421E8C0127C7FD8E00A9B264 /* GCHistoryFieldSelectionViewController.swift */,
 			);
-			name = Buttons;
+			name = ButtonsAndSelections;
 			sourceTree = "<group>";
 		};
 		423050E1261A2E7D004195BB /* Notifications */ = {
@@ -2669,13 +2678,14 @@
 			name = Pages;
 			sourceTree = "<group>";
 		};
-		4234943716090DE900A770D6 /* GraphsDataSource */ = {
+		4234943716090DE900A770D6 /* DataSource */ = {
 			isa = PBXGroup;
 			children = (
+				421E8BFD27C7E9DA00A9B264 /* GCHistoryFieldSummaryDataSource.swift */,
 				42E226B7165842F9008FFD68 /* GCSimpleGraphCachedDataSource+Templates.h */,
 				42E226B8165842F9008FFD68 /* GCSimpleGraphCachedDataSource+Templates.m */,
 			);
-			name = GraphsDataSource;
+			name = DataSource;
 			sourceTree = "<group>";
 		};
 		4235448616C5BC6900AB3E09 /* Strava */ = {
@@ -3469,7 +3479,7 @@
 				42A66BCD160CFF7F00DA29A5 /* Cells */,
 				42A95B361632DB20000B2082 /* Maps */,
 				42A66BCE160CFF8700DA29A5 /* Config */,
-				4234943716090DE900A770D6 /* GraphsDataSource */,
+				4234943716090DE900A770D6 /* DataSource */,
 				4237CD6E1D69EFAF001AE5BC /* DeviceSpecific */,
 				4234943616090DD300A770D6 /* Pages */,
 			);
@@ -3664,7 +3674,7 @@
 		42A66BCE160CFF8700DA29A5 /* Config */ = {
 			isa = PBXGroup;
 			children = (
-				422D900917A27E2E00C131DC /* Buttons */,
+				422D900917A27E2E00C131DC /* ButtonsAndSelections */,
 				422D900817A27E2000C131DC /* Colors */,
 				42A66BCF160D000D00DA29A5 /* GCViewConfig.h */,
 				42A66BD0160D000D00DA29A5 /* GCViewConfig.m */,
@@ -5428,6 +5438,7 @@
 				424F92D71B1073100075C5F1 /* GCMapWindCompass.m in Sources */,
 				42091D001B19F3E600E9DD34 /* GCHealthKitDailySummaryRequest.m in Sources */,
 				424F92D61B1072FD0075C5F1 /* GCDebugActionsTableViewController.m in Sources */,
+				421E8C0027C7E9DA00A9B264 /* GCHistoryFieldSummaryDataSource.swift in Sources */,
 				422FAEF019A1DD6000D09773 /* GCCalendarDataSource.m in Sources */,
 				422FAEF219A1DD6000D09773 /* GCTrackStats.m in Sources */,
 				422FAEF319A1DD6000D09773 /* GCSettingsViewController.m in Sources */,
@@ -5456,6 +5467,7 @@
 				42D5799025603E3E004A540F /* GCCellFieldValueColumnView.swift in Sources */,
 				4289CD8A2668C09B003BC3EB /* GCConnectStatsRequestBackgroundFitFile.swift in Sources */,
 				42868B0C27A5AE52005C4FE9 /* GCStatsOneFieldConfigViewController.swift in Sources */,
+				421E8C0427C7FD8E00A9B264 /* GCHistoryFieldSelectionViewController.swift in Sources */,
 				422FAF0719A1DD6000D09773 /* GCMapLegendView.m in Sources */,
 				42CDF8692413E05C003930A4 /* GCTrackPoint+Swim.m in Sources */,
 				422F521F1DFB56BF00DD5551 /* GCActivity+Fields.m in Sources */,
@@ -5752,6 +5764,7 @@
 				420967511895566200D32CA7 /* GCDerivedDataSerie.m in Sources */,
 				42DC51581B2784F200B5C12F /* GCHealthKitWorkoutsRequest.m in Sources */,
 				423F9FC919AD2ACA0057DB5A /* GCStatsHistGraphConfig.m in Sources */,
+				421E8BFE27C7E9DA00A9B264 /* GCHistoryFieldSummaryDataSource.swift in Sources */,
 				42BC539B161E37AE00576097 /* GCHistoryFieldSummaryStats.m in Sources */,
 				42B231D0253058680080D743 /* GCHistoryFieldSummaryDataHolder.m in Sources */,
 				42FD55B91B90A39F0070B3B4 /* GCCellHealthDayActivity.m in Sources */,
@@ -5780,6 +5793,7 @@
 				42AA288F1637F6AB0054F84A /* GCActivitySearchElement.m in Sources */,
 				422549571EE7361F004F4AE5 /* FITFitStatisticsWeight.swift in Sources */,
 				42868B0A27A5AE52005C4FE9 /* GCStatsOneFieldConfigViewController.swift in Sources */,
+				421E8C0227C7FD8E00A9B264 /* GCHistoryFieldSelectionViewController.swift in Sources */,
 				422C70AE1642B677003779E0 /* GCHistoryAggregatedStats.m in Sources */,
 				422F3BB126173F2100BE3417 /* GCActivityAutoLapChoiceHolder.m in Sources */,
 				424BDAB925E2DA7C00EC7DBE /* GCActivity+Location.swift in Sources */,
@@ -5964,6 +5978,7 @@
 				422CC8781E6ACA1700195414 /* GCField+FitFile.swift in Sources */,
 				4280C7D22364FC7C00223709 /* GCConnectStatsRequestWeather.m in Sources */,
 				4226B42A1F65E2ED009E1104 /* GCWebRequestStandard.m in Sources */,
+				421E8BFF27C7E9DA00A9B264 /* GCHistoryFieldSummaryDataSource.swift in Sources */,
 				42D8BECD256FD20E0051903E /* GCActivityOrganizedFields.swift in Sources */,
 				42A425B62556BF8500E4AFBE /* GCField+Icons.swift in Sources */,
 				42BF8D7A24B505EB001E1C72 /* GCActivity+Assets.m in Sources */,
@@ -6005,6 +6020,7 @@
 				42BDFE81242F7789001BCDC8 /* GCActivity+Series.m in Sources */,
 				42B5E2581BA5B216000FAE4E /* GCHealthMeasure.m in Sources */,
 				42B5E2591BA5B216000FAE4E /* GCHealthSleepMeasure.m in Sources */,
+				421E8C0327C7FD8E00A9B264 /* GCHistoryFieldSelectionViewController.swift in Sources */,
 				42B5E25A1BA5B216000FAE4E /* GCHealthSleepBlock.m in Sources */,
 				42B5E25B1BA5B216000FAE4E /* GCHealthOrganizer.m in Sources */,
 				42B5E25C1BA5B216000FAE4E /* GCDerivedRequest.m in Sources */,

@@ -44,7 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic,retain) NSArray<NSString*> * foundActivityTypes;
 
-+(GCHistoryFieldSummaryStats*)fieldStatsWithActivities:(NSArray<GCActivity*>*)activities
++(GCHistoryFieldSummaryStats*)fieldSummaryStatsWithActivities:(NSArray<GCActivity*>*)activities
                                               activityTypeSelection:(nullable GCActivityTypeSelection*)typeSelection
                                          referenceDate:(nullable NSDate*)refOrNil
                                             ignoreMode:(gcIgnoreMode)ignoreMode;

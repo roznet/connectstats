@@ -41,7 +41,7 @@
     [super dealloc];
 }
 
-+(GCHistoryFieldSummaryStats*)fieldStatsWithActivities:(NSArray<GCActivity*>*)activities
++(GCHistoryFieldSummaryStats*)fieldSummaryStatsWithActivities:(NSArray<GCActivity*>*)activities
                                  activityTypeSelection:(nullable GCActivityTypeSelection*)typeSelection
                                          referenceDate:(NSDate*)refOrNil
                                             ignoreMode:(gcIgnoreMode)ignoreMode{

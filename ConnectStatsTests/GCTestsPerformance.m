@@ -78,7 +78,7 @@
     GCActivitiesOrganizer * organizer = [[GCActivitiesOrganizer alloc] initTestModeWithDb:db];
     
     [self measureBlock:^{
-        [GCHistoryFieldSummaryStats fieldStatsWithActivities:organizer.activities
+        [GCHistoryFieldSummaryStats fieldSummaryStatsWithActivities:organizer.activities
                                        activityTypeSelection:nil
                                                referenceDate:nil
                                                   ignoreMode:gcIgnoreModeActivityFocus];

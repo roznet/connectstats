@@ -725,7 +725,7 @@
     
     gcIgnoreMode ignoreMode = [self.activityType isEqualToString:GC_TYPE_DAY] ? gcIgnoreModeDayFocus : gcIgnoreModeActivityFocus;
     NSArray * useActivities = self.useFilter ? [[GCAppGlobal organizer] filteredActivities] : [[GCAppGlobal organizer] activities];
-    GCHistoryFieldSummaryStats * vals = [GCHistoryFieldSummaryStats fieldStatsWithActivities:useActivities
+    GCHistoryFieldSummaryStats * vals = [GCHistoryFieldSummaryStats fieldSummaryStatsWithActivities:useActivities
                                                                                     activityTypeSelection:self.multiFieldConfig.activityTypeSelection
                                                                                referenceDate:self.multiFieldConfig.calendarConfig.referenceDate
                                                                                   ignoreMode:ignoreMode
