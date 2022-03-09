@@ -423,12 +423,12 @@ static NSArray * _calculatedFields = nil;
         return nil;
     }
     
-    double val =  [speed convertToUnit:GCUnit.mps].value / pow.value * [weight convertToUnit:GCUnit.kilogram].value * 100.0;
+    double val =  [speed convertToUnit:GCUnit.mps].value / pow.value * [weight convertToUnit:GCUnit.kilogram].value;
 
-    return [GCNumberWithUnit numberWithUnitName:@"dimensionless" andValue:val];
+    return [GCNumberWithUnit numberWithUnitName:@"kg/N" andValue:val];
 }
 -(NSString*)unitName{
-    return @"dimensionless";
+    return @"kg/N";
 }
 
 @end

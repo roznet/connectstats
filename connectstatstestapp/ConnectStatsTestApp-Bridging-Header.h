@@ -16,6 +16,7 @@
 #import "GCTrackPoint+Swim.h"
 #import "GCStatsMultiFieldViewController.h"
 #import "GCActivityDetailViewController.h"
+#import "GCStatsOneFieldViewController.h"
 
 #import "GCViewIcons.h"
 #import "GCActivity+UI.h"
