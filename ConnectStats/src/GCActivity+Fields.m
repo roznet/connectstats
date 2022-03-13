@@ -74,7 +74,7 @@
                           @"WeightedMeanVerticalRatio",
                           @"WeightedMeanAirTemperature",
                           @"WeightedMeanLegSpringStiffness",
-                          CALC_METABOLIC_EFFICIENCY,
+                          CALC_RUNNING_EFFECTIVENESS,
                           ],
                   GC_TYPE_CYCLING:@[
                           @"SumDistance",

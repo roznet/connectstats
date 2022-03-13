@@ -628,7 +628,7 @@ static void registerInCache(GCField*field){
                     @[CALC_ASCENT_SPEED, CALC_MAX_ASCENT_SPEED],
                     @[CALC_DESCENT_SPEED, CALC_MAX_DESCENT_SPEED],
                     @[CALC_VERTICAL_SPEED, CALC_ASCENT_SPEED, CALC_DESCENT_SPEED],
-                    @[CALC_METABOLIC_EFFICIENCY, CALC_RUNNING_EFFECTIVENESS, CALC_EFFICIENCY_FACTOR],
+                    @[ CALC_RUNNING_EFFECTIVENESS, CALC_METABOLIC_EFFICIENCY, CALC_EFFICIENCY_FACTOR],
                     
                     ];
         RZRetain(_groups);
