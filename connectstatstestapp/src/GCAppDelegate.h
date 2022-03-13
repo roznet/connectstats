@@ -33,7 +33,7 @@
 #import "GCHealthOrganizer.h"
 #import "GCDerivedOrganizer.h"
 #import "GCTestServicesViewController.h"
-
+#import "GCAppActionDelegate.h"
 
 @interface GCAppDelegate : UIResponder <UIApplicationDelegate>
 
@@ -50,6 +50,7 @@
 @property (nonatomic, retain) GCAppProfiles * profile;
 @property (nonatomic, retain) GCHealthOrganizer * health;
 @property (nonatomic, retain) GCDerivedOrganizer * derived;
+@property (nonatomic, readonly) NSObject<GCAppActionDelegate>*actionDelegate;
 
 -(void)setupEmptyState:(NSString*)name withSettingsName:(NSString*)settingName;
 -(void)setupEmptyState:(NSString*)name;

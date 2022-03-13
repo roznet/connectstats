@@ -223,7 +223,7 @@ class GCTestAggregatedStats: XCTestCase {
         let performance = RZPerformance()
         performance.reset()
 
-        let fieldsdata = GCHistoryFieldSummaryStats.fieldStats(withActivities: activities, activityTypeSelection: nil, referenceDate: nil, ignoreMode: gcIgnoreMode.activityFocus)
+        let fieldsdata = GCHistoryFieldSummaryStats(activities: activities, activityTypeSelection: nil, referenceDate: nil, ignoreMode: gcIgnoreMode.activityFocus)
         
         if let basedate = activities.first?.date {
             let indexes : Set<Index> = [

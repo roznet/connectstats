@@ -37,6 +37,7 @@
 
 #import "GCHistoryFieldSummaryDataHolder.h"
 #import "GCHistoryFieldSummaryStats.h"
+#import "GCFieldsForCategory.h"
 
 #import "GCTestAppGlobal.h"
 #import "GCGarminLoginSSORequest.h"

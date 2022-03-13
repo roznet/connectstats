@@ -390,4 +390,8 @@
     RZLog(RZLogInfo,@"Version %@", [[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"]);
 }
 
+- (NSObject<UIApplicationDelegate> *)actionDelegate{
+    return nil;
+}
+
 @end

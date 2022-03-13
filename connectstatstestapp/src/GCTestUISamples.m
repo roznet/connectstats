@@ -46,7 +46,7 @@
 #import "GCConnectStatsRequestFitFile.h"
 #import "GCGarminActivityTrack13Request.h"
 #import "GCGarminRequestActivityReload.h"
-#import "GCStatsDerivedAnalysisHistory.h"
+#import "GCStatsDerivedHistory.h"
 #import "GCTestAppGlobal.h"
 #import "GCActivitiesOrganizer.h"
 #import "ConnectStats-Swift.h"
@@ -682,10 +682,9 @@
     
     NSMutableArray * rv = [NSMutableArray array];
     
-    GCStatsMultiFieldConfig * fieldConfig = [GCStatsMultiFieldConfig fieldListConfigFrom:nil];
     GCStatsDerivedHistoryConfig * derivedAnalysisConfig = [GCStatsDerivedHistoryConfig configForActivityType:GC_TYPE_RUNNING];;
     
-    GCStatsDerivedAnalysisHistory * config = [GCStatsDerivedAnalysisHistory analysisWith:fieldConfig and:derivedAnalysisConfig];
+    GCStatsDerivedHistory * config = [GCStatsDerivedHistory analysisWith:derivedAnalysisConfig];
     config.mode = gcDerivedHistModeAbsolute;
     config.longTermSmoothing = gcDerivedHistSmoothingMovingAverage;
     config.shortTermSmoothing = gcDerivedHistSmoothingMovingAverage;

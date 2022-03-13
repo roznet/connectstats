@@ -134,7 +134,7 @@
     return rv;
 }
 
-+(GCHistoryFieldSummaryStats*)fieldStatsWithHealthMeasures:(NSArray*)measures{
++(GCHistoryFieldSummaryStats*)fieldSummaryStatsWithHealthMeasures:(NSArray*)measures{
     GCHistoryFieldSummaryStats * rv = [[[GCHistoryFieldSummaryStats alloc] init] autorelease];
     if (rv) {
         rv.fieldData = [NSMutableDictionary dictionaryWithCapacity:30];

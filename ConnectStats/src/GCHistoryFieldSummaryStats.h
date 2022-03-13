@@ -48,7 +48,7 @@ NS_ASSUME_NONNULL_BEGIN
                                               activityTypeSelection:(nullable GCActivityTypeSelection*)typeSelection
                                          referenceDate:(nullable NSDate*)refOrNil
                                             ignoreMode:(gcIgnoreMode)ignoreMode;
-+(GCHistoryFieldSummaryStats*)fieldStatsWithHealthMeasures:(NSArray*)measures;
++(GCHistoryFieldSummaryStats*)fieldSummaryStatsWithHealthMeasures:(NSArray<GCHealthMeasure*>*)measures;
 -(void)addHealthMeasures:(NSArray<GCHealthMeasure*>*)measures referenceDate:(nullable NSDate*)refOrNil;
 
 -(GCHistoryFieldSummaryDataHolder*)dataForField:(GCField*)aField;
