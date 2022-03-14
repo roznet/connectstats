@@ -39,6 +39,8 @@
 #import "GCSettingsLogViewController.h"
 #import "GCService.h"
 #import "GCDebugActionsTableViewController.h"
+#import "ConnectStats-Swift.h"
+
 @import RZExternal;
 @import SafariServices;
 
@@ -968,7 +970,7 @@
         }
     }else if (section == GC_SECTION_LOG){
         if (indexPath.row == GC_SETTINGS_SHOW_LOG) {
-            GCSettingsLogViewController * detail = [[[GCSettingsLogViewController alloc] initWithNibName:nil bundle:nil] autorelease];
+            GCSettingsLogTableViewController * detail = [[[GCSettingsLogTableViewController alloc] initWithNibName:nil bundle:nil] autorelease];
             if ([UIViewController useIOS7Layout]) {
                 [UIViewController setupEdgeExtendedLayout:detail];
             }

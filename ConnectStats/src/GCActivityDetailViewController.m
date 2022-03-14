@@ -166,7 +166,8 @@
     self.tableView.tableHeaderView.backgroundColor = [GCViewConfig cellBackgroundLighterForActivity:self.activity];
     
     // Get ready with current activity
-    [self selectNewActivity:[[GCAppGlobal organizer] currentActivity]];
+    // when will appear always make sure it's refreshed fully
+    [self selectNewActivity:[[GCAppGlobal organizer] currentActivity] isChanging:true];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -794,9 +795,13 @@
 #pragma mark - Activity Change and Prep
 
 -(void)selectNewActivity:(GCActivity*)act{
-
     BOOL activityIsChanging = (![act.activityId isEqualToString:self.activity.activityId]);
     
+    [self selectNewActivity:act isChanging:activityIsChanging];
+}
+
+-(void)selectNewActivity:(GCActivity*)act isChanging:(BOOL)activityIsChanging{
+
     // This only needed if brand new activity
     if( activityIsChanging )  {
         if (act) {

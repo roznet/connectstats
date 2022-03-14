@@ -46,7 +46,10 @@ NS_ASSUME_NONNULL_BEGIN
 +(nullable GCActivity*)testForActivity:(nullable GCActivity*)act withFilesIn:(NSString*)path;
 
 /// Parse filename, to be used by derived class only
--(void)processParse:(NSString*)fileName;
+-(void)processParse:(NSString*)filename;
+/// Parse data, the filepath only used to deduct information from the name like activity id if necessary
+-(void)processParseData:(NSData*)data filePath:(NSString*)fp;
+
 @end
 
 NS_ASSUME_NONNULL_END

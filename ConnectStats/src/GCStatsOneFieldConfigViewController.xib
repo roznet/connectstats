@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="GCStatsOneFieldConfigViewController" customModule="ConnectStats" customModuleProvider="target">
+            <connections>
+                <outlet property="calendarAggregationSegment" destination="fuT-Iy-40B" id="Jbh-4D-Qd3"/>
+                <outlet property="graphTypeSegment" destination="jjN-d2-RAW" id="RUS-rp-BnF"/>
+                <outlet property="periodSegment" destination="W3e-fO-HnE" id="Kkb-5N-QtB"/>
+                <outlet property="previewTableView" destination="Of9-ew-5Jy" id="YC1-a4-mwd"/>
+                <outlet property="secondGraphSegment" destination="cMQ-mS-JYN" id="npt-5l-5mB"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+                <outlet property="viewConfigSegment" destination="5ua-gJ-SAY" id="svM-xO-C9J"/>
+                <outlet property="xFieldLabel" destination="ZuM-Wv-aJB" id="kdW-Am-Atr"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SGS-rr-LkK">
+                    <rect key="frame" x="357" y="44" width="37" height="39"/>
+                    <state key="normal" title="Done"/>
+                    <connections>
+                        <action selector="done:" destination="-1" eventType="touchUpInside" id="LYw-Gs-oqz"/>
+                    </connections>
+                </button>
+                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="5ua-gJ-SAY">
+                    <rect key="frame" x="76" y="132" width="275" height="32"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <segments>
+                        <segment title="All"/>
+                        <segment title="Last 3M"/>
+                        <segment title="Last 6M"/>
+                        <segment title="Last 1Y"/>
+                    </segments>
+                    <connections>
+                        <action selector="changeSegment:" destination="-1" eventType="valueChanged" id="nKm-ha-hbm"/>
+                    </connections>
+                </segmentedControl>
+                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="W3e-fO-HnE">
+                    <rect key="frame" x="101" y="171" width="224" height="32"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <segments>
+                        <segment title="Calendar"/>
+                        <segment title="Rolling"/>
+                        <segment title="To Date"/>
+                    </segments>
+                    <connections>
+                        <action selector="changeSegment:" destination="-1" eventType="valueChanged" id="Mus-Vk-ize"/>
+                    </connections>
+                </segmentedControl>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="Of9-ew-5Jy">
+                    <rect key="frame" x="0.0" y="253" width="414" height="590"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                </tableView>
+                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="cMQ-mS-JYN">
+                    <rect key="frame" x="64" y="210" width="299" height="32"/>
+                    <segments>
+                        <segment title="History"/>
+                        <segment title="Performance"/>
+                        <segment title="Histogram"/>
+                    </segments>
+                    <connections>
+                        <action selector="changeSegment:" destination="-1" eventType="valueChanged" id="FPj-DM-fL8"/>
+                    </connections>
+                </segmentedControl>
+                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="jjN-d2-RAW">
+                    <rect key="frame" x="6" y="48" width="93" height="32"/>
+                    <segments>
+                        <segment title="" image="858-line-chart"/>
+                        <segment title="" image="859-bar-chart"/>
+                    </segments>
+                    <connections>
+                        <action selector="changeSegment:" destination="-1" eventType="valueChanged" id="7n8-6e-Sbg"/>
+                    </connections>
+                </segmentedControl>
+                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="fuT-Iy-40B">
+                    <rect key="frame" x="109" y="93" width="209" height="32"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <segments>
+                        <segment title="Weekly"/>
+                        <segment title="Monthly"/>
+                        <segment title="Yearly"/>
+                    </segments>
+                    <connections>
+                        <action selector="changeSegment:" destination="-1" eventType="valueChanged" id="3YX-YM-o6n"/>
+                    </connections>
+                </segmentedControl>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZuM-Wv-aJB">
+                    <rect key="frame" x="186" y="53" width="42" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="Of9-ew-5Jy" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="3vt-aY-zVw"/>
+                <constraint firstItem="cMQ-mS-JYN" firstAttribute="centerX" secondItem="fuT-Iy-40B" secondAttribute="centerX" id="4wZ-VZ-tW7"/>
+                <constraint firstItem="5ua-gJ-SAY" firstAttribute="top" secondItem="SGS-rr-LkK" secondAttribute="bottom" constant="49" id="7n8-MU-0XS"/>
+                <constraint firstItem="jjN-d2-RAW" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="6" id="BFm-vx-7G7"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="SGS-rr-LkK" secondAttribute="trailing" constant="20" id="Cti-tY-MN3"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="Of9-ew-5Jy" secondAttribute="bottom" constant="19" id="H4Q-2N-wWl"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="Of9-ew-5Jy" secondAttribute="trailing" id="Jad-Ai-kSg"/>
+                <constraint firstItem="ZuM-Wv-aJB" firstAttribute="firstBaseline" secondItem="SGS-rr-LkK" secondAttribute="firstBaseline" id="L3P-iD-f1Q"/>
+                <constraint firstItem="Of9-ew-5Jy" firstAttribute="top" secondItem="SGS-rr-LkK" secondAttribute="bottom" constant="170" id="Mvc-Tu-ZwW"/>
+                <constraint firstItem="ZuM-Wv-aJB" firstAttribute="centerX" secondItem="fnl-2z-Ty3" secondAttribute="centerX" id="Ztm-wr-xaI"/>
+                <constraint firstItem="SGS-rr-LkK" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="d3o-Wz-hoc"/>
+                <constraint firstItem="fuT-Iy-40B" firstAttribute="top" secondItem="SGS-rr-LkK" secondAttribute="bottom" constant="10" id="f3n-3H-FcM"/>
+                <constraint firstItem="W3e-fO-HnE" firstAttribute="top" secondItem="SGS-rr-LkK" secondAttribute="bottom" constant="88" id="pKr-lz-YmB"/>
+                <constraint firstItem="cMQ-mS-JYN" firstAttribute="top" secondItem="SGS-rr-LkK" secondAttribute="bottom" constant="127" id="pvk-Qf-Rnj"/>
+                <constraint firstItem="jjN-d2-RAW" firstAttribute="centerY" secondItem="SGS-rr-LkK" secondAttribute="centerY" id="qal-c4-pCa"/>
+            </constraints>
+            <point key="canvasLocation" x="137.68115942028987" y="150"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="858-line-chart" width="28" height="14"/>
+        <image name="859-bar-chart" width="28" height="14"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

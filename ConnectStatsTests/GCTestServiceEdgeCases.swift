@@ -56,10 +56,10 @@ class GCTestServiceEdgeCases: XCTestCase {
 
         // Start with list of activity including multi sport sub activities
         GCConnectStatsRequestSearch.test(for: organizer, withFilesInPath: cs)
-        let startCount = organizer.activities().count
+        let startCount = organizer.activities.count
         // While garmin does not send sub activities, make sure all the activities are preserved and not deleted
         GCGarminRequestModernSearch.test(for: organizer, withFilesInPath: ga)
-        XCTAssertEqual(startCount, organizer.activities().count)
+        XCTAssertEqual(startCount, organizer.activities.count)
     }
 
     

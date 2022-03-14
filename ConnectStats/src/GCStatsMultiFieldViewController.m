@@ -85,7 +85,7 @@
     [_performanceAnalysis release];
     [_aggregatedStats release];
     [_fieldOrder release];
-    [_fieldStats release];
+    [_fieldSummaryStats release];
     [_fieldDataSeries release];
     [_rightMostButtonItem release];
     [_allFields release];
@@ -290,7 +290,7 @@
         GCStatsOneFieldViewController *statsViewController = [[GCStatsOneFieldViewController alloc] initWithStyle:UITableViewStylePlain];
         statsViewController.fieldOrder = self.fieldOrder;
         
-        [statsViewController setupForConfig:[GCStatsOneFieldConfig configFromMultiFieldConfig:self.multiFieldConfig forY:field andX:xfield]];
+        [statsViewController setupForFieldListConfig:[GCStatsOneFieldConfig configFromMultiFieldConfig:self.multiFieldConfig forY:field andX:xfield]];
         
         [UIViewController setupEdgeExtendedLayout:statsViewController];
         
@@ -410,7 +410,7 @@
         [doGraph retain];
     }
 
-    GCHistoryFieldSummaryDataHolder * data = [self.fieldStats dataForField:field];
+    GCHistoryFieldSummaryDataHolder * data = [self.fieldSummaryStats dataForField:field];
     
     if( self.isNewStyle ){
         [cell setupFieldStatisticsWithDataHolder:data histStats:self.multiFieldConfig.historyStats geometry:self.geometry];
@@ -462,7 +462,7 @@
 
 -(UITableViewCell*)tableView:(UITableView *)tableView derivedHistCellForRowAtIndexPath:(NSIndexPath *)indexPath{
     if( self.derivedHistAnalysis == nil){
-        self.derivedHistAnalysis = [GCStatsDerivedHistory analysisWith:self.multiFieldConfig and:self.derivedAnalysisConfig];
+        self.derivedHistAnalysis = [GCStatsDerivedHistory analysisWith:self.derivedAnalysisConfig];
     }
     
     GCCellSimpleGraph * graphCell = [self.derivedHistAnalysis tableView:tableView derivedHistCellForRowAtIndexPath:indexPath with:[GCAppGlobal derived]];
@@ -725,7 +725,7 @@
     
     gcIgnoreMode ignoreMode = [self.activityType isEqualToString:GC_TYPE_DAY] ? gcIgnoreModeDayFocus : gcIgnoreModeActivityFocus;
     NSArray * useActivities = self.useFilter ? [[GCAppGlobal organizer] filteredActivities] : [[GCAppGlobal organizer] activities];
-    GCHistoryFieldSummaryStats * vals = [GCHistoryFieldSummaryStats fieldStatsWithActivities:useActivities
+    GCHistoryFieldSummaryStats * vals = [GCHistoryFieldSummaryStats fieldSummaryStatsWithActivities:useActivities
                                                                                     activityTypeSelection:self.multiFieldConfig.activityTypeSelection
                                                                                referenceDate:self.multiFieldConfig.calendarConfig.referenceDate
                                                                                   ignoreMode:ignoreMode
@@ -754,11 +754,11 @@
     self.allFields = [NSArray arrayWithArray:limitFields];
 
     self.fieldOrder = [GCFields categorizeAndOrderFields:self.allFields];
-    self.fieldStats = vals;
+    self.fieldSummaryStats = vals;
 
     self.geometry = [RZNumberWithUnitGeometry geometry];
     
-    [GCCellGrid adjustFieldStatisticsWithSummaryStats:self.fieldStats histStats:gcHistoryStatsAll geometry:self.geometry];
+    [GCCellGrid adjustFieldStatisticsWithSummaryStats:self.fieldSummaryStats histStats:gcHistoryStatsAll geometry:self.geometry];
     
     dispatch_async(dispatch_get_main_queue(), ^(){
         [self updateDone];
@@ -859,7 +859,7 @@
     self.multiFieldConfig = nConfig;
     [self clearFieldDataSeries];
     if (self.viewChoice == gcViewChoiceFields || self.viewChoice == gcViewChoiceSummary) {
-        [self setFieldStats:nil];
+        [self setFieldSummaryStats:nil];
         [self setFieldOrder:nil];
         [self setupFieldStats];
         [self setupTestModeFieldDataSeries];
@@ -879,13 +879,13 @@
         self.multiFieldConfig = nConfig;
         [self clearFieldDataSeries];
         if( self.derivedAnalysisConfig== nil){
-            self.derivedAnalysisConfig = [GCStatsDerivedAnalysisConfig configForActivityType:self.multiFieldConfig.activityType];
+            self.derivedAnalysisConfig = [GCStatsDerivedHistoryConfig configForActivityType:self.multiFieldConfig.activityType];
         }else{
             self.derivedAnalysisConfig.activityType = self.multiFieldConfig.activityType;
         }
 
         if (self.viewChoice == gcViewChoiceFields || self.viewChoice == gcViewChoiceSummary) {
-            [self setFieldStats:nil];
+            [self setFieldSummaryStats:nil];
             [self setFieldOrder:nil];
             dispatch_async([GCAppGlobal worker],^(){
                 [self setupFieldStats];

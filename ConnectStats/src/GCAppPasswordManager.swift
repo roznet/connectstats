@@ -25,10 +25,10 @@ class GCAppPasswordManager : NSObject {
     }
     
     @objc @discardableResult public func savePassword(_ password : String ) -> Bool {
-        return keychain.set(password, forKey: key)
+        return keychain.set(password, forKey: key, withAccessibility: .afterFirstUnlock)
     }
     
     @objc @discardableResult public func clearPassword() -> Bool {
-        return keychain.removeObject(forKey: key)
+        return keychain.removeObject(forKey: key, withAccessibility: .afterFirstUnlock)
     }
 }

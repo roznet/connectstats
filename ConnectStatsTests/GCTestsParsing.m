@@ -60,7 +60,6 @@
 
 #pragma mark - Parse Single Activities
 
-
 -(void)testActivityParsingModern{
     // Add test for
     NSArray * activityIds = @[
@@ -76,8 +75,7 @@
         @"2545022458", // in fit_files: running, 2018, running pwer from garmin, fit
     ];
     
-    RZRegressionManager * manager = [RZRegressionManager managerForTestClass:[self class]];
-    manager.recordMode = [GCTestCase recordModeGlobal];
+    RZRegressionManager * manager = [self regressionManager];
     //manager.recordMode = true;
     
     NSSet<Class>*classes =[NSSet setWithObjects:[GCStatsDataSerieWithUnit class], nil];
@@ -139,7 +137,7 @@
     [modernAct saveToDb:db];
     
     XCTAssertGreaterThan(modernAct.trackpoints.count, 1);
-    BOOL recordMode = [GCTestCase recordModeGlobal];
+    BOOL recordMode = false;
     //recordMode = true;
     //[[modernAct exportCsv] writeToFile:[RZFileOrganizer writeableFilePath:@"t.csv"] atomically:YES encoding:NSUTF8StringEncoding error:nil];
     [self compareStatsCheckSavedFor:modernAct identifier:@"modernAct" cmd:_cmd recordMode:recordMode];
@@ -179,7 +177,7 @@
         [parsedAct saveToDb:db];
         
         XCTAssertGreaterThan(parsedAct.trackpoints.count, 1);
-        bool recordMode = [GCTestCase recordModeGlobal];
+        bool recordMode = false;
         //recordMode = true;
         
         NSString * identifier = [NSString stringWithFormat:@"parse_reload_%@", activityId];
@@ -655,8 +653,7 @@
             }
         }
     }
-    RZRegressionManager * manager = [RZRegressionManager managerForTestClass:[self class]];
-    manager.recordMode = [GCTestCase recordModeGlobal];
+    RZRegressionManager * manager = [self regressionManager];
     //manager.recordMode = true;
     
     NSError * error = nil;
@@ -727,8 +724,7 @@
     
     NSDictionary * rv = [organizer fieldsSeries:@[ hrField, paceField, hf] matching:nil useFiltered:NO ignoreMode:gcIgnoreModeActivityFocus];
     
-    RZRegressionManager * manager = [RZRegressionManager managerForTestClass:[self class]];
-    manager.recordMode = [GCTestCase recordModeGlobal];
+    RZRegressionManager * manager = [self regressionManager];
     //manager.recordMode = true;
     
     NSError * error = nil;
@@ -769,23 +765,23 @@
     NSString * activityType = first.activityType;
     GCNumberWithUnit * dist = [first numberWithUnitForField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:activityType]];
     
-    GCHistoryFieldSummaryStats * start_stats = [GCHistoryFieldSummaryStats fieldStatsWithActivities:organizer.activities activityTypeSelection:nil referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
+    GCHistoryFieldSummaryStats * start_stats = [GCHistoryFieldSummaryStats fieldSummaryStatsWithActivities:organizer.activities activityTypeSelection:nil referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
     GCNumberWithUnit * start_nu = [[start_stats dataForField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:activityType]] weightedSumWithUnit:gcHistoryStatsAll];
     
     first.skipAlways = true;
     [first saveToDb:organizer.db];
     
-    GCHistoryFieldSummaryStats * skip_stats = [GCHistoryFieldSummaryStats fieldStatsWithActivities:organizer.activities activityTypeSelection:nil referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
+    GCHistoryFieldSummaryStats * skip_stats = [GCHistoryFieldSummaryStats fieldSummaryStatsWithActivities:organizer.activities activityTypeSelection:nil referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
     GCNumberWithUnit * skip_nu = [[skip_stats dataForField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:activityType]] weightedSumWithUnit:gcHistoryStatsAll];
 
     GCActivitiesOrganizer * reload = [[[GCActivitiesOrganizer alloc] initTestModeWithDb:organizer.db] autorelease];
 
-    GCHistoryFieldSummaryStats * reload_stats = [GCHistoryFieldSummaryStats fieldStatsWithActivities:reload.activities activityTypeSelection:nil referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
+    GCHistoryFieldSummaryStats * reload_stats = [GCHistoryFieldSummaryStats fieldSummaryStatsWithActivities:reload.activities activityTypeSelection:nil referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
     GCNumberWithUnit * reload_nu = [[reload_stats dataForField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:activityType]] weightedSumWithUnit:gcHistoryStatsAll];
 
     first.skipAlways = false;
     
-    GCHistoryFieldSummaryStats * unskip_stats = [GCHistoryFieldSummaryStats fieldStatsWithActivities:organizer.activities activityTypeSelection:nil referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
+    GCHistoryFieldSummaryStats * unskip_stats = [GCHistoryFieldSummaryStats fieldSummaryStatsWithActivities:organizer.activities activityTypeSelection:nil referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
     GCNumberWithUnit * unskip_nu = [[unskip_stats dataForField:[GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:activityType]] weightedSumWithUnit:gcHistoryStatsAll];
 
     
@@ -1103,6 +1099,7 @@
         }
     }
 
+    // ==== Test background download and process
     // now delete one fit activity, to make sure background reload will bring it back
     NSString * deletedActivityId = save_fit.allKeys.firstObject;
     [organizer_light deleteActivityId:deletedActivityId];
@@ -1117,7 +1114,7 @@
         }
     }
     // Do the background refresh, without details loaded, to simulate background refresh
-    [GCConnectStatsRequestBackgroundSearch testWithOrganizer:organizer_light path:bundlePath];
+    [GCConnectStatsRequestBackgroundSearch testWithOrganizer:organizer_light path:bundlePath mode:gcRequestModeDownloadAndProcess];
     
     // Right now activity was reconstructed from fit
     GCActivity * current = [organizer_light activityForId:deletedActivityId];
@@ -1160,6 +1157,48 @@
         }
         XCTAssertEqual(after.summaryData.count,before.count, @"%@ after full reload has all information", after);
     }
+    
+    // ==== Test cache
+    // Now try to do the same exercise fully in backgorund without anything loaded and in two step
+    // delete one fit activity, reload minimum, save cache, reload details, process cache
+    
+    [organizer_light deleteActivityId:deletedActivityId];
+    // reload it
+    organizer_light = RZReturnAutorelease([[GCActivitiesOrganizer alloc] initTestModeMinimumWithDb:db]);
+    XCTAssertEqual(organizer_light.countOfActivities, 0, "Started with no activities loaded");
+    XCTAssertFalse( organizer_light.fullyLoaded );
+    // Do the background refresh, without details loaded, to simulate background refresh
+    [GCConnectStatsRequestBackgroundSearch testWithOrganizer:organizer_light path:bundlePath mode:gcRequestModeDownloadAndCache];
+
+    // Nothing got updated
+    XCTAssertEqual(organizer_light.countOfActivities, 0, "Started with no activities loaded");
+    XCTAssertFalse( organizer_light.fullyLoaded );
+
+    // Now load
+    [organizer_light ensureSummaryLoaded];
+    [organizer_light ensureDetailsLoaded];
+
+    for (NSString * activityId in save_fit) {
+        if( [activityId isEqualToString:deletedActivityId]){
+            XCTAssertNil([organizer_light activityForId:activityId]);
+        }else{
+            GCActivity * after  = [organizer_light activityForId:activityId];
+            before = save_gar[activityId];
+            XCTAssertEqual(after.summaryData.count,before.count,@"%@ summary loaded same details", after);
+        }
+    }
+
+    // Now process cache
+    [GCConnectStatsRequestBackgroundSearch testWithOrganizer:organizer_light path:bundlePath mode:gcRequestModeProcessCache];
+    
+    // Right now activity was reconstructed properly
+    current = [organizer_light activityForId:deletedActivityId];
+    before = nil;
+    
+    XCTAssertNotNil(current);
+    before = save_cs[deletedActivityId];
+    XCTAssertEqual(current.summaryData.count,before.count, @"In memory reconstruction match original");
+
     
     [exampleFieldValue release];
 }
@@ -1368,7 +1407,7 @@
 }
 
 -(void)compareStatsCheckSavedFor:(GCActivity*)act identifier:(NSString*)label cmd:(SEL)sel recordMode:(BOOL)record{
-    RZRegressionManager * manager = [RZRegressionManager managerForTestClass:[self class]];
+    RZRegressionManager * manager = [self regressionManager];
     manager.recordMode = record;
 
     NSSet<Class>*classes = [NSSet setWithObjects:[NSDictionary class], [GCField class], [GCTrackFieldChoiceHolder class], [NSArray class], nil];

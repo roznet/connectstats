@@ -180,7 +180,7 @@ class GCTestAggregatedStats: XCTestCase {
         guard let db = GCTestsSamples.sampleActivityDatabase("test_activities_stats.db") else { XCTAssertTrue(false); return [] }
         let organizer = GCActivitiesOrganizer(testModeWithDb: db)
         
-        let all = organizer.activities()
+        let all = organizer.activities
         
         var focusbucket : DateBucket? = nil
         
@@ -223,7 +223,7 @@ class GCTestAggregatedStats: XCTestCase {
         let performance = RZPerformance()
         performance.reset()
 
-        let fieldsdata = GCHistoryFieldSummaryStats.fieldStats(withActivities: activities, activityTypeSelection: nil, referenceDate: nil, ignoreMode: gcIgnoreMode.activityFocus)
+        let fieldsdata = GCHistoryFieldSummaryStats(activities: activities, activityTypeSelection: nil, referenceDate: nil, ignoreMode: gcIgnoreMode.activityFocus)
         
         if let basedate = activities.first?.date {
             let indexes : Set<Index> = [

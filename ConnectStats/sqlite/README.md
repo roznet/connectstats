@@ -1,10 +1,14 @@
 # Update Fields
 
+
+
+
 build.py will update fields.db from:
 
 - files in cache directory are cached translated fields in multiple languages
 - files in download directory are files that can change and are downloaded while running the app 
 - files in edit are files that should be manually update for orders, categories and new fields
+
 
 
 

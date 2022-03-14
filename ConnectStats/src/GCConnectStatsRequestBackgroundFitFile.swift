@@ -29,25 +29,35 @@ import UIKit
 import RZUtilsSwift
 
 class GCConnectStatsRequestBackgroundFitFile: GCConnectStatsRequestFitFile {
+    let requestMode : gcRequestMode
+    private let cache : GCWebRequestCache
     
-    override init(activity: GCActivity) {
+    @objc init(activity: GCActivity, requestMode : gcRequestMode, cacheDb : FMDatabase) {
+        self.requestMode = requestMode
+        self.cache = GCWebRequestCache(db: cacheDb, classname: String(describing: type(of: self)))
         super.init(activity:activity)
     }
     
     @objc override func preparedUrlRequest() -> URLRequest? {
-        if self.isSignedIn(),
-           let path = GCWebConnectStatsFitFile(GCAppGlobal.webConnectsStatsConfig()),
-           let aid = self.activity.service.serviceId(fromActivityId: self.activity.activityId){
-            let params : [AnyHashable:Any] = [
-                "token_id": self.tokenId,
-                "activity_id": aid,
-                "background":1
-            ]
-            return self.preparedUrlRequest(path, params: params)
+        switch self.requestMode {
+        case .downloadAndProcess,.downloadAndCache:
+            
+            if self.isSignedIn(),
+               let path = GCWebConnectStatsFitFile(GCAppGlobal.webConnectsStatsConfig()),
+               let aid = self.activity.service.serviceId(fromActivityId: self.activity.activityId){
+                let params : [AnyHashable:Any] = [
+                    "token_id": self.tokenId,
+                    "activity_id": aid,
+                    "background":1
+                ]
+                return self.preparedUrlRequest(path, params: params)
+            }
+        default:
+            break
         }
         return nil
     }
-    
+
     @objc override func process(_ theData: Data, andDelegate delegate: GCWebRequestDelegate) {
         self.delegate = delegate
         
@@ -55,23 +65,46 @@ class GCConnectStatsRequestBackgroundFitFile: GCConnectStatsRequestFitFile {
             self.processDone()
             return
         }
-        
-        let fileurl = URL(fileURLWithPath: RZFileOrganizer.writeableFilePath(filename))
-        
-        do {
-            try theData.write(to: fileurl, options: .atomic)
-        } catch {
-            RZSLog.error("Failed to save \(filename)")
+
+        switch self.requestMode {
+        case .downloadAndProcess:
+            let fileurl = URL(fileURLWithPath: RZFileOrganizer.writeableFilePath(filename))
+            
+            do {
+                try theData.write(to: fileurl, options: .atomic)
+            } catch {
+                RZSLog.error("Failed to save \(filename)")
+                self.processDone()
+                return
+            }
+            self.stage = gcRequestStage.parsing
+            GCAppGlobal.worker().async {
+                self.processParseData(theData, filePath: fileurl.path)
+            }
+
+        case .downloadAndCache:
+            self.cache.save(data: theData, filename: filename)
             self.processDone()
+        default:
+            RZSLog.warning("Inconsistency, caching should not download data")
+            self.process(nil, encoding: String.Encoding.utf8.rawValue, andDelegate: delegate)
             return
-        }
-        
-        self.stage = gcRequestStage.parsing
-        GCAppGlobal.worker().async {
-            self.processParse(filename)
         }
     }
 
+    // this is only called if noURL/no data, for cache processing
+    @objc override func process(_ theString: String?, encoding: UInt, andDelegate delegate: GCWebRequestDelegate) {
+        let searchMore = self.cache.retrieve() {
+            data in
+            self.processParseData(data, filePath: self.fitFileName)
+            self.processDone()
+            return true
+        }
+        if( !searchMore ){
+            self.processDone()
+        }
+    }
+    
     @objc override var nextReq: GCWebRequestStandard? {
         return nil
     }
@@ -81,10 +114,10 @@ class GCConnectStatsRequestBackgroundFitFile: GCConnectStatsRequestFitFile {
     }
 
     @discardableResult
-    @objc static func test(activity: GCActivity, path : String) -> GCActivity?{
-        let req = GCConnectStatsRequestBackgroundFitFile(activity: activity)
+    @objc static func test(activity: GCActivity, path : String, mode:gcRequestMode) -> GCActivity?{
+        let req = GCConnectStatsRequestBackgroundFitFile(activity: activity, requestMode:.processCache, cacheDb: activity.db!)
         
-        var isDirectory :ObjCBool = false
+        var isDirectory : ObjCBool = false
         let filename = req.fitFileName
         if FileManager.default.fileExists(atPath: path, isDirectory: &isDirectory) {
             var fileUrl = URL(fileURLWithPath: path)

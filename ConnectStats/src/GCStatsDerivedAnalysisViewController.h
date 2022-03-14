@@ -30,13 +30,13 @@
 NS_ASSUME_NONNULL_BEGIN
 @class GCStatsDerivedAnalysisViewController;
 @class GCStatsMultiFieldConfig;
-@class GCStatsDerivedAnalysisConfig;
+@class GCStatsDerivedHistoryConfig;
 
 @protocol GCStatsMultiFieldConfigViewDelegate <NSObject>
 
 -(void)configChanged;
 -(GCStatsMultiFieldConfig*)multiFieldConfig;
--(GCStatsDerivedAnalysisConfig*)derivedAnalysisConfig;
+-(GCStatsDerivedHistoryConfig*)derivedAnalysisConfig;
 @end
 
 @interface GCStatsDerivedAnalysisViewController : UITableViewController<GCEntryFieldDelegate,RZChildObject>

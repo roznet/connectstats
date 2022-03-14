@@ -29,51 +29,92 @@ import UIKit
 import RZUtilsSwift
 
 class GCConnectStatsRequestBackgroundSearch: GCConnectStatsRequest {
+    
     static let kActivityRequestCount : UInt = 20
     private var searchMore : Bool = false
     private let start : UInt
+    private let requestMode : gcRequestMode
+    private let cache : GCWebRequestCache
+    
     // by default try to download up to 5 tracks/activities
     var loadTracks = 5
     var addedActivities : [GCActivity] = []
     
-    override init() {
+    @objc init(requestMode : gcRequestMode, cacheDb : FMDatabase) {
         self.start = 0
+        self.requestMode = requestMode
+        self.cache = GCWebRequestCache(db: cacheDb, classname: String(describing: type(of: self)))
         super.init()
     }
     
     init(nextWith current: GCConnectStatsRequestBackgroundSearch) {
         self.start = current.start + Self.kActivityRequestCount
+        self.requestMode = current.requestMode
+        self.cache = current.cache
         super.init(nextWith: current)
-        
     }
     
     @objc override func preparedUrlRequest() -> URLRequest? {
-        if self.isSignedIn(),
-           let path = GCWebConnectStatsSearch(GCAppGlobal.webConnectsStatsConfig()){
-            let params : [AnyHashable: Any] = [
-                "token_id": self.tokenId,
-                "start":self.start,
-                "limit":Self.kActivityRequestCount,
-                "background":1
-            ]
-            return self.preparedUrlRequest(path, params: params)
+        switch self.requestMode {
+        case .downloadAndProcess,.downloadAndCache:
+            if self.isSignedIn(),
+               let path = GCWebConnectStatsSearch(GCAppGlobal.webConnectsStatsConfig()){
+                let params : [AnyHashable: Any] = [
+                    "token_id": self.tokenId,
+                    "start":self.start,
+                    "limit":Self.kActivityRequestCount,
+                    "background":1
+                ]
+                return self.preparedUrlRequest(path, params: params)
+            }else{
+                RZSLog.warning("Not signed in")
+            }
+        default:
+            return nil
         }
         return nil
     }
     
-    func searchFileName(page : Int) -> String {
+    func searchFileName(page : UInt) -> String {
         return "last_connectstats_search_\(page).json"
     }
 
-    @objc override func process() {
+    func processSaveDataToCache() {
         guard let data = self.theString?.data(using: .utf8)
         else {
             RZSLog.info("invalid data skipping background update")
             self.processDone()
             return
-
         }
         
+        self.cache.save(data: data, filename: self.searchFileName(page: self.start))
+        
+        self.processDone()
+    }
+    
+    func processDataFromCache(){
+        self.searchMore = self.cache.retrieve() {
+            data in
+            self.process(parse: data)
+            return true
+        }
+        if( !self.searchMore ){
+            self.processDone()
+        }
+    }
+    
+    func processDataAndParse(){
+        guard let data = self.theString?.data(using: .utf8)
+        else {
+            RZSLog.info("invalid data skipping background update")
+            self.processDone()
+            return
+        }
+        
+        self.process(parse: data)
+    }
+    
+    func process(parse data : Data){
         guard self.checkNoErrors()
         else {
             RZSLog.info("Failed to fetch skipping background update")
@@ -89,6 +130,20 @@ class GCConnectStatsRequestBackgroundSearch: GCConnectStatsRequest {
             }
             self.processDone()
         }
+
+    }
+    
+    @objc override func process() {
+        switch self.requestMode {
+        case .downloadAndProcess:
+            self.processDataAndParse()
+        case .downloadAndCache:
+            self.processSaveDataToCache()
+        case .processCache:
+            self.processDataFromCache()
+        default:
+            self.processDataAndParse()
+        }
     }
     
     func addActivities(from parser : GCConnectStatsSearchJsonParser, to organizer: GCActivitiesOrganizer){
@@ -98,14 +153,14 @@ class GCConnectStatsRequestBackgroundSearch: GCConnectStatsRequest {
         listRegister.loadTracks = 0;
         listRegister.add(to: organizer)
         if listRegister.childIds != nil {
-            RZSLog.warning("ChildIDs not supported for strava")
+            RZSLog.warning("ChildIDs not supported for connectstats")
         }
         if let addedActivities = listRegister.addedActivities {
             self.addedActivities.append(contentsOf: addedActivities)
             RZSLog.info("Found new activities, background downloading trackpoints for \(addedActivities.count) activities")
             for act in addedActivities {
                 if self.loadTracks > 0 {
-                    let req = GCConnectStatsRequestBackgroundFitFile(activity: act)
+                    let req = GCConnectStatsRequestBackgroundFitFile(activity: act, requestMode: self.requestMode, cacheDb: organizer.db)
                     GCAppGlobal.web().add(req)
                     self.loadTracks -= 1
                 }
@@ -122,8 +177,8 @@ class GCConnectStatsRequestBackgroundSearch: GCConnectStatsRequest {
     }
     
     @discardableResult
-    @objc static func test(organizer: GCActivitiesOrganizer, path : String) -> GCActivitiesOrganizer{
-        let search = GCConnectStatsRequestBackgroundSearch()
+    @objc static func test(organizer: GCActivitiesOrganizer, path : String, mode: gcRequestMode) -> GCActivitiesOrganizer{
+        let search = GCConnectStatsRequestBackgroundSearch(requestMode: .processCache, cacheDb: organizer.db)
         
         var isDirectory : ObjCBool = false
         
@@ -132,20 +187,40 @@ class GCConnectStatsRequestBackgroundSearch: GCConnectStatsRequest {
             if isDirectory.boolValue {
                 fileURL.appendPathComponent(search.searchFileName(page: 0))
             }
-            if let data = try? Data(contentsOf: fileURL) {
-                let parser = GCConnectStatsSearchJsonParser(data: data)
-                if parser.success {
-                    search.loadTracks = 0
-                    search.addActivities(from: parser, to: organizer)
+            if( mode == .processCache){
+                search.cache.retrieve(){
+                    data in
+                    let parser = GCConnectStatsSearchJsonParser(data: data)
+                    if parser.success {
+                        search.loadTracks = 0
+                        search.addActivities(from: parser, to: organizer)
+                    }
+                    return true
                 }
-                if isDirectory.boolValue && search.addedActivities.count > 0 {
-                    for act in search.addedActivities {
-                        GCConnectStatsRequestBackgroundFitFile.test(activity: act, path: path)
+            }else{
+                if let data = try? Data(contentsOf: fileURL) {
+                    switch mode {
+                    case .downloadAndCache:
+                        search.theString = String(data: data, encoding: .utf8)
+                        search.processSaveDataToCache()
+                    case .downloadAndProcess:
+                        let parser = GCConnectStatsSearchJsonParser(data: data)
+                        if parser.success {
+                            search.loadTracks = 0
+                            search.addActivities(from: parser, to: organizer)
+                        }
+                        if isDirectory.boolValue && search.addedActivities.count > 0 {
+                            for act in search.addedActivities {
+                                GCConnectStatsRequestBackgroundFitFile.test(activity: act, path: path, mode: .downloadAndProcess)
+                            }
+                        }
+                    default:
+                        break
                     }
                 }
             }
         }
         return organizer
+        
     }
-
 }

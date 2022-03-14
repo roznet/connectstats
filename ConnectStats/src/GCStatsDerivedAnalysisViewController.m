@@ -32,7 +32,7 @@
 #import "GCSimpleGraphCachedDataSource+Templates.h"
 #import "GCStatsDerivedAnalysisViewControllerConsts.h"
 #import "GCAppGlobal.h"
-#import "GCStatsDerivedAnalysisConfig.h"
+#import "GCStatsDerivedHistoryConfig.h"
 
 typedef NS_ENUM(NSUInteger) {
     gcRebuildFree,
@@ -45,7 +45,7 @@ typedef NS_ENUM(NSUInteger) {
 @property (nonatomic,retain) NSArray<GCField*>*fields;
 @property (nonatomic,retain) NSArray<GCDerivedDataSerie*>*choices;
 @property (nonatomic,readonly) GCStatsMultiFieldConfig * config;
-@property (nonatomic,readonly) GCStatsDerivedAnalysisConfig * derivedAnalysisConfig;
+@property (nonatomic,readonly) GCStatsDerivedHistoryConfig * derivedAnalysisConfig;
 @property (nonatomic,assign) gcRebuildStatus rebuildStatus;
 @end
 
@@ -234,7 +234,7 @@ typedef NS_ENUM(NSUInteger) {
 -(GCStatsMultiFieldConfig*)multiFieldConfig{
     return self.delegate.multiFieldConfig;
 }
--(GCStatsDerivedAnalysisConfig*)derivedAnalysisConfig{
+-(GCStatsDerivedHistoryConfig*)derivedAnalysisConfig{
     return self.delegate.derivedAnalysisConfig;
 }
 #pragma mark - Rebuild process

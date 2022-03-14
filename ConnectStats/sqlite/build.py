@@ -21,9 +21,15 @@
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
-#  
-#  To rebuild db from legacy:
-#    ./build.py --init legacy -o out/fields.db build
+#
+#  Regular Usage:
+#    Add field:
+#        edit edit/gc_fields_manual.xlsx
+#        edit edit/fields_order.xlsx
+#        rerun to update:
+#    ./build.py -v -b out/fields.db -i latest -o out/fields.json build edit/gc_fields_manual.xlsx edit/fields_order.xlsx
+#
+#
 #
 #  To rebuild db adding changes for a file (example here edit/gc_fields_manual.xlsx)
 #       -v : verbose
@@ -32,6 +38,11 @@
 #       -o : save to fields.json
 #    ./build.py -v -b out/fields.db -i latest -o out/fields.json build edit/gc_fields_manual.xlsx
 #       then git diff will show what changed or use 'diff' as a command instead of 'build'
+#
+#
+#  To rebuild db from legacy:
+#    ./build.py --init legacy -o out/fields.db build
+#
 
 import sqlite3
 import argparse
@@ -431,7 +442,7 @@ class Field:
         if no activityType or null applies to all
         '''
         rv = None
-        debug = (self.key == '__CalcLossElevation')
+        debug = (self.key == '__CalcRunningEffectiveness')
 
         if debug:
             print( f'add: {info}' )
@@ -766,7 +777,7 @@ class Driver :
         self.types.verbose = self.verbose
         self.types.read_from_modern_json( 'download/activity_types_modern.json' )
         if self.verbose:
-            print( 'read {}'.format( base ) )
+            print( 'init with latest {}'.format( base ) )
         self.types.read_from_db(base)
         self.fields = Fields(self.types)
         self.fields.verbose = self.verbose
@@ -809,6 +820,8 @@ class Driver :
         self.categories.verbose = self.verbose
         
     def cmd_build(self):
+        if self.verbose:
+            print( 'start build' )
         for fn in self.args.files:
             self.process_file( fn )
 
@@ -863,7 +876,7 @@ class Driver :
     def process_file(self,fn):
         if os.path.exists( fn ):
             if self.verbose:
-                print( 'read {}'.format( fn ) )
+                print( 'process {}'.format( fn ) )
             if fn.endswith( '.db' ) :
                 self.load_db( fn )
             elif fn.endswith( '.json' ):

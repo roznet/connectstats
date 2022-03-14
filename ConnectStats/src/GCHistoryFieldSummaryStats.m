@@ -41,7 +41,7 @@
     [super dealloc];
 }
 
-+(GCHistoryFieldSummaryStats*)fieldStatsWithActivities:(NSArray<GCActivity*>*)activities
++(GCHistoryFieldSummaryStats*)fieldSummaryStatsWithActivities:(NSArray<GCActivity*>*)activities
                                  activityTypeSelection:(nullable GCActivityTypeSelection*)typeSelection
                                          referenceDate:(NSDate*)refOrNil
                                             ignoreMode:(gcIgnoreMode)ignoreMode{
@@ -134,7 +134,7 @@
     return rv;
 }
 
-+(GCHistoryFieldSummaryStats*)fieldStatsWithHealthMeasures:(NSArray*)measures{
++(GCHistoryFieldSummaryStats*)fieldSummaryStatsWithHealthMeasures:(NSArray*)measures{
     GCHistoryFieldSummaryStats * rv = [[[GCHistoryFieldSummaryStats alloc] init] autorelease];
     if (rv) {
         rv.fieldData = [NSMutableDictionary dictionaryWithCapacity:30];

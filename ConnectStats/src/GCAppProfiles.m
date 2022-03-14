@@ -610,12 +610,14 @@ NSInteger kServiceNoAnchor = 0;
         switch (service) {
             case gcServiceGarmin:
             {
-                gcGarminLoginMethod method = (gcGarminLoginMethod)[self configGetInt:CONFIG_GARMIN_LOGIN_METHOD defaultValue:GARMINLOGIN_DEFAULT];
-
-                if (method == gcGarminLoginMethodDirect && ([self currentLoginNameForService:service].length==0 || [self currentPasswordForService:service].length==0)) {
-                    rv = true;
+                if( ![self serviceSuccess:service] ){
+                    gcGarminLoginMethod method = (gcGarminLoginMethod)[self configGetInt:CONFIG_GARMIN_LOGIN_METHOD defaultValue:GARMINLOGIN_DEFAULT];
+                    
+                    if (method == gcGarminLoginMethodDirect && ([self currentLoginNameForService:service].length==0 || [self currentPasswordForService:service].length==0)) {
+                        rv = true;
+                    }
+                    break;
                 }
-                break;
             }
             default:
                 break;

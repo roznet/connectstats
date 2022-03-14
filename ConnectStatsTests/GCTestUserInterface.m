@@ -171,8 +171,7 @@
             XCTAssertNotEqualObjects(check, config);
         }
     }
-    RZRegressionManager * manager = [RZRegressionManager managerForTestClass:[self class]];
-    manager.recordMode = [GCTestCase recordModeGlobal];
+    RZRegressionManager * manager = [self regressionManager];
     //manager.recordMode = true;
     
     NSArray * generated = [configs arrayByMappingBlock:^(GCStatsMultiFieldConfig * config) {
@@ -183,22 +182,4 @@
     NSArray * retrieved = [manager retrieveReferenceObject:generated forClasses:classes selector:_cmd identifier:@"" error:&error];
     XCTAssertEqualObjects(generated, retrieved);
 }
-
--(void)testMapSnapshot{
-    NSString * aId = @"2477200414";
-    NSString * fn = [RZFileOrganizer bundleFilePath:[NSString stringWithFormat:@"activity_%@.fit", aId] forClass:[self class]];
-    GCActivity * fitAct = [[GCActivity alloc] initWithId:aId fitFilePath:fn startTime:[NSDate date]];
-    
-    XCTestExpectation * expectation = RZReturnAutorelease([[XCTestExpectation alloc] initWithDescription:@"Map Snapshot"]);
-    
-    self.mapViewController = RZReturnAutorelease([[GCMapViewController alloc] initWithNibName:nil bundle:nil]);
-    [self.mapViewController mapImageForActivity:fitAct size:CGSizeMake(250.,250.) completion:^(UIImage*img){
-        XCTAssertEqual(img.size.height, 250.);
-        XCTAssertEqual(img.size.width, 250.);
-        [expectation fulfill];
-    }];
-    
-    [self waitForExpectations:@[ expectation ] timeout:5.0];
-}
-
 @end

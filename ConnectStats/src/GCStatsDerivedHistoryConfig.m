@@ -25,19 +25,19 @@
 
 
 
-#import "GCStatsDerivedAnalysisConfig.h"
+#import "GCStatsDerivedHistoryConfig.h"
 #import "GCAppGlobal.h"
 
-@interface GCStatsDerivedAnalysisConfig ()
+@interface GCStatsDerivedHistoryConfig ()
 @property (nonatomic,retain) GCDerivedOrganizer * cachedDerived;
 @property (nonatomic,assign) NSUInteger derivedSerieMonthIndex;
 @property (nonatomic,assign) NSUInteger derivedSerieFieldIndex;
 
 @end
 
-@implementation GCStatsDerivedAnalysisConfig
-+(GCStatsDerivedAnalysisConfig*)configForActivityType:(NSString*)activityType{
-    GCStatsDerivedAnalysisConfig * rv = RZReturnAutorelease([[GCStatsDerivedAnalysisConfig alloc] init]);
+@implementation GCStatsDerivedHistoryConfig
++(GCStatsDerivedHistoryConfig*)configForActivityType:(NSString*)activityType{
+    GCStatsDerivedHistoryConfig * rv = RZReturnAutorelease([[GCStatsDerivedHistoryConfig alloc] init]);
     if( rv ){
         rv.activityType = activityType;
     }

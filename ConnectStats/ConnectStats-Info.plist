@@ -95,7 +95,7 @@
 					<key>UISceneConfigurationName</key>
 					<string>Default Configuration</string>
 					<key>UISceneDelegateClassName</key>
-					<string>GCAppSceneDelegate</string>
+					<string>ConnectStats.GCAppSceneDelegate</string>
 				</dict>
 			</array>
 		</dict>

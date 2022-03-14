@@ -54,6 +54,7 @@ typedef BOOL (^gcActivityOrganizerMatchBlock)(GCActivity*);
 @property (nonatomic,retain,nullable) NSString * filteredActivityType;
 @property (nonatomic,retain) GCHealthOrganizer * health;
 @property (nonatomic,readonly,nullable) CLLocation * currentActivityLocation;
+@property (nonatomic,readonly) BOOL fullyLoaded;
 
 -(GCActivitiesOrganizer*)initWithDb:(FMDatabase*)aDb;
 -(GCActivitiesOrganizer*)initWithDb:(FMDatabase*)aDb andThread:(nullable dispatch_queue_t)thread NS_DESIGNATED_INITIALIZER;
@@ -65,7 +66,24 @@ typedef BOOL (^gcActivityOrganizerMatchBlock)(GCActivity*);
  * testmode will trigger load of database on current thread in synchronous method and disable all notificaitons,
  *  if loadDetails is false will only load summary else will load everything
  */
--(GCActivitiesOrganizer*)initTestModeWithDb:(FMDatabase*)aDb loadDetails:(BOOL)loadDetails NS_DESIGNATED_INITIALIZER;
+-(GCActivitiesOrganizer*)initTestModeWithDb:(FMDatabase*)aDb loadDetails:(BOOL)loadDetails;
+/**
+ * testmode will trigger load of minimum databaseon current thread in synchronous method and disable all notificaitons
+ */
+-(GCActivitiesOrganizer*)initTestModeMinimumWithDb:(FMDatabase*)aDb;
+
+/**
+ * call this function when ready to load data
+ * typically when the ui is about to start
+ * @return true if details already loaded, false if this actually triggered the load
+ */
+-(BOOL)ensureSummaryLoaded;
+
+/**
+ * call this function to call the very minimum to know what which activity Ids
+ *  are available
+ */
+-(BOOL)ensureMinimumLoaded;
 
 /**
  * call this function when details should be loaded
@@ -87,13 +105,22 @@ typedef BOOL (^gcActivityOrganizerMatchBlock)(GCActivity*);
 -(nullable NSString*)hasKnownDuplicate:(GCActivity*)act;
 
 -(NSUInteger)countOfActivities;
--(NSArray<GCActivity*>*)activities;
+
+/**
+ * only writable for testing
+ */
+@property (nonatomic,retain) NSArray<GCActivity*>*activities;
+
 -(NSArray<GCActivity*>*)activitiesWithin:(NSTimeInterval)time of:(NSDate*)date;
 -(NSArray<GCActivity*>*)activitiesMatching:(gcActivityOrganizerMatchBlock)match withLimit:(NSUInteger)limit;
 -(BOOL)loadCompleted;
 
 
--(void)setActivities:(NSArray*)activities;
+/**
+ * this function can be called even if all activities are not yet loaded as it check just a activity Id map
+ * that is loaded when ensureMinimumLoaded is called
+ */
+-(BOOL)containsActivityId:(NSString*)aId;
 -(nullable GCActivity*)activityForId:(NSString*)aId;
 -(nullable GCActivity*)activityForIndex:(NSUInteger)idx;
 -(NSArray<GCActivity*>*)activitiesFromDate:(NSDate*)aFrom to:(NSDate*)aTo;

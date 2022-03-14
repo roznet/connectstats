@@ -35,6 +35,7 @@ class GCConnectStatsRequestRegisterNotifications : GCConnectStatsRequest {
     @objc override func preparedUrlRequest() -> URLRequest? {
         #if GC_USE_SANDBOX_APN
         // if using sandbox, skip registration in prod as can't use prod apn from debug build
+        // and it would be impossible to log in as password/token don't match prod/dev
         if( GCAppGlobal.webConnectsStatsConfig() == gcWebConnectStatsConfig.productionConnectStatsApp){
             RZSLog.info("Disabling notification register because DEBUG build")
             return nil
@@ -92,6 +93,8 @@ class GCConnectStatsRequestRegisterNotifications : GCConnectStatsRequest {
         }
     }
     
+    
+    
     struct NotificationConfirmation : Codable {
         var cs_user_id : Int
         var device_token : String
@@ -109,7 +112,7 @@ class GCConnectStatsRequestRegisterNotifications : GCConnectStatsRequest {
         
         guard let data = str.data(using: .utf8)
         else {
-            RZSLog.info("invalid data skipping background update")
+            RZSLog.info("invalid data skipping registration")
             self.processDone()
             return
         }
@@ -129,4 +132,9 @@ class GCConnectStatsRequestRegisterNotifications : GCConnectStatsRequest {
         
         self.processDone()
     }
+    
+    @objc static func ensureDbStructure(db : FMDatabase) {
+        GCWebRequestCache.ensureDbStructure(db: db)
+    }
+    
 }

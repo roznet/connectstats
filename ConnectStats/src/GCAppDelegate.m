@@ -31,7 +31,6 @@
 #include <execinfo.h>
 @import RZExternal;
 #include "GCMapGoogleViewController.h"
-#import "GCSettingsBugReportViewController.h"
 #import "GCWebConnect+Requests.h"
 #import "GCAppActions.h"
 #import "GCActivityType.h"
@@ -41,7 +40,7 @@
 #import "GCWeather.h"
 #import "GCActivity+CalculatedTracks.h"
 #import "GCConnectStatsStatus.h"
-#import "GCAppSceneDelegate.h"
+#import "GCService.h"
 
 
 static BOOL connectStatsVersion = false;
@@ -145,10 +144,6 @@ void checkVersion(void){
 #endif
     [self handleAppRating];
     [GCMapGoogleViewController provideAPIKey:[self credentialsForService:@"googlemaps" andKey:@"api_key"]];
-    BOOL ok = [self startInit];
-    if (!ok) {
-        RZLog(RZLogError, @"Multiple failure to start");
-    }
 
     [GCAppGlobal setApplicationDelegate:self];
 
@@ -164,8 +159,7 @@ void checkVersion(void){
     // Wrap in autorelease pool to ensure no left over db object are released
     // later while db operation happening on worker
     @autoreleasepool {
-        [GCActivitiesOrganizer ensureDbStructure:_db];
-        [GCHealthOrganizer ensureDbStructure:_db];
+        [self ensureDbStructure:self.db];
     }
 
     [self setupFieldCache];
@@ -180,8 +174,11 @@ void checkVersion(void){
 
     // This will trigger load from db in background,
     // make sure all setup first
+    // Note organizer will only load basic summary, everything else (details, health, derived) will
+    // be only loaded if/when the UI starts by a further call to ensureDetailLoaded on each of below
     self.organizer = [[[GCActivitiesOrganizer alloc] initWithDb:self.db andThread:self.worker] autorelease];
     self.health = [[[GCHealthOrganizer alloc] initWithDb:self.db andThread:self.worker] autorelease];
+    
     self.web = [[[GCWebConnect alloc] init] autorelease] ;
     self.web.worker = self.worker;
     // Force initial login
@@ -518,23 +515,6 @@ void checkVersion(void){
 
 }
 
--(GCAppSceneDelegate*)currentSceneDelegate{
-    NSSet<UIScene*> * scenes = [[UIApplication sharedApplication] connectedScenes];
-    GCAppSceneDelegate * delegate = nil;
-    
-    for (UIScene * scene in scenes) {
-        if( [scene.delegate isKindOfClass:[GCAppSceneDelegate class]] ){
-            delegate = (GCAppSceneDelegate*)scene.delegate;
-            break;
-        }
-    }
-    return delegate;
-}
-
--(NSObject<GCAppActionDelegate>*)actionDelegate{
-    return [[self currentSceneDelegate] actionDelegate];
-}
-
 
 -(void)settingsUpdateCheckPostStart{
     BOOL needToSaveSettings = false;
@@ -558,7 +538,39 @@ void checkVersion(void){
             [[self.actionDelegate currentNavigationController] presentViewController:alert animated:YES completion:nil];
         }
     }
+
     
+    if( needToSaveSettings ){
+        [self saveSettings];
+    }
+
+}
+
+-(void)settingsUpdateBeforeFirstUpdate{
+    BOOL needToSaveSettings = false;
+    
+    // don't use isFirstTimeForFeature as it's possible this is called in the background and will not succeed
+    if( [self checkIfForFeatureIsRequired:@"FIX_KEY_CHAIN_AFTER_FIRST_UNLOCK"]){
+        BOOL succeeded = false;
+        BOOL atLeastOne = false;
+        NSArray<GCService*>* services = @[ [GCService service:gcServiceGarmin], [GCService service:gcServiceConnectStats] ];
+        for (GCService * service in services) {
+            if( [[GCAppGlobal profile] serviceEnabled:service.service] ){
+                atLeastOne = true;
+                NSString * pwd = [[GCAppGlobal profile] currentPasswordForService:service.service];
+                if( pwd && pwd.length > 0){
+                    [[GCAppGlobal profile] setPassword:pwd forService:service.service];
+                    succeeded = true;
+                    RZLog(RZLogInfo, @"Updated password keychain after first unlock for %@", service);
+                }
+            }
+        }
+        
+        if( !atLeastOne || succeeded){
+            // Will save feature as seen
+            [self isFirstTimeForFeature:@"FIX_KEY_CHAIN_AFTER_FIRST_UNLOCK"];
+        }
+    }
     if( needToSaveSettings ){
         [self saveSettings];
     }
@@ -660,6 +672,12 @@ void checkVersion(void){
     }
 }
 
+
+-(BOOL)checkIfForFeatureIsRequired:(NSString*)feature{
+    NSDictionary * dict = self.settings[CONFIG_FEATURES_SEEN];
+    return dict[feature] == nil;
+}
+
 -(BOOL)isFirstTimeForFeature:(NSString*)feature{
     BOOL rv = false;
     NSDictionary * dict = self.settings[CONFIG_FEATURES_SEEN];
@@ -690,6 +708,8 @@ void checkVersion(void){
     }
 }
 -(void)searchRecentActivities{
+    
+    [self settingsUpdateBeforeFirstUpdate];
     [self.web servicesSearchRecentActivities];
 }
 
@@ -701,8 +721,9 @@ void checkVersion(void){
         [self.profiles addOrSelectProfile:pName];
         self.db = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:[self.profiles currentDatabasePath]]];
         [self.db open];
-        [GCActivitiesOrganizer ensureDbStructure:_db];
-        [GCHealthOrganizer ensureDbStructure:_db];
+        @autoreleasepool {
+            [self ensureDbStructure:_db];
+        }
         [self setupFieldCache];
         [_organizer updateForNewProfile];
         [_health updateForNewProfile];
@@ -719,35 +740,12 @@ void checkVersion(void){
 
 }
 
+
 -(void)startupRefreshIfNeeded{
     if (self.needsStartupRefresh && [self.profiles configGetBool:CONFIG_REFRESH_STARTUP defaultValue:[GCAppGlobal healthStatsVersion]]) {
         [self searchRecentActivities];
     }
     self.needsStartupRefresh = false;
-}
-
--(BOOL)multipleFailureStart{
-    [Flurry logEvent:EVENT_MULTIPLE_FAILURE];
-    _window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    GCSettingsBugReportViewController * bug =[[[GCSettingsBugReportViewController alloc] initWithNibName:nil bundle:nil] autorelease];
-    bug.includeActivityFiles = true;
-    bug.includeErrorFiles = true;
-    _window.rootViewController = bug;
-
-    self.settings = [NSMutableDictionary dictionaryWithDictionary:[RZFileOrganizer loadDictionary:@"settings.plist"]];
-    self.profiles = [GCAppProfiles profilesFromSettings:_settings];
-    [self setupWorkerThread];
-    self.db = [FMDatabase databaseWithPath:[RZFileOrganizer writeableFilePath:[_profiles currentDatabasePath]]];
-    [_db open];
-
-    [self startSuccessful];
-    [_window makeKeyAndVisible];
-
-    //Tested by forcing multiple Failure
-    [bug presentSimpleAlertWithTitle:NSLocalizedString(@"Repeated Failure to start", @"Error")
-                             message:NSLocalizedString(@"The app seem to not have started multiple times. You can send a bug report, next attempt will try again", @"Error")];
-
-    return YES;
 }
 
 -(NSDictionary<NSString*,NSString*>*)credentialsForService:(NSString*)service{

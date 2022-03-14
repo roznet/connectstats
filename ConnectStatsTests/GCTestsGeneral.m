@@ -146,7 +146,7 @@
 
     [tmp addObject:act];
     [act release];
-    [organizer setActivities:[NSArray arrayWithArray:tmp]];
+    organizer.activities = [NSArray arrayWithArray:tmp];
 }
 
 
@@ -328,7 +328,7 @@
     [stats setActivityTypeSelection:RZReturnAutorelease([[GCActivityTypeSelection alloc] initWithActivityType:GC_TYPE_ALL])];
     [stats aggregate:NSCalendarUnitWeekOfYear referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
 
-    GCHistoryFieldSummaryStats * sumStats = [GCHistoryFieldSummaryStats fieldStatsWithActivities:organizer.activities activityTypeSelection:nil referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
+    GCHistoryFieldSummaryStats * sumStats = [GCHistoryFieldSummaryStats fieldSummaryStatsWithActivities:organizer.activities activityTypeSelection:nil referenceDate:nil ignoreMode:gcIgnoreModeActivityFocus];
     GCHistoryAggregatedDataHolder * holder = [stats dataForIndex:0];
     
     GCField * hrfield =[GCField fieldForFlag:gcFieldFlagWeightedMeanHeartRate andActivityType:GC_TYPE_ALL];
@@ -666,8 +666,7 @@
 
     [perfAnalysis calculate];
     
-    RZRegressionManager * manager = [RZRegressionManager managerForTestClass:[self class]];
-    manager.recordMode = [GCTestCase recordModeGlobal];
+    RZRegressionManager * manager = [self regressionManager];
     //manager.recordMode = true;
     NSSet<Class>*classes =[NSSet setWithObjects:[GCStatsDataSerieWithUnit class], nil];
     NSError * error = nil;
@@ -757,7 +756,7 @@
         [a1 addObject:act];
         [act release];
     }
-    [organizer setActivities:[NSArray arrayWithArray:a1]];
+    organizer.activities = [NSArray arrayWithArray:a1];
     NSArray * t1 = [NSArray arrayWithObjects:@"a", @"c", @"d", nil];
     NSArray * t2 = [NSArray arrayWithObjects:@"aa",@"cc", @"dd", nil];
     NSArray * t3 = [NSArray arrayWithObjects:@"d", @"e", nil];
@@ -799,7 +798,7 @@
             [self fldFor:@"WeightedMeanSpeed" act:act]:[self sumVal:[self fldFor:@"WeightedMeanSpeed" act:act] val:[[sample objectAtIndex:4] doubleValue] uom:[sample objectAtIndex:5]]}];
         [activities addObject:act];
     }
-    [organizer setActivities:activities];
+    organizer.activities = activities;
     XCTAssertEqual([organizer countOfFilteredActivities], samples.count);
     
     [organizer filterForQuickFilter];
@@ -860,7 +859,7 @@
         }];
         [activities addObject:act];
     }
-    [organizer setActivities:activities];
+    organizer.activities = activities;
     
     GCField * speedField = [GCField fieldForKey:@"WeightedMeanSpeed" andActivityType:GC_TYPE_ALL];
     GCField * distField  = [GCField fieldForFlag:gcFieldFlagSumDistance andActivityType:GC_TYPE_ALL];

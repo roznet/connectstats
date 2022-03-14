@@ -43,12 +43,11 @@ extension GCSettingsBugReport {
         
         if let data = RZLogFileContent().data(using: .utf8){
             do {
-                try archive?.addEntry(with: "bugreport.log",
-                                      type: .file,
-                                      uncompressedSize: UInt32(data.count),
-                                      provider: { (position,size) -> Data in
-                                        return data.subdata(in: position..<position+size)
-                                      })
+                try archive?.addEntry(with: "bugreport.log", type: .file, uncompressedSize: Int64(data.count)){
+                    (position : Int64,size:Int) throws -> Data in
+                    let start = Int(position), end = start+size
+                      return data.subdata(in: start..<end)
+                }
             }catch{
                 RZSLog.error("bug archive error for log \(error)")
                 archiveSucess = false
@@ -58,10 +57,11 @@ extension GCSettingsBugReport {
             do {
                 try archive?.addEntry(with: "missing_fields.json",
                                       type: .file,
-                                      uncompressedSize: UInt32(jsonMissingFields.count),
-                                      provider: { (position,size) -> Data in
-                                        return jsonMissingFields.subdata(in: position..<position+size)
-                                      })
+                                      uncompressedSize: Int64(jsonMissingFields.count)) {
+                    (position:Int64,size:Int) throws -> Data in
+                    let start = Int(position), end = start+size
+                    return jsonMissingFields.subdata(in: start..<end)
+                }
             }catch{
                 RZSLog.error("bug archive error for missingJson \(error)")
                 archiveSucess = false
@@ -128,10 +128,11 @@ extension GCSettingsBugReport {
                                                           options: [JSONSerialization.WritingOptions.prettyPrinted,JSONSerialization.WritingOptions.sortedKeys])
                 try archive?.addEntry(with: "settings_bugreport.json",
                                       type: .file,
-                                      uncompressedSize: UInt32(jsonData.count),
-                                      provider: { (position,size) -> Data in
-                                        return jsonData.subdata(in: position..<position+size)
-                                      })
+                                      uncompressedSize: Int64(jsonData.count) ) {
+                    (position:Int64,size:Int) throws -> Data in
+                    let start = Int(position), end = start+size
+                    return jsonData.subdata(in: start..<end)
+                }
             }catch{
                 RZSLog.error("bug archive error for json settings \(error)")
                 archiveSucess = false
@@ -149,7 +150,7 @@ extension GCSettingsBugReport {
         let device = UIDevice()
         let deviceGuru = DeviceGuru()
         let commonid = GCAppGlobal.configGet(CONFIG_BUG_COMMON_ID, defaultValue: kBugNoCommonId) ?? kBugNoCommonId
-        
+
         var rv : [String:String] = [
             "systemName" : device.systemName,
             "systemVersion": device.systemVersion,
@@ -159,8 +160,18 @@ extension GCSettingsBugReport {
             "platformString": deviceGuru.hardwareDescription() ?? "Unknown Device",
             "commonid" : commonid
         ]
-        extra.forEach { (k,v) in rv[k] = v }
         
+        if let buildString = buildString,
+            let versionString = versionString {
+            if buildString.hasPrefix(versionString) {
+                rv["version"] = buildString
+            }else{
+                rv["version"] = "\(versionString) (\(buildString))"
+            }
+        }
+
+        extra.forEach { (k,v) in rv[k] = v }
+
         if( commonid != kBugNoCommonId ){
             RZSLog.info("Had previous bug report: id=\(commonid)")
         }

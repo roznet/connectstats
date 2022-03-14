@@ -33,19 +33,11 @@
 
 @interface GCStatsOneFieldViewController : UITableViewController<RZChildObject>
 
-@property (nonatomic,retain) GCHistoryFieldDataSerie * activityStats;
-@property (nonatomic,retain) GCHistoryFieldDataSerie * scatterStats;
-@property (nonatomic,retain) GCHistoryAggregatedStats * aggregatedStats;
-@property (nonatomic,retain) GCHistoryPerformanceAnalysis * performanceAnalysis;
-@property (nonatomic,retain) NSDictionary * summarizedHistory DEPRECATED_MSG_ATTRIBUTE("Use aggregatedStats");
-@property (nonatomic,retain) GCStatsDataSerie * average;
-@property (nonatomic,retain) GCStatsDataSerie * quartiles;
 @property (nonatomic,retain) GCStatsOneFieldConfig * oneFieldConfig;
 @property (nonatomic,retain) NSArray<GCFieldsForCategory*> * fieldOrder;
-@property (nonatomic,readonly) BOOL isNewStyle;
+@property (nonatomic,copy) void (^updateCallback)(void);
 
--(void)setupForConfig:(GCStatsOneFieldConfig*)oneFieldConfig;
-//-(void)setupForViewChoice:(gcViewChoice)choice;
+-(void)setupForFieldListConfig:(GCStatsOneFieldConfig*)oneFieldConfig;
 -(void)changeXField:(GCField*)xField;
 
 @end

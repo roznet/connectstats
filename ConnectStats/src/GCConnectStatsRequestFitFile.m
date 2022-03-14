@@ -219,42 +219,46 @@
     if( [self checkNoErrors]){
         NSString * fp = [[NSFileManager defaultManager] fileExistsAtPath:fileName] ? fileName : [RZFileOrganizer writeableFilePath:fileName];
         
-        NSDate * useStartDate = self.activity.parentId != nil ? self.activity.date : nil;
-        
         NSData * data = [NSData dataWithContentsOfFile:fp];
-        const char * start = data.bytes;
-        
-        GCActivity * fitAct = nil;
-        
-        if( data.length > 5 && strncmp(start,"<?xml", 5 ) == 0 ){
-            GCConnectStatsActivityTCXParser * parser = [GCConnectStatsActivityTCXParser activityTCXParserWithActivityId:self.activity.activityId andData:data];
-            fitAct = parser.activity;
-        }else if( data.length > 13 ){ // should check bytes
-            NSString * activityId = self.activity.activityId;
-            if( activityId == nil){
-                activityId = [[fileName lastPathComponent] stringByDeletingPathExtension];
-            }
-            fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:activityId fitFileData:data fitFilePath:fp startTime:useStartDate]);
-        }
-        if( fitAct ){ // check if we could parse. Could be no fit file available.
-            if( self.activity == nil){
-                self.activity = fitAct;
-            }else{
-                if( [self.activity markCompleted:gcServicePhaseTrack for:gcServiceConnectStats] ){
-                    RZLog(RZLogInfo,@"%@: Already completed connectstats/track", self.activity)
-                }
-                
-                [self.activity updateSummaryDataFromActivity:fitAct];
-                [self.activity updateTrackpointsFromActivity:fitAct];
-                [self.activity saveTrackpoints:fitAct.trackpoints andLaps:fitAct.laps];
-                // don't go further if successful
-                self.shouldCheckForAlternativeWhenEmpty = false;
-            }
-        }
+        [self processParseData:data filePath:fp];
     }
     [self processDone];
-
 }
+
+-(void)processParseData:(NSData*)data filePath:(NSString*)fp{
+    NSDate * useStartDate = self.activity.parentId != nil ? self.activity.date : nil;
+
+    const char * start = data.bytes;
+    
+    GCActivity * fitAct = nil;
+    
+    if( data.length > 5 && strncmp(start,"<?xml", 5 ) == 0 ){
+        GCConnectStatsActivityTCXParser * parser = [GCConnectStatsActivityTCXParser activityTCXParserWithActivityId:self.activity.activityId andData:data];
+        fitAct = parser.activity;
+    }else if( data.length > 13 ){ // should check bytes
+        NSString * activityId = self.activity.activityId;
+        if( activityId == nil){
+            activityId = [[fp lastPathComponent] stringByDeletingPathExtension];
+        }
+        fitAct = RZReturnAutorelease([[GCActivity alloc] initWithId:activityId fitFileData:data fitFilePath:fp startTime:useStartDate]);
+    }
+    if( fitAct ){ // check if we could parse. Could be no fit file available.
+        if( self.activity == nil){
+            self.activity = fitAct;
+        }else{
+            if( [self.activity markCompleted:gcServicePhaseTrack for:gcServiceConnectStats] ){
+                RZLog(RZLogInfo,@"%@: Already completed connectstats/track", self.activity)
+            }
+            
+            [self.activity updateSummaryDataFromActivity:fitAct];
+            [self.activity updateTrackpointsFromActivity:fitAct];
+            [self.activity saveTrackpoints:fitAct.trackpoints andLaps:fitAct.laps];
+            // don't go further if successful
+            self.shouldCheckForAlternativeWhenEmpty = false;
+        }
+    }
+}
+
 
 +(GCActivity*)testForActivity:(GCActivity*)act withFilesIn:(NSString*)path{
     

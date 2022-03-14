@@ -138,6 +138,7 @@
         [self checkToken];
     }
     BOOL rv = self.oauthToken != nil && self.oauthTokenSecret != nil && self.userId != 0 && self.tokenId != 0;
+            
     if( rv && ! self.oauth1Controller){
         [self buildOAuthController];
     }

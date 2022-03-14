@@ -123,8 +123,7 @@
                         @"UnknownField2"
                         ];
     
-    RZRegressionManager * manager = [RZRegressionManager managerForTestClass:[self class]];
-    manager.recordMode = [GCTestCase recordModeGlobal];
+    RZRegressionManager * manager = [self regressionManager];
     //manager.recordMode = true;
     
     NSError * error = nil;
@@ -522,8 +521,7 @@
     
     XCTAssertTrue([act hasField:[GCField fieldForKey:CALC_NONZERO_POWER andActivityType:act.activityType]]);
 
-    RZRegressionManager * manager = [RZRegressionManager managerForTestClass:[self class]];
-    manager.recordMode = [GCTestCase recordModeGlobal];
+    RZRegressionManager * manager = [self regressionManager];
     //manager.recordMode =true;
     
     NSSet<Class> * classes = [NSSet setWithObjects:[NSDictionary class], [GCField class], [GCNumberWithUnit class], nil ];

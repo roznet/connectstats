@@ -51,7 +51,7 @@
 
 import Foundation
 
-
+// Not yet included in connectstats only in tests
 extension Array : Comparable where Element : Comparable {
     public static func < (lhs : [Element], rhs : [Element]) -> Bool {
         for (lhe, rhe) in zip(lhs, rhs) {

@@ -33,21 +33,21 @@
 #import "GCStatsDerivedAnalysisViewController.h"
 #import "GCStatsDerivedHistory.h"
 #import "GCStatsDerivedHistoryViewController.h"
-#import "GCStatsDerivedAnalysisConfig.h"
+#import "GCStatsDerivedHistoryConfig.h"
 
 
 @class  GCFieldsForCategory;
 
 @interface GCStatsMultiFieldViewController : UITableViewController<RZChildObject,GCViewActivityTypeButtonDelegate,GCCellSimpleGraphDelegate,GCStatsMultiFieldConfigViewDelegate,GCStatsDerivedHistoryViewDelegate>
 
-@property (nonatomic,retain) GCHistoryFieldSummaryStats * fieldStats;
+@property (nonatomic,retain) GCHistoryFieldSummaryStats * fieldSummaryStats;
 @property (nonatomic,retain) GCHistoryAggregatedStats * aggregatedStats;
 @property (nonatomic,retain) NSArray<GCFieldsForCategory*> * fieldOrder;
 @property (nonatomic,retain) NSArray<GCField*> * allFields;
 @property (nonatomic,retain) NSDictionary<GCField*,GCHistoryFieldDataSerie*> * fieldDataSeries;
 @property (nonatomic,retain) GCViewActivityTypeButton * activityTypeButton;
 @property (nonatomic,retain) GCStatsMultiFieldConfig * multiFieldConfig;
-@property (nonatomic,retain) GCStatsDerivedAnalysisConfig * derivedAnalysisConfig;
+@property (nonatomic,retain) GCStatsDerivedHistoryConfig * derivedAnalysisConfig;
 @property (nonatomic,copy) void (^updateCallback)(void);
 @property (nonatomic,readonly) BOOL isNewStyle;
 

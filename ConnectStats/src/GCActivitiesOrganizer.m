@@ -54,6 +54,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 @property (nonatomic,retain) FMDatabase * tennisdbCache;
 @property (nonatomic,retain) NSDictionary<NSString*,NSMutableDictionary*> * info;
 @property (nonatomic,retain) NSMutableDictionary * duplicateActivityIds;
+@property (nonatomic,retain) NSMutableSet<NSString*>*existingActivityIds;
 
 @property (nonatomic,assign) NSUInteger nextForGeocoding;
 @property (nonatomic,assign) BOOL geocoding;
@@ -74,6 +75,8 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 
 @property (nonatomic,retain) GCHealthOrganizer * storedHealth;
 
+
+-(GCActivitiesOrganizer*)initTestModeWithDb:(FMDatabase*)aDb loadDetails:(BOOL)loadDetails loadMinimum:(BOOL)minimum NS_DESIGNATED_INITIALIZER;
 
 @end
 
@@ -96,35 +99,43 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         self.db = aDb;
         self.reverseGeocoder = RZReturnAutorelease([[GCWebReverseGeocode alloc]initWithOrganizer:self andDel:self]);
         self.worker = thread;
-        if (aDb) {
-            if (thread) {
-                dispatch_async(thread,^(){
-                    [self loadFromDb];
-                });
-            }else{
-                [self loadFromDb];
-            }
-        }
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateForNewHealthData:) name:kNotifyHealthLoadComplete object:nil];
     }
     return self;
 }
 
 -(GCActivitiesOrganizer*)initTestModeWithDb:(FMDatabase*)aDb{
-    return [self initTestModeWithDb:aDb loadDetails:true];
+    return [self initTestModeWithDb:aDb loadDetails:true loadMinimum:false];
 }
 
 -(GCActivitiesOrganizer*)initTestModeWithDb:(FMDatabase*)aDb loadDetails:(BOOL)loadDetails{
+    return [self initTestModeWithDb:aDb loadDetails:loadDetails loadMinimum:false];
+}
+
+-(GCActivitiesOrganizer*)initTestModeMinimumWithDb:(FMDatabase*)aDb{
+    return [self initTestModeWithDb:aDb loadDetails:false loadMinimum:true];
+}
+
+-(GCActivitiesOrganizer*)initTestModeWithDb:(FMDatabase*)aDb loadDetails:(BOOL)loadDetails loadMinimum:(BOOL)minimum {
     self = [super init];
     if (self) {
         self.testMode = true;
         self.loadDetailsNeeded = loadDetails;
         self.db = aDb;
         [self setReverseGeocoder:nil];
-        [self loadFromDb];
+        if( minimum ){
+            [self ensureMinimumLoaded];
+        }else{
+            [self loadFromDb];
+        }
     }
     return self;
 }
+
 -(void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
     for (GCActivity * act in _allActivities) {
         act.settings.organizer = nil;
     }
@@ -146,6 +157,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     [_info release];
     [_filteredActivityType release];
     [_duplicateActivityIds release];
+    [_existingActivityIds release];
     [_storedHealth release];
     [_activityIdToActivityType release];
     [_loadStartTime release];
@@ -291,7 +303,91 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 }
 
 #pragma mark - load and update
+-(BOOL)fullyLoaded{
+    return self.loadSummaryCompleted == true || self.loadDetailsCompleted == true;
+}
 
+-(BOOL)ensureMinimumLoaded{
+    if( self.db){
+        if(self.worker){
+            dispatch_async(self.worker, ^(){
+                [self loadExisting];
+            });
+        }else{
+            [self loadExisting];
+        }
+    }
+    return true;
+}
+
+-(BOOL)ensureSummaryLoaded{
+    if (self.db) {
+        if (self.worker) {
+            dispatch_async(self.worker,^(){
+                [self loadFromDb];
+            });
+        }else{
+            [self loadFromDb];
+        }
+    }
+    return self.loadSummaryCompleted;
+}
+
+
+-(void)loadFromDb{
+    if (!_db) {
+        if (!self.info) {
+            [self buildInfoDictionary];
+        }
+        self.allActivities = @[];
+
+        return;
+    }
+    // Load process will have several stages:
+    //   - always load summary first
+    //   - when ui starts: load the details
+    [self loadSummaryFromDb];
+    // If test mode load details, otherwise wait for signal it's needed
+    // Typically from the ui
+    if( self.loadDetailsNeeded ){
+        [self loadDetailsFromDb];
+    }
+}
+
+-(void)loadExisting{
+    RZPerformance * perf = [RZPerformance start];
+    [self loadDuplicate];
+    
+    if( self.existingActivityIds == nil){
+        NSMutableSet * existing = [NSMutableSet set];
+        FMResultSet * res = nil;
+        res = [_db executeQuery:@"SELECT activityId FROM gc_activities"];
+        while( [res next]){
+            [existing addObject:[res stringForColumn:@"activityId"]];
+        }
+        self.existingActivityIds = existing;
+    }
+    RZLog(RZLogInfo, @"Loaded minimum %d activities %@",(int)self.existingActivityIds.count, perf);
+}
+
+-(void)loadDuplicate{
+    if( self.duplicateActivityIds == nil){
+        NSMutableDictionary * duplicates = [NSMutableDictionary dictionary];
+        FMResultSet * res = nil;
+        if ([_db tableExists:@"gc_duplicate_activities"]) {
+            res = [_db executeQuery:@"SELECT * FROM gc_duplicate_activities"];
+            while ([res next]) {
+                NSString * activityId = [res stringForColumn:@"activityId"];
+                NSString * duplicateActivityId = [res stringForColumn:@"duplicateActivityId"];
+                // some account somehow had duplicate as healthkit
+                if( ![duplicateActivityId hasPrefix:@"__healthkit__"]){
+                    duplicates[activityId] = duplicateActivityId;
+                }
+            }
+        }
+        self.duplicateActivityIds = duplicates;
+    }
+}
 -(void)loadSummaryFromDb {
     @synchronized (self) {
         // load startime means we are currently running
@@ -304,23 +400,11 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     
     unsigned mem_start = [RZMemory memoryInUse];
     
-    NSMutableDictionary * duplicates = [NSMutableDictionary dictionary];
-    FMResultSet * res = nil;
-    if ([_db tableExists:@"gc_duplicate_activities"]) {
-        res = [_db executeQuery:@"SELECT * FROM gc_duplicate_activities"];
-        while ([res next]) {
-            NSString * activityId = [res stringForColumn:@"activityId"];
-            NSString * duplicateActivityId = [res stringForColumn:@"duplicateActivityId"];
-            // some account somehow had duplicate as healthkit
-            if( ![duplicateActivityId hasPrefix:@"__healthkit__"]){
-                duplicates[activityId] = duplicateActivityId;
-            }
-        }
-    }
-    self.duplicateActivityIds = duplicates;
+    [self loadDuplicate];
 
     NSMutableArray * m_activities = [NSMutableArray array];
-
+    self.existingActivityIds = [NSMutableSet set];
+    FMResultSet * res = nil;
     res = [_db executeQuery:@"SELECT * FROM gc_activities ORDER BY BeginTimestamp DESC"];
     if (res == nil) {
         RZLog(RZLogError, @"db error: %@", [_db lastErrorMessage]);
@@ -351,6 +435,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         [self recordActivityType:act];
         
         [m_activities addObject:act];
+        [self.existingActivityIds addObject:act.activityId];
         [act release];
     }
     [res close];
@@ -376,6 +461,25 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         self.loadSummaryCompleted = true;
         self.loadStartTime = nil;
     }
+}
+
+-(BOOL)ensureDetailsLoaded{
+    @synchronized (self) {
+        self.loadDetailsNeeded = true;
+        if( self.loadDetailsCompleted){
+            // nothing to do
+            return true;
+        }
+    }
+    if( self.worker){
+        dispatch_async(self.worker, ^(){
+            [self loadDetailsFromDb];
+        });
+    }else{
+        [self loadDetailsFromDb];
+    }
+    
+    return false;
 }
 
 -(void)loadDetailsFromDb{
@@ -414,51 +518,6 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     }
 }
 
--(BOOL)ensureDetailsLoaded{
-    @synchronized (self) {
-        self.loadDetailsNeeded = true;
-        if( self.loadDetailsCompleted){
-            // nothing to do
-            return true;
-        }
-    }
-    if( self.worker){
-        dispatch_async(self.worker, ^(){
-            [self loadDetailsFromDb];
-        });
-    }else{
-        [self loadDetailsFromDb];
-    }
-    
-    return false;
-}
-
--(void)loadFromDb{
-    if (!_db) {
-        if (!self.info) {
-            [self buildInfoDictionary];
-        }
-        self.allActivities = @[];
-
-        return;
-    }
-    // Load process will have several stages:
-    //   - always load summary first
-    //   - when ui starts: load the details
-    
-    self.loadCompleted = false;
-    self.loadDetailsCompleted = false;
-    self.loadSummaryCompleted = false;
-
-    [self loadSummaryFromDb];
-    // If test mode load details, otherwise wait for signal it's needed
-    // Typically from the ui
-    if( self.loadDetailsNeeded ){
-        [self loadDetailsFromDb];
-    }
-}
-
-
 -(void)postNotificationListChanged{
     dispatch_async(dispatch_get_main_queue(), ^(){
         [[NSNotificationCenter defaultCenter] postNotificationName:kNotifyOrganizerListChanged object:nil];
@@ -476,12 +535,24 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 -(void)updateForNewProfile{
     self.db = [GCAppGlobal db];
     _currentActivityIndex = 0;
+    self.loadSummaryCompleted = false;
+    self.loadDetailsCompleted = false;
+    self.loadCompleted = false;
+    
     dispatch_async([GCAppGlobal worker],^(){
         [self loadFromDb];
         [self postNotificationReset];
     });
 }
 
+-(void)updateForNewHealthData:(NSNotification*)notification{
+    // If new Health Data may have to recalculate fields
+    
+    for (GCActivity * one in self.allActivities) {
+        [GCFieldsCalculated addCalculatedFields:one];
+    }
+
+}
 #pragma mark - Register new activities
 
 /**
@@ -526,6 +597,8 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
             return [[obj2 date] compare:[obj1 date]];
         }];
         self.allActivities = [NSArray arrayWithArray:m_activities];
+        [self.existingActivityIds addObject:act.activityId];
+        
         [self recordActivityType:act];
         [self notifyOnMainThread:aId];
         [_reverseGeocoder start];
@@ -662,12 +735,15 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
             NSUInteger preCount = self.allActivities.count;
             
             NSMutableArray * fixed = [NSMutableArray arrayWithCapacity:preCount];
+            NSMutableSet<NSString*>*existing = [NSMutableSet set];
             for (GCActivity * one in self.allActivities) {
                 if( ! found[one.activityId]){
                     [fixed addObject:one];
+                    [existing addObject:one.activityId];
                 }
             }
             self.allActivities = fixed;
+            self.existingActivityIds = existing;
             RZLog(RZLogInfo, @"Found %lu duplicates (%lu activities left)", (unsigned long)dupCount, (unsigned long)self.allActivities.count );
             
         }
@@ -710,6 +786,10 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 }
 
 #pragma mark - access
+
+-(BOOL)containsActivityId:(NSString*)aId{
+    return [self.existingActivityIds containsObject:aId];
+}
 
 -(GCActivity*)activityForId:(NSString*)aId{
     for (GCActivity * act in _allActivities) {
@@ -786,6 +866,13 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 }
 -(void)setActivities:(NSArray*)activities{
     self.allActivities = activities;
+    NSMutableSet<NSString*>*set = RZReturnAutorelease([[NSMutableSet alloc] init]);
+    for (GCActivity * act in activities) {
+        if( act.activityId){
+            [set addObject:act.activityId];
+        }
+    }
+    self.existingActivityIds = set;
 }
 
 -(NSArray*)activitiesMatching:(gcActivityOrganizerMatchBlock)match withLimit:(NSUInteger)limit{
@@ -875,7 +962,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 +(void)ensureDbStructure:(FMDatabase*)db{
     [GCActivity ensureDbStructure:db];
     [GCFields ensureDbStructure:db];
-
+    
     if (![db tableExists:@"gc_list_activity_types"]) {
         [db executeUpdate:@"CREATE TABLE gc_list_activity_types (activityTypeDetail TEXT, description TEXT, activityTypeParent TEXT, activityType TEXT )"];
     }
@@ -1204,6 +1291,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     _currentActivityIndex = 0;
     [GCAppGlobal saveSettings];
     self.allActivities = [NSMutableArray arrayWithCapacity:_allActivities.count];
+    self.existingActivityIds = [NSMutableSet set];
     self.duplicateActivityIds = [NSMutableDictionary dictionary];
     [self notify];
 
@@ -1212,17 +1300,19 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
 -(void)deleteActivitiesInTrash{
     if (self.activitiesTrash.count) {
         NSMutableArray * newActivities = [NSMutableArray arrayWithCapacity:_allActivities.count];
-
+        NSMutableSet * newExisting = [NSMutableSet set];
         NSMutableDictionary * toDelete = [NSMutableDictionary dictionaryWithObjects:_activitiesTrash forKeys:_activitiesTrash];
 
         for (GCActivity * act in _allActivities) {
             if (toDelete[act.activityId] == nil) {
                 [newActivities addObject:act];
+                [newExisting addObject:act.activityId];
             }else{
                 act.settings.organizer = nil;
             }
         }
         self.allActivities = [NSArray arrayWithArray:newActivities];
+        self.existingActivityIds = newExisting;
         if (self.currentActivityIndex >= newActivities.count) {
             self.currentActivityIndex = 0;
         }
@@ -1281,6 +1371,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     _currentActivityIndex = 0;
     NSMutableArray * array = [NSMutableArray arrayWithArray:_allActivities];
     [array removeObjectAtIndex:idx];
+    [self.existingActivityIds removeObject:activityId];
     self.allActivities = [NSArray arrayWithArray:array];
     [self notify];
 }
@@ -1336,6 +1427,11 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         NSArray * end   = [self.allActivities subarrayWithRange:NSMakeRange(idxto, self.allActivities.count-idxto)];
         self.allActivities = [start arrayByAddingObjectsFromArray:end];
     }
+    [self.existingActivityIds removeAllObjects];
+    for (GCActivity * act in self.allActivities) {
+        [self.existingActivityIds addObject:act.activityId];
+    }
+    
     [self notify];
 }
 

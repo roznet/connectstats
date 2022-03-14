@@ -26,6 +26,7 @@
 #import "GCAppDelegate+Swift.h"
 #import "ConnectStats-Swift.h"
 #import "GCWebConnect+Requests.h"
+#import "GCSettingsBugReportViewController.h"
 
 @import UserNotifications;
 
@@ -53,7 +54,7 @@ BOOL kOpenTemporary = false;
     application.applicationIconBadgeNumber = 1;
     RZPerformance * notificationPerf = [RZPerformance start];
     
-    [self startSuccessful];
+    [[GCAppGlobal organizer] ensureMinimumLoaded];
     
     self.web.notificationHandler = ^(gcWebNotification notification){
         switch( notification ){
@@ -141,7 +142,6 @@ BOOL kOpenTemporary = false;
     NSError * e = nil;
 
     if (filename) {
-
         NSString * sofar = [NSString stringWithContentsOfFile:filename
                                             encoding:NSUTF8StringEncoding error:&e];
 
@@ -163,7 +163,7 @@ BOOL kOpenTemporary = false;
 -(void)startSuccessful{
     static BOOL once = false;
     if (!once) {
-        RZLog(RZLogInfo, @"Started");
+        RZLog(RZLogInfo, @"UI Started");
         [RZFileOrganizer removeEditableFile:GC_STARTING_FILE];
         once = true;
         
@@ -171,6 +171,30 @@ BOOL kOpenTemporary = false;
         [self startSuccessfulSwift];
         //[UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     }
+}
+
+-(GCAppSceneDelegate*)currentSceneDelegate{
+    NSSet<UIScene*> * scenes = [[UIApplication sharedApplication] connectedScenes];
+    GCAppSceneDelegate * delegate = nil;
+    
+    for (UIScene * scene in scenes) {
+        if( [scene.delegate isKindOfClass:[GCAppSceneDelegate class]] ){
+            delegate = (GCAppSceneDelegate*)scene.delegate;
+            break;
+        }
+    }
+    return delegate;
+}
+
+-(NSObject<GCAppActionDelegate>*)actionDelegate{
+    return [[self currentSceneDelegate] actionDelegate];
+}
+
+-(void)ensureDbStructure:(FMDatabase*)db{
+    [GCActivitiesOrganizer ensureDbStructure:db];
+    [GCHealthOrganizer ensureDbStructure:db];
+
+    [GCConnectStatsRequestRegisterNotifications ensureDbStructureWithDb:db];
 }
 
 @end

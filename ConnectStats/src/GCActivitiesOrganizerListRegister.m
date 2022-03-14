@@ -66,6 +66,39 @@ NSUInteger kDownloadTrackPointCount = 5;
 
     [super dealloc];
 }
+
+-(void)identifyActivitiesToAddTo:(GCActivitiesOrganizer*)organizer{
+    NSMutableArray * existingInService = [NSMutableArray array];
+    NSMutableArray * newActivities = nil;
+    self.addedActivities = nil;
+    
+    self.reachedExisting = 0;
+    
+    if (self.activities) {
+        for (GCActivity * activity in self.activities) {
+            [existingInService addObject:activity.activityId];
+            BOOL knownDuplicate = [organizer isKnownDuplicate:activity];
+            BOOL foundInOrganizer = [organizer containsActivityId:activity.activityId] || knownDuplicate;
+            if (foundInOrganizer || knownDuplicate) {
+                _reachedExisting++;
+            }else{
+                if( newActivities == nil){
+                    newActivities = [NSMutableArray array];
+                    self.addedActivities = newActivities;
+                }
+                [newActivities addObject:activity];
+            }
+        }
+        RZLog(RZLogInfo,@"Hello");
+        if( self.activities.count > 0){
+            RZLog(RZLogInfo, @"Identified %@ [%@-%@]=%lu new=%lu existing=%lu", self.service.displayName, [self.activities.firstObject activityId], [self.activities.lastObject activityId],
+                  (unsigned long)self.activities.count,(unsigned long)newActivities.count,(unsigned long)self.reachedExisting);
+        }else{
+            RZLog(RZLogInfo, @"Idenfitied %@ [empty]", self.service.displayName);            
+        }
+    }
+}
+
 -(void)addToOrganizer:(GCActivitiesOrganizer*)organizer{
     NSMutableArray * existingInService = [NSMutableArray array];
 

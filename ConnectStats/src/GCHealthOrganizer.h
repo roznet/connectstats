@@ -31,10 +31,13 @@
 
 @class GCHealthZoneCalculator;
 
+extern NSString * kNotifyHealthLoadComplete;
+extern NSString * kNotifyHealthLoadNewData;
+
 @interface GCHealthOrganizer : NSObject
 
-@property (nonatomic,retain) NSArray * measures;
-@property (nonatomic,retain) NSDictionary * zones;
+@property (nonatomic,retain) NSArray<GCHealthMeasure*> * measures;
+@property (nonatomic,retain) NSDictionary<NSString*,GCHealthZoneCalculator*>* zones;
 @property (nonatomic,retain) FMDatabase * db;
 @property (nonatomic,retain) NSArray * sleepBlocks;
 @property (nonatomic,retain) dispatch_queue_t worker;

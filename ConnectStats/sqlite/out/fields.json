@@ -2092,6 +2092,10 @@
       "field": "__CalcRotationDevelopment"
     },
     {
+      "en": "Running Effectiveness",
+      "field": "__CalcRunningEffectiveness"
+    },
+    {
       "field": "__CalcStrideLength"
     },
     {
@@ -2894,6 +2898,11 @@
       "category": "bike",
       "field": "__CalcRotationDevelopment",
       "field_order": 20
+    },
+    {
+      "category": "running",
+      "field": "__CalcRunningEffectiveness",
+      "field_order": 5
     },
     {
       "category": "run",
@@ -3848,6 +3857,12 @@
       "field": "__CalcBestRollingWeightedMeanSpeed",
       "metric": "kph",
       "statute": "mph"
+    },
+    {
+      "activity_type": "running",
+      "field": "__CalcRunningEffectiveness",
+      "metric": "dimensionless",
+      "statute": "dimensionless"
     }
   ]
 }

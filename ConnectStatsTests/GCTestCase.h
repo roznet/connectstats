@@ -33,12 +33,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface GCTestCase : XCTestCase
 
-+(BOOL)recordModeGlobal;
 -(GCActivitiesOrganizer*)createEmptyOrganizer:(NSString*)dbname;
 -(GCActivitiesOrganizer*)createTemporaryInMemoryOrganizer;
 -(GCDerivedOrganizer*)createEmptyDerived:(NSString*)dbname;
 -(GCActivitiesOrganizer*)setupSampleState:(NSString*)name;
 -(void)setupForTest:(GCActivity*)act;
+
+-(RZRegressionManager*)regressionManager;
 @end
 
 NS_ASSUME_NONNULL_END

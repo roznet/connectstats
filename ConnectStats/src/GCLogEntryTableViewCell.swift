@@ -1,8 +1,8 @@
 //  MIT License
 //
-//  Created on 27/06/2020 for ConnectStats
+//  Created on 12/12/2021 for ConnectStats
 //
-//  Copyright (c) 2020 Brice Test User
+//  Copyright (c) 2021 Brice Rosenzweig
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -25,17 +25,28 @@
 
 
 
-#import <UIKit/UIKit.h>
-#import "GCAppActionDelegate.h"
+import UIKit
 
-NS_ASSUME_NONNULL_BEGIN
+class GCLogEntryTableViewCell: UITableViewCell {
+    @IBOutlet var level: UILabel!
+    @IBOutlet var timestamp: UILabel!
+    @IBOutlet var method: UILabel!
+    @IBOutlet var message: UILabel!
+    @IBOutlet var scrollView: UIScrollView!
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        // Initialization code
+    }
 
-@interface GCAppSceneDelegate : UIResponder <UIWindowSceneDelegate>
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
 
-@property (strong, nonatomic) UIWindow * window;
-
--(NSObject<GCAppActionDelegate>*)actionDelegate;
-
-@end
-
-NS_ASSUME_NONNULL_END
+        // Configure the view for the selected state
+    }
+ 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        self.scrollView.contentSize.width *= 3
+    }
+}

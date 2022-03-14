@@ -49,7 +49,12 @@ typedef NS_ENUM(NSUInteger, gcOneFieldSecondGraph) {
 
 @property (nonatomic,assign) gcOneFieldSecondGraph secondGraphChoice;
 
-
+/**
+ * Used for
+ *      viewChoice all, monthly, yearly, summary
+ *      viewConfig how far back (3m, 6m, 1y, all)
+ *              calendarConfig
+ */
 @property (nonatomic,readonly) GCStatsMultiFieldConfig * multiFieldConfig;
 
 // Convenience access from multifield config
@@ -63,7 +68,11 @@ typedef NS_ENUM(NSUInteger, gcOneFieldSecondGraph) {
 //@property (nonatomic,readonly) BOOL useFilter;
 @property (nonatomic,readonly) NSArray<GCField*>*fieldsForAggregation;
 
+@property (nonatomic,assign) gcGraphChoice graphChoice;
+
 +(GCStatsOneFieldConfig*)configFromMultiFieldConfig:(GCStatsMultiFieldConfig*)multiFieldConfig forY:(GCField*)field andX:(GCField*)xfield;
++(GCStatsOneFieldConfig*)fieldListConfigFrom:(GCStatsOneFieldConfig*)other;
+-(GCStatsOneFieldConfig*)sameFieldListConfig;
 
 
 -(BOOL)isEqualToConfig:(GCStatsOneFieldConfig*)other;
@@ -71,6 +80,11 @@ typedef NS_ENUM(NSUInteger, gcOneFieldSecondGraph) {
 -(GCHistoryFieldDataSerieConfig*)historyConfig;
 -(GCHistoryFieldDataSerieConfig*)historyConfigXY;
 
+-(UIBarButtonItem*)viewChoiceButtonForTarget:(id)target action:(SEL)sel longPress:(SEL)longPressSel;
+-(UIBarButtonItem*)viewConfigButtonForTarget:(id)target action:(SEL)sel longPress:(SEL)longPressSel;
+
+
 -(BOOL)nextView;
+-(BOOL)nextViewConfig;
 
 @end

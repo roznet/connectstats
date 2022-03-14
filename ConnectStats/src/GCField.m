@@ -614,7 +614,7 @@ static void registerInCache(GCField*field){
         _groups = @[
                     @[@"SumDuration", @"SumElapsedDuration", @"SumMovingDuration" ],
                     @[@"GainElevation", @"LossElevation", @"MaxElevation"],
-                    @[@"SumEnergy",   @"SumTrainingEffect",  CALC_ENERGY,  CALC_METABOLIC_EFFICIENCY],
+                    @[@"SumEnergy",   @"SumTrainingEffect",  CALC_ENERGY],
                     
                     @[@"SumIntensityFactor",          @"SumTrainingStressScore"],
                     @[@"WeightedMeanNormalizedPower", CALC_NONZERO_POWER, @"WeightedMeanLeftBalance", @"WeightedMeanRightBalance"],
@@ -628,6 +628,7 @@ static void registerInCache(GCField*field){
                     @[CALC_ASCENT_SPEED, CALC_MAX_ASCENT_SPEED],
                     @[CALC_DESCENT_SPEED, CALC_MAX_DESCENT_SPEED],
                     @[CALC_VERTICAL_SPEED, CALC_ASCENT_SPEED, CALC_DESCENT_SPEED],
+                    @[ CALC_RUNNING_EFFECTIVENESS, CALC_METABOLIC_EFFICIENCY, CALC_EFFICIENCY_FACTOR],
                     
                     ];
         RZRetain(_groups);

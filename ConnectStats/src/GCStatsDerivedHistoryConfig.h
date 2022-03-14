@@ -32,14 +32,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface GCStatsDerivedAnalysisConfig : NSObject
+@interface GCStatsDerivedHistoryConfig : NSObject
 @property (nonatomic,retain) GCDerivedOrganizer * derived;
 /// Activity type used to filer series
 @property (nonatomic,retain) NSString * activityType;
 @property (nonatomic,retain,nullable) GCDerivedDataSerie * currentDerivedDataSerie;
 
 
-+(GCStatsDerivedAnalysisConfig*)configForActivityType:(NSString*)activityType;
++(GCStatsDerivedHistoryConfig*)configForActivityType:(NSString*)activityType;
 
 /// Goes to the next derivedSerie, stepping one by one
 -(void)nextDerivedSerie;

@@ -122,13 +122,15 @@ static NSArray * _calculatedFields = nil;
 
 +(NSArray*)calculatedFields{
     if (_calculatedFields==nil) {
-        _calculatedFields = [@[
-                             [[[GCFieldCalcKiloJoules alloc] init] autorelease],
-                             [[[GCFieldCalcStrideLength alloc] init] autorelease],
-                             [[[GCFieldCalcMetabolicEfficiency alloc] init] autorelease],
-                             [[[GCFieldCalcRotationDevelopment alloc] init] autorelease],
-                             [[[GCFieldCalcElevationGradient alloc] init] autorelease]
-                             ] retain];
+        _calculatedFields = @[
+            RZReturnAutorelease([[GCFieldCalcKiloJoules alloc] init]),
+            RZReturnAutorelease([[GCFieldCalcStrideLength alloc] init]),
+            RZReturnAutorelease([[GCFieldCalcMetabolicEfficiency alloc] init]),
+            RZReturnAutorelease([[GCFieldCalcRotationDevelopment alloc] init]),
+            RZReturnAutorelease([[GCFieldCalcElevationGradient alloc] init]),
+            RZReturnAutorelease([[GCFieldCalcRunningEffectiveness alloc] init])
+        ] ;
+        RZRetain(_calculatedFields);
     }
     return _calculatedFields;
 }
@@ -236,6 +238,9 @@ static NSArray * _calculatedFields = nil;
     NSArray<GCField*> * inputF = [self inputFieldsForActivity:act];
     for (GCField * f in inputF) {
         if (![act hasField:f]) {
+            if( f.isHealthField ){
+                return [[GCAppGlobal health] hasHealthData];
+            }
             return false;
         }
     }
@@ -249,6 +254,9 @@ static NSArray * _calculatedFields = nil;
     }
     for (GCField * f in inputF) {
         if( ![trackPoint hasField:f inActivity:act] ){
+            if( f.isHealthField ){
+                return [[GCAppGlobal health] hasHealthData];
+            }
             return false;
         }
     }
@@ -262,13 +270,25 @@ static NSArray * _calculatedFields = nil;
         NSMutableArray * inputs = [NSMutableArray arrayWithCapacity:inputF.count];
 
         for (GCField * f in inputF) {
-            [inputs addObject:[act numberWithUnitForField:f]];
+            GCNumberWithUnit * arg = nil;
+
+            if( f.isHealthField ){
+                arg = [[GCAppGlobal health] measureForDate:act.date andField:f].value;
+            }else{
+                arg = [act numberWithUnitForField:f];
+            }
+            
+            if( arg ){
+                [inputs addObject:arg];
+            }
         }
-        GCNumberWithUnit * val = [self evaluateWithInputs:inputs];
-        if (val) {
-            rv = [[[GCActivityCalculatedValue alloc] init] autorelease];
-            rv.numberWithUnit = val;
-            rv.field = [self fieldInActivity:act];
+        if( inputs.count == inputF.count){
+            GCNumberWithUnit * val = [self evaluateWithInputs:inputs];
+            if (val) {
+                rv = [[[GCActivityCalculatedValue alloc] init] autorelease];
+                rv.numberWithUnit = val;
+                rv.field = [self fieldInActivity:act];
+            }
         }
     }
     return rv;
@@ -282,16 +302,24 @@ static NSArray * _calculatedFields = nil;
         NSMutableArray * inputs = [NSMutableArray arrayWithCapacity:inputF.count];
 
         for (GCField * f in inputF) {
-            GCNumberWithUnit * arg = [trackPoint numberWithUnitForField:f inActivity:act];
+            GCNumberWithUnit * arg = nil;
+            
+            if( f.isHealthField ){
+                arg = [[GCAppGlobal health] measureForDate:act.date andField:f].value;
+            }else{
+                arg = [trackPoint numberWithUnitForField:f inActivity:act];
+            }
             
             if (arg) {
                 [inputs addObject:arg];
             }
         }
-        GCNumberWithUnit * val = [self evaluateWithInputs:inputs];
-        rv = [[[GCActivityCalculatedValue alloc] init] autorelease];
-        rv.numberWithUnit = val;
-        rv.field = [GCField fieldForKey:[self fieldKey] andActivityType:act.activityType];
+        if( inputs.count == inputF.count){
+            GCNumberWithUnit * val = [self evaluateWithInputs:inputs];
+            rv = [[[GCActivityCalculatedValue alloc] init] autorelease];
+            rv.numberWithUnit = val;
+            rv.field = [GCField fieldForKey:[self fieldKey] andActivityType:act.activityType];
+        }
     }
     return rv;
 
@@ -360,6 +388,49 @@ static NSArray * _calculatedFields = nil;
 -(NSString*)unitName{
     return @"percent";
 }
+@end
+
+
+#pragma mark - runningefficiency
+
+@implementation GCFieldCalcRunningEffectiveness
+-(BOOL)validForActivity:(GCActivity*)act{
+    return [act.activityTypeDetail hasSamePrimaryType:GCActivityType.running];
+}
+-(NSString*)fieldKey{
+    return CALC_RUNNING_EFFECTIVENESS;
+}
+-(NSString*)displayName{
+    return @"Running Effectiveness";
+}
+
+-(NSArray<NSString*>*)inputFields{
+    return @[@"WeightedMeanSpeed",@"WeightedMeanPower", GC_HEALTH_PREFIX @"weight" ];
+}
+-(NSArray*)inputFieldsTrackPoint{
+    return @[@(gcFieldFlagWeightedMeanSpeed), @(gcFieldFlagPower), GC_HEALTH_PREFIX @"weight" ];
+}
+-(GCNumberWithUnit*)evaluateWithInputs:(NSArray<GCNumberWithUnit*> *)inputs{
+    if (![self ensureInputs:inputs]) {
+        return nil;
+    }
+
+    GCNumberWithUnit * speed = inputs[0];
+    GCNumberWithUnit * pow = inputs[1];
+    GCNumberWithUnit * weight = inputs[2];
+
+    if( pow.value == 0.){
+        return nil;
+    }
+    
+    double val =  [speed convertToUnit:GCUnit.mps].value / pow.value * [weight convertToUnit:GCUnit.kilogram].value;
+
+    return [GCNumberWithUnit numberWithUnitName:@"kg/N" andValue:val];
+}
+-(NSString*)unitName{
+    return @"kg/N";
+}
+
 @end
 
 #pragma mark - efficiencyFactor

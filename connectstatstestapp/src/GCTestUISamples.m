@@ -682,10 +682,9 @@
     
     NSMutableArray * rv = [NSMutableArray array];
     
-    GCStatsMultiFieldConfig * fieldConfig = [GCStatsMultiFieldConfig fieldListConfigFrom:nil];
-    GCStatsDerivedAnalysisConfig * derivedAnalysisConfig = [GCStatsDerivedAnalysisConfig configForActivityType:GC_TYPE_RUNNING];;
+    GCStatsDerivedHistoryConfig * derivedAnalysisConfig = [GCStatsDerivedHistoryConfig configForActivityType:GC_TYPE_RUNNING];;
     
-    GCStatsDerivedHistory * config = [GCStatsDerivedHistory analysisWith:fieldConfig and:derivedAnalysisConfig];
+    GCStatsDerivedHistory * config = [GCStatsDerivedHistory analysisWith:derivedAnalysisConfig];
     config.mode = gcDerivedHistModeAbsolute;
     config.longTermSmoothing = gcDerivedHistSmoothingMovingAverage;
     config.shortTermSmoothing = gcDerivedHistSmoothingMovingAverage;

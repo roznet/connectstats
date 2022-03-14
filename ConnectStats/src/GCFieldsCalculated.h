@@ -82,6 +82,11 @@
 
 @end
 
+@interface GCFieldCalcRunningEffectiveness : GCFieldsCalculated
+
+@end
+
+
 @interface GCFieldCalcKiloJoules : GCFieldsCalculated
 
 @end
@@ -97,4 +102,3 @@
 @interface GCFieldCalcRotationDevelopment : GCFieldsCalculated
 
 @end
-

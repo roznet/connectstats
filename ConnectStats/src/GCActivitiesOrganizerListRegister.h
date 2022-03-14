@@ -57,6 +57,7 @@ NS_ASSUME_NONNULL_BEGIN
 +(instancetype)activitiesOrganizerListRegister:(NSArray<GCActivity*>*)activities from:(GCService*)service isFirst:(BOOL)isFirst;
 
 -(void)addToOrganizer:(GCActivitiesOrganizer*)organizer;
+-(void)identifyActivitiesToAddTo:(GCActivitiesOrganizer*)organizer;
 
 -(BOOL)shouldSearchForMoreWith:(NSUInteger)requestCount reloadAll:(BOOL)mode;
 

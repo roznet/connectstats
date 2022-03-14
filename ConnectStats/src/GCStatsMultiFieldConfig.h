@@ -59,6 +59,9 @@ typedef NS_ENUM(NSUInteger, gcComparisonMetric) {
 
 @property (nonatomic,assign) BOOL useFilter;
 
+/**
+ * graph choice cumulative, bar, distribuction
+ */
 @property (nonatomic,assign) gcGraphChoice graphChoice;
 @property (nonatomic,retain) NSString * graphChoiceKey;
 
@@ -88,9 +91,21 @@ typedef NS_ENUM(NSUInteger, gcComparisonMetric) {
 -(UIBarButtonItem*)viewChoiceButtonForTarget:(id)target action:(SEL)sel longPress:(SEL)longPressSel;
 -(UIBarButtonItem*)viewConfigButtonForTarget:(id)target action:(SEL)sel longPress:(SEL)longPressSel;
 
+-(UIBarButtonItem*)standardButtonSetupWithImage:(UIImage*)image orTitle:(NSString*)title
+                                         target:(id)target action:(SEL)sel longPress:(SEL)longPressSel;
+
 /// Iterate through the different configuration for the current view
 /// depending on the view will iterate though historyStats filter or calChoice.
+/// Full logic iteration
 -(BOOL)nextViewConfig;
+/**
+ * Will iterate through calendar And Configs
+ */
+-(BOOL)nextViewConfigCalendar;
+/**
+ * simple next view config from last 1y, last 3m, all, not other logic
+ */
+-(BOOL)nextViewConfigOnly;
 
 /// Iterate through the different view, summary, all, calendar(weekly,monthly,annual)
 /// return true if cycle complete and back to first view
