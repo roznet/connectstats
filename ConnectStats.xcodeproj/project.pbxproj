@@ -7188,7 +7188,7 @@
 			repositoryURL = "https://github.com/roznet/FitFileParser.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.4.5;
+				minimumVersion = 1.4.6;
 			};
 		};
 		422DCD72258A74DF000DEE4B /* XCRemoteSwiftPackageReference "rzutils-macos" */ = {
