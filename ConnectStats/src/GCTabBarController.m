@@ -25,7 +25,7 @@
 
 #import "GCTabBarController.h"
 #import "GCAppGlobal.h"
-#import "Flurry.h"
+@import Flurry_iOS_SDK;
 @import RZExternal;
 #import "GCViewIcons.h"
 #import "GCWebConnect+Requests.h"

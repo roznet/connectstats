@@ -25,7 +25,7 @@
 
 #import "GCSettingsHelpViewController.h"
 #import "GCViewIcons.h"
-#import "Flurry.h"
+@import Flurry_iOS_SDK;
 #import "GCAppGlobal.h"
 #import "GCViewConfig.h"
 

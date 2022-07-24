@@ -27,7 +27,6 @@
 #import "GCAppGlobal.h"
 #import "GCActivity.h"
 #import "GCFields.h"
-#import "Flurry.h"
 #import "GCActivitySearch.h"
 #import "GCHealthOrganizer.h"
 #import "GCWeather.h"
@@ -36,6 +35,7 @@
 #import "GCService.h"
 #import "GCActivity+Database.h"
 
+@import Flurry_iOS_SDK;
 
 #define GC_SYNC_KEY(act,service) [[act activityId] stringByAppendingString:service]
 

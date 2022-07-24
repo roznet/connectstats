@@ -33,7 +33,7 @@
 #import "GCActivityLapViewController.h"
 #import "GCActivityTrackGraphViewController.h"
 #import "GCSimpleGraphCachedDataSource+Templates.h"
-#import "Flurry.h"
+@import Flurry_iOS_SDK;
 #import "GCActivitySwimLapViewController.h"
 @import RZExternal;
 #import "GCActivityTrackGraphOptionsViewController.h"

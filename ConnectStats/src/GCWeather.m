@@ -23,8 +23,9 @@
 //  SOFTWARE.
 //  
 
+@import Flurry_iOS_SDK;
+
 #import "GCWeather.h"
-#import "Flurry.h"
 #import "GCAppGlobal.h"
 #import "GCFields.h"
 

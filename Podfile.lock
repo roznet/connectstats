@@ -1,11 +1,13 @@
 PODS:
   - Armchair (0.3.7)
   - CHCSVParser (2.1.0)
-  - Flurry-iOS-SDK/FlurrySDK (11.4.0)
-  - GoogleMaps (6.0.1):
-    - GoogleMaps/Maps (= 6.0.1)
-  - GoogleMaps/Base (6.0.1)
-  - GoogleMaps/Maps (6.0.1):
+  - Flurry-iOS-SDK/CrashReporter (12.1.1)
+  - Flurry-iOS-SDK/FlurrySDK (12.1.1):
+    - Flurry-iOS-SDK/CrashReporter
+  - GoogleMaps (7.0.0):
+    - GoogleMaps/Maps (= 7.0.0)
+  - GoogleMaps/Base (7.0.0)
+  - GoogleMaps/Maps (7.0.0):
     - GoogleMaps/Base
 
 DEPENDENCIES:
@@ -24,8 +26,8 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   Armchair: ea2da13f78515da627bd63d9540bd58a50e71562
   CHCSVParser: 3bcc7bdb72111a31222e95d57eacceefe4e537e8
-  Flurry-iOS-SDK: a1dbf099040d71e89a11cdf3a30c8723c1de950f
-  GoogleMaps: c213fc2334b7374144cede914da779b99be0ab74
+  Flurry-iOS-SDK: 2ae2391515ae3248a63e95a397c1b393ae52b3a9
+  GoogleMaps: 6e9c923ca035989709fcb5771544fda4cc5fa2a4
 
 PODFILE CHECKSUM: 19ad1230cebe2eb3b145b952512054697dd5afe8
 
