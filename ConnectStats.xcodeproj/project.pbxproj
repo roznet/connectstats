@@ -7164,7 +7164,7 @@
 			repositoryURL = "https://github.com/roznet/rzutils.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.18;
+				minimumVersion = 1.0.22;
 			};
 		};
 		422DCB84258A27EF000DEE4B /* XCRemoteSwiftPackageReference "fmdb" */ = {

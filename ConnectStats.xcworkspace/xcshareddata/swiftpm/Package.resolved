@@ -113,8 +113,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/roznet/rzutils.git",
       "state" : {
-        "revision" : "527755dcdba4b6ea33fc48dd8325abe4a218de9e",
-        "version" : "1.0.21"
+        "revision" : "f2ea10f1c97d80c6fa067379b15b2be1d25501ee",
+        "version" : "1.0.22"
       }
     },
     {
