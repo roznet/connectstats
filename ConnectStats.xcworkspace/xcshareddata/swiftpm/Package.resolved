@@ -41,8 +41,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/roznet/FitFileParser.git",
       "state" : {
-        "revision" : "c08ddd70687b020115d0964ac8995d50263c34df",
-        "version" : "1.4.7"
+        "revision" : "38a855a37e07e4a07ef1867907a98a322efec63f",
+        "version" : "1.4.8"
       }
     },
     {
