@@ -1589,6 +1589,11 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
             filter.minValue = [GCAppGlobal configGetDouble:CONFIG_FILTER_SPEED_BELOW defaultValue:1.0];
             filter.filterMinValue = true;
             filter.unit = [GCUnit unitForKey:STOREUNIT_SPEED];
+        }else if (aField == gcFieldFlagWeightedMeanSpeed && [type isEqualToString:GC_TYPE_SWIMMING]){
+            filter = RZReturnAutorelease([[GCStatsDataSerieFilter alloc] init]);
+            filter.minValue = [GCAppGlobal configGetDouble:CONFIG_FILTER_SPEED_BELOW_SWIM defaultValue:0.2];
+            filter.filterMinValue = true;
+            filter.unit = [GCUnit unitForKey:STOREUNIT_SPEED];
         }else if ([field.key isEqualToString:@"DirectVO2Max"]){
             filter = RZReturnAutorelease([[GCStatsDataSerieFilter alloc] init]);
             filter.minValue = 1.;

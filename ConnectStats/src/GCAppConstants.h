@@ -30,6 +30,7 @@ extern NSString * const  CONFIG_REFRESH_STARTUP;
 extern NSString * const  CONFIG_FILTER_BAD_VALUES;
 extern NSString * const  CONFIG_FILTER_ADJUST_FOR_LAP;
 extern NSString * const  CONFIG_FILTER_SPEED_BELOW;
+extern NSString * const  CONFIG_FILTER_SPEED_BELOW_SWIM;
 extern NSString * const  CONFIG_FILTER_BAD_ACCEL;
 extern NSString * const  CONFIG_FILTER_POWER_ABOVE;
 extern NSString * const  CONFIG_LAST_LATITUDE;
