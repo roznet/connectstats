@@ -15,7 +15,7 @@
       "location" : "https://github.com/InderKumarRathore/DeviceGuru",
       "state" : {
         "branch" : "master",
-        "revision" : "f612ed42d3264a6ab2f1d9526f784ecce914a6a5"
+        "revision" : "6ae76835652d68b09e3ac3ae2721961fc004f1e3"
       }
     },
     {
@@ -104,8 +104,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/roznet/rzexternal",
       "state" : {
-        "revision" : "8196de67f9481c7f2a1ba2d5bf7886fe89f63ce4",
-        "version" : "1.0.3"
+        "revision" : "369f04960e18085d549400c1f7a571af8d8f3935",
+        "version" : "1.0.4"
       }
     },
     {
@@ -113,8 +113,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/roznet/rzutils.git",
       "state" : {
-        "revision" : "f2ea10f1c97d80c6fa067379b15b2be1d25501ee",
-        "version" : "1.0.22"
+        "revision" : "8e389bc2fd0d8e52ce7e6d7e888e8aa980a441cb",
+        "version" : "1.0.23"
       }
     },
     {
@@ -158,8 +158,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/weichsel/ZIPFoundation.git",
       "state" : {
-        "revision" : "7254c74b49cec2cb81520523ba993c671f71b066",
-        "version" : "0.9.14"
+        "revision" : "f6a22e7da26314b38bf9befce34ae8e4b2543090",
+        "version" : "0.9.15"
       }
     }
   ],

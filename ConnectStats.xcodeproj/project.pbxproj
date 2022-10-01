@@ -7150,7 +7150,7 @@
 			repositoryURL = "https://github.com/roznet/rzexternal";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.3;
+				minimumVersion = 1.0.4;
 			};
 		};
 		4221EDE626F091D3006049DE /* XCRemoteSwiftPackageReference "generic-json-swift" */ = {
@@ -7166,7 +7166,7 @@
 			repositoryURL = "https://github.com/roznet/rzutils.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.22;
+				minimumVersion = 1.0.23;
 			};
 		};
 		422DCB84258A27EF000DEE4B /* XCRemoteSwiftPackageReference "fmdb" */ = {
