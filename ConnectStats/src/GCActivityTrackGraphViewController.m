@@ -25,7 +25,7 @@
 
 #import "GCActivityTrackGraphViewController.h"
 #import "GCViewConfig.h"
-#import "Flurry.h"
+@import Flurry_iOS_SDK;
 #import "GCAppGlobal.h"
 #import "GCViewIcons.h"
 #import "GCTrackFieldChoices.h"

@@ -27,12 +27,13 @@
 #import "GCCellGrid+Templates.h"
 #import "GCAppGlobal.h"
 
-#define GCVIEW_FILTER_MAIN          0
-#define GCVIEW_FILTER_LOW_SPEED     1
-#define GCVIEW_FILTER_ACCEL         2
-#define GCVIEW_FILTER_HIGH_POWER    3
-#define GCVIEW_FILTER_ADJUST_LAP    4
-#define GCVIEW_FILTER_END           5
+#define GCVIEW_FILTER_MAIN              0
+#define GCVIEW_FILTER_LOW_SPEED         1
+#define GCVIEW_FILTER_LOW_SPEED_SWIM    2
+#define GCVIEW_FILTER_ACCEL             3
+#define GCVIEW_FILTER_HIGH_POWER        4
+#define GCVIEW_FILTER_ADJUST_LAP        5
+#define GCVIEW_FILTER_END               6
 
 
 @interface GCSettingsFilterViewController ()
@@ -107,8 +108,19 @@
         [cell setupForRows:1 andCols:2];
         [cell labelForRow:0 andCol:0].attributedText = [GCViewConfig attributedString:NSLocalizedString(@"Minimum running speed", @"Settings Filter") attribute:@selector(attributeBold16)];
         [cell configForRow:0 andCol:0].horizontalOverflow=true;
-        NSUInteger choice = [self minimumSpeedChoiceForSpeed:[GCAppGlobal configGetDouble:CONFIG_FILTER_SPEED_BELOW defaultValue:1.0]];
-        NSString  * val = [self minimumSpeedChoicesDescriptions][choice];
+        NSUInteger choice = [self minimumSpeedChoiceForSpeed:[GCAppGlobal configGetDouble:CONFIG_FILTER_SPEED_BELOW defaultValue:1.0] activityType:GCActivityType.running];
+        NSString  * val = [self minimumSpeedChoicesDescriptions:GCActivityType.running][choice];
+        [cell labelForRow:0 andCol:1].attributedText = [GCViewConfig attributedString:val attribute:@selector(attributeBold16)];
+
+        rv = cell;
+    }else if(indexPath.row==GCVIEW_FILTER_LOW_SPEED_SWIM){
+        GCCellGrid * cell = [GCCellGrid cellGrid:tableView];
+        cell.marginx = 5.;
+        [cell setupForRows:1 andCols:2];
+        [cell labelForRow:0 andCol:0].attributedText = [GCViewConfig attributedString:NSLocalizedString(@"Minimum swimming speed", @"Settings Filter") attribute:@selector(attributeBold16)];
+        [cell configForRow:0 andCol:0].horizontalOverflow=true;
+        NSUInteger choice = [self minimumSpeedChoiceForSpeed:[GCAppGlobal configGetDouble:CONFIG_FILTER_SPEED_BELOW_SWIM defaultValue:0.2] activityType:GCActivityType.swimming];
+        NSString  * val = [self minimumSpeedChoicesDescriptions:GCActivityType.swimming][choice];
         [cell labelForRow:0 andCol:1].attributedText = [GCViewConfig attributedString:val attribute:@selector(attributeBold16)];
 
         rv = cell;
@@ -196,9 +208,9 @@
 
 #pragma mark - Minimum Speed
 
--(NSUInteger)minimumSpeedChoiceForSpeed:(double)curr{
+-(NSUInteger)minimumSpeedChoiceForSpeed:(double)curr activityType:(GCActivityType*)activityType{
     NSUInteger idx = 0;
-    NSArray * choices = [self minimumSpeedChoices];
+    NSArray * choices = [self minimumSpeedChoices:activityType];
 
     for (idx=0; idx<choices.count; idx++) {
         if (curr <= [choices[idx] doubleValue]) {
@@ -212,15 +224,19 @@
     return idx;
 }
 
--(NSArray*)minimumSpeedChoices{
-    return @[@0., @0.5, @1.,@1.5,@1.75,@2.,@2.25, @2.6, @3., @3.25 ];
+-(NSArray*)minimumSpeedChoices:(GCActivityType*)activityType{
+    if ( [activityType hasSamePrimaryType:GCActivityType.swimming] ){
+        return @[@0., @0.1, @0.15, @0.2, @0.3, @0.4, @0.5];
+    }else{
+        return @[@0., @0.5, @1.,@1.5,@1.75,@2.,@2.25, @2.6, @3., @3.25 ];
+    }
 }
 
--(NSArray*)minimumSpeedChoicesDescriptions{
-    NSArray * sp = [self minimumSpeedChoices];
+-(NSArray*)minimumSpeedChoicesDescriptions:(GCActivityType*)activityType{
+    NSArray * sp = [self minimumSpeedChoices:activityType];
     NSMutableArray * ar = [NSMutableArray arrayWithCapacity:sp.count];
     
-    GCUnit * unit = [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:GC_TYPE_RUNNING].unit;
+    GCUnit * unit = [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityTypeDetail:activityType].unit;
     unit = [unit unitForGlobalSystem];
     for (NSNumber * v in sp) {
         double mps = v.doubleValue;
@@ -249,11 +265,18 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == GCVIEW_FILTER_LOW_SPEED) {
-        NSArray * choices = [self minimumSpeedChoicesDescriptions];
-        NSUInteger selected = [self minimumSpeedChoiceForSpeed:[GCAppGlobal configGetDouble:CONFIG_FILTER_SPEED_BELOW defaultValue:1.0]];
+        NSArray * choices = [self minimumSpeedChoicesDescriptions:GCActivityType.running];
+        NSUInteger selected = [self minimumSpeedChoiceForSpeed:[GCAppGlobal configGetDouble:CONFIG_FILTER_SPEED_BELOW defaultValue:1.0] activityType:GCActivityType.running];
         GCCellEntryListViewController * detailViewController = [GCViewConfig standardEntryListViewController:choices selected:selected];
         detailViewController.entryFieldDelegate = self;
         detailViewController.identifierInt = GCVIEW_FILTER_LOW_SPEED;
+        [self.navigationController pushViewController:detailViewController animated:YES];
+    }else if (indexPath.row == GCVIEW_FILTER_LOW_SPEED_SWIM) {
+        NSArray * choices = [self minimumSpeedChoicesDescriptions:GCActivityType.swimming];
+        NSUInteger selected = [self minimumSpeedChoiceForSpeed:[GCAppGlobal configGetDouble:CONFIG_FILTER_SPEED_BELOW_SWIM defaultValue:0.2] activityType:GCActivityType.swimming];
+        GCCellEntryListViewController * detailViewController = [GCViewConfig standardEntryListViewController:choices selected:selected];
+        detailViewController.entryFieldDelegate = self;
+        detailViewController.identifierInt = GCVIEW_FILTER_LOW_SPEED_SWIM;
         [self.navigationController pushViewController:detailViewController animated:YES];
     }else if (indexPath.row==GCVIEW_FILTER_HIGH_POWER){
         NSArray * choices = [self maximumPowerChoicesDescriptions];
@@ -273,9 +296,14 @@
             [GCAppGlobal saveSettings];
             break;
         case GCVIEW_FILTER_LOW_SPEED:
-            [GCAppGlobal configSet:CONFIG_FILTER_SPEED_BELOW doubleVal:[[self minimumSpeedChoices][[cell selected]] doubleValue]];
+            [GCAppGlobal configSet:CONFIG_FILTER_SPEED_BELOW doubleVal:[[self minimumSpeedChoices:GCActivityType.running][[cell selected]] doubleValue]];
             [GCAppGlobal saveSettings];
             break;
+        case GCVIEW_FILTER_LOW_SPEED_SWIM:
+            [GCAppGlobal configSet:CONFIG_FILTER_SPEED_BELOW_SWIM doubleVal:[[self minimumSpeedChoices:GCActivityType.swimming][[cell selected]] doubleValue]];
+            [GCAppGlobal saveSettings];
+            break;
+
         case GCVIEW_FILTER_HIGH_POWER:
             [GCAppGlobal configSet:CONFIG_FILTER_POWER_ABOVE doubleVal:[[self maximumPowerChoices][[cell selected]] doubleValue]];
             [GCAppGlobal saveSettings];

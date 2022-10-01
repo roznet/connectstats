@@ -26,7 +26,7 @@
 #import "GCAppGlobal.h"
 #import "GCAppDelegate.h"
 #import "GCAppDelegate+Swift.h"
-#import "Flurry.h"
+@import Flurry_iOS_SDK;
 #import "GCHealthViewController.h"
 #import "GCWebConnect+Requests.h"
 

@@ -32,6 +32,7 @@ NSString * const CONFIG_REFRESH_STARTUP          = @"config_refresh_startup";
 NSString * const CONFIG_FILTER_BAD_VALUES        = @"config_filter_bad_values";
 NSString * const CONFIG_FILTER_ADJUST_FOR_LAP    = @"config_filter_adjust_for_lap";
 NSString * const CONFIG_FILTER_SPEED_BELOW       = @"config_filter_speed_below";
+NSString * const CONFIG_FILTER_SPEED_BELOW_SWIM  = @"config_filter_speed_below_swim";
 NSString * const CONFIG_FILTER_BAD_ACCEL         = @"config_filter_bad_accel";
 NSString * const CONFIG_FILTER_POWER_ABOVE       = @"config_filter_power_above";
 NSString * const CONFIG_LAST_LATITUDE            = @"location_last_latitude";

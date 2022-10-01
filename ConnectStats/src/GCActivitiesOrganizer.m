@@ -27,7 +27,6 @@
 #import "GCAppGlobal.h"
 #import "GCActivity.h"
 #import "GCFields.h"
-#import "Flurry.h"
 #import "GCActivitySearch.h"
 #import "GCHealthOrganizer.h"
 #import "GCWeather.h"
@@ -36,6 +35,7 @@
 #import "GCService.h"
 #import "GCActivity+Database.h"
 
+@import Flurry_iOS_SDK;
 
 #define GC_SYNC_KEY(act,service) [[act activityId] stringByAppendingString:service]
 
@@ -1587,6 +1587,11 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         }else if (aField == gcFieldFlagWeightedMeanSpeed && ([type isEqualToString:GC_TYPE_RUNNING] ||[type isEqualToString:GC_TYPE_CYCLING])){
             filter = RZReturnAutorelease([[GCStatsDataSerieFilter alloc] init]);
             filter.minValue = [GCAppGlobal configGetDouble:CONFIG_FILTER_SPEED_BELOW defaultValue:1.0];
+            filter.filterMinValue = true;
+            filter.unit = [GCUnit unitForKey:STOREUNIT_SPEED];
+        }else if (aField == gcFieldFlagWeightedMeanSpeed && [type isEqualToString:GC_TYPE_SWIMMING]){
+            filter = RZReturnAutorelease([[GCStatsDataSerieFilter alloc] init]);
+            filter.minValue = [GCAppGlobal configGetDouble:CONFIG_FILTER_SPEED_BELOW_SWIM defaultValue:0.2];
             filter.filterMinValue = true;
             filter.unit = [GCUnit unitForKey:STOREUNIT_SPEED];
         }else if ([field.key isEqualToString:@"DirectVO2Max"]){

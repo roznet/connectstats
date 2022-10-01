@@ -26,7 +26,7 @@
 #import "GCAppGlobal.h"
 #import "GCAppDelegate.h"
 #import "GCWebConnect.h"
-#import "Flurry.h"
+@import Flurry_iOS_SDK;
 #import "GCActivitiesCacheManagement.h"
 #include <execinfo.h>
 @import RZExternal;

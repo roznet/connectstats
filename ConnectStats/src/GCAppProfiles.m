@@ -25,7 +25,7 @@
 
 #import "GCAppGlobal.h"
 #import "GCAppProfiles.h"
-#import "Flurry.h"
+@import Flurry_iOS_SDK;
 #import "GCService.h"
 #import "GCAppProfiles+Swift.h"
 

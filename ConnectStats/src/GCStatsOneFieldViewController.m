@@ -29,7 +29,7 @@
 #import "GCSimpleGraphCachedDataSource+Templates.h"
 #import "GCCellGrid+Templates.h"
 #import "GCStatsMultiFieldGraphViewController.h"
-#import "Flurry.h"
+@import Flurry_iOS_SDK;
 #import "GCStatsOneFieldGraphViewController.h"
 #import "GCFields.h"
 #import "GCViewConfig.h"

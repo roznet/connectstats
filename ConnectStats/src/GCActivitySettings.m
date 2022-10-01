@@ -104,7 +104,12 @@
             field = [GCField fieldForFlag:gcFieldFlagWeightedMeanSpeed andActivityType:act.activityType];
             filter = [[[GCStatsDataSerieFilter alloc] init] autorelease];
             filter.minValue = [GCAppGlobal configGetDouble:CONFIG_FILTER_SPEED_BELOW defaultValue:1.0];
-            filter.filterMinValue = [act.activityType isEqualToString:GC_TYPE_RUNNING] ||[act.activityType isEqualToString:GC_TYPE_CYCLING];
+            filter.filterMinValue = [act.activityType isEqualToString:GC_TYPE_RUNNING] || [act.activityType isEqualToString:GC_TYPE_CYCLING];
+            if ([act.activityType isEqualToString:GC_TYPE_SWIMMING]) {
+                filter.filterMinValue = true;
+                filter.minValue = [GCAppGlobal configGetDouble:CONFIG_FILTER_SPEED_BELOW_SWIM defaultValue:0.2];
+            }
+            
             if ([GCAppGlobal configGetBool:CONFIG_FILTER_BAD_ACCEL defaultValue:YES]) {
                 filter.filterHighAcceleration = true;
                 filter.maxAccelerationSpeedThreshold = 5.55; // about 20kph in mps

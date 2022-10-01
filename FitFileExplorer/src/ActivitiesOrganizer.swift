@@ -247,10 +247,9 @@ class ActivitiesOrganizer {
         return rv
     }
     func save(url : URL) throws {
-        if let json = try? self.json(),
-            let data = try? JSONEncoder().encode(json) {
-            try data.write(to: url)
-        }
+        let json = try self.json()
+        let data = try JSONEncoder().encode(json)
+        try data.write(to: url)
     }
     func json() throws -> JSON {
         let list : JSON = try JSON(activityList.map {
