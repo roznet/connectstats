@@ -131,8 +131,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/roznet/rzutils-touch.git",
       "state" : {
-        "revision" : "c1f0c04187f23d72de33f3613af90d55c239906f",
-        "version" : "1.0.4"
+        "revision" : "5484419f4d88e8061d6f3eb6e456e7a660424adf",
+        "version" : "1.0.5"
       }
     },
     {
