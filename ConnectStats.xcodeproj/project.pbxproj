@@ -362,6 +362,8 @@
 		424053B821E0F36F00375795 /* activity_2477200414.fit in Resources */ = {isa = PBXBuildFile; fileRef = 421A76492027534A00D12B6C /* activity_2477200414.fit */; };
 		424053B921E0F55800375795 /* activity_2545022458.fit in Resources */ = {isa = PBXBuildFile; fileRef = 422F283620551AE100187478 /* activity_2545022458.fit */; };
 		424053BB21E12B8E00375795 /* GarminRequestActivityList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424053BA21E12B8E00375795 /* GarminRequestActivityList.swift */; };
+		42418F0A299797D20027986F /* RZUtilsTouchHealthKit in Frameworks */ = {isa = PBXBuildFile; productRef = 42418F09299797D20027986F /* RZUtilsTouchHealthKit */; };
+		42418F0C299798C50027986F /* RZUtilsTouchHealthKit in Frameworks */ = {isa = PBXBuildFile; productRef = 42418F0B299798C50027986F /* RZUtilsTouchHealthKit */; };
 		424208901BCAF71500F3DB12 /* GCActivity+UI.m in Sources */ = {isa = PBXBuildFile; fileRef = 42C4159917B1A23800EBBAFB /* GCActivity+UI.m */; };
 		424208911BCAF9D800F3DB12 /* Activities.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 422CCE891B7EAB7200A4DAEB /* Activities.xcassets */; };
 		424208971BCC49E200F3DB12 /* GCActivityPreviewingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 425733991BC05A1A0080D75F /* GCActivityPreviewingViewController.m */; };
@@ -2248,6 +2250,7 @@
 				422DCB6F258A2779000DEE4B /* RZUtilsSwift in Frameworks */,
 				424BDAD425E2E25400EC7DBE /* RZExternalUniversal in Frameworks */,
 				42AB66D316DACF8A00C633BD /* CoreText.framework in Frameworks */,
+				42418F0A299797D20027986F /* RZUtilsTouchHealthKit in Frameworks */,
 				4211D576259A0BDA00967874 /* RZExternal in Frameworks */,
 				42A66BDB160D0A0800DA29A5 /* QuartzCore.framework in Frameworks */,
 				42AB66DD16DAD01900C633BD /* libz.dylib in Frameworks */,
@@ -2307,6 +2310,7 @@
 				422DCC20258A6325000DEE4B /* RZUtilsTouch in Frameworks */,
 				42A95C40259A18E400A52DB6 /* RZExternal in Frameworks */,
 				4211D4BE2598B33900967874 /* OAuthSwift in Frameworks */,
+				42418F0C299798C50027986F /* RZUtilsTouchHealthKit in Frameworks */,
 				42B5E2FF1BA5B7BF000FAE4E /* libsqlite3.tbd in Frameworks */,
 				42BD32A3258BC88B004D5E0F /* DeviceGuru in Frameworks */,
 				42D1512B26F1F27C00CE8647 /* GenericJSON in Frameworks */,
@@ -4453,6 +4457,7 @@
 				42DB6CB625D56107003AC195 /* ZIPFoundation */,
 				424BDAD325E2E25400EC7DBE /* RZExternalUniversal */,
 				4221EDE726F091D3006049DE /* GenericJSON */,
+				42418F09299797D20027986F /* RZUtilsTouchHealthKit */,
 			);
 			productName = GarminConnect;
 			productReference = 428FF70915F36888007A88FA /* ConnectStats.app */;
@@ -4513,6 +4518,7 @@
 				42DB6CBC25D5611D003AC195 /* ZIPFoundation */,
 				42CBD0A225E415150024BD28 /* RZExternalUniversal */,
 				42D1512A26F1F27C00CE8647 /* GenericJSON */,
+				42418F0B299798C50027986F /* RZUtilsTouchHealthKit */,
 			);
 			productName = ConnectStatsTestApp;
 			productReference = 42B5E1B91BA5AEC9000FAE4E /* ConnectStatsTestApp.app */;
@@ -5166,11 +5172,13 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
+				"$(SRCROOT)/ConnectStats/credentials.sample.json",
 			);
 			name = "Run Script Validate credentials.json";
 			outputFileListPaths = (
 			);
 			outputPaths = (
+				"$(SRCROOT)/ConnectStats/credentials.json",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -6667,7 +6675,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 7.3;
+				MARKETING_VERSION = 7.3.1;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "$(inherited)";
 				OTHER_LDFLAGS = (
@@ -6722,7 +6730,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 7.3;
+				MARKETING_VERSION = 7.3.1;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -7171,7 +7179,7 @@
 			repositoryURL = "https://github.com/roznet/rzutils-touch.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.2;
+				minimumVersion = 1.0.4;
 			};
 		};
 		422DCC16258A630E000DEE4B /* XCRemoteSwiftPackageReference "FitFileParser" */ = {
@@ -7367,6 +7375,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 422DCD72258A74DF000DEE4B /* XCRemoteSwiftPackageReference "rzutils-macos" */;
 			productName = RZUtilsMacOS;
+		};
+		42418F09299797D20027986F /* RZUtilsTouchHealthKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 422DCC0B258A62EE000DEE4B /* XCRemoteSwiftPackageReference "rzutils-touch" */;
+			productName = RZUtilsTouchHealthKit;
+		};
+		42418F0B299798C50027986F /* RZUtilsTouchHealthKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 422DCC0B258A62EE000DEE4B /* XCRemoteSwiftPackageReference "rzutils-touch" */;
+			productName = RZUtilsTouchHealthKit;
 		};
 		424BDAD325E2E25400EC7DBE /* RZExternalUniversal */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -33,6 +33,7 @@
 #import "GCActivity+Fields.h"
 @import RZUtilsTouch;
 #import "GCActivity+Database.h"
+@import RZUtilsTouchHealthKit;
 
 @interface GCHealthKitActivityParser ()
 @property (nonatomic,retain) NSDictionary * data;

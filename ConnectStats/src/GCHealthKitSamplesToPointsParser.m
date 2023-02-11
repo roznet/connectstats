@@ -27,6 +27,7 @@
 
 #ifdef GC_USE_HEALTHKIT
 #import <HealthKit/HealthKit.h>
+@import RZUtilsTouchHealthKit;
 #endif
 #include "GCTrackPoint.h"
 @import RZUtilsTouch;

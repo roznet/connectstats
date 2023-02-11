@@ -31,6 +31,7 @@ import RZUtilsMacOS
 import GenericJSON
 import RZUtilsSwift
 import FitFileParser
+import UniformTypeIdentifiers
 
 extension Date {
     func formatAsRFC3339() -> String {
@@ -110,7 +111,7 @@ class FITDownloadViewController: NSViewController {
         let savePanel = NSSavePanel()
 
         savePanel.message = "Choose the location to save the csv file"
-        savePanel.allowedFileTypes = [ "csv" ]
+        savePanel.allowedContentTypes = [ .commaSeparatedText ]
         savePanel.nameFieldStringValue = candidate
         if savePanel.runModal() == NSApplication.ModalResponse.OK, let url = savePanel.url {
             do {

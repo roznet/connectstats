@@ -30,6 +30,7 @@
 #ifdef GC_USE_HEALTHKIT
 #import <HealthKit/HealthKit.h>
 @import RZUtilsTouch;
+@import RZUtilsTouchHealthKit;
 #endif
 
 #import "GCService.h"

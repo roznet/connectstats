@@ -28,6 +28,7 @@
 #import "GCFieldInfo.h"
 #if TARGET_OS_IPHONE
 @import RZUtilsTouch;
+@import RZUtilsTouchHealthKit;
 #endif
 
 // 1	Weight (kg)
