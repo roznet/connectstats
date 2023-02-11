@@ -9,6 +9,7 @@
 import Cocoa
 import RZUtilsMacOS
 import RZUtilsSwift
+import UniformTypeIdentifiers
 
 class FITDetailTableViewController: NSViewController {
 
@@ -152,7 +153,7 @@ class FITDetailTableViewController: NSViewController {
             let savePanel = NSSavePanel()
 
             savePanel.message = "Choose the location to save the csv file"
-            savePanel.allowedFileTypes = [ "csv" ]
+            savePanel.allowedContentTypes = [ .commaSeparatedText ]
             let fitFile = dataSource.fitFile
             if let message = fitFile.messageTypeDescription(messageType: dataSource.messageType){
                 var candidate = "newfile_\(message)"
