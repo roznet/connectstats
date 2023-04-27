@@ -113,7 +113,7 @@ void GCWebSetSimulatorDir( NSString * dir){
 void GCWebSetSimulatorError( BOOL abool){
     simulatorError = abool;
 }
-BOOL GCWebSimulatorIsInUse(){
+BOOL GCWebSimulatorIsInUse(void){
     return useSimulator;
 }
 
@@ -347,7 +347,7 @@ NSString * GCWebWeatherHtml(NSString*aId){
     }
 }
 
-NSString * GCWebActivityTypes(){
+NSString * GCWebActivityTypes(void){
     if (useSimulator) {
         return [NSString stringWithFormat:@"%@/garminsimul/samples2/activity_types.json", simulatorURL];
     }else{
@@ -357,7 +357,7 @@ NSString * GCWebActivityTypes(){
     }
 }
 
-NSString * GCWebActivityTypesModern(){
+NSString * GCWebActivityTypesModern(void){
     if (useSimulator) {
         return [NSString stringWithFormat:@"%@/garminsimul/samples_fullmodern/activity_types_modern.json", simulatorURL];
     }else{
@@ -366,7 +366,7 @@ NSString * GCWebActivityTypesModern(){
 }
 
 
-NSString * GCWebUserData(){
+NSString * GCWebUserData(void){
     if (useSimulator) {
         return [NSString stringWithFormat:@"%@/garminsimul/samples/user.json", simulatorURL];
     }else{
@@ -374,7 +374,7 @@ NSString * GCWebUserData(){
     }
 }
 
-NSString * GCWebGarminHeartRate(){
+NSString * GCWebGarminHeartRate(void){
     if (useSimulator) {
         return [NSString stringWithFormat:@"%@/garminsimul/json.php?filename=user_hr_zones", simulatorURL];
     }else{
@@ -398,7 +398,7 @@ NSString * GCWebActivityURLSwim( NSString * activityID){
 }
 
 
-NSString * GCWebLogoutURL(){
+NSString * GCWebLogoutURL(void){
     return @"https://connect.garmin.com/reports?actionMethod=page%2Fhome%2Freports.xhtml%3Aidentity.logout";
 }
 
@@ -415,10 +415,10 @@ NSString * GCWebDeleteActivity(NSString*aId){
 #pragma mark - Strava
 
 
-NSString * GCWebStravaAuthentication(){
+NSString * GCWebStravaAuthentication(void){
     return @"https://www.strava.com/oauth/token";
 }
-NSString * GCWebStravaUpload(){
+NSString * GCWebStravaUpload(void){
     return @"https://www.strava.com/api/v3/uploads";
 }
 

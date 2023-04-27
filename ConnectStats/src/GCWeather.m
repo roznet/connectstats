@@ -71,7 +71,7 @@ static NSDictionary * _weatherIcons = nil;
 static NSDictionary * _weatherTypes = nil;
 static NSDictionary * _weatherIconToTypes = nil;
 
-static void buildCache(){
+static void buildCache(void){
     if(_weatherIcons==nil){
         _weatherTypes =  [[NSDictionary alloc] initWithDictionary:@{
                                                                     @(100): @[ @"Fair", @"fair" ],
