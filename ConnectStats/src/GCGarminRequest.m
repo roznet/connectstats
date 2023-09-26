@@ -35,7 +35,7 @@
 @implementation GCGarminReqBase
 
 +(BOOL)killSwitchTriggered{
-    return false;
+    return true;
 }
 
 -(BOOL)checkNoErrors{

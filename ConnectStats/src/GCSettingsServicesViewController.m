@@ -109,7 +109,7 @@
             [dynamic addObject:@(GC_CONNECTSTATS_DEBUGKEY)];
         }
     }
-    if( [[GCAppGlobal profile] serviceEnabled:gcServiceGarmin]){
+    if(![GCGarminReqBase killSwitchTriggered] && [[GCAppGlobal profile] serviceEnabled:gcServiceGarmin]){
         [dynamic addObjectsFromArray:@[
             @( GC_GARMIN_USERNAME      ),
             @( GC_GARMIN_PASSWORD      ),
@@ -329,6 +329,13 @@
 
         [gridcell labelForRow:0 andCol:0].attributedText = title;
         gcGarminDownloadSource source = [GCViewConfig garminDownloadSource];
+        if( [GCGarminReqBase killSwitchTriggered]){
+            if( source == gcGarminDownloadSourceBoth || source == gcGarminDownloadSourceGarminWeb){
+                source = gcGarminDownloadSourceConnectStats;
+                RZLog(RZLogWarning, @"Garmin Kill swtich on, forcing connectstats");
+#warning "Should issue alert"
+            }
+        }
         NSString * method = [GCViewConfig describeGarminSource:source];
         [gridcell labelForRow:0 andCol:1].attributedText = [NSAttributedString attributedString:[GCViewConfig attribute16]
                                                                                      withString:method];
