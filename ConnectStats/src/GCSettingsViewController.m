@@ -571,6 +571,11 @@
 
                 NSMutableArray * statuses = [NSMutableArray arrayWithCapacity:5];
                 NSString * status = nil;
+                status = [[GCService service:gcServiceConnectStats] statusDescription];
+                if( status.length > 0){
+                    [statuses addObject:status];
+                }
+                
                 status = [[GCService service:gcServiceGarmin] statusDescription];
                 if (status.length>0) {
                     [statuses addObject:status];

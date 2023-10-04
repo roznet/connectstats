@@ -91,6 +91,7 @@ extern NSString * const  CONFIG_CONNECTSTATS_USE;
 extern NSString * const  CONFIG_CONNECTSTATS_FILLYEAR;
 extern NSString * const  CONFIG_CONNECTSTATS_CONFIG;
 extern NSString * const  CONFIG_GARMIN_ENABLE;
+extern NSString * const  CONFIG_GARMIN_KILL_SWITCH;
 extern NSString * const  CONFIG_GARMIN_LOGIN_METHOD;
 extern NSString * const  CONFIG_GARMIN_LAST_SOURCE;
 extern NSString * const  CONFIG_GARMIN_USE_MODERN;
@@ -112,6 +113,7 @@ extern NSString * const  CONFIG_CONNECTSTATS_USER_ID;
 
 extern NSString * const  CONFIG_GARMIN_FIT_DOWNLOAD;
 extern NSString * const  CONFIG_GARMIN_FIT_MERGE;
+
 
 extern NSString * const  CONFIG_ENABLE_DEBUG;
 extern NSString * const  CONFIG_ENABLE_DEBUG_ON;

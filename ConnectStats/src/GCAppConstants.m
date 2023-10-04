@@ -93,6 +93,7 @@ NSString * const CONFIG_CONNECTSTATS_USE         = @"config_connectstats_use";
 NSString * const CONFIG_CONNECTSTATS_FILLYEAR    = @"config_connectstats_fillyear";
 NSString * const CONFIG_CONNECTSTATS_CONFIG      = @"config_connectstats_config";
 NSString * const CONFIG_GARMIN_ENABLE            = @"config_garmin_enable";
+NSString * const CONFIG_GARMIN_KILL_SWITCH       = @"config_garmin_kill_switch";
 NSString * const CONFIG_GARMIN_LOGIN_METHOD      = @"config_garmin_login_method";
 NSString * const CONFIG_GARMIN_LAST_SOURCE       = @"config_garmin_last_source";
 NSString * const CONFIG_GARMIN_USE_MODERN        = @"config_garmin_use_modern_v3";

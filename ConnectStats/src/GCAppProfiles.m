@@ -568,6 +568,9 @@ NSInteger kServiceNoAnchor = 0;
     switch (service) {
         case gcServiceGarmin:
             rv = [self configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO];
+            if( [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_KILL_SWITCH defaultValue:true]){
+                rv = false;
+            }
             break;
         case gcServiceStrava:
             rv = [self configGetBool:CONFIG_STRAVA_ENABLE defaultValue:NO];

@@ -35,7 +35,7 @@
 @implementation GCGarminReqBase
 
 +(BOOL)killSwitchTriggered{
-    return true;
+    return [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_KILL_SWITCH defaultValue:true];
 }
 
 -(BOOL)checkNoErrors{

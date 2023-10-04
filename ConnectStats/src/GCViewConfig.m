@@ -650,7 +650,11 @@ NS_INLINE GCViewConfigSkin * _current_skin(void){
 
 +(gcGarminDownloadSource)garminDownloadSource{
     if([[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:false] && [[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:false] ){
-        return gcGarminDownloadSourceBoth;
+        if( [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_KILL_SWITCH defaultValue:true]){
+            return gcGarminDownloadSourceConnectStats;
+        }else{
+            return gcGarminDownloadSourceBoth;
+        }
     }else if( [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:false] ){
         return gcGarminDownloadSourceGarminWeb;
     }else if( [[GCAppGlobal profile] configGetBool:CONFIG_CONNECTSTATS_ENABLE defaultValue:false]){
@@ -687,6 +691,9 @@ NS_INLINE GCViewConfigSkin * _current_skin(void){
                 connectStatsOn = false;
                 break;
             }
+    }
+    if( [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_KILL_SWITCH defaultValue:true] ){
+        garminOn = true;
     }
     [[GCAppGlobal profile] configSet:CONFIG_CONNECTSTATS_ENABLE boolVal:connectStatsOn];
     [[GCAppGlobal profile] configSet:CONFIG_GARMIN_ENABLE boolVal:garminOn];
