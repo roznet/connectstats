@@ -1323,7 +1323,6 @@
 		4209E1991DA8E15700B80735 /* GCGarminRequestModernSearch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCGarminRequestModernSearch.m; path = src/GCGarminRequestModernSearch.m; sourceTree = "<group>"; };
 		420A57E91CB32C5900EA3B42 /* last_search_0.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = last_search_0.json; sourceTree = "<group>"; };
 		420A57EA1CB32C5900EA3B42 /* withings_getmeas_188427.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = withings_getmeas_188427.json; sourceTree = "<group>"; };
-		420DD2252AD423AF00BF888E /* rzutils-touch */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "rzutils-touch"; path = "../rzutils-touch"; sourceTree = "<group>"; };
 		4211C52619A72447000DEF87 /* GCHealthKitBodyRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCHealthKitBodyRequest.h; path = src/GCHealthKitBodyRequest.h; sourceTree = "<group>"; };
 		4211C52719A72447000DEF87 /* GCHealthKitBodyRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCHealthKitBodyRequest.m; path = src/GCHealthKitBodyRequest.m; sourceTree = "<group>"; };
 		4211C53319AB043A000DEF87 /* version.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = version.plist; path = HealthStats/version.plist; sourceTree = "<group>"; };
@@ -2118,7 +2117,6 @@
 		42E226BA16599AB2008FFD68 /* GCWebReverseGeocode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCWebReverseGeocode.h; path = src/GCWebReverseGeocode.h; sourceTree = "<group>"; };
 		42E226BB16599AB2008FFD68 /* GCWebReverseGeocode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCWebReverseGeocode.m; path = src/GCWebReverseGeocode.m; sourceTree = "<group>"; };
 		42E231722AD36628009E9CDE /* GCConnectStatsRequestAPICheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GCConnectStatsRequestAPICheck.swift; path = src/GCConnectStatsRequestAPICheck.swift; sourceTree = "<group>"; };
-		42E231742AD41D7C009E9CDE /* rzutils */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = rzutils; path = ../rzutils; sourceTree = "<group>"; };
 		42E4D330232E7158002F114C /* GCSettingsServicesViewConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCSettingsServicesViewConstants.h; path = src/GCSettingsServicesViewConstants.h; sourceTree = "<group>"; };
 		42E53AE725C55879003AF0D1 /* GCAppConstants.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GCAppConstants.m; path = src/GCAppConstants.m; sourceTree = "<group>"; };
 		42E53B2825C56792003AF0D1 /* GCAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GCAppDelegate.swift; path = src/GCAppDelegate.swift; sourceTree = "<group>"; };
@@ -3297,8 +3295,6 @@
 		428FF6FE15F36888007A88FA = {
 			isa = PBXGroup;
 			children = (
-				420DD2252AD423AF00BF888E /* rzutils-touch */,
-				42E231742AD41D7C009E9CDE /* rzutils */,
 				4245CD811B7DE351006B85B4 /* Common */,
 				428FF71315F36888007A88FA /* ConnectStats */,
 				4253B4571CD49F7E00437E6A /* FitFileExplorer */,
