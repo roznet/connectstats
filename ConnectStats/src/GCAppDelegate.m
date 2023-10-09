@@ -666,10 +666,11 @@ void checkVersion(void){
             [self stravaSignout];
         }
     }
-    
+
     if( needToSaveSettings ){
         [self saveSettings];
     }
+    
 }
 
 

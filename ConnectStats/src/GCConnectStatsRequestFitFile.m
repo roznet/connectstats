@@ -109,6 +109,10 @@
 
 -(BOOL)validAlternativeService{
     BOOL rv = false;
+    if( [GCGarminReqBase killSwitchTriggered]){
+        return rv;
+    }
+    
     BOOL garminSuccess = [[GCAppGlobal profile] serviceSuccess:gcServiceGarmin];
     if( garminSuccess && self.activity.externalServiceActivityId) {
         GCService * service = [GCService serviceForActivityId:self.activity.externalServiceActivityId];

@@ -950,6 +950,11 @@
             NSString * garminId = [externalId substringFromIndex:[@"garmin_push_" length]];
             self.externalServiceActivityId = [[GCService service:gcServiceGarmin] activityIdFromServiceId:garminId];
         }
+        
+        if([externalId isKindOfClass:[NSString class]] && [externalId hasPrefix:@"garmin_ping_"]){
+            NSString * garminId = [externalId substringFromIndex:[@"garmin_ping_" length]];
+            self.externalServiceActivityId = [[GCService service:gcServiceGarmin] activityIdFromServiceId:garminId];
+        }
     }
 }
 

@@ -146,12 +146,10 @@ class GCStravaRequestBase: GCWebRequestStandard {
         // Start with success
         self.status = GCWebStatus.OK
         if let url = self.stravaUrl() {
-            RZSLog.info("Start get url")
             self.stravaAuth.client.get(url){ result in
                 
                 switch result {
                 case .success(let response):
-                    RZSLog.info("Start got url ok")
                     self.status = GCWebStatus.OK
                     if( !GCAppGlobal.profile().serviceSuccess(gcService.strava)) {
                         DispatchQueue.main.async {

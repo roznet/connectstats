@@ -63,6 +63,10 @@
     };
 }
 -(id<GCWebRequest>)remediationReq{
+    // if disable don't try anything
+    if( [GCGarminReqBase killSwitchTriggered]){
+        return nil;
+    }
     if (self.status==GCWebStatusAccessDenied) {
         self.status = GCWebStatusOK;
         self.stage = gcRequestStageDownload;

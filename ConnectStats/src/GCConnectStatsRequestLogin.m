@@ -97,12 +97,16 @@
     }else{
         // result of validate user
         NSData * jsonData = theData;
-        NSDictionary * info = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:nil];
-        if( [info isKindOfClass:[NSDictionary class]] && [info[@"cs_user_id"] respondsToSelector:@selector(integerValue)] && [info[@"cs_user_id"] integerValue] == self.userId){
-            RZLog(RZLogInfo, @"Validated user %@", info[@"cs_user_id"]);
-            [GCConnectStatsRequestRegisterNotifications register];
+        if( jsonData ){
+            NSDictionary * info = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:nil];
+            if( [info isKindOfClass:[NSDictionary class]] && [info[@"cs_user_id"] respondsToSelector:@selector(integerValue)] && [info[@"cs_user_id"] integerValue] == self.userId){
+                RZLog(RZLogInfo, @"Validated user %@", info[@"cs_user_id"]);
+                [GCConnectStatsRequestRegisterNotifications register];
+            }else{
+                RZLog(RZLogWarning, @"Invalid user %@ != %@", info[@"cs_user_id"], @(self.userId));
+            }
         }else{
-            RZLog(RZLogWarning, @"Invalid user %@ != %@", info[@"cs_user_id"], @(self.userId));
+            RZLog(RZLogWarning, @"Not data for user validation");
         }
         [self processDone];
     }

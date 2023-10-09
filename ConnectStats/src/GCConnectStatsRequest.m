@@ -134,7 +134,7 @@
 -(BOOL)isSignedIn{
     // Always check token first as it's possible a previous req in the queue did log in and
     // we don't want to present a second time.
-    if( ! self.oauthToken ){
+    if( !self.oauthToken || self.oauthToken.length == 0){
         [self checkToken];
     }
     BOOL rv = self.oauthToken != nil && self.oauthTokenSecret != nil && self.userId != 0 && self.tokenId != 0;
@@ -142,7 +142,6 @@
     //If signed in, we will still need an oauth1controller
     // if not signed in, will be created in the sign in process
     if( rv && ! self.oauth1Controller){
-        RZLog(RZLogInfo, @"check oauthbuild during isSignedIn");
         [self buildOAuthController];
     }
     return rv;
@@ -151,7 +150,7 @@
 -(void)signIn{
     if (self.oauthToken) {
         if( self.userId == 0 || self.tokenId == 0){
-            [self signInConnectStatsStep];
+            [self signInGarminStep];
         }else{
             [self signInConnectStatsStep];
             //[self processDone];
@@ -164,6 +163,7 @@
 -(void)signInConnectStatsStep{
     gcWebConnectStatsConfig config = [GCAppGlobal webConnectsStatsConfig];
     NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:GCWebConnectStatsRegisterUser(config, self.oauthToken, self.oauthTokenSecret)]];
+    RZLog(RZLogInfo, @"ConnectStats Step with token %@", self.oauthToken);
     
     [[[self sharedSession] dataTaskWithRequest:request completionHandler:
       ^(NSData * _Nullable data,
@@ -179,6 +179,7 @@
                   if( [responseTokenId respondsToSelector:@selector(integerValue)] ){
                       self.tokenId = responseTokenId.integerValue;
                   }else{
+                      RZLog(RZLogWarning, @"Invalid token_id");
                       self.tokenId = 0;
                   }
                   
@@ -186,18 +187,24 @@
                   if( [responseUserId respondsToSelector:@selector(integerValue)] ){
                       self.userId = responseUserId.integerValue;
                   }else{
+                      RZLog(RZLogWarning, @"Invalid cs_user_id");
                       self.userId = 0;
+                  }
+                  if( self.userId == 0 || self.tokenId == 0){
                   }
                   
                   [[GCAppGlobal profile] configSet:CONFIG_CONNECTSTATS_TOKEN_ID intVal:self.tokenId];
                   [[GCAppGlobal profile] configSet:CONFIG_CONNECTSTATS_USER_ID intVal:self.userId];
                   
                   if( self.userId != 0 && self.tokenId !=0){
+                      RZLog(RZLogInfo, @"Successfully logged in userid=%@ tokenId=%@", @(self.userId), @(self.tokenId));
                       [[GCAppGlobal profile] serviceSuccess:gcServiceConnectStats set:YES];
                       if( [GCAppGlobal profile].pushNotificationEnabled){
                           [[GCAppGlobal web] addRequest:RZReturnAutorelease([[GCConnectStatsRequestRegisterNotifications alloc] init])];
                       }
 
+                  }else{
+                      RZLog(RZLogWarning, @"Invalid response %@", response);
                   }
                   [GCAppGlobal saveSettings];
               }
@@ -210,7 +217,7 @@
 
 -(void)buildOAuthController{
     if( self.oauth1Controller == nil){
-        RZLog(RZLogInfo,@"start build oauth controller");
+        RZLog(RZLogInfo,@"building oauth controller");
         NSError * error = nil;
         NSData * credentials = [NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"credentials.json"] options:0 error:&error];
         if( ! credentials ){
@@ -227,7 +234,6 @@
         
         if( !params[@"consumer_secret"] || [params[@"consumer_secret"] isEqualToString:@"***"]){
             RZLog( RZLogError, @"Credentials not initialized properly, no consumer_secret");
-            
         }
         
         self.oauth1Controller = [[[OAuth1Controller alloc] initWithServiceParameters:params] autorelease];
@@ -252,7 +258,6 @@
     [self.navigationController pushViewController:webCont animated:YES];
     [webCont release];
     [webView release];
-    RZLog(RZLogInfo, @"check oauthbuild during signinStep");
     [self buildOAuthController];
     [self.oauth1Controller loginWithWebView:webView completion:^(NSDictionary *oauthTokens, NSError *error) {
         if (error != nil) {

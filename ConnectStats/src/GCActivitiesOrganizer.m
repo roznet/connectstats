@@ -645,7 +645,7 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         GCActivity * other = [self findDuplicate:act];
         if (other) {
             gcDuplicate reason = [other testForDuplicate:act];
-            BOOL duplicateServiceIsPreferred = (reason == gcDuplicateSynchronizedService) && [act.service preferredOver:other.service];
+            BOOL duplicateServiceIsPreferred = (reason != gcDuplicateNotMatching) && [act.service preferredOver:other.service];
             
             // don't record if already
             if( self.duplicateActivityIds[act.activityId] == nil) {

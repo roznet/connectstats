@@ -104,8 +104,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/roznet/rzexternal",
       "state" : {
-        "revision" : "369f04960e18085d549400c1f7a571af8d8f3935",
-        "version" : "1.0.4"
+        "revision" : "efce225e6616ab3eb5dac5470c470ecada2c0bc0",
+        "version" : "1.0.5"
       }
     },
     {
