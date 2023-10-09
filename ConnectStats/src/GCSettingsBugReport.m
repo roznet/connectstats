@@ -85,6 +85,12 @@ NSString * kBugNoCommonId = @"-1";
         }
     }
     [GCAppGlobal versionSummary];
+    
+    NSString * ckey = [GCAppGlobal credentialsForService:@"garmin" andKey:@"consumer_key"];
+    NSString * cid = [GCAppGlobal credentialsForService:@"strava" andKey:@"client_id"];
+    RZLog(RZLogInfo, @"consumer_key=%@, client_id=%@", ckey, cid);
+    
+    
 }
 
 -(void)checkDb{

@@ -246,8 +246,8 @@
         if( self.activity == nil){
             self.activity = fitAct;
         }else{
-            if( [self.activity markCompleted:gcServicePhaseTrack for:gcServiceConnectStats] ){
-                RZLog(RZLogInfo,@"%@: Already completed connectstats/track", self.activity)
+            if( ![self.activity markCompleted:gcServicePhaseTrack for:gcServiceConnectStats] ){
+                RZLog(RZLogInfo,@"%@: Marked completed connectstats/track", self.activity)
             }
             
             [self.activity updateSummaryDataFromActivity:fitAct];

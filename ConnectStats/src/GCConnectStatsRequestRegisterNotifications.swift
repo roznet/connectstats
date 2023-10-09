@@ -42,8 +42,8 @@ class GCConnectStatsRequestRegisterNotifications : GCConnectStatsRequest {
         }
         #endif
         
-        if self.isSignedIn(),
-           let path = GCWebConnectStatsRegisterNotification(GCAppGlobal.webConnectsStatsConfig()){
+        if self.isSignedIn(){
+            let path = GCWebConnectStatsRegisterNotification(GCAppGlobal.webConnectsStatsConfig())
             let type : UInt = GCAppGlobal.profile().pushNotificationType.rawValue
             let params : [AnyHashable: Any] = [
                 "token_id": self.tokenId,

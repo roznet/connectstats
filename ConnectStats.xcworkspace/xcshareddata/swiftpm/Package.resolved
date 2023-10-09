@@ -1,167 +1,151 @@
 {
-  "pins" : [
-    {
-      "identity" : "brightfutures",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Thomvis/BrightFutures.git",
-      "state" : {
-        "revision" : "fa66fa183dce7196d431244d0215748cd14c5758",
-        "version" : "8.2.0"
+  "object": {
+    "pins": [
+      {
+        "package": "BrightFutures",
+        "repositoryURL": "https://github.com/Thomvis/BrightFutures.git",
+        "state": {
+          "branch": null,
+          "revision": "fa66fa183dce7196d431244d0215748cd14c5758",
+          "version": "8.2.0"
+        }
+      },
+      {
+        "package": "DeviceGuru",
+        "repositoryURL": "https://github.com/InderKumarRathore/DeviceGuru",
+        "state": {
+          "branch": "master",
+          "revision": "186f69781f3da5f3b50b23c595368ea018bd41a0",
+          "version": null
+        }
+      },
+      {
+        "package": "Erik",
+        "repositoryURL": "https://github.com/phimage/Erik.git",
+        "state": {
+          "branch": null,
+          "revision": "109a130e9cdb00789a43a7a625293eeb12d22989",
+          "version": "5.1.0"
+        }
+      },
+      {
+        "package": "FileKit",
+        "repositoryURL": "https://github.com/nvzqz/FileKit.git",
+        "state": {
+          "branch": null,
+          "revision": "826d9161b184509f80d85c28cd612d630646de98",
+          "version": "6.0.0"
+        }
+      },
+      {
+        "package": "FitFileParser",
+        "repositoryURL": "https://github.com/roznet/FitFileParser.git",
+        "state": {
+          "branch": null,
+          "revision": "cf64038c355be65af6f9cb829417efd6b20f9ed2",
+          "version": "1.5.1"
+        }
+      },
+      {
+        "package": "FMDB",
+        "repositoryURL": "https://github.com/ccgus/fmdb",
+        "state": {
+          "branch": null,
+          "revision": "61e51fde7f7aab6554f30ab061cc588b28a97d04",
+          "version": "2.7.7"
+        }
+      },
+      {
+        "package": "GenericJSON",
+        "repositoryURL": "https://github.com/zoul/generic-json-swift.git",
+        "state": {
+          "branch": null,
+          "revision": "0a06575f4038b504e78ac330913d920f1630f510",
+          "version": "2.0.2"
+        }
+      },
+      {
+        "package": "Kanna",
+        "repositoryURL": "https://github.com/tid-kijyun/Kanna.git",
+        "state": {
+          "branch": null,
+          "revision": "f9e4922223dd0d3dfbf02ca70812cf5531fc0593",
+          "version": "5.2.7"
+        }
+      },
+      {
+        "package": "KeychainSwift",
+        "repositoryURL": "https://github.com/evgenyneu/keychain-swift",
+        "state": {
+          "branch": null,
+          "revision": "96fb84f45a96630e7583903bd7e08cf095c7a7ef",
+          "version": "19.0.0"
+        }
+      },
+      {
+        "package": "MBProgressHUD",
+        "repositoryURL": "https://github.com/jdg/MBProgressHUD",
+        "state": {
+          "branch": null,
+          "revision": "bca42b801100b2b3a4eda0ba8dd33d858c780b0d",
+          "version": "1.2.0"
+        }
+      },
+      {
+        "package": "OAuthSwift",
+        "repositoryURL": "https://github.com/OAuthSwift/OAuthSwift.git",
+        "state": {
+          "branch": null,
+          "revision": "d85964b96dbce94df961f28b996187c835089903",
+          "version": "2.2.0"
+        }
+      },
+      {
+        "package": "RZExternal",
+        "repositoryURL": "https://github.com/roznet/rzexternal",
+        "state": {
+          "branch": null,
+          "revision": "369f04960e18085d549400c1f7a571af8d8f3935",
+          "version": "1.0.4"
+        }
+      },
+      {
+        "package": "RZUtilsMacOS",
+        "repositoryURL": "https://github.com/roznet/rzutils-macos",
+        "state": {
+          "branch": null,
+          "revision": "9b567821a8113338f75c9fb83da469d07eb5e233",
+          "version": "1.0.0"
+        }
+      },
+      {
+        "package": "Swifter",
+        "repositoryURL": "https://github.com/httpswift/swifter.git",
+        "state": {
+          "branch": null,
+          "revision": "9483a5d459b45c3ffd059f7b55f9638e268632fd",
+          "version": "1.5.0"
+        }
+      },
+      {
+        "package": "SwiftKeychainWrapper",
+        "repositoryURL": "https://github.com/jrendel/SwiftKeychainWrapper",
+        "state": {
+          "branch": null,
+          "revision": "185a3165346a03767101c4f62e9a545a0fe0530f",
+          "version": "4.0.1"
+        }
+      },
+      {
+        "package": "ZIPFoundation",
+        "repositoryURL": "https://github.com/weichsel/ZIPFoundation.git",
+        "state": {
+          "branch": null,
+          "revision": "43ec568034b3731101dbf7670765d671c30f54f3",
+          "version": "0.9.16"
+        }
       }
-    },
-    {
-      "identity" : "deviceguru",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/InderKumarRathore/DeviceGuru",
-      "state" : {
-        "branch" : "master",
-        "revision" : "186f69781f3da5f3b50b23c595368ea018bd41a0"
-      }
-    },
-    {
-      "identity" : "erik",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/phimage/Erik.git",
-      "state" : {
-        "revision" : "109a130e9cdb00789a43a7a625293eeb12d22989",
-        "version" : "5.1.0"
-      }
-    },
-    {
-      "identity" : "filekit",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/nvzqz/FileKit.git",
-      "state" : {
-        "revision" : "826d9161b184509f80d85c28cd612d630646de98",
-        "version" : "6.0.0"
-      }
-    },
-    {
-      "identity" : "fitfileparser",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/roznet/FitFileParser.git",
-      "state" : {
-        "revision" : "cf64038c355be65af6f9cb829417efd6b20f9ed2",
-        "version" : "1.5.1"
-      }
-    },
-    {
-      "identity" : "fmdb",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/ccgus/fmdb",
-      "state" : {
-        "revision" : "61e51fde7f7aab6554f30ab061cc588b28a97d04",
-        "version" : "2.7.7"
-      }
-    },
-    {
-      "identity" : "generic-json-swift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/zoul/generic-json-swift.git",
-      "state" : {
-        "revision" : "0a06575f4038b504e78ac330913d920f1630f510",
-        "version" : "2.0.2"
-      }
-    },
-    {
-      "identity" : "kanna",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/tid-kijyun/Kanna.git",
-      "state" : {
-        "revision" : "f9e4922223dd0d3dfbf02ca70812cf5531fc0593",
-        "version" : "5.2.7"
-      }
-    },
-    {
-      "identity" : "keychain-swift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/evgenyneu/keychain-swift",
-      "state" : {
-        "revision" : "96fb84f45a96630e7583903bd7e08cf095c7a7ef",
-        "version" : "19.0.0"
-      }
-    },
-    {
-      "identity" : "mbprogresshud",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/jdg/MBProgressHUD",
-      "state" : {
-        "revision" : "bca42b801100b2b3a4eda0ba8dd33d858c780b0d",
-        "version" : "1.2.0"
-      }
-    },
-    {
-      "identity" : "oauthswift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/OAuthSwift/OAuthSwift.git",
-      "state" : {
-        "revision" : "d85964b96dbce94df961f28b996187c835089903",
-        "version" : "2.2.0"
-      }
-    },
-    {
-      "identity" : "rzexternal",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/roznet/rzexternal",
-      "state" : {
-        "revision" : "369f04960e18085d549400c1f7a571af8d8f3935",
-        "version" : "1.0.4"
-      }
-    },
-    {
-      "identity" : "rzutils",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/roznet/rzutils.git",
-      "state" : {
-        "revision" : "dc3e483ca89add8b530cfa70b662b34194f7df70",
-        "version" : "1.0.24"
-      }
-    },
-    {
-      "identity" : "rzutils-macos",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/roznet/rzutils-macos",
-      "state" : {
-        "revision" : "9b567821a8113338f75c9fb83da469d07eb5e233",
-        "version" : "1.0.0"
-      }
-    },
-    {
-      "identity" : "rzutils-touch",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/roznet/rzutils-touch.git",
-      "state" : {
-        "revision" : "5484419f4d88e8061d6f3eb6e456e7a660424adf",
-        "version" : "1.0.5"
-      }
-    },
-    {
-      "identity" : "swifter",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/httpswift/swifter.git",
-      "state" : {
-        "revision" : "9483a5d459b45c3ffd059f7b55f9638e268632fd",
-        "version" : "1.5.0"
-      }
-    },
-    {
-      "identity" : "swiftkeychainwrapper",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/jrendel/SwiftKeychainWrapper",
-      "state" : {
-        "revision" : "185a3165346a03767101c4f62e9a545a0fe0530f",
-        "version" : "4.0.1"
-      }
-    },
-    {
-      "identity" : "zipfoundation",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/weichsel/ZIPFoundation.git",
-      "state" : {
-        "revision" : "43ec568034b3731101dbf7670765d671c30f54f3",
-        "version" : "0.9.16"
-      }
-    }
-  ],
-  "version" : 2
+    ]
+  },
+  "version": 1
 }

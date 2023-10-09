@@ -57,8 +57,8 @@ class GCConnectStatsRequestBackgroundSearch: GCConnectStatsRequest {
     @objc override func preparedUrlRequest() -> URLRequest? {
         switch self.requestMode {
         case .downloadAndProcess,.downloadAndCache:
-            if self.isSignedIn(),
-               let path = GCWebConnectStatsSearch(GCAppGlobal.webConnectsStatsConfig()){
+            if self.isSignedIn(){
+                let path = GCWebConnectStatsSearch(GCAppGlobal.webConnectsStatsConfig())
                 let params : [AnyHashable: Any] = [
                     "token_id": self.tokenId,
                     "start":self.start,

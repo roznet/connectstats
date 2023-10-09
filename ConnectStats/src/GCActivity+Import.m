@@ -1018,18 +1018,18 @@
     // no metaData in current activity, just take the other one as is
     if( self.metaData == nil && other.metaData != nil){
         [self updateMetaData:[NSDictionary dictionaryWithDictionary:other.metaData]];
-        
-        FMDatabase * db = self.db;
-        [db beginTransaction];
-        for (NSString * field in self.metaData) {
-            GCActivityMetaValue * data = self.metaData[field];
-            if( db ){
-                [data saveToDb:db forActivityId:self.activityId];
+        if( other.metaData.count != 0){
+            FMDatabase * db = self.db;
+            [db beginTransaction];
+            for (NSString * field in self.metaData) {
+                GCActivityMetaValue * data = self.metaData[field];
+                if( db ){
+                    [data saveToDb:db forActivityId:self.activityId];
+                }
             }
+            [db commit];
+            rv = true;
         }
-        [db commit];
-        rv = true;
-
     }else{
         if (self.metaData) {
             NSMutableDictionary * newMetaData = nil;
@@ -1177,8 +1177,8 @@
     // Special Case were some field should always be imported (like name event etc)
     BOOL connectstatsFromGarmin = self.service.service == gcServiceConnectStats && other.service.service == gcServiceGarmin;
     
-    if( [self markCompleted:gcServicePhaseSummary for:other.service.service] ){
-        RZLog(RZLogInfo, @"%@: Already completed %@/summary", self, other.service);
+    if( ![self markCompleted:gcServicePhaseSummary for:other.service.service] ){
+        RZLog(RZLogInfo, @"%@: Marked completed %@/summary", self, other.service);
     }
 
     if( ! newOnly){

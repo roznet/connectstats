@@ -25,6 +25,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 typedef NS_ENUM(NSUInteger, gcWebConnectStatsConfig) {
     gcWebConnectStatsConfigProductionRozNet,
     gcWebConnectStatsConfigProductionConnectStatsApp,
@@ -34,7 +36,7 @@ typedef NS_ENUM(NSUInteger, gcWebConnectStatsConfig) {
     gcWebConnectStatsConfigEnd
 };
 
-void GCWebUseSimulator( BOOL abool, NSString * url);
+void GCWebUseSimulator( BOOL abool, NSString * _Nullable url);
 void GCWebSetSimulatorError( BOOL abool);
 void GCWebSetSimulatorState( NSString * state);
 void GCWebConnectStatsConfigSet(gcWebConnectStatsConfig config);
@@ -81,3 +83,4 @@ NSString * GCWebWeatherHtml(NSString*aId);
 
 NSString * GCWebActivityURLDetail( NSString * activityID);
 
+NS_ASSUME_NONNULL_END

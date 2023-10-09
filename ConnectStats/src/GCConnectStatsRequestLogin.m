@@ -30,19 +30,6 @@
 #import "GCAppGlobal.h"
 #import "ConnectStats-Swift.h"
 
-typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
-    GCConnectStatsRequestLoginStageAPICheck,
-    GCConnectStatsRequestLoginStageValidateUser,
-    GCConnectStatsRequestLoginStageEnd
-};
-
-@interface GCConnectStatsRequestLogin ()
-
-@property (nonatomic,assign) GCConnectStatsRequestLoginStage loginStage;
-
-@end
-
-
 @implementation GCConnectStatsRequestLogin
 
 +(GCConnectStatsRequestLogin*)requestNavigationController:(UINavigationController *)nav{
@@ -55,14 +42,16 @@ typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
     self = [super initNextWith:current];
     if( self ){
         self.navigationController = nil;
-        self.loginStage = current.loginStage + 1;
     }
     return self;
 }
 -(NSString*)url{
     return nil;
 }
-
+// Need to override urlDescription to not deal work without signing in.
+-(NSString*)urlDescription{
+    return GCWebConnectStatsValidateUser([GCAppGlobal webConnectsStatsConfig]);
+}
 -(NSURLRequest*)preparedUrlRequest{
     if( [self isSignedIn] ){
         self.navigationController = nil;
@@ -71,86 +60,51 @@ typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
     if (self.navigationController) {
         return nil;
     }else{
-        switch (self.loginStage) {
-                
-            case GCConnectStatsRequestLoginStageValidateUser:
-            {
-                NSString * path = GCWebConnectStatsValidateUser([GCAppGlobal webConnectsStatsConfig]);
-                NSUInteger type = [GCAppGlobal profile].pushNotificationType;
-                NSDictionary *parameters = @{
-                                             @"token_id" : @(self.tokenId),
-                                             @"notification_device_token": [[GCAppGlobal profile] configGetString:CONFIG_NOTIFICATION_DEVICE_TOKEN defaultValue:@""],
-                                             @"notification_enabled" : @([GCAppGlobal profile].pushNotificationEnabled),
-                                             @"notification_push_type" : @( type ),
-                                             };
-                
-                return [self preparedUrlRequest:path params:parameters];
-            }
-            case GCConnectStatsRequestLoginStageAPICheck:
-            {
-                return [NSURLRequest requestWithURL:[NSURL URLWithString:GCWebConnectStatsApiCheck([GCAppGlobal webConnectsStatsConfig])]];
-            }
-            case GCConnectStatsRequestLoginStageEnd:
-                return nil;
-        }
+        NSString * path = GCWebConnectStatsValidateUser([GCAppGlobal webConnectsStatsConfig]);
+        NSUInteger type = [GCAppGlobal profile].pushNotificationType;
+        NSDictionary *parameters = @{
+            @"token_id" : @(self.tokenId),
+            @"notification_device_token": [[GCAppGlobal profile] configGetString:CONFIG_NOTIFICATION_DEVICE_TOKEN defaultValue:@""],
+            @"notification_enabled" : @([GCAppGlobal profile].pushNotificationEnabled),
+            @"notification_push_type" : @( type ),
+        };
+        
+        return [self preparedUrlRequest:path params:parameters];
     }
     return nil;
 }
 
-
+-(void)process{
+    [self process:[self.theString dataUsingEncoding:self.encoding] andDelegate:self.delegate];
+}
 -(void)process:(NSData *)theData andDelegate:(id<GCWebRequestDelegate>)delegate{
     self.delegate = delegate;
-    
-    if (self.loginStage == GCConnectStatsRequestLoginStageAPICheck){
-        if( theData != nil){
-            NSData * jsonData = theData;
-            NSDictionary * info = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:nil];
-            if( [info isKindOfClass:[NSDictionary class]] && [info[@"status"] respondsToSelector:@selector(integerValue)] && [info[@"status"] integerValue] == 1){
-                RZLog(RZLogInfo, @"Api Check Success");
-                
-                if( [info[@"redirect"] isKindOfClass:[NSString class]] ){
-                    gcWebConnectStatsConfig redirect = GCWebConnectStatsConfigForRedirect(info[@"redirect"]);
-                    gcWebConnectStatsConfig currentConfig = [GCAppGlobal webConnectsStatsConfig];
-                    if( redirect != gcWebConnectStatsConfigEnd && redirect != currentConfig){
-                        RZLog( RZLogInfo, @"API Check requesting redirect from %@ to %@",
-                              GCWebConnectStatsApiCheck(currentConfig),
-                              GCWebConnectStatsApiCheck(redirect));
-                        
-                        [[GCAppGlobal profile] configSet:CONFIG_CONNECTSTATS_CONFIG intVal:redirect];
-                        [GCAppGlobal saveSettings];
-                    }else{
-                        RZLog(RZLogInfo, @"API Check success. Already redirected." );
-                    }
-                }
-            }else{
-                RZLog(RZLogError, @"API Check FAILED %@", info);
-            }
-        }else{
-            RZLog(RZLogInfo, @"API Check not supported");
-        }
-        [self processDone];
-    }else{
+  
+    // If we have navigation controller, check signin
+    if( self.navigationController != nil) {
         if (![self isSignedIn]) {
             dispatch_async(dispatch_get_main_queue(), ^(){
                 [self processNewStage];
             });
             dispatch_async(dispatch_get_main_queue(),^(){
+                RZLog(RZLogInfo,@"Starting signIn process");
                 [self signIn];
             });
-            
         }else{
-            if( self.loginStage == GCConnectStatsRequestLoginStageValidateUser){
-                NSData * jsonData = theData;
-                NSDictionary * info = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:nil];
-                if( [info isKindOfClass:[NSDictionary class]] && [info[@"cs_user_id"] respondsToSelector:@selector(integerValue)] && [info[@"cs_user_id"] integerValue] == self.userId){
-                    RZLog(RZLogInfo, @"Validated user %@", info[@"cs_user_id"]);
-                    [GCConnectStatsRequestRegisterNotifications register];
-                }else{
-                    RZLog(RZLogWarning, @"Invalid user %@ != %@", info[@"cs_user_id"], @(self.userId));
-                }
-                [self processDone];
-            }
+            RZLog(RZLogInfo,@"Already signed in");
+            [self processDone];
         }
+    }else{
+        // result of validate user
+        NSData * jsonData = theData;
+        NSDictionary * info = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:nil];
+        if( [info isKindOfClass:[NSDictionary class]] && [info[@"cs_user_id"] respondsToSelector:@selector(integerValue)] && [info[@"cs_user_id"] integerValue] == self.userId){
+            RZLog(RZLogInfo, @"Validated user %@", info[@"cs_user_id"]);
+            [GCConnectStatsRequestRegisterNotifications register];
+        }else{
+            RZLog(RZLogWarning, @"Invalid user %@ != %@", info[@"cs_user_id"], @(self.userId));
+        }
+        [self processDone];
     }
 }
 
@@ -160,15 +114,11 @@ typedef NS_ENUM(NSUInteger,GCConnectStatsRequestLoginStage) {
 
 
 -(id<GCWebRequest>)nextReq{
-    // later check logic to see if reach existing.
     if( self.navigationController ){
         return [GCConnectStatsRequestLogin requestNavigationController:nil];
     }else{
-        if( self.loginStage + 1 < GCConnectStatsRequestLoginStageEnd ){
-            return [[[GCConnectStatsRequestLogin alloc] initNextWith:self] autorelease];
-        }
+        return nil;
     }
-    return nil;
 }
 
 @end

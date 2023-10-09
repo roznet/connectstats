@@ -120,6 +120,7 @@
         // Run on main queue as it accesses a navigation Controller
         dispatch_async(dispatch_get_main_queue(), ^(){
             BOOL connectStatsReload = reloadAll || ![[GCAppGlobal profile] serviceCompletedFull:gcServiceConnectStats];
+            [self addRequest:RZReturnAutorelease([[GCConnectStatsRequestAPICheck alloc] init])];
             [self addRequest:[GCConnectStatsRequestLogin requestNavigationController:[GCAppGlobal currentNavigationController]]];
             [self addRequest:[GCConnectStatsRequestSearch requestWithStart:0 mode:connectStatsReload andNavigationController:[GCAppGlobal currentNavigationController]]];
         });
@@ -127,7 +128,11 @@
     
     if ([[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO]) {
         if( [GCGarminReqBase killSwitchTriggered] ){
-            RZLog(RZLogWarning, @"Garmin is turned off by killswitch");
+            static BOOL reported = false;
+            if( ! reported){
+                RZLog(RZLogWarning, @"Garmin is turned off by killswitch");
+                reported = true;
+            }
         }else{
             dispatch_async(dispatch_get_main_queue(), ^(){
                 BOOL garminStatsReload = reloadAll || ![[GCAppGlobal profile] serviceCompletedFull:gcServiceGarmin];
@@ -180,7 +185,10 @@
 -(void)servicesLogin{
     if (![self didLoginSuccessfully:gcWebServiceGarmin] && [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO]) {
         if( [GCGarminReqBase killSwitchTriggered] ){
-            RZLog(RZLogWarning, @"Garmin is turned off by killswitch");
+            static BOOL reported = false;
+            if( ! reported){
+                RZLog(RZLogWarning, @"Garmin is turned off by killswitch");
+            }
         }else{
             [self garminLogin];
         }
@@ -196,7 +204,11 @@
     // it's possible it's the detail of an old activities, downloaded before the service was turned off.
     if( [[GCAppGlobal profile] serviceSuccess:gcServiceGarmin] || [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO] ){
         if( [GCGarminReqBase killSwitchTriggered] ){
-            RZLog(RZLogWarning, @"Garmin is turned off by killswitch");
+            static BOOL reported = false;
+            if( ! reported){
+                RZLog(RZLogWarning, @"Garmin is turned off by killswitch");
+                reported = true;
+            }
             return;
         }
         [self addRequest:[GCGarminActivityTrack13Request requestWithActivity:act]];
@@ -206,7 +218,11 @@
 -(void)garminDownloadActivitySummary:(NSString*)aId{
     if(  [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO] ){
         if( [GCGarminReqBase killSwitchTriggered] ){
-            RZLog(RZLogWarning, @"Garmin is turned off by killswitch");
+            static BOOL reported = false;
+            if( !reported) {
+                RZLog(RZLogWarning, @"Garmin is turned off by killswitch");
+                reported = true;
+            }
             return;
         }
         [self addRequest:[[[GCGarminRequestActivityReload alloc] initWithId:aId] autorelease]];
@@ -221,7 +237,10 @@
 -(void)garminLogin{
     if (!self.isProcessing && [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_ENABLE defaultValue:NO]) {
         if( [GCGarminReqBase killSwitchTriggered] ){
-            RZLog(RZLogWarning, @"Garmin is turned off by killswitch");
+            static BOOL reported = false;
+            if( ! reported){
+                RZLog(RZLogWarning, @"Garmin is turned off by killswitch");
+            }
             return;
         }
 

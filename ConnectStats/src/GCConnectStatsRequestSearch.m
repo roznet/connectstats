@@ -102,7 +102,9 @@ static const NSUInteger kActivityRequestCount = 20;
 -(NSString*)url{
     return nil;
 }
-
+-(NSString*)urlDescription{
+    return GCWebConnectStatsSearch([GCAppGlobal webConnectsStatsConfig]);
+}
 -(NSURLRequest*)preparedUrlRequest{
     if( [self isSignedIn] ){
         self.navigationController = nil;

@@ -333,7 +333,16 @@ NSString * GCWebStatusShortDescription(GCWebStatus status){
         // if priority: add it to next slot, else at the end
             if (isPriority || ([req respondsToSelector:@selector(priorityRequest)] &&
                                [req priorityRequest]) ) {
-                [_requests insertObject:req atIndex:0];
+                NSUInteger insertAt = 0;
+                // priority request added at the beginning in the order
+                // they were added
+                for (id<GCWebRequest>one in _requests) {
+                    if( ![one respondsToSelector:@selector(priorityRequest)] || ![req priorityRequest]){
+                        break;
+                    }
+                    insertAt++;
+                }
+                [_requests insertObject:req atIndex:insertAt];
             }else{
                 [_requests addObject:req];
             }

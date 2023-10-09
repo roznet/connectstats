@@ -138,8 +138,11 @@
         [self checkToken];
     }
     BOOL rv = self.oauthToken != nil && self.oauthTokenSecret != nil && self.userId != 0 && self.tokenId != 0;
-            
+        
+    //If signed in, we will still need an oauth1controller
+    // if not signed in, will be created in the sign in process
     if( rv && ! self.oauth1Controller){
+        RZLog(RZLogInfo, @"check oauthbuild during isSignedIn");
         [self buildOAuthController];
     }
     return rv;
@@ -207,6 +210,7 @@
 
 -(void)buildOAuthController{
     if( self.oauth1Controller == nil){
+        RZLog(RZLogInfo,@"start build oauth controller");
         NSError * error = nil;
         NSData * credentials = [NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"credentials.json"] options:0 error:&error];
         if( ! credentials ){
@@ -227,6 +231,8 @@
         }
         
         self.oauth1Controller = [[[OAuth1Controller alloc] initWithServiceParameters:params] autorelease];
+    }else{
+        RZLog(RZLogInfo,@"Already has oauthcontroller");
     }
 }
 
@@ -246,6 +252,7 @@
     [self.navigationController pushViewController:webCont animated:YES];
     [webCont release];
     [webView release];
+    RZLog(RZLogInfo, @"check oauthbuild during signinStep");
     [self buildOAuthController];
     [self.oauth1Controller loginWithWebView:webView completion:^(NSDictionary *oauthTokens, NSError *error) {
         if (error != nil) {
@@ -278,7 +285,16 @@
 
 -(NSURLRequest*)preparedUrlRequest:(NSString*)path params:(NSDictionary*)parameters{
     if( self.oauth1Controller == nil){
-        RZLog(RZLogError, @"Trying to prepare url %@ but no oauth1Controller built", path);
+        if(self.navigationController){
+            [self buildOAuthController];
+            if( self.oauth1Controller){
+                RZLog(RZLogInfo, @"Built oauth1Controller to prepare url %@", path);
+            }else{
+                RZLog(RZLogError, @"Failed to build oauth1Controller to prepare url %@", path);
+            }
+        }else{
+            RZLog(RZLogError, @"no oauth1Controller built and not navigation controller to prepare url %@", path);
+        }
     }
     NSURLRequest *preparedRequest = [self.oauth1Controller preparedRequestForPath:path
                                                                        parameters:parameters

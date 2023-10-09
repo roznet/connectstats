@@ -43,8 +43,8 @@ class GCConnectStatsRequestBackgroundFitFile: GCConnectStatsRequestFitFile {
         case .downloadAndProcess,.downloadAndCache:
             
             if self.isSignedIn(),
-               let path = GCWebConnectStatsFitFile(GCAppGlobal.webConnectsStatsConfig()),
                let aid = self.activity.service.serviceId(fromActivityId: self.activity.activityId){
+                let path = GCWebConnectStatsFitFile(GCAppGlobal.webConnectsStatsConfig())
                 let params : [AnyHashable:Any] = [
                     "token_id": self.tokenId,
                     "activity_id": aid,
