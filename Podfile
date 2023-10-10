@@ -32,6 +32,7 @@ post_install do |pi|
         t.build_configurations.each do |config|
             # fix warning after update about deployment target
             config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.0'
+            config.build_settings['MACOSX_DEPLOYMENT_TARGET'] = '13.0'
             # fix warning after install about overriden architecture
             config.build_settings.delete('ARCHS')
         end

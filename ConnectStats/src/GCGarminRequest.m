@@ -35,7 +35,11 @@
 @implementation GCGarminReqBase
 
 +(BOOL)killSwitchTriggered{
+#if TARGET_OS_IPHONE
     return [[GCAppGlobal profile] configGetBool:CONFIG_GARMIN_KILL_SWITCH defaultValue:true];
+#else
+    return true;
+#endif
 }
 
 -(BOOL)checkNoErrors{
