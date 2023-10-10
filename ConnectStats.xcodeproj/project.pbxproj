@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -4569,9 +4569,10 @@
 		428FF70015F36888007A88FA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				CLASSPREFIX = GC;
 				LastSwiftUpdateCheck = 0810;
-				LastUpgradeCheck = 1420;
+				LastUpgradeCheck = 1500;
 				ORGANIZATIONNAME = "Brice Rosenzweig";
 				TargetAttributes = {
 					422FAEA319A1DD6000D09773 = {
@@ -5185,7 +5186,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\nCREDENTIALS=$SRCROOT/ConnectStats/credentials.json\nSAMPLE_CREDENTIALS=$SRCROOT/ConnectStats/credentials.sample.json\n\nif [ -f $CREDENTIALS ]; then\n    echo \"Checked $CREDENTIALS\"\nelse\n    if [ -f $SAMPLE_CREDENTIALS ]; then\n        echo \"Creating $CREDENTIALS\"\n        exit 1\n        #/bin/cp $SAMPLE_CREDENTIALS $CREDENTIALS\n    fi\nfi\n\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\nCREDENTIALS=$SRCROOT/ConnectStats/credentials.json\nSAMPLE_CREDENTIALS=$SRCROOT/ConnectStats/credentials.sample.json\n\nif [ -f $CREDENTIALS ]; then\n    echo \"Checked $CREDENTIALS\"\nelse\n    if [ -f $SAMPLE_CREDENTIALS ]; then\n        echo \"Creating $CREDENTIALS\"\n        exit 1\n        /bin/cp $SAMPLE_CREDENTIALS $CREDENTIALS\n    fi\nfi\n\n";
 		};
 		5F38E408AAF45836E802C5DB /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -6570,6 +6571,7 @@
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -6623,6 +6625,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Brice Rosenzweig";
 				COPY_PHASE_STRIP = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;

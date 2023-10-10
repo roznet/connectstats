@@ -333,7 +333,6 @@
             if( source == gcGarminDownloadSourceBoth || source == gcGarminDownloadSourceGarminWeb){
                 source = gcGarminDownloadSourceConnectStats;
                 RZLog(RZLogWarning, @"Garmin Kill swtich on, forcing connectstats");
-#warning "Should issue alert"
             }
         }
         NSString * method = [GCViewConfig describeGarminSource:source];
