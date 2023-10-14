@@ -153,7 +153,6 @@
             [self signInGarminStep];
         }else{
             [self signInConnectStatsStep];
-            //[self processDone];
         }
     }else{
         [self signInGarminStep];
@@ -243,6 +242,7 @@
 }
 
 -(void)signInGarminStep{
+    RZLog(RZLogInfo,@"Starting garmin step");
     UIViewController * webCont = [[UIViewController alloc] initWithNibName:nil bundle:nil];
     WKWebView * webView = [[WKWebView alloc] initWithFrame:self.navigationController.view.frame];
     // keep hold so we can clear the delegate.

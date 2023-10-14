@@ -118,7 +118,6 @@ class GCStravaRequestBase: GCWebRequestStandard {
     
     override func process() {
         self.retrieveCredential()
-        RZSLog.info("Start Process")
         if GCAppGlobal.profile().serviceSuccess(gcService.strava) == false {
             let urlscheme = GCAppGlobal.appURLScheme()
             RZSLog.info("strava signin start")

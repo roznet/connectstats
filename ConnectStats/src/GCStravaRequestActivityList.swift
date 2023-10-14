@@ -85,7 +85,6 @@ import RZUtilsSwift
     //MARK: - Processing
     
     override func process(data : Data) {
-        RZSLog.info("Start process data")
         #if targetEnvironment(simulator)
         try? data.write(to: URL(fileURLWithPath: RZFileOrganizer.writeableFilePath(self.searchFileName(page: self.page))))
         #endif

@@ -106,7 +106,7 @@
                 RZLog(RZLogWarning, @"Invalid user %@ != %@", info[@"cs_user_id"], @(self.userId));
             }
         }else{
-            RZLog(RZLogWarning, @"Not data for user validation");
+            RZLog(RZLogWarning, @"No data for user validation");
         }
         [self processDone];
     }
