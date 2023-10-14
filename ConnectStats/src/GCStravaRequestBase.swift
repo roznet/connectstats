@@ -27,7 +27,6 @@
 
 import UIKit
 import OAuthSwift
-import SwiftKeychainWrapper
 import RZUtilsSwift
 
 class GCStravaRequestBase: GCWebRequestStandard {

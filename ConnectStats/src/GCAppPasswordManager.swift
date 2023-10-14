@@ -7,28 +7,48 @@
 //
 
 import UIKit
-import SwiftKeychainWrapper
+import KeychainAccess
+import RZUtils
+import RZUtilsSwift
 
 class GCAppPasswordManager : NSObject {
 
-    let keychain : KeychainWrapper
+    let keychain : Keychain
     let key :String
     
     @objc public init(forService service : String, andUsername username : String) {
-        keychain = KeychainWrapper(serviceName: "net.ro-z.connectstats")
+        keychain = Keychain(service: "net.ro-z.connectstats")
+            .accessibility(.afterFirstUnlock)
         key = NSString(format: "%@.%@", service,username) as String
         super.init()
     }
     
     @objc public func retrievePassword() -> String? {
-        return keychain.string(forKey: key)
+        do {
+            return try keychain.get(key)
+        }catch{
+            RZSLog.error("Failed to retrieve \(key) from keychain \(error)")
+            return nil
+        }
     }
     
     @objc @discardableResult public func savePassword(_ password : String ) -> Bool {
-        return keychain.set(password, forKey: key, withAccessibility: .afterFirstUnlock)
+        do {
+            try keychain.set(password, key: key)
+            return true
+        }catch{
+            RZSLog.error("Failed to set \(key) to keychain \(error)")
+            return false
+        }
     }
     
     @objc @discardableResult public func clearPassword() -> Bool {
-        return keychain.removeObject(forKey: key, withAccessibility: .afterFirstUnlock)
+        do {
+            try keychain.remove(key)
+            return true
+        }catch{
+            RZSLog.error("Failed to remove \(key) from keychain \(error)")
+            return false
+        }
     }
 }

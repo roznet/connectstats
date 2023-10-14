@@ -29,7 +29,7 @@ import Cocoa
 import GenericJSON
 import FitFileParser
 import RZUtilsSwift
-import KeychainSwift
+import KeychainAccess
 
 
 class FITAppGlobal {
@@ -47,7 +47,7 @@ class FITAppGlobal {
     let activityTypes : GCActivityTypes
     let downloadManager : FITGarminDownloadManager
     let organizer : ActivitiesOrganizer
-    let keychain : KeychainSwift
+    let keychain : Keychain
     var parsingTypes : [URL:FitFile.ParsingType] = [:]
     
     private init() {
@@ -60,8 +60,7 @@ class FITAppGlobal {
             }
         }
         //keychain = KeychainWrapper(serviceName: "net.ro-z.FitFileExplorer", accessGroup: "net.ro-z.FitFileExplorer.accessGroup")
-        keychain = KeychainSwift()
-        keychain.accessGroup = "net.ro-z.FitFileExplorer.KeychainGroup"
+        keychain = Keychain(accessGroup:"net.ro-z.FitFileExplorer.KeychainGroup").accessibility(.afterFirstUnlock)
         web = GCWebConnect()
         worker = DispatchQueue.init(label: "net.ro-z.worker")
         activityTypes = GCActivityType.activityTypes()
@@ -81,28 +80,30 @@ class FITAppGlobal {
     
     
     static func currentLoginName() -> String {
-        if let name = self.shared.keychain.get(ConfigParameters.loginName.rawValue){
-        //if let name = self.shared.keychain.string(forKey: ConfigParameters.loginName.rawValue) {
+        if let name = try? self.shared.keychain.get(ConfigParameters.loginName.rawValue){
             return name
         }
         return "default"
     }
     static func currentPassword() -> String {
-        if let pwd = self.shared.keychain.get(ConfigParameters.password.rawValue){
-        //if let pwd = self.shared.keychain.string(forKey: ConfigParameters.password.rawValue) {
+        if let pwd = try? self.shared.keychain.get(ConfigParameters.password.rawValue){
             return pwd
         }
         return ""
     }
     static func setCurrentLoginName(_ name : String){
-        if !self.shared.keychain.set(name, forKey: ConfigParameters.loginName.rawValue, withAccess: .accessibleAfterFirstUnlock) {
-            RZSLog.error( "failed to save username" )
+        do{
+            try self.shared.keychain.set(name, key: ConfigParameters.loginName.rawValue)
+        }catch{
+            RZSLog.error( "failed to save username \(error)" )
         }
     }
     
     static func setCurrentPassword(_ name : String){
-        if !self.shared.keychain.set(name, forKey: ConfigParameters.password.rawValue, withAccess: .accessibleAfterFirstUnlock) {
-            RZSLog.error("failed to save password")
+        do {
+            try self.shared.keychain.set(name, key: ConfigParameters.password.rawValue)
+        }catch{
+            RZSLog.error("failed to save password \(error)")
         }
     }
     
