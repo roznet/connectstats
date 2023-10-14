@@ -83,10 +83,13 @@
     self.tokenId = [[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_TOKEN_ID defaultValue:0];
     
     if ((self.oauthTokenSecret).length==0) {
+        RZLog(RZLogInfo,@"missing oauthTokenSecret %@", [self debugDescription]);
         self.oauthTokenSecret = nil;
         self.oauthToken = nil;
         self.userId = 0;
         self.tokenId = 0;
+    }else{
+        RZLog(RZLogInfo,@"valid oauthTokenSecret %@", [self debugDescription]);
     }
 }
 
@@ -216,7 +219,7 @@
 
 -(void)buildOAuthController{
     if( self.oauth1Controller == nil){
-        RZLog(RZLogInfo,@"building oauth controller");
+        RZLog(RZLogInfo,@"building oauth controller %@", [self debugDescription]);
         NSError * error = nil;
         NSData * credentials = [NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"credentials.json"] options:0 error:&error];
         if( ! credentials ){
@@ -242,7 +245,7 @@
 }
 
 -(void)signInGarminStep{
-    RZLog(RZLogInfo,@"Starting garmin step");
+    RZLog(RZLogInfo,@"starting garmin step %@", [self debugDescription]);
     UIViewController * webCont = [[UIViewController alloc] initWithNibName:nil bundle:nil];
     WKWebView * webView = [[WKWebView alloc] initWithFrame:self.navigationController.view.frame];
     // keep hold so we can clear the delegate.
@@ -295,7 +298,7 @@
             if( self.oauth1Controller){
                 RZLog(RZLogInfo, @"Built oauth1Controller to prepare url %@", path);
             }else{
-                RZLog(RZLogError, @"Failed to build oauth1Controller to prepare url %@", path);
+                RZLog(RZLogError, @"%@ Failed to build oauth1Controller to prepare url %@", self, path);
             }
         }else{
             RZLog(RZLogError, @"no oauth1Controller built and not navigation controller to prepare url %@", path);

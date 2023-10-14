@@ -88,7 +88,10 @@ NSString * kBugNoCommonId = @"-1";
     
     NSString * ckey = [GCAppGlobal credentialsForService:@"garmin" andKey:@"consumer_key"];
     NSString * cid = [GCAppGlobal credentialsForService:@"strava" andKey:@"client_id"];
-    RZLog(RZLogInfo, @"consumer_key=%@, client_id=%@", ckey, cid);
+    NSString * token = [[GCAppGlobal profile] currentPasswordForService:gcServiceConnectStats];
+    NSString * csStatus = token.length != 0 ? @"Has CS Token" : @"Missing CS Token";
+    
+    RZLog(RZLogInfo, @"consumer_key=%@, client_id=%@, %@", ckey, cid, csStatus);
     
     
 }
