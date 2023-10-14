@@ -5182,7 +5182,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\nCREDENTIALS=$SRCROOT/ConnectStats/credentials.json\nSAMPLE_CREDENTIALS=$SRCROOT/ConnectStats/credentials.sample.json\n\nif [ -f $CREDENTIALS ]; then\n    echo \"Checked $CREDENTIALS\"\nelse\n    if [ -f $SAMPLE_CREDENTIALS ]; then\n        echo \"Creating $CREDENTIALS\"\n        exit 1\n        /bin/cp $SAMPLE_CREDENTIALS $CREDENTIALS\n    fi\nfi\n\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\nCREDENTIALS=$SRCROOT/ConnectStats/credentials.json\nSAMPLE_CREDENTIALS=$SRCROOT/ConnectStats/credentials.sample.json\n\nif [ -f $CREDENTIALS ]; then\n    echo \"Checked $CREDENTIALS\"\nelse\n    if [ -f $SAMPLE_CREDENTIALS ]; then\n        echo \"Creating $CREDENTIALS\"\n        /bin/cp $SAMPLE_CREDENTIALS $CREDENTIALS\n    fi\nfi\n\n";
 		};
 		5F38E408AAF45836E802C5DB /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
