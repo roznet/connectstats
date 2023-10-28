@@ -47,7 +47,10 @@ class GCConnectStatsRequestAPICheck : GCConnectStatsRequest {
         let status : Int
         let redirect : String?
     }
-    
+   
+    override var urlDescription: String! {
+        return GCWebConnectStatsApiCheck(GCAppGlobal.webConnectsStatsConfig())
+    }
     @objc override func preparedUrlRequest() -> URLRequest? {
         if let url = URL(string: GCWebConnectStatsApiCheck(GCAppGlobal.webConnectsStatsConfig())){
             return URLRequest(url: url)

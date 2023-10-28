@@ -111,6 +111,7 @@
 		422B343E1CA7321200B345CD /* GCFieldCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 422B343C1CA7321200B345CD /* GCFieldCache.m */; };
 		422B34411CA7322600B345CD /* GCFieldInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 422B34401CA7322600B345CD /* GCFieldInfo.m */; };
 		422B34421CA7322600B345CD /* GCFieldInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 422B34401CA7322600B345CD /* GCFieldInfo.m */; };
+		422B4D252AED7FE100DB037A /* ExampleSummaryFirst.fit in Resources */ = {isa = PBXBuildFile; fileRef = 422B4D242AED7FE100DB037A /* ExampleSummaryFirst.fit */; };
 		422C70AE1642B677003779E0 /* GCHistoryAggregatedStats.m in Sources */ = {isa = PBXBuildFile; fileRef = 422C70AD1642B677003779E0 /* GCHistoryAggregatedStats.m */; };
 		422CC8761E6ACA1700195414 /* GCUnit+FIT.m in Sources */ = {isa = PBXBuildFile; fileRef = 423B462E1CDFE03400743D79 /* GCUnit+FIT.m */; };
 		422CC8781E6ACA1700195414 /* GCField+FitFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42769BC51DD1D225000390F1 /* GCField+FitFile.swift */; };
@@ -1396,6 +1397,7 @@
 		422B343F1CA7322600B345CD /* GCFieldInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCFieldInfo.h; path = src/GCFieldInfo.h; sourceTree = "<group>"; };
 		422B34401CA7322600B345CD /* GCFieldInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCFieldInfo.m; path = src/GCFieldInfo.m; sourceTree = "<group>"; };
 		422B34431CA7345200B345CD /* GCFieldsDefs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GCFieldsDefs.h; path = src/GCFieldsDefs.h; sourceTree = "<group>"; };
+		422B4D242AED7FE100DB037A /* ExampleSummaryFirst.fit */ = {isa = PBXFileReference; lastKnownFileType = file; path = ExampleSummaryFirst.fit; sourceTree = "<group>"; };
 		422C70AC1642B2ED003779E0 /* GCHistoryAggregatedStats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = GCHistoryAggregatedStats.h; path = src/GCHistoryAggregatedStats.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		422C70AD1642B677003779E0 /* GCHistoryAggregatedStats.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCHistoryAggregatedStats.m; path = src/GCHistoryAggregatedStats.m; sourceTree = "<group>"; };
 		422CCE7B1B7E9B6300A4DAEB /* Cells.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Cells.xcassets; path = ConnectStats/icons/Cells.xcassets; sourceTree = "<group>"; };
@@ -2904,6 +2906,7 @@
 		4253B46D1CD4A53400437E6A /* fit_files */ = {
 			isa = PBXGroup;
 			children = (
+				422B4D242AED7FE100DB037A /* ExampleSummaryFirst.fit */,
 				422A24EB247325FB00D6C2FB /* activity_424479793.json */,
 				42C3118A24731B09004DF872 /* activity_424479793.fit */,
 				4285C20F2427C5E5003C522E /* last_connectstats_single_544406.json */,
@@ -4937,6 +4940,7 @@
 				42A5D917232874A600898FD5 /* modern_activity_types.json in Resources */,
 				42880C462381EEE00030C3C1 /* track_cs_5582.fit in Resources */,
 				4277C0E123BD133D00C1B1B9 /* activity_217470507.tcx in Resources */,
+				422B4D252AED7FE100DB037A /* ExampleSummaryFirst.fit in Resources */,
 				427B79D72465A11F005EDEAD /* track_cs_857090.fit in Resources */,
 				420A57EC1CB32C5900EA3B42 /* withings_getmeas_188427.json in Resources */,
 				427B79D62465A11F005EDEAD /* track_cs_728599.fit in Resources */,
@@ -6660,7 +6664,7 @@
 				CODE_SIGN_ENTITLEMENTS = ConnectStats/ConnectStats.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = M7QSSF3624;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
@@ -6717,7 +6721,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = M7QSSF3624;
 				ENABLE_TESTABILITY = NO;

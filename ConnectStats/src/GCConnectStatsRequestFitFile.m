@@ -138,6 +138,14 @@
     return nil;
 }
 
+-(NSString*)urlDescription{
+        NSString * path = GCWebConnectStatsFitFile([GCAppGlobal webConnectsStatsConfig]);
+        GCService * service = self.activity.service;
+        NSString * aid = [service serviceIdFromActivityId:self.activity.activityId ];
+    
+    return [NSString stringWithFormat:@"%@?activity_id=%@", path, aid];
+}
+
 -(NSURLRequest*)preparedUrlRequest{
     if( [self isSignedIn] ){
         self.navigationController = nil;

@@ -76,6 +76,12 @@
 -(NSString*)url{
     return nil;
 }
+-(NSString*)urlDescription{
+        NSString * path = GCWebConnectStatsWeather([GCAppGlobal webConnectsStatsConfig]);
+        GCService * service = self.activity.service;
+        NSString * aid = [service serviceIdFromActivityId:self.activity.activityId ];
+    return [NSString stringWithFormat:@"%@?activity_id=%@", path, aid];
+}
 -(NSString*)debugDescription{
     return [NSString stringWithFormat:@"<%@: %@ %@>",
             NSStringFromClass([self class]),

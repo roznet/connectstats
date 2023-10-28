@@ -31,6 +31,10 @@ import UIKit
 import RZUtilsSwift
 
 class GCConnectStatsRequestRegisterNotifications : GCConnectStatsRequest {
+    override var urlDescription : String! {
+        let path = GCWebConnectStatsRegisterNotification(GCAppGlobal.webConnectsStatsConfig())
+        return path
+    }
         
     @objc override func preparedUrlRequest() -> URLRequest? {
         #if GC_USE_SANDBOX_APN

@@ -48,7 +48,13 @@ extension GCActivity {
                 if let messageStart = message.interpretedField(key: "start_time")?.time{
                     if messageStart == startTime {
                         sessionStart = messageStart
-                        sessionEnd   = message.time()
+                        if let messageElapsed = message.interpretedField(key: "total_elapsed_time")?.valueUnit,
+                           messageElapsed.unit == "s"{
+                            let total_elapsed_time = TimeInterval(messageElapsed.value)
+                            sessionEnd = messageStart.addingTimeInterval(total_elapsed_time)
+                        }else{
+                            sessionEnd   = message.time()
+                        }
                         break;
                     }
                 }

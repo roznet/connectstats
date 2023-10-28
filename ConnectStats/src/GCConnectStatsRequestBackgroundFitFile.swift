@@ -37,7 +37,10 @@ class GCConnectStatsRequestBackgroundFitFile: GCConnectStatsRequestFitFile {
         self.cache = GCWebRequestCache(db: cacheDb, classname: String(describing: type(of: self)))
         super.init(activity:activity)
     }
-    
+   
+    override var urlDescription: String! {
+        return GCWebConnectStatsFitFile(GCAppGlobal.webConnectsStatsConfig())
+    }
     @objc override func preparedUrlRequest() -> URLRequest? {
         switch self.requestMode {
         case .downloadAndProcess,.downloadAndCache:

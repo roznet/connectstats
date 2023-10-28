@@ -47,6 +47,32 @@ class GCTestActivityFitFile: XCTestCase {
     
     }
     
+    func testParseFitMultiSportSummaryFirstMethod() {
+        let url = URL(fileURLWithPath: RZFileOrganizer.bundleFilePath("ExampleSummaryFirst.fit", for: type(of: self)))
+        let activityId = "example"
+        if
+            let fitFile = FitFile(file: url){
+            let messages = fitFile.messages(forMessageType: FitMessageType.session)
+            var activities : [GCActivity] = []
+            for message in messages {
+                if let messageStart = message.interpretedField(key: "start_time")?.time,
+                   let activity = GCActivity(withId: activityId, fitFile: fitFile, startTime: messageStart){
+                    activities.append(activity)
+                }
+            }
+            XCTAssertEqual(activities.count, messages.count)
+            var lastEndTime : Date? = nil
+            for activity in activities {
+                if let shouldBeAfter = lastEndTime {
+                    // Adding a Tolerance of 1 sec as one of the transition elapsed time is of by 0.1 sec or so.
+                    XCTAssertGreaterThanOrEqual(activity.startTime, shouldBeAfter.addingTimeInterval(TimeInterval(-1.0)))
+                }
+                lastEndTime = activity.endTime
+            }
+        }
+        print("finished")
+    }
+    
     func testParseFitSwimAndMultiSport() {
         
         RZFileOrganizer.removeEditableFile("multisport.db")
@@ -71,7 +97,6 @@ class GCTestActivityFitFile: XCTestCase {
                     if let messageStart = message.interpretedField(key: "start_time")?.time,
                        let activity = GCActivity(withId: activityId, fitFile: fitFile, startTime: messageStart){
                         activities.append(activity)
-                        //print( "\(activity) \(activity.summaryData)")
                         var downloaded : GCActivity? = nil
                         for act in organizer.activities {
                             if act.date == messageStart && act.activityType == activity.activityType{

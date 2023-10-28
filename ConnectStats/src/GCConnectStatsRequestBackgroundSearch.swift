@@ -54,6 +54,10 @@ class GCConnectStatsRequestBackgroundSearch: GCConnectStatsRequest {
         super.init(nextWith: current)
     }
     
+    override var urlDescription: String! {
+        return GCWebConnectStatsSearch(GCAppGlobal.webConnectsStatsConfig())
+    }
+    
     @objc override func preparedUrlRequest() -> URLRequest? {
         switch self.requestMode {
         case .downloadAndProcess,.downloadAndCache:
