@@ -67,6 +67,13 @@ class GCTestActivityFitFile: XCTestCase {
                     // Adding a Tolerance of 1 sec as one of the transition elapsed time is of by 0.1 sec or so.
                     XCTAssertGreaterThanOrEqual(activity.startTime, shouldBeAfter.addingTimeInterval(TimeInterval(-1.0)))
                 }
+                if let points = activity.trackpoints {
+                    let laps = activity.lapCount()
+                    XCTAssertGreaterThan(points.count, 0)
+                    XCTAssertGreaterThan(laps, 0)
+                }else{
+                    XCTAssertTrue(false)
+                }
                 lastEndTime = activity.endTime
             }
         }
