@@ -28,7 +28,7 @@
 import UIKit
 import RZUtilsSwift
 
-class GCConnectStatsRequestBackgroundFitFile: GCConnectStatsRequestFitFile {
+class GCConnectStatsRequestBackgroundFitFile: GCConnectStatsRequestFitFile, @unchecked Sendable {
     let requestMode : gcRequestMode
     private let cache : GCWebRequestCache
     

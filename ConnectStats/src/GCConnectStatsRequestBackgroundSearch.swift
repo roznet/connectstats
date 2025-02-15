@@ -28,7 +28,7 @@
 import UIKit
 import RZUtilsSwift
 
-class GCConnectStatsRequestBackgroundSearch: GCConnectStatsRequest {
+class GCConnectStatsRequestBackgroundSearch: GCConnectStatsRequest, @unchecked Sendable {
     
     static let kActivityRequestCount : UInt = 20
     private var searchMore : Bool = false

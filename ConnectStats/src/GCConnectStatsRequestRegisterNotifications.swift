@@ -30,7 +30,7 @@ import Foundation
 import UIKit
 import RZUtilsSwift
 
-class GCConnectStatsRequestRegisterNotifications : GCConnectStatsRequest {
+class GCConnectStatsRequestRegisterNotifications : GCConnectStatsRequest, @unchecked Sendable {
     override var urlDescription : String! {
         let path = GCWebConnectStatsRegisterNotification(GCAppGlobal.webConnectsStatsConfig())
         return path

@@ -42,7 +42,7 @@ extension gcWebConnectStatsConfig {
         }
     }
 }
-class GCConnectStatsRequestAPICheck : GCConnectStatsRequest {
+class GCConnectStatsRequestAPICheck : GCConnectStatsRequest, @unchecked Sendable {
     struct APIStatus : Codable {
         let status : Int
         let redirect : String?

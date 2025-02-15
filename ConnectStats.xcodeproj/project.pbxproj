@@ -4572,7 +4572,7 @@
 				BuildIndependentTargetsInParallel = YES;
 				CLASSPREFIX = GC;
 				LastSwiftUpdateCheck = 0810;
-				LastUpgradeCheck = 1500;
+				LastUpgradeCheck = 1600;
 				ORGANIZATIONNAME = "Brice Rosenzweig";
 				TargetAttributes = {
 					422FAEA319A1DD6000D09773 = {
@@ -6289,7 +6289,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 998155FAECA4FF8F81D2DC94 /* Pods-HealthStats.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = HealthStatsAppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -6336,7 +6335,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7B4338B72FB5E891D8120070 /* Pods-HealthStats.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = HealthStatsAppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -6656,7 +6654,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8F8BF4F20C572A0B439BAE9F /* Pods-ConnectStats.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = ConnectStatsNewAppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -6712,7 +6709,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7511076C6F489225E4DB97A3 /* Pods-ConnectStats.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = ConnectStatsNewAppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -6837,7 +6833,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 722F58FE2B9F9EF1C1D899FD /* Pods-ConnectStatsTestApp.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = ConnectStatsTestAppIcon;
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -6882,7 +6877,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = EBDC45B331B669A42DAFAD9B /* Pods-ConnectStatsTestApp.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = "$(inherited)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = ConnectStatsTestAppIcon;
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -6925,7 +6919,6 @@
 		42D8AF0C1B24CE8900ADDD31 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -6959,7 +6952,6 @@
 		42D8AF0D1B24CE8900ADDD31 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -6991,7 +6983,6 @@
 		42F97BF3200B7B97009905D2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -7028,7 +7019,6 @@
 		42F97BF4200B7B97009905D2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
