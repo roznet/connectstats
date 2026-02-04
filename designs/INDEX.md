@@ -34,11 +34,11 @@ Strategy for Obj-C to Swift migration. Guidelines for incremental modernization 
 
 ## Key External Dependencies
 
-| Dependency | Location | Purpose |
-|------------|----------|---------|
-| [RZUtils](https://github.com/roznet/rzutils) | ~/Developer/public/rzutils | Units, statistics, graphs, DataFrame |
-| [FitFileParser](https://github.com/roznet/FitFileParser) | Swift Package | Garmin FIT file parsing |
-| [connectstats_server](https://github.com/roznet/connectstats_server) | ~/Developer/public/connectstats_server | Backend for FIT files, weather |
+| Dependency | Purpose |
+|------------|---------|
+| [RZUtils](https://github.com/roznet/rzutils) | Units, statistics, graphs, DataFrame |
+| [FitFileParser](https://github.com/roznet/FitFileParser) | Garmin FIT file parsing |
+| [connectstats_server](https://github.com/roznet/connectstats_server) | Backend for FIT files, weather |
 
 ## Getting Started
 
