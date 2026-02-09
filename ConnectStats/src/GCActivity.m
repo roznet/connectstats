@@ -1622,8 +1622,12 @@ NSString * kGCActivityNotifyTrackpointReady = @"kGCActivityNotifyTrackpointReady
 
 -(void)recordWeather:(GCWeather*)we{
     self.weather = we;
-    [self.weather saveToDb:self.db forActivityId:self.activityId];
-
+    // self.db can be nil when the activity was freshly parsed from search JSON
+    // and not yet saved to its own database. Skip persisting weather in that case;
+    // it will be saved when the activity is next fully saved with a valid db.
+    if( self.db ){
+        [self.weather saveToDb:self.db forActivityId:self.activityId];
+    }
 }
 
 -(BOOL)hasWeather{

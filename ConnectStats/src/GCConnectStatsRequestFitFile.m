@@ -261,13 +261,20 @@
             if( ![self.activity markCompleted:gcServicePhaseTrack for:gcServiceConnectStats] ){
                 RZLog(RZLogInfo,@"%@: Marked completed connectstats/track", self.activity)
             }
-            
+
             [self.activity updateSummaryDataFromActivity:fitAct];
             [self.activity updateTrackpointsFromActivity:fitAct];
             [self.activity saveTrackpoints:fitAct.trackpoints andLaps:fitAct.laps];
             // don't go further if successful
             self.shouldCheckForAlternativeWhenEmpty = false;
         }
+    }else if( data.length > 0 && self.activity != nil ){
+        // FIT data received but could not be parsed. Create empty track db
+        // to prevent re-downloading on every sync cycle.
+        RZLog(RZLogWarning, @"%@: FIT data could not be parsed (%lu bytes), skipping track", self.activity, (unsigned long)data.length);
+        [self.activity saveTrackpointsAndLapsToDb:self.activity.trackdb];
+        [self.activity markCompleted:gcServicePhaseTrack for:gcServiceConnectStats];
+        self.shouldCheckForAlternativeWhenEmpty = false;
     }
 }
 
