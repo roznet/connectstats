@@ -129,6 +129,9 @@
 
 
 -(void)updateDb:(FMDatabase*)db forActivityId:(NSString*)activityId{
+    if( isnan(self.value) ){
+        return;
+    }
     if ([db executeUpdate:@"UPDATE gc_activities_values SET value=?, uom=? WHERE activityId = ? AND field = ?",
          @(self.value),
          self.uom,
@@ -145,6 +148,9 @@
 
 
 -(void)saveToDb:(FMDatabase*)db forActivityId:(NSString*)activityId{
+    if( isnan(_value) ){
+        return;
+    }
     NSNumber * valNum = @(_value);
 
     NSString * query = [NSString stringWithFormat:@"INSERT INTO gc_activities_values (%@) VALUES(%@)",

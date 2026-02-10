@@ -104,7 +104,7 @@
 
     for (GCField * field in newDict) {
         GCActivitySummaryValue * new = newDict[field];
-        if( new.value != 0. || field.isZeroValid ){
+        if( !isnan(new.value) && (new.value != 0. || field.isZeroValid) ){
             merged[field] = new;
 #if TARGET_IPHONE_SIMULATOR
         }else{
@@ -1097,6 +1097,9 @@
                         // Don't put back to 0.0 value that were picked up
                         continue;
                     }
+                    if( isnan(otherVal.value) ){
+                        continue;
+                    }
                     if (!newSummaryData) {
                         newSummaryData = [NSMutableDictionary dictionaryWithDictionary:self.summaryData];
                     }
@@ -1117,7 +1120,7 @@
             GCActivitySummaryValue * thisVal = self.summaryData[field];
             GCActivitySummaryValue * otherVal = other.summaryData[field];
             // Update if missing or if old value is 0.0
-            if ((thisVal==nil && otherVal.value != 0.0 ) || ( thisVal.value == 0.0 && otherVal.value != 0.0) ) {
+            if ( !isnan(otherVal.value) && ((thisVal==nil && otherVal.value != 0.0 ) || ( thisVal.value == 0.0 && otherVal.value != 0.0)) ) {
                 if (!newSummaryData) {
                     newSummaryData = [NSMutableDictionary dictionaryWithDictionary:self.summaryData];
                 }
@@ -1256,7 +1259,7 @@
     NSMutableDictionary<GCField*,GCActivitySummaryValue*>* newSum = [NSMutableDictionary dictionaryWithDictionary:self.summaryData];
     
     for (GCField * field in fromPoints) {
-        if( newSum[field] == nil){
+        if( newSum[field] == nil || isnan(newSum[field].value) ){
             newSum[field] = fromPoints[field];
             rv = true;
         }

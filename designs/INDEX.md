@@ -28,6 +28,11 @@ ViewControllers, navigation, and adaptive layout. Patterns for table-based UI an
 Key exports: `GCCellGrid`, `GCSimpleGraphCachedDataSource`, `GCStatsMultiFieldViewController`
 → Full doc: ui-architecture.md
 
+### activity-types
+Activity type mapping from Garmin, Strava, and FIT files to internal types. Mapping tables, hierarchy, import flow, and how to add/maintain type mappings.
+Key exports: `GCActivityType`, `GCActivityTypes`
+→ Full doc: activity-types.md
+
 ### swift-modernization
 Strategy for Obj-C to Swift migration. Guidelines for incremental modernization of the codebase.
 → Full doc: swift-modernization.md
