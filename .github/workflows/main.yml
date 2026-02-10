@@ -16,4 +16,4 @@ jobs:
         ls
         pod install
     - name: Build
-      run: xcodebuild -sdk iphonesimulator -workspace ConnectStats.xcworkspace -scheme ConnectStats -destination 'platform=iOS Simulator,name=iPhone 11' build CODE_SIGNING_REQUIRED=NO
+      run: xcodebuild -sdk iphonesimulator -workspace ConnectStats.xcworkspace -scheme ConnectStats -destination 'generic/platform=iOS Simulator' build CODE_SIGNING_REQUIRED=NO
