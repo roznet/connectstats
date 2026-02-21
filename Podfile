@@ -1,5 +1,5 @@
 source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '15.0'
+platform :ios, '18.6'
 target 'ConnectStats' do
   use_frameworks!
   pod 'GoogleMaps', :inhibit_warnings => true
@@ -29,7 +29,7 @@ post_install do |pi|
     pi.pods_project.targets.each do |t|
         t.build_configurations.each do |config|
             # fix warning after update about deployment target
-            config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.0'
+            config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '18.6'
             config.build_settings['MACOSX_DEPLOYMENT_TARGET'] = '13.0'
             # fix warning after install about overriden architecture
             config.build_settings.delete('ARCHS')
