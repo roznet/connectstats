@@ -441,6 +441,7 @@
 		4257766623205BB200BD9375 /* GCCellEntryText+GCViewConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 4257766323205BB200BD9375 /* GCCellEntryText+GCViewConfig.m */; };
 		425ACBBA17C163EE00EB23A3 /* GCHealthZone.m in Sources */ = {isa = PBXBuildFile; fileRef = 425ACBB917C163EE00EB23A3 /* GCHealthZone.m */; };
 		425ACBC017C1687F00EB23A3 /* GCGarminUserJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 425ACBBF17C1687F00EB23A3 /* GCGarminUserJsonParser.m */; };
+		425BBBF12F48E9070021E05A /* GCConnectStatsRequestAPICheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E231722AD36628009E9CDE /* GCConnectStatsRequestAPICheck.swift */; };
 		425CF5A91813CEEC009279C0 /* GCTestsActivities.m in Sources */ = {isa = PBXBuildFile; fileRef = 425CF5A81813CEEC009279C0 /* GCTestsActivities.m */; };
 		425D251F25A0EC240003574F /* GCTestAppGlobal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 425D251E25A0EC240003574F /* GCTestAppGlobal.swift */; };
 		42628A4023ACCFE900EC6673 /* fields.db in Resources */ = {isa = PBXBuildFile; fileRef = 42939CE423AAD79500D2403A /* fields.db */; };
@@ -1217,6 +1218,7 @@
 		42FD55BA1B90A39F0070B3B4 /* GCCellHealthDayActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 42FD55B81B90A39F0070B3B4 /* GCCellHealthDayActivity.m */; };
 		42FFF6A7232EDAE1008714D5 /* user.json in Resources */ = {isa = PBXBuildFile; fileRef = 42FFF6A6232EDAE1008714D5 /* user.json */; };
 		42FFF6A8232EDAE1008714D5 /* user.json in Resources */ = {isa = PBXBuildFile; fileRef = 42FFF6A6232EDAE1008714D5 /* user.json */; };
+		55B76818E22AF3B0C42A45D4 /* CHCSVParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C5F5F9E59A0B913BC56C8A7 /* CHCSVParser.m */; };
 		92B62512F5F055339B3DBB44 /* Pods_ConnectStats_ConnectStatsXCTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5AF16D3B0A2CADB1BC0DB581 /* Pods_ConnectStats_ConnectStatsXCTests.framework */; };
 		BF9120CBFA7E3BB8AEA21520 /* Pods_FitFileExplorer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4291909821E226FF00E0B114 /* Pods_FitFileExplorer.framework */; };
 		FA5B4E7AA31A2F2A7CA5ED72 /* Pods_HealthStats.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A8193CBDBE4DB491C7633CA /* Pods_HealthStats.framework */; };
@@ -1297,6 +1299,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		04ADAE7DBACEE3DD181E7EF7 /* CHCSVParser.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CHCSVParser.h; sourceTree = "<group>"; };
 		2363D1E580BD0C9920BCB763 /* Pods_ConnectStatsTestApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ConnectStatsTestApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		26648864493045C8F4EADDCA /* Pods-ConnectStats-ConnectStatsXCTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ConnectStats-ConnectStatsXCTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ConnectStats-ConnectStatsXCTests/Pods-ConnectStats-ConnectStatsXCTests.debug.xcconfig"; sourceTree = "<group>"; };
 		3665CA8D2236812ED0C4EBE1 /* libPods-tennisstats.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-tennisstats.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1390,8 +1393,8 @@
 		42295E061EC6F4D900F4F7EE /* GCTestServiceGarmin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCTestServiceGarmin.h; path = src/GCTestServiceGarmin.h; sourceTree = "<group>"; };
 		42295E071EC6F4D900F4F7EE /* GCTestServiceGarmin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCTestServiceGarmin.m; path = src/GCTestServiceGarmin.m; sourceTree = "<group>"; };
 		422A24EB247325FB00D6C2FB /* activity_424479793.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = activity_424479793.json; sourceTree = "<group>"; };
-		422AC6A21C1CC99E002DDA9C /* test_activity_day___healthkit__Default_20151106.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = "test_activity_day___healthkit__Default_20151106.db"; sourceTree = "<group>"; };
-		422AC6A31C1CC99E002DDA9C /* test_activity_day___healthkit__Default_20151109.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = "test_activity_day___healthkit__Default_20151109.db"; sourceTree = "<group>"; };
+		422AC6A21C1CC99E002DDA9C /* test_activity_day___healthkit__Default_20151106.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = test_activity_day___healthkit__Default_20151106.db; sourceTree = "<group>"; };
+		422AC6A31C1CC99E002DDA9C /* test_activity_day___healthkit__Default_20151109.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = test_activity_day___healthkit__Default_20151109.db; sourceTree = "<group>"; };
 		422B343B1CA7321200B345CD /* GCFieldCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCFieldCache.h; path = src/GCFieldCache.h; sourceTree = "<group>"; };
 		422B343C1CA7321200B345CD /* GCFieldCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCFieldCache.m; path = src/GCFieldCache.m; sourceTree = "<group>"; };
 		422B343F1CA7322600B345CD /* GCFieldInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCFieldInfo.h; path = src/GCFieldInfo.h; sourceTree = "<group>"; };
@@ -2087,7 +2090,7 @@
 		42E04E4C2538C34B005FFD5E /* GCCellActivity.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = GCCellActivity.xib; path = src/GCCellActivity.xib; sourceTree = "<group>"; };
 		42E04E5725398099005FFD5E /* GCCellRoundedPatternView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GCCellRoundedPatternView.swift; path = src/GCCellRoundedPatternView.swift; sourceTree = "<group>"; };
 		42E06D481B5EF4DC001BDA02 /* test_activity_running_837769405.db */ = {isa = PBXFileReference; lastKnownFileType = file; name = test_activity_running_837769405.db; path = ConnectStatsTests/samples/test_activity_running_837769405.db; sourceTree = SOURCE_ROOT; };
-		42E06D4A1B5EFFC4001BDA02 /* test_activity_day___healthkit__20150622.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = "test_activity_day___healthkit__20150622.db"; sourceTree = "<group>"; };
+		42E06D4A1B5EFFC4001BDA02 /* test_activity_day___healthkit__20150622.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = test_activity_day___healthkit__20150622.db; sourceTree = "<group>"; };
 		42E10BC621D670E300175C83 /* FITDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FITDocument.swift; path = src/FITDocument.swift; sourceTree = "<group>"; };
 		42E11EB31B36C74C00D90E66 /* health_daydetail_20150612.data */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; name = health_daydetail_20150612.data; path = samples/applewatch/health_daydetail_20150612.data; sourceTree = "<group>"; };
 		42E11EB41B36C74C00D90E66 /* health_daydetail_20150618.data */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; name = health_daydetail_20150618.data; path = samples/applewatch/health_daydetail_20150618.data; sourceTree = "<group>"; };
@@ -2164,6 +2167,7 @@
 		5C5AB89BEF17CEA462B96687 /* Pods-ConnectStatsXCTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ConnectStatsXCTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ConnectStatsXCTests/Pods-ConnectStatsXCTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5DD0D8823C4B64B0B64A85E3 /* Pods-ConnectStats-ConnectStatsXCTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ConnectStats-ConnectStatsXCTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ConnectStats-ConnectStatsXCTests/Pods-ConnectStats-ConnectStatsXCTests.release.xcconfig"; sourceTree = "<group>"; };
 		5F6E36F5C6647979F417842B /* Pods-ConnectStatsXCTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ConnectStatsXCTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ConnectStatsXCTests/Pods-ConnectStatsXCTests.release.xcconfig"; sourceTree = "<group>"; };
+		6C5F5F9E59A0B913BC56C8A7 /* CHCSVParser.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = CHCSVParser.m; sourceTree = "<group>"; };
 		722F58FE2B9F9EF1C1D899FD /* Pods-ConnectStatsTestApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ConnectStatsTestApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ConnectStatsTestApp/Pods-ConnectStatsTestApp.debug.xcconfig"; sourceTree = "<group>"; };
 		7511076C6F489225E4DB97A3 /* Pods-ConnectStats.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ConnectStats.release.xcconfig"; path = "Pods/Target Support Files/Pods-ConnectStats/Pods-ConnectStats.release.xcconfig"; sourceTree = "<group>"; };
 		7A8193CBDBE4DB491C7633CA /* Pods_HealthStats.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HealthStats.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -3427,6 +3431,8 @@
 				42C0113C1AB437C10059B6CF /* samples */,
 				428FF72C15F36888007A88FA /* Supporting Files */,
 				42A2FE1A1A330284002F2A06 /* TestResources */,
+				04ADAE7DBACEE3DD181E7EF7 /* CHCSVParser.h */,
+				6C5F5F9E59A0B913BC56C8A7 /* CHCSVParser.m */,
 			);
 			name = ConnectStatsXCTests;
 			path = ConnectStatsTests;
@@ -4498,7 +4504,6 @@
 				42B5E1B61BA5AEC9000FAE4E /* Frameworks */,
 				42B5E1B71BA5AEC9000FAE4E /* Resources */,
 				42EAE412200BB2E40017D65C /* Embed Frameworks */,
-				CA7BA052D74F944BBEA800F2 /* [CP] Embed Pods Frameworks */,
 				213834454543D176F21EE27B /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
@@ -5295,23 +5300,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		CA7BA052D74F944BBEA800F2 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ConnectStatsTestApp/Pods-ConnectStatsTestApp-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ConnectStatsTestApp/Pods-ConnectStatsTestApp-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ConnectStatsTestApp/Pods-ConnectStatsTestApp-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		E1154C16AB148ED69A10029A /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -5964,6 +5952,7 @@
 				42B9555318186D0C00BC7AF9 /* GCTestsUtils.m in Sources */,
 				422CE58625DC1E1400723D4D /* GCTestAggregatedStats.swift in Sources */,
 				42B088451C38894D00113306 /* GCTestFields.m in Sources */,
+				55B76818E22AF3B0C42A45D4 /* CHCSVParser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6117,6 +6106,7 @@
 				427F937B1BEDFF1A00C177F9 /* GCViewActivityTypeButton.m in Sources */,
 				42D5798F25603E3E004A540F /* GCCellFieldValueColumnView.swift in Sources */,
 				42E1A74E24277FF9006C868A /* GCActivity+BestRolling.m in Sources */,
+				425BBBF12F48E9070021E05A /* GCConnectStatsRequestAPICheck.swift in Sources */,
 				427F93771BEDFA6F00C177F9 /* GCStatsMultiFieldViewController.m in Sources */,
 				42D4CA6F248D5497003F3AB7 /* GCStatsDerivedHistory.m in Sources */,
 				42CC45D0200A6E91003EB805 /* GCTestServiceBugReport.m in Sources */,
@@ -6845,6 +6835,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ConnectStatsTestApp/src/ConnectStatsTest-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -6891,6 +6882,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ConnectStatsTestApp/src/ConnectStatsTest-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (

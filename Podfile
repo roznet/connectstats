@@ -6,7 +6,6 @@ target 'ConnectStats' do
   pod 'Flurry-iOS-SDK/FlurrySDK'
   pod 'Armchair', '>= 0.3', :inhibit_warnings => true
   target 'ConnectStatsXCTests' do
-    pod 'CHCSVParser', :inhibit_warnings => true
   end
 end
 target 'HealthStats' do
@@ -19,7 +18,6 @@ target 'ConnectStatsTestApp' do
   use_frameworks!
   pod 'Flurry-iOS-SDK/FlurrySDK'
   pod 'GoogleMaps', :inhibit_warnings => true
-  pod 'CHCSVParser', :inhibit_warnings => true
 end
 target 'FitFileExplorer' do
   use_frameworks!

@@ -37,7 +37,7 @@
 #import "GCHistoryFieldSummaryDataHolder.h"
 #import "ConnectStats-Swift.h"
 
-@import CHCSVParser;
+#import "CHCSVParser.h"
 
 @interface GCTestsStats : GCTestCase
 

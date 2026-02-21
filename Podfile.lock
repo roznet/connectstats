@@ -1,6 +1,5 @@
 PODS:
   - Armchair (0.3.7)
-  - CHCSVParser (2.1.0)
   - Flurry-iOS-SDK/CrashReporter (12.4.0)
   - Flurry-iOS-SDK/FlurrySDK (12.4.0):
     - Flurry-iOS-SDK/CrashReporter
@@ -12,23 +11,20 @@ PODS:
 
 DEPENDENCIES:
   - Armchair (>= 0.3)
-  - CHCSVParser
   - Flurry-iOS-SDK/FlurrySDK
   - GoogleMaps
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
     - Armchair
-    - CHCSVParser
     - Flurry-iOS-SDK
     - GoogleMaps
 
 SPEC CHECKSUMS:
   Armchair: ea2da13f78515da627bd63d9540bd58a50e71562
-  CHCSVParser: 3bcc7bdb72111a31222e95d57eacceefe4e537e8
   Flurry-iOS-SDK: 402045d874e9e330d2fbcdf48d82727292ade109
   GoogleMaps: 032f676450ba0779bd8ce16840690915f84e57ac
 
-PODFILE CHECKSUM: 7827c4d5e804c5b3f61d491df253623f483d8f4a
+PODFILE CHECKSUM: 06bfedd2c1bfce2f88c4d02be3642d4cfff615e8
 
-COCOAPODS: 1.13.0
+COCOAPODS: 1.16.2
