@@ -128,6 +128,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    [self registerForTraitChanges:@[UITraitUserInterfaceStyle.class, UITraitHorizontalSizeClass.class, UITraitVerticalSizeClass.class] withAction:@selector(traitDidChange)];
+
     self.cache = [GCSimpleGraphCachedDataSource scatterPlotCacheFrom:self.scatterStats];
     
     self.graphView.dataSource = self.cache;
@@ -251,8 +254,7 @@
     }
 }
 
--(void)traitCollectionDidChange:(UITraitCollection*)previous{
-    [super traitCollectionDidChange:previous];
+-(void)traitDidChange{
     [self.graphView setNeedsDisplay];
     [self.legendView setNeedsDisplay];
     [self setupFrames];

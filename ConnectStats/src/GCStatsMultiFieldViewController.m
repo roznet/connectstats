@@ -111,6 +111,8 @@
 {
     [super viewDidLoad];
 
+    [self registerForTraitChanges:@[UITraitUserInterfaceStyle.class] withAction:@selector(userInterfaceStyleDidChange)];
+
     self.navigationItem.hidesBackButton = YES;
     self.activityTypeButton = [GCViewActivityTypeButton activityTypeButtonForDelegate:self];
     
@@ -160,7 +162,7 @@
     // Dispose of any resources that can be recreated.
 }
 
--(void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection{
+-(void)userInterfaceStyleDidChange{
     [self.tableView reloadData];
 }
 

@@ -51,7 +51,7 @@ BOOL kOpenTemporary = false;
     }else{
         RZLog(RZLogInfo,@"remote notification %@", userInfo);
     }
-    application.applicationIconBadgeNumber = 1;
+    [UNUserNotificationCenter.currentNotificationCenter setBadgeCount:1 withCompletionHandler:nil];
     RZPerformance * notificationPerf = [RZPerformance start];
     
     [[GCAppGlobal organizer] ensureMinimumLoaded];

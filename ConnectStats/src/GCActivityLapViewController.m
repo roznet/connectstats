@@ -66,6 +66,8 @@
 {
     [super viewDidLoad];
 
+    [self registerForTraitChanges:@[UITraitUserInterfaceStyle.class] withAction:@selector(userInterfaceStyleDidChange)];
+
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
 
@@ -146,9 +148,8 @@
     // Dispose of any resources that can be recreated.
 }
 
--(void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection{
+-(void)userInterfaceStyleDidChange{
     [self.tableView reloadData];
-
 }
 
 #pragma mark - Table view data source

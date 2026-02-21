@@ -421,21 +421,23 @@ typedef NS_ENUM(NSUInteger,gcMapViewType) {
         if (an.type==gcMapAnnotationUser ) {
             annotationView = [[[NSClassFromString(@"MKUserLocationView") alloc] initWithAnnotation:annotation reuseIdentifier:@"blueDot"] autorelease];
         }else{
-            MKPinAnnotationView *pinview=[[[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"pinview"] autorelease];
-            [pinview setCanShowCallout:YES];
+            MKMarkerAnnotationView *markerView=[[[MKMarkerAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"pinview"] autorelease];
+            [markerView setCanShowCallout:YES];
             switch (an.type) {
                 case gcMapAnnotationStart:
-                    pinview.pinTintColor =   [MKPinAnnotationView greenPinColor];
+                    markerView.markerTintColor = [UIColor systemGreenColor];
+                    markerView.glyphText = @"S";
                     break;
                 case gcMapAnnotationEnd:
-                    pinview.pinTintColor = [MKPinAnnotationView redPinColor];
+                    markerView.markerTintColor = [UIColor systemRedColor];
+                    markerView.glyphText = @"E";
                     break;
 
                 default:
-                    pinview.pinTintColor = [MKPinAnnotationView purplePinColor];
+                    markerView.markerTintColor = [UIColor systemPurpleColor];
 
             }
-            annotationView = pinview;
+            annotationView = markerView;
         }
     }
     return annotationView;

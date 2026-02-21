@@ -50,6 +50,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    [self registerForTraitChanges:@[UITraitHorizontalSizeClass.class, UITraitVerticalSizeClass.class] withAction:@selector(traitDidChange)];
+
 	// Do any additional setup after loading the view.
 
     WKWebView *contentView	= [[WKWebView alloc] initWithFrame: self.view.frame];
@@ -102,7 +105,7 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
--(void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection{
+-(void)traitDidChange{
     self.webView.frame= self.view.frame;
 }
 -(void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation{

@@ -380,7 +380,7 @@ NS_INLINE BOOL calendarDisplayIsPercent( gcCalendarDisplay x) {
         // Highlight the max
         GCCalendarDataMarkerInfo * info = markers.infoTotals;
         BOOL isMax = false;
-        if (_display == gcCalendarDayDisplayDistancePercent) {
+        if (_display == gcCalendarDisplayDistancePercent) {
             isMax = [info.sumDistance compare:self.maxInfo.sumDistance withTolerance:1.e-5] == NSOrderedSame;
         }else{
             isMax = [info.sumDuration compare:self.maxInfo.sumDuration withTolerance:1.e-5] == NSOrderedSame;

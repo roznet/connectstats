@@ -29,6 +29,7 @@ import Foundation
 import OAuthSwift
 import RZUtilsSwift
 import UIKit
+import UserNotifications
 
 @objc class GCAppSceneDelegate : UIResponder, UIWindowSceneDelegate{
     
@@ -83,7 +84,7 @@ import UIKit
         worker.async {
             GCAppGlobal.health().ensureDetailsLoaded()
         }
-        UIApplication.shared.applicationIconBadgeNumber = 0
+        UNUserNotificationCenter.current().setBadgeCount(0)
         
         
     }

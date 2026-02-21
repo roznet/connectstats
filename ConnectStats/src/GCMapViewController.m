@@ -137,6 +137,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    [self registerForTraitChanges:@[UITraitUserInterfaceStyle.class, UITraitHorizontalSizeClass.class, UITraitVerticalSizeClass.class] withAction:@selector(traitDidChange)];
+
     self.view.autoresizesSubviews = YES;
     
     [UIViewController setupEdgeExtendedLayout:self];
@@ -203,7 +206,7 @@
     [self.appleImplementor didReceiveMemoryWarning];
 }
 
--(void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection{
+-(void)traitDidChange{
     [self setupFrames:[self adjustedViewFrame]];
     [self forceRedisplay];
 }

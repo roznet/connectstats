@@ -59,7 +59,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+
+    [self registerForTraitChanges:@[UITraitUserInterfaceStyle.class, UITraitHorizontalSizeClass.class, UITraitVerticalSizeClass.class] withAction:@selector(traitDidChange)];
+
     self.graphView = [[[GCSimpleGraphView alloc] initWithFrame:(self.view).frame] autorelease];
     self.legendView = [[[GCMapLegendView alloc] initWithFrame:CGRectZero] autorelease];
     self.rulerView = [[[GCSimpleGraphRulerView alloc] initWithFrame:self.view.frame] autorelease];
@@ -216,8 +218,7 @@
     // Dispose of any resources that can be recreated.
 }
 
--(void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection{
-
+-(void)traitDidChange{
     [self setupFrames];
     [self.graphView setNeedsDisplay];
 }

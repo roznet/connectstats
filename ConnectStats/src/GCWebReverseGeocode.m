@@ -28,6 +28,9 @@
 #import "GCAppGlobal.h"
 @import RZExternalUniversal;
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+
 @interface GCWebReverseGeocode ()
 @property (nonatomic,assign)    NSUInteger countOfSuccessfulRequest;
 @property (nonatomic,assign)    BOOL reachedGeocodingLimit;
@@ -150,3 +153,4 @@
 
 
 @end
+#pragma clang diagnostic pop

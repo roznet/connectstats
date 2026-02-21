@@ -27,6 +27,8 @@
 
 @class GCActivitiesOrganizer;
 @class GCActivity;
+// CLGeocoder is deprecated in iOS 26 (replaced by MKReverseGeocodingRequest),
+// but the replacement requires iOS 26+ so we continue using CLGeocoder for now.
 @class CLGeocoder;
 
 @protocol GCWebReverseGeocodeDelegate <NSObject>
@@ -35,6 +37,8 @@
 
 @end
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 @interface GCWebReverseGeocode : NSObject{
     NSUInteger nextForGeocoding;
     BOOL geocoding;
@@ -44,6 +48,7 @@
 @property (nonatomic,retain) GCActivity * activity;
 @property (nonatomic,assign) id<GCWebReverseGeocodeDelegate> delegate;
 @property (nonatomic,retain) CLGeocoder * geocoder;
+#pragma clang diagnostic pop
 
 -(instancetype)init NS_DESIGNATED_INITIALIZER;
 -(GCWebReverseGeocode*)initWithOrganizer:(GCActivitiesOrganizer*)aOrg andDel:(id<GCWebReverseGeocodeDelegate>)aDel NS_DESIGNATED_INITIALIZER;

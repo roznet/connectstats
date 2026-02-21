@@ -75,6 +75,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    [self registerForTraitChanges:@[UITraitUserInterfaceStyle.class, UITraitHorizontalSizeClass.class, UITraitVerticalSizeClass.class] withAction:@selector(traitDidChange)];
+
     [self.view addSubview:self.graphView];
     [self.view addSubview:self.legendView];
 
@@ -218,11 +221,10 @@
 
 }
 
--(void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection{
+-(void)traitDidChange{
     [self.graphView setNeedsDisplay];
     //[[self legendView] setNeedsDisplay];
     [self setupFrames];
-
 }
 
 @end

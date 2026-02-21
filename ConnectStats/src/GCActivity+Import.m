@@ -820,7 +820,9 @@
     summary[sumVal.field] = sumVal;
     sumVal = [self buildSummaryValue:@"WeightedMeanSpeed" uom:@"mps" fieldFlag:gcFieldFlagWeightedMeanSpeed andValue:distanceMeter/durationSecond];
     summary[sumVal.field] = sumVal;
-    double sumEnergy = [workout.totalEnergyBurned doubleValueForUnit:[HKUnit kilocalorieUnit]];
+    HKQuantityType * activeEnergyType = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierActiveEnergyBurned];
+    HKStatistics * energyStats = [workout statisticsForType:activeEnergyType];
+    double sumEnergy = [energyStats.sumQuantity doubleValueForUnit:[HKUnit kilocalorieUnit]];
     if (sumEnergy != 0.) {
         sumVal = [self buildSummaryValue:@"SumEnergy" uom:@"kilocalorie" fieldFlag:gcFieldFlagNone andValue:sumEnergy];
         summary[sumVal.field] = sumVal;

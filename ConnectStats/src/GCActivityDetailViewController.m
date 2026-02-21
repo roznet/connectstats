@@ -139,7 +139,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+
+    [self registerForTraitChanges:@[UITraitUserInterfaceStyle.class] withAction:@selector(userInterfaceStyleDidChange)];
+
     [self.tableView registerNib:[UINib nibWithNibName:@"GCCellActivity" bundle:[NSBundle mainBundle]]
          forCellReuseIdentifier:@"GCCellActivity"];
 
@@ -205,14 +207,9 @@
     }
 }
 
--(void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection{
+-(void)userInterfaceStyleDidChange{
     [self notifyCallBack:nil info:nil];
-    if( @available( iOS 13.0, * )){
-        if( self.traitCollection.userInterfaceStyle != previousTraitCollection.userInterfaceStyle ){
-            [self.tableView reloadData];
-        }
-    }
-
+    [self.tableView reloadData];
 }
 
 
