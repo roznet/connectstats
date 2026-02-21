@@ -656,28 +656,24 @@ const CGFloat kCellDaySpacing = 2.f;
 
 #pragma mark - UIContextMenuInteractionDelegate
 
--(UIContextMenuConfiguration*)tableView:(UITableView *)tableView contextMenuConfigurationForRowAtIndexPath:(NSIndexPath *)indexPath point:(CGPoint)point API_AVAILABLE(ios(13.0)){
-    if( @available( iOS 13.0, *)){
-        return [UIContextMenuConfiguration configurationWithIdentifier:nil
-                                                       previewProvider:^(){
-            GCActivity * activity = [self.organizer activityForIndex:[self.organizer activityIndexForFilteredIndex:indexPath.row]];
-            
-            GCActivityPreviewingViewController * preview = [[[GCActivityPreviewingViewController alloc] initWithNibName:nil bundle:nil] autorelease];
-            preview.activity = activity;
-            
-            preview.preferredContentSize = CGSizeMake(0., self.view.frame.size.height*0.75);
-            return preview;
-        }
-                                                        actionProvider:^(NSArray<UIMenuElement *> *suggestedActions){
-            UIAction * open = [UIAction actionWithTitle:@"Open" image:nil identifier:nil handler:^(UIAction * action){
-                GCActivity * activity = [self.organizer activityForIndex:[self.organizer activityIndexForFilteredIndex:indexPath.row]];
-                [GCAppGlobal focusOnActivityId:activity.activityId];
-            }];
-            return [UIMenu menuWithTitle:@"" children:@[open]];
-        }];
-    }else{
-        return nil;
+-(UIContextMenuConfiguration*)tableView:(UITableView *)tableView contextMenuConfigurationForRowAtIndexPath:(NSIndexPath *)indexPath point:(CGPoint)point{
+    return [UIContextMenuConfiguration configurationWithIdentifier:nil
+                                                   previewProvider:^(){
+        GCActivity * activity = [self.organizer activityForIndex:[self.organizer activityIndexForFilteredIndex:indexPath.row]];
+
+        GCActivityPreviewingViewController * preview = [[[GCActivityPreviewingViewController alloc] initWithNibName:nil bundle:nil] autorelease];
+        preview.activity = activity;
+
+        preview.preferredContentSize = CGSizeMake(0., self.view.frame.size.height*0.75);
+        return preview;
     }
+                                                    actionProvider:^(NSArray<UIMenuElement *> *suggestedActions){
+        UIAction * open = [UIAction actionWithTitle:@"Open" image:nil identifier:nil handler:^(UIAction * action){
+            GCActivity * activity = [self.organizer activityForIndex:[self.organizer activityIndexForFilteredIndex:indexPath.row]];
+            [GCAppGlobal focusOnActivityId:activity.activityId];
+        }];
+        return [UIMenu menuWithTitle:@"" children:@[open]];
+    }];
 }
 
 @end

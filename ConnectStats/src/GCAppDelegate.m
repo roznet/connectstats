@@ -579,12 +579,10 @@ void checkVersion(void){
 
 -(void)settingsUpdateCheck{
     BOOL needToSaveSettings = false;
-    if( @available( iOS 13.0, *)){
-        if( [[GCAppGlobal profile] configGetBool:@"CONFIG_FIRST_TIME_IOS13" defaultValue:true] ){
-            [[GCAppGlobal profile] configSet:CONFIG_SKIN_NAME stringVal:kGCSkinName2021];
-            [[GCAppGlobal profile] configSet:@"CONFIG_FIRST_TIME_IOS13" boolVal:false];
-            needToSaveSettings = true;
-        }
+    if( [[GCAppGlobal profile] configGetBool:@"CONFIG_FIRST_TIME_IOS13" defaultValue:true] ){
+        [[GCAppGlobal profile] configSet:CONFIG_SKIN_NAME stringVal:kGCSkinName2021];
+        [[GCAppGlobal profile] configSet:@"CONFIG_FIRST_TIME_IOS13" boolVal:false];
+        needToSaveSettings = true;
     }
     
     NSString * currentVersion = [[NSBundle mainBundle] infoDictionary][@"CFBundleVersion"];

@@ -977,17 +977,13 @@ typedef NS_ENUM(NSUInteger,gcDynamicMethod){
         case gcDynamicMethodiOS14:
         case gcDynamicMethodiOS13:
         {
-            if( @available(iOS 13.0, *)) {
-                return [UIColor colorWithDynamicProvider:^(UITraitCollection*trait){
-                    if( trait.userInterfaceStyle == UIUserInterfaceStyleDark){
-                        return darkColor;
-                    }else{
-                        return lightColor;
-                    }
-                }];
-            }else{
-                return lightColor;
-            }
+            return [UIColor colorWithDynamicProvider:^(UITraitCollection*trait){
+                if( trait.userInterfaceStyle == UIUserInterfaceStyleDark){
+                    return darkColor;
+                }else{
+                    return lightColor;
+                }
+            }];
         }
         case gcDynamicMethodColorSetJson:
             return
@@ -1068,10 +1064,8 @@ typedef NS_ENUM(NSUInteger,gcDynamicMethod){
         return val.boolValue;
     }else if( [val isKindOfClass:[NSDictionary class] ]){
         NSDictionary * choices = (NSDictionary*)val;
-        if( @available( iOS 13.0, *)){
-            if( [GCAppGlobal userInterfaceStyle] == UIUserInterfaceStyleDark ){
-                return [choices[@"dark"] boolValue];
-            }
+        if( [GCAppGlobal userInterfaceStyle] == UIUserInterfaceStyleDark ){
+            return [choices[@"dark"] boolValue];
         }
         return [choices[@"light"] boolValue];
         
@@ -1084,10 +1078,8 @@ typedef NS_ENUM(NSUInteger,gcDynamicMethod){
     NSString * val = self.defs[kGCSkinKeyStringValues][@(which)];
     if( [val isKindOfClass:[NSDictionary class]] ){
         NSDictionary * choices = (NSDictionary*)val;
-        if( @available( iOS 13.0, *)){
-            if( [GCAppGlobal userInterfaceStyle] == UIUserInterfaceStyleDark ){
-                return choices[@"dark"];
-            }
+        if( [GCAppGlobal userInterfaceStyle] == UIUserInterfaceStyleDark ){
+            return choices[@"dark"];
         }
     }
     return val;
