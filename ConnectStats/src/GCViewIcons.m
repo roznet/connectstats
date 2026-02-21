@@ -128,18 +128,25 @@ UIImage*imageNamedIn(NSArray*defs,NSUInteger idx,NSString*suffix,NSString*bundle
     return imageNamedIn(navigationIconDefs(), name,nil,nil);
 }
 
++(NSString*)imageNameForActivityType:(NSString*)activityType{
+    if([activityType isEqualToString:@"all"]){
+        return @"activity_all";
+    }
+    return activityType;
+}
+
 +(UIImage*)activityTypeColoredIconFor:(NSString*)activityType{
     if(activityType == nil){
         return nil;
     }
 
-    UIImage * rv = [UIImage imageNamed:activityType];
+    UIImage * rv = [UIImage imageNamed:[self imageNameForActivityType:activityType]];
 
     return rv;
 }
 
 +(UIImage*)activityTypeDisabledIconFor:(NSString*)activityType{
-    UIImage * icon = [UIImage imageNamed:[NSString stringWithFormat:@"%@", activityType]];
+    UIImage * icon = [UIImage imageNamed:[self imageNameForActivityType:activityType]];
     if( icon == nil){
         return nil;
     }
@@ -160,7 +167,7 @@ UIImage*imageNamedIn(NSArray*defs,NSUInteger idx,NSString*suffix,NSString*bundle
 }
 
 +(UIImage*)activityTypeDynamicIconFor:(NSString*)activityType{
-    UIImage * icon = [UIImage imageNamed:[NSString stringWithFormat:@"%@", activityType]];
+    UIImage * icon = [UIImage imageNamed:[self imageNameForActivityType:activityType]];
     if( icon == nil){
         return nil;
     }
@@ -189,7 +196,7 @@ UIImage*imageNamedIn(NSArray*defs,NSUInteger idx,NSString*suffix,NSString*bundle
 }
 
 +(UIImage*)activityTypeBWIconFor:(NSString*)activityType{
-    UIImage * rv = [UIImage imageNamed:[NSString stringWithFormat:@"%@", activityType]];
+    UIImage * rv = [UIImage imageNamed:[self imageNameForActivityType:activityType]];
     return rv;
 
 }

@@ -77,6 +77,7 @@ typedef NS_ENUM(NSUInteger, gcIconCell) {
 
 +(nullable UIImage*)navigationIconFor:(gcIconNav)name;
 +(nullable UIImage*)tabBarIconFor:(gcIconTab)name;
++(nonnull NSString*)imageNameForActivityType:(nonnull NSString*)activityType;
 +(nullable UIImage*)activityTypeColoredIconFor:(nonnull NSString*)activityType;
 +(nullable UIImage*)cellIconFor:(gcIconCell)name;
 +(nullable UIImage*)activityTypeBWIconFor:(nonnull NSString*)activityType;

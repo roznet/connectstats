@@ -580,7 +580,7 @@ NS_INLINE GCViewConfigSkin * _current_skin(void){
     NSArray * suffix = nil;
     suffix = @[@"-bw-ios7",@"-bw"];
     UIImage * rv = nil;
-    NSString * base = activityType.lowercaseString;
+    NSString * base = [GCViewIcons imageNameForActivityType:activityType.lowercaseString];
     for (NSString * ext in suffix) {
         NSString * fn = [NSString stringWithFormat:@"%@%@",base,ext];
         rv = [UIImage imageNamed:fn];
