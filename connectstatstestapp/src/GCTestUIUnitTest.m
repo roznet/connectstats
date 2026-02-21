@@ -54,7 +54,7 @@
 
 -(void)testSimpleGraph{
     [self startSession:@"UI SimpleGraph"];
-    //Rebase on iPhone 12 Pro and iPhone 8 for two screen sizes
+    //Rebase on iPhone 17 Pro
     self.recordMode = false;
     dispatch_sync(dispatch_get_main_queue(), ^(){
         [self checkSimpleGraphSnapshot];
@@ -63,7 +63,7 @@
 
 -(void)testCellGrid{
     [self startSession:@"UI CellGrid"];
-    //Rebase on iPhone 12 Pro and iPhone 8 for two screen sizes
+    //Rebase on iPhone 17 Pro
     self.recordMode = false;
     dispatch_sync(dispatch_get_main_queue(), ^(){
         [self checkGridCellSnapshot];
