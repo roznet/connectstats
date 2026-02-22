@@ -370,6 +370,52 @@ GCWebRequestCache.cached(forClass: Self.self, page: page)
 
 ---
 
+## Multi-Service Duplicate Handling
+
+When multiple services are configured (e.g., Garmin + Strava), the same activity may arrive from both. The duplicate system makes import **order-independent** — the result is the same regardless of which service syncs first.
+
+**Key files:**
+- `GCActivitiesOrganizer.m` → `checkIfActivityIsDuplicate:`
+- `GCActivity+Import.m` → `updateWithActivity:newOnly:fromPreferred:verbose:`
+- `GCActivitiesOrganizerListRegister.m` → `addToOrganizer:` (delete logic)
+
+### Service Priority
+
+`GCService.preferredOver:` defines priority: Garmin > ConnectStats > Strava > HealthKit. The "preferred" service's name and activity type always win.
+
+### Duplicate Detection
+
+`findDuplicate:` + `testForDuplicate:` check for:
+- `gcDuplicateSynchronizedService` — same activity linked across services
+- `gcDuplicateTimeOverlapping` — activities that overlap in time
+
+Duplicates are recorded in `gc_duplicate_activities` table and the `duplicateActivityIds` dictionary (maps duplicate → existing).
+
+### Merge Rules (checkIfActivityIsDuplicate:)
+
+When a duplicate is detected, the **first** activity to arrive stays in the organizer. The second is skipped but its data is merged:
+
+| Incoming service | Action on existing activity |
+|---|---|
+| **Preferred** (e.g., Garmin after Strava) | `updateMissingFromActivity:fromPreferred:YES` — overwrites name, activity type, and fills missing summary fields |
+| **Non-preferred** (e.g., Strava after Garmin) | `updateMissingFromActivity:` — fills only missing summary fields (name/type untouched) |
+
+The `fromPreferred` flag controls whether name and type are updated in `newOnly` mode. Summary fields (distance, duration, speed, HR) always use fill-missing semantics regardless.
+
+### Delete-Sync Rules
+
+When a service syncs and an activity is missing from the response:
+- **Same service**: activity is deleted (normal sync behavior)
+- **Cross-service**: activity is **never** deleted — prevents a Garmin sync from removing Strava-only activities
+
+### Gotchas
+
+- The first activity to arrive keeps its `activityId` in the organizer. In Strava-first scenarios, activities have Strava IDs even after Garmin data is merged in.
+- `updateMissingFromActivity:` (without `fromPreferred:`) defaults to `fromPreferred:NO` — preserves backward compatibility.
+- The `connectstatsFromGarmin` special case allows ConnectStats-sourced activities to get names from Garmin even without the preferred flag.
+
+---
+
 ## Known Issues & Considerations
 
 ### Garmin SSO Fragility

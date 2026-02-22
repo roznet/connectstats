@@ -14,7 +14,7 @@ Key exports: `GCActivity`, `GCField`, `GCTrackPoint`, `GCLap`, `GCActivitySummar
 → Full doc: data-model.md
 
 ### service-integrations
-Garmin, Strava, HealthKit, and ConnectStats Server sync. Auth flows, request handling, and error recovery.
+Garmin, Strava, HealthKit, and ConnectStats Server sync. Auth flows, request handling, multi-service duplicate merging, and error recovery.
 Key exports: `GCWebConnect`, `GCGarminReqBase`, `GCConnectStatsRequest`
 → Full doc: service-integrations.md
 
