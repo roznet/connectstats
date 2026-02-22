@@ -191,16 +191,11 @@ NSUInteger kDownloadTrackPointCount = 5;
             if (deleteCandidate && deleteCandidate.count) {
                 NSMutableArray * toTrash = [NSMutableArray arrayWithCapacity:deleteCandidate.count];
                 for (NSString * one in deleteCandidate) {
-                    // Only delete if it's coming from same service. Maybe redundant check?
+                    // Only delete if it's coming from same service, never delete cross-service activities
                     if ([GCService serviceForActivityId:one].service == self.service.service){
                         [toTrash addObject:one];
                     }else{
-                        if( self.syncDeleteWithPreferred && [self.service preferredOver:[GCService serviceForActivityId:one]] ){
-                            RZLog(RZLogWarning, @"Deleting activity not in preferred service: %@ from %@ not in preferred %@", one, [GCService serviceForActivityId:one], self.service);
-                            [toTrash addObject:one];
-                        }else{
-                            RZLog(RZLogWarning, @"Ignoring delete an activity not in preferred service: %@ from %@ not in preferred %@", one, [GCService serviceForActivityId:one], self.service);
-                        }
+                        RZLog(RZLogInfo, @"Skipping delete of cross-service activity: %@ from %@ (syncing %@)", one, [GCService serviceForActivityId:one], self.service);
                     }
                 }
                 if (toTrash.count>0) {

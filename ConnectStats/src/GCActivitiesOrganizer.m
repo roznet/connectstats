@@ -668,15 +668,19 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
                     }
                     // Avoid trivial case where exact same pointer/activity
                     if( act != other ){
-                        [other updateMissingFromActivity:act];
+                        [other updateMissingFromActivity:act fromPreferred:YES];
                     }
                 }else{
                     RZLog(RZLogInfo, @"Duplicate (%@): skipping %@ (preferred: %@)", reasonDescription, act.activityId, other.activityId);
+                    // Fill any missing fields from the non-preferred service
+                    if( act != other ){
+                        [other updateMissingFromActivity:act];
+                    }
                 }
             }else{
                 // Update missing again as some edit can happen later
-                if( duplicateServiceIsPreferred && act != other ){
-                    [other updateMissingFromActivity:act];
+                if( act != other ){
+                    [other updateMissingFromActivity:act fromPreferred:duplicateServiceIsPreferred];
                 }
             }
             rv = true;

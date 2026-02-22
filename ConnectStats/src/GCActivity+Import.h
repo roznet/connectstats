@@ -48,7 +48,9 @@ typedef NS_ENUM(NSUInteger,gcDuplicate) {
 -(void)updateWithGarminData:(NSDictionary*)data;
 
 -(BOOL)updateMissingFromActivity:(GCActivity*)other;
+-(BOOL)updateMissingFromActivity:(GCActivity*)other fromPreferred:(BOOL)fromPreferred;
 -(BOOL)updateWithActivity:(GCActivity*)other;
+-(BOOL)updateWithActivity:(GCActivity*)other newOnly:(BOOL)newOnly fromPreferred:(BOOL)fromPreferred verbose:(BOOL)verbose;
 -(BOOL)updateSummaryDataFromActivity:(GCActivity*)other;
 -(BOOL)updateTrackpointsFromActivity:(GCActivity*)other;
 

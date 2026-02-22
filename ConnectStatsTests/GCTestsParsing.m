@@ -844,7 +844,9 @@
         [GCGarminRequestModernSearch testForOrganizer:organizer_cs_garmin withFilesInPath:[RZFileOrganizer bundleFilePath:@"last_modern_search_0_changes.json" forClass:[self class]]];
         [GCGarminRequestModernSearch testForOrganizer:organizer_garmin withFilesInPath:[RZFileOrganizer bundleFilePath:@"last_modern_search_0_changes.json" forClass:[self class]]];
         
-        XCTAssertEqual(mergeStartCount, organizer_cs_garmin.countOfActivities+1);
+        // Cross-service activities are no longer deleted, so the ConnectStats activity
+        // that was missing from Garmin changes should be preserved
+        XCTAssertEqual(mergeStartCount, organizer_cs_garmin.countOfActivities);
         XCTAssertEqual(garminStartCount, organizer_garmin.countOfActivities+1);
         [expectation fulfill];
     });
@@ -991,7 +993,78 @@
     [GCGarminRequestModernSearch testForOrganizer:reload withFilesInPath:bundlePath start:20];
     [GCStravaRequestActivityList testWithOrganizer:reload path:bundlePath start:1];
     XCTAssertEqual(organizer.countOfActivities,reload.countOfActivities);
-    
+
+}
+
+-(void)testOrganizerMergeServicesReverseOrder{
+    // Test that Strava-first then Garmin produces the same result:
+    // - Garmin (preferred) name and type should win
+    // - Strava-only activities should NOT be deleted when Garmin syncs
+
+    NSString * bundlePath = [RZFileOrganizer bundleFilePath:nil forClass:[self class]];
+
+    [[GCAppGlobal profile] configSet:CONFIG_SYNC_WITH_PREFERRED boolVal:false];
+
+    GCActivitiesOrganizer * organizer_rev = [self createEmptyOrganizer:@"test_parsing_modern_merge_rev.db"];
+
+    NSData * data = [NSData dataWithContentsOfFile:[RZFileOrganizer bundleFilePath:@"services_activities.json" forClass:[self class]]
+                                           options:0 error:nil];
+    NSDictionary * dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+    NSArray * running_ids = [[dict[@"types"][@"running"] allKeys] sortedArrayUsingSelector:@selector(compare:)];
+    NSArray * cycling_ids = [[dict[@"types"][@"cycling"] allKeys] sortedArrayUsingSelector:@selector(compare:)];
+
+    NSString * runGarminId = running_ids[0];
+    NSString * bikeGarminId = cycling_ids[0];
+
+    NSArray * running_dup = [[dict[@"duplicates"][runGarminId] allKeys] sortedArrayUsingSelector:@selector(compare:)];
+    NSArray * cycling_dup = [[dict[@"duplicates"][bikeGarminId] allKeys] sortedArrayUsingSelector:@selector(compare:)];
+
+    NSString * runStravaId = running_dup[1];
+    NSString * bikeStravaId = cycling_dup[1];
+
+    // Strava first
+    [GCStravaRequestActivityList testWithOrganizer:organizer_rev path:bundlePath];
+    NSUInteger stravaOnlyCount = organizer_rev.countOfActivities;
+    XCTAssertGreaterThan(stravaOnlyCount, 0);
+
+    // Remember Strava activity names before Garmin merge
+    GCActivity * runStravaAct = [organizer_rev activityForId:runStravaId];
+    GCActivity * bikeStravaAct = [organizer_rev activityForId:bikeStravaId];
+    XCTAssertNotNil(runStravaAct);
+    XCTAssertNotNil(bikeStravaAct);
+
+    // Then add Garmin (preferred)
+    [GCGarminRequestModernSearch testForOrganizer:organizer_rev withFilesInPath:bundlePath];
+
+    // Strava-only activities should NOT be deleted
+    XCTAssertGreaterThanOrEqual(organizer_rev.countOfActivities, stravaOnlyCount);
+
+    // In reverse order (Strava first), the Strava activities are the "existing" ones.
+    // The Garmin duplicates are skipped but their data is merged into the existing Strava activities.
+    // Look up by Strava ID — these should now have Garmin's name and type.
+    GCActivity * runMerged = [organizer_rev activityForId:runStravaId];
+    GCActivity * bikeMerged = [organizer_rev activityForId:bikeStravaId];
+    XCTAssertNotNil(runMerged, @"Strava running activity should exist after merge");
+    XCTAssertNotNil(bikeMerged, @"Strava cycling activity should exist after merge");
+
+    // Garmin-first then Strava organizer for comparison
+    GCActivitiesOrganizer * organizer_fwd = [self createEmptyOrganizer:@"test_parsing_modern_merge_fwd.db"];
+    [GCGarminRequestModernSearch testForOrganizer:organizer_fwd withFilesInPath:bundlePath];
+    [GCStravaRequestActivityList testWithOrganizer:organizer_fwd path:bundlePath];
+
+    // The forward merged has Garmin IDs as the existing activities
+    GCActivity * runFwd = [organizer_fwd activityForId:runGarminId];
+    GCActivity * bikeFwd = [organizer_fwd activityForId:bikeGarminId];
+    XCTAssertNotNil(runFwd);
+    XCTAssertNotNil(bikeFwd);
+
+    // Both orderings should produce the same activity name (from Garmin preferred)
+    XCTAssertEqualObjects(runMerged.activityName, runFwd.activityName, @"Running activity name should match regardless of import order");
+    XCTAssertEqualObjects(bikeMerged.activityName, bikeFwd.activityName, @"Cycling activity name should match regardless of import order");
+
+    // Both orderings should produce the same activity type
+    XCTAssertEqualObjects(runMerged.activityType, runFwd.activityType, @"Running activity type should match regardless of import order");
+    XCTAssertEqualObjects(bikeMerged.activityType, bikeFwd.activityType, @"Cycling activity type should match regardless of import order");
 }
 
 -(void)testOrganizerBackgroundRegister{    

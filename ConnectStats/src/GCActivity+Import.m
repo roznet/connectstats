@@ -1181,17 +1181,21 @@
 }
 
 -(BOOL)updateWithActivity:(GCActivity*)other newOnly:(BOOL)newOnly verbose:(BOOL)verbose{
+    return [self updateWithActivity:other newOnly:newOnly fromPreferred:!newOnly verbose:verbose];
+}
+
+-(BOOL)updateWithActivity:(GCActivity*)other newOnly:(BOOL)newOnly fromPreferred:(BOOL)fromPreferred verbose:(BOOL)verbose{
 
     BOOL rv = false;
 
     // Special Case were some field should always be imported (like name event etc)
     BOOL connectstatsFromGarmin = self.service.service == gcServiceConnectStats && other.service.service == gcServiceGarmin;
-    
+
     if( ![self markCompleted:gcServicePhaseSummary for:other.service.service] ){
         RZLog(RZLogInfo, @"%@: Marked completed %@/summary", self, other.service);
     }
 
-    if( ! newOnly){
+    if( ! newOnly || fromPreferred){
         GCActivityType * aType = other.activityTypeDetail;
         if (![aType isEqualToActivityType:self.activityTypeDetail]) {
             [self.settings.updateRecord recordFor:self changedAttribute:@"activityType" from:self.activityTypeDetail.description to:aType.description];
@@ -1205,7 +1209,7 @@
     }
 
     NSString * aName = other.activityName;
-    if( ! newOnly || connectstatsFromGarmin){
+    if( ! newOnly || connectstatsFromGarmin || fromPreferred){
         if (aName.length > 0 && ![aName isEqualToString:self.activityName]) {
             [self.settings.updateRecord recordFor:self changedAttribute:@"activityName" from:self.activityName to:aName];
             rv = true;
@@ -1216,11 +1220,11 @@
             [db commit];
         }
     }
-    
+
     if( [self updateSummaryDataFromActivity:other newOnly:newOnly verbose:verbose] ){
         rv = true;
     }
-    
+
     if( [self updateTrackpointsFromActivity:other newOnly:newOnly verbose:verbose] ){
         rv = true;
     }
@@ -1228,7 +1232,10 @@
 }
 
 -(BOOL)updateMissingFromActivity:(GCActivity*)other{
-    return [self updateWithActivity:other newOnly:true verbose:false];
+    return [self updateWithActivity:other newOnly:true fromPreferred:false verbose:false];
+}
+-(BOOL)updateMissingFromActivity:(GCActivity*)other fromPreferred:(BOOL)fromPreferred{
+    return [self updateWithActivity:other newOnly:true fromPreferred:fromPreferred verbose:false];
 }
 -(BOOL)updateWithActivity:(GCActivity*)other{
     return [self updateWithActivity:other newOnly:false verbose:true];
