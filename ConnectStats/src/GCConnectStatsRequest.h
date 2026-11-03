@@ -27,6 +27,8 @@
 
 #import "GCWebRequestStandard.h"
 
+@class GCGarminOAuth2Credentials;
+
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSUInteger, gcWebConnectStatsMode) {
@@ -49,6 +51,8 @@ typedef NS_ENUM(NSUInteger, gcWebConnectStatsMode) {
 -(BOOL)isSignedIn;
 -(void)signIn;
 +(void)signout;
+// Save the result of a new OAuth 2.0 login, returns false if it could not be saved
+-(BOOL)completeOAuth2Login:(GCGarminOAuth2Credentials*)credentials;
 
 -(NSURLRequest*)preparedUrlRequest:(NSString*)path params:(NSDictionary*)parameters;
 

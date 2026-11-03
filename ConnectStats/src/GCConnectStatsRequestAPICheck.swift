@@ -43,11 +43,6 @@ extension gcWebConnectStatsConfig {
     }
 }
 class GCConnectStatsRequestAPICheck : GCConnectStatsRequest, @unchecked Sendable {
-    struct APIStatus : Codable {
-        let status : Int
-        let redirect : String?
-    }
-   
     override var urlDescription: String! {
         return GCWebConnectStatsApiCheck(GCAppGlobal.webConnectsStatsConfig())
     }
@@ -62,9 +57,10 @@ class GCConnectStatsRequestAPICheck : GCConnectStatsRequest, @unchecked Sendable
         self.delegate = delegate
        
         do {
-            let api = try JSONDecoder().decode(APIStatus.self, from: theData)
+            let api = try JSONDecoder().decode(GCConnectStatsAPIStatus.self, from: theData)
             if api.status == 1 {
                 RZSLog.info("Api Check Success")
+                GCGarminLoginSetting.record(status: api)
                 if let redirect = api.redirect {
                     let redirectConfig = GCWebConnectStatsConfigForRedirect(redirect)
                     let currentConfig = GCAppGlobal.webConnectsStatsConfig()

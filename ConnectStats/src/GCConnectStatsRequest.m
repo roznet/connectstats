@@ -41,7 +41,16 @@
 @property (nonatomic,assign) NSUInteger userId;
 @property (nonatomic,retain) OAuth1Controller * oauth1Controller;
 @property (nonatomic,retain) WKWebView * webView;
+// From a new OAuth 2.0 login. If there is one requests use Bearer, otherwise they are signed with OAuth 1.0
+@property (nonatomic,retain) NSString * serverToken;
+@property (nonatomic,retain) GCGarminOAuth2Login * oauth2Login;
 @end
+
+// Keyed by token_id, which is in the profile config: a server token is only found for the current login of
+// a profile, and not after a reinstall, which clears the config but not the keychain.
+static GCAppPasswordManager * serverTokenKeychain(NSUInteger tokenId){
+    return [[[GCAppPasswordManager alloc] initForService:@"ConnectStatsServerToken" andUsername:@(tokenId).stringValue] autorelease];
+}
 
 @implementation GCConnectStatsRequest
 
@@ -60,6 +69,7 @@
         self.userId = current.userId;
         self.tokenId = current.tokenId;
         self.oauthTokenSecret = current.oauthTokenSecret;
+        self.serverToken = current.serverToken;
         self.webView = nil;
         self.navigationController = nil;
     }
@@ -71,6 +81,8 @@
     [_oauthTokenSecret release];
     [_oauth1Controller release];
     [_webView release];
+    [_serverToken release];
+    [_oauth2Login release];
     
     [super dealloc];
 }
@@ -82,7 +94,14 @@
     self.userId = [[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_USER_ID defaultValue:0];
     self.tokenId = [[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_TOKEN_ID defaultValue:0];
     
-    if ((self.oauthTokenSecret).length==0) {
+    NSString * serverToken = self.tokenId != 0 ? [serverTokenKeychain(self.tokenId) retrievePassword] : nil;
+    self.serverToken = serverToken.length > 0 ? serverToken : nil;
+
+    if( self.serverToken ){
+        self.oauthToken = nil;
+        self.oauthTokenSecret = nil;
+        RZLog(RZLogInfo,@"valid serverToken %@", [self debugDescription]);
+    }else if ((self.oauthTokenSecret).length==0) {
         RZLog(RZLogInfo,@"missing oauthTokenSecret %@", [self debugDescription]);
         self.oauthTokenSecret = nil;
         self.oauthToken = nil;
@@ -95,6 +114,10 @@
 
 
 +(void)signout{
+    NSUInteger tokenId = [[GCAppGlobal profile] configGetInt:CONFIG_CONNECTSTATS_TOKEN_ID defaultValue:0];
+    if( tokenId != 0 ){
+        [serverTokenKeychain(tokenId) clearPassword];
+    }
     [[GCAppGlobal profile] configSet:CONFIG_CONNECTSTATS_USER_ID intVal:0];
     [[GCAppGlobal profile] configSet:CONFIG_CONNECTSTATS_TOKEN_ID intVal:0];
     [[GCAppGlobal profile] setPassword:@"" forService:gcServiceConnectStats];
@@ -137,8 +160,11 @@
 -(BOOL)isSignedIn{
     // Always check token first as it's possible a previous req in the queue did log in and
     // we don't want to present a second time.
-    if( !self.oauthToken || self.oauthToken.length == 0){
+    if( !self.serverToken && (!self.oauthToken || self.oauthToken.length == 0) ){
         [self checkToken];
+    }
+    if( self.serverToken ){
+        return self.userId != 0 && self.tokenId != 0;
     }
     BOOL rv = self.oauthToken != nil && self.oauthTokenSecret != nil && self.userId != 0 && self.tokenId != 0;
         
@@ -153,13 +179,81 @@
 -(void)signIn{
     if (self.oauthToken) {
         if( self.userId == 0 || self.tokenId == 0){
-            [self signInGarminStep];
+            [self signInNewLogin];
         }else{
             [self signInConnectStatsStep];
         }
     }else{
-        [self signInGarminStep];
+        [self signInNewLogin];
     }
+}
+
+-(void)signInNewLogin{
+    [GCGarminLoginSetting resolveUseOAuth2WithSession:[self sharedSession] completion:^(BOOL useOAuth2){
+        if( useOAuth2 ){
+            [self signInOAuth2Step];
+        }else{
+            [self signInGarminStep];
+        }
+    }];
+}
+
+-(void)failOAuth2Login:(NSError*)error{
+    RZLog(RZLogError, @"ConnectStats OAuth2 login failed %@", error);
+    self.status = GCWebStatusLoginFailed;
+    [[GCAppGlobal profile] serviceSuccess:gcServiceConnectStats set:NO];
+    [self processDone];
+}
+
+-(void)signInOAuth2Step{
+    RZLog(RZLogInfo,@"starting garmin oauth2 step %@", [self debugDescription]);
+    self.oauth2Login = [GCGarminOAuth2Login forCurrentConfigWithSession:[self sharedSession]];
+    if( self.oauth2Login == nil ){
+        [self failOAuth2Login:nil];
+        return;
+    }
+    [self.oauth2Login startWithAnchor:self.navigationController.view.window completion:^(GCGarminOAuth2Credentials * credentials, NSError * error){
+        self.oauth2Login = nil;
+        if( credentials == nil ){
+            [self failOAuth2Login:error];
+        }else if( ![self completeOAuth2Login:credentials] ){
+            [self failOAuth2Login:nil];
+        }else{
+            [self processDone];
+        }
+    }];
+}
+
+-(BOOL)completeOAuth2Login:(GCGarminOAuth2Credentials*)credentials{
+    // Save the token first: if that fails, nothing else should say we're logged in
+    if( ![serverTokenKeychain(credentials.tokenId) savePassword:credentials.serverToken] ){
+        return false;
+    }
+    GCAppProfiles * profile = [GCAppGlobal profile];
+    [profile configSet:CONFIG_CONNECTSTATS_TOKEN_ID intVal:credentials.tokenId];
+    [profile configSet:CONFIG_CONNECTSTATS_USER_ID intVal:credentials.userId];
+    // No OAuth 1.0 credentials for this login, make sure none remain from an earlier one
+    [profile configSet:CONFIG_CONNECTSTATS_TOKEN stringVal:@""];
+    [profile setPassword:@"" forService:gcServiceConnectStats];
+    [profile serviceSuccess:gcServiceConnectStats set:YES];
+
+    self.serverToken = credentials.serverToken;
+    self.tokenId = credentials.tokenId;
+    self.userId = credentials.userId;
+    self.oauthToken = nil;
+    self.oauthTokenSecret = nil;
+    RZLog(RZLogInfo, @"Successfully logged in with OAuth2 userid=%@ tokenId=%@ activityExport=%@", @(self.userId), @(self.tokenId), @(credentials.activityExport));
+
+    if( profile.pushNotificationEnabled ){
+        [GCConnectStatsRequestRegisterNotifications register];
+        [[GCAppGlobal web] addRequest:RZReturnAutorelease([[GCConnectStatsRequestRegisterNotifications alloc] init])];
+    }
+    if( !credentials.activityExport ){
+        [self.navigationController presentSimpleAlertWithTitle:NSLocalizedString(@"Activity Sharing is Off", @"Garmin Login")
+                                                       message:NSLocalizedString(@"Garmin Connect is not sharing your activities with ConnectStats, so no activities will arrive. To receive them, allow activity sharing for ConnectStats in Garmin Connect.", @"Garmin Login")];
+    }
+    [GCAppGlobal saveSettings];
+    return true;
 }
 
 -(void)signInConnectStatsStep{
@@ -292,6 +386,16 @@
 }
 
 -(NSURLRequest*)preparedUrlRequest:(NSString*)path params:(NSDictionary*)parameters{
+    if( self.serverToken ){
+        NSString * url = path;
+        if( parameters.count > 0 ){
+            url = [path stringByAppendingFormat:@"?%@", CHQueryStringFromParametersWithEncoding(parameters, NSUTF8StringEncoding)];
+        }
+        NSMutableURLRequest * request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
+        request.HTTPMethod = @"GET";
+        [request setValue:[NSString stringWithFormat:@"Bearer %@", self.serverToken] forHTTPHeaderField:@"Authorization"];
+        return request;
+    }
     if( self.oauth1Controller == nil){
         if(self.navigationController){
             [self buildOAuthController];

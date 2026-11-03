@@ -224,6 +224,28 @@ POST GCWebConnectStatsValidateUser()
 Params: token_id, notification_device_token, notification_enabled
 ```
 
+### New Logins with OAuth 2.0
+
+Garmin retires OAuth 1.0 on 31 Dec 2026. Full plan: `designs/oauth2-migration.md` in connectstats_server.
+
+**Signed-in users have no mode.** A stored `server_token` means `Authorization: Bearer`, otherwise OAuth 1.0 signing with the stored token and secret. All requests go through `preparedUrlRequest:params:`. The server setting below plays no part in this, so turning it on or off never affects a signed-in user.
+
+**The setting only picks the flow for a new login.** `GET /api/status/api` returning `"garmin_login": "oauth2"` selects PKCE. Absent or any other value means OAuth 1.0. `GCGarminLoginSetting` saves it in `CONFIG_CONNECTSTATS_GARMIN_LOGIN`.
+
+**Flow** (`GCGarminOAuth2Login.swift`):
+
+1. Create the PKCE verifier, challenge and `state`
+2. Open `oauth2Confirm` in an `ASWebAuthenticationSession`, redirect URI `connectstats://ro-z.net/oauth/garmin`
+3. Check `state`, then POST `code`, `code_verifier` and `redirect_uri` to `/api/connectstats/user_register_oauth2`, form-encoded
+4. Save `server_token` in the Keychain and `token_id`, `cs_user_id` in the config
+
+**Gotchas:**
+
+- The app must never call Garmin's token endpoint or hold the client secret. This is why it doesn't use OAuthSwift as Strava does: that would call the token endpoint itself.
+- The `server_token` is stored in the Keychain per `token_id`, with the same accessibility as the OAuth 1.0 secret. A reinstall clears the config but not the Keychain, so the old token isn't picked up.
+- `oauth2_client_id` comes from `credentials.json` (`garmin` and `garmin_dev`) and is compiled into the build. Without one, the app logs an error and uses OAuth 1.0 even if the setting is on.
+- The status check queued before login can't be relied on to have answered: after a connection error requests stay in the queue, and on the next sync the new check is inserted behind the left over login. `resolveUseOAuth2` therefore asks the server itself if there's no answer from the last 5 minutes, and otherwise falls back on the last saved value.
+
 ### Request Classes
 
 **GCConnectStatsRequestSearch** - Activity list with pagination:
@@ -436,4 +458,4 @@ FIT file access often requires the ConnectStats server. When unavailable, falls 
 
 - Garmin: Session cookies (temporary)
 - Strava: Keychain (OAuth tokens)
-- ConnectStats: Config + Keychain (OAuth 1.0a)
+- ConnectStats: Config + Keychain (OAuth 1.0a secret, or `server_token` for OAuth 2.0 logins)

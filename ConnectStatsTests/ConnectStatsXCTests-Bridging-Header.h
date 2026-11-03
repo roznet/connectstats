@@ -17,6 +17,7 @@
 #import "GCGarminUserJsonParser.h"
 
 #import "GCConnectStatsRequestSearch.h"
+#import "GCConnectStatsRequestLogin.h"
 #import "GCService.h"
 
 #import "GCHistoryFieldSummaryDataHolder.h"
