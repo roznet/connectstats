@@ -36,11 +36,13 @@ struct GCConnectStatsAPIStatus : Decodable {
     let status : Int
     let redirect : String?
     let garminLogin : String?
+    let oauth2ClientId : String?
 
     enum CodingKeys : String, CodingKey {
         case status
         case redirect
         case garminLogin = "garmin_login"
+        case oauth2ClientId = "oauth2_client_id"
     }
 
     init(from decoder: Decoder) throws {
@@ -49,6 +51,7 @@ struct GCConnectStatsAPIStatus : Decodable {
         self.redirect = try container.decodeIfPresent(String.self, forKey: .redirect)
         // Any unexpected value means OAuth 1.0, and must not lose the rest of the answer
         self.garminLogin = try? container.decodeIfPresent(String.self, forKey: .garminLogin)
+        self.oauth2ClientId = try? container.decodeIfPresent(String.self, forKey: .oauth2ClientId)
     }
 }
 
@@ -67,15 +70,31 @@ struct GCConnectStatsAPIStatus : Decodable {
         return GCAppGlobal.profile().configGet(CONFIG_CONNECTSTATS_GARMIN_LOGIN, defaultValue: "") == oauth2Value
     }
 
-    /// Save the setting from a valid answer. Absent means OAuth 1.0, so that it can be turned back off
+    /// The client id from the server, which is only issued once Garmin converts the app, so a build made
+    /// before that can still turn on OAuth 2.0. Not secret. Empty if the server didn't provide one
+    static var serverClientId : String {
+        return GCAppGlobal.profile().configGet(CONFIG_CONNECTSTATS_GARMIN_CLIENT_ID, defaultValue: "") ?? ""
+    }
+
+    /// Save the values from a valid answer. Absent means OAuth 1.0, so that it can be turned back off
     static func record(status : GCConnectStatsAPIStatus) {
         guard status.status == 1 else {
             return
         }
-        let value = status.garminLogin ?? ""
-        if value != GCAppGlobal.profile().configGet(CONFIG_CONNECTSTATS_GARMIN_LOGIN, defaultValue: "") {
-            RZSLog.info("Garmin login setting changed to '\(value)'")
-            GCAppGlobal.profile().configSet(CONFIG_CONNECTSTATS_GARMIN_LOGIN, stringVal: value)
+        let profile = GCAppGlobal.profile()
+        let login = status.garminLogin ?? ""
+        let clientId = status.oauth2ClientId ?? ""
+        let loginChanged = login != profile.configGet(CONFIG_CONNECTSTATS_GARMIN_LOGIN, defaultValue: "")
+        let clientIdChanged = clientId != serverClientId
+        if loginChanged {
+            RZSLog.info("Garmin login setting changed to '\(login)'")
+            profile.configSet(CONFIG_CONNECTSTATS_GARMIN_LOGIN, stringVal: login)
+        }
+        if clientIdChanged {
+            RZSLog.info("Garmin OAuth 2.0 client id from server \(clientId.isEmpty ? "removed" : "changed")")
+            profile.configSet(CONFIG_CONNECTSTATS_GARMIN_CLIENT_ID, stringVal: clientId)
+        }
+        if loginChanged || clientIdChanged {
             GCAppGlobal.saveSettings()
         }
         lock.lock()
@@ -207,7 +226,9 @@ enum GCGarminOAuth2LoginError : Error {
             let config = GCAppGlobal.webConnectsStatsConfig()
             // same choice of service as for the OAuth 1.0 credentials
             let service = (config == .remoteDevTesting || config == .localDevTesting) ? "garmin_dev" : "garmin"
-            let clientId : String = GCAppGlobal.credentials(forService: service, andKey: "oauth2_client_id")
+            // The server's value first, the one bundled in credentials.json is only a fallback
+            let serverClientId = GCGarminLoginSetting.serverClientId
+            let clientId : String = serverClientId.isEmpty ? GCAppGlobal.credentials(forService: service, andKey: "oauth2_client_id") : serverClientId
             guard !clientId.isEmpty && clientId != "***" else {
                 return nil
             }

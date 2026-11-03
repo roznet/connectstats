@@ -243,7 +243,7 @@ Garmin retires OAuth 1.0 on 31 Dec 2026. Full plan: `designs/oauth2-migration.md
 
 - The app must never call Garmin's token endpoint or hold the client secret. This is why it doesn't use OAuthSwift as Strava does: that would call the token endpoint itself.
 - The `server_token` is stored in the Keychain per `token_id`, with the same accessibility as the OAuth 1.0 secret. A reinstall clears the config but not the Keychain, so the old token isn't picked up.
-- `oauth2_client_id` comes from `credentials.json` (`garmin` and `garmin_dev`) and is compiled into the build. Without one, the app logs an error and uses OAuth 1.0 even if the setting is on.
+- `oauth2_client_id` comes from the same status check, saved in `CONFIG_CONNECTSTATS_GARMIN_CLIENT_ID`, because Garmin only issues it once it converts the app: a build made before that can still turn on OAuth 2.0 without a release. It isn't secret. `credentials.json` (`garmin` and `garmin_dev`) is only a fallback. With neither, the app logs an error and uses OAuth 1.0 even if the setting is on.
 - The status check queued before login can't be relied on to have answered: after a connection error requests stay in the queue, and on the next sync the new check is inserted behind the left over login. `resolveUseOAuth2` therefore asks the server itself if there's no answer from the last 5 minutes, and otherwise falls back on the last saved value.
 
 ### Request Classes

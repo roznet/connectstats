@@ -111,6 +111,7 @@ extern NSString * const  CONFIG_CONNECTSTATS_TOKEN;
 extern NSString * const  CONFIG_CONNECTSTATS_TOKEN_ID;
 extern NSString * const  CONFIG_CONNECTSTATS_USER_ID;
 extern NSString * const  CONFIG_CONNECTSTATS_GARMIN_LOGIN;
+extern NSString * const  CONFIG_CONNECTSTATS_GARMIN_CLIENT_ID;
 
 extern NSString * const  CONFIG_GARMIN_FIT_DOWNLOAD;
 extern NSString * const  CONFIG_GARMIN_FIT_MERGE;

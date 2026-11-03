@@ -100,6 +100,7 @@ class GCTestGarminOAuth2: XCTestCase {
         self.savedPassword = profile.currentPassword(for: gcService.connectStats) ?? ""
         self.savedConfig = [
             CONFIG_CONNECTSTATS_GARMIN_LOGIN : profile.configGet(CONFIG_CONNECTSTATS_GARMIN_LOGIN, defaultValue: "") as Any,
+            CONFIG_CONNECTSTATS_GARMIN_CLIENT_ID : profile.configGet(CONFIG_CONNECTSTATS_GARMIN_CLIENT_ID, defaultValue: "") as Any,
             CONFIG_CONNECTSTATS_TOKEN : profile.configGet(CONFIG_CONNECTSTATS_TOKEN, defaultValue: "") as Any,
             CONFIG_CONNECTSTATS_TOKEN_ID : profile.configGetInt(CONFIG_CONNECTSTATS_TOKEN_ID, defaultValue: 0),
             CONFIG_CONNECTSTATS_USER_ID : profile.configGetInt(CONFIG_CONNECTSTATS_USER_ID, defaultValue: 0),
@@ -107,6 +108,7 @@ class GCTestGarminOAuth2: XCTestCase {
         GCConnectStatsRequest.signout()
         profile.configSet(CONFIG_CONNECTSTATS_TOKEN, stringVal: "")
         profile.configSet(CONFIG_CONNECTSTATS_GARMIN_LOGIN, stringVal: "")
+        profile.configSet(CONFIG_CONNECTSTATS_GARMIN_CLIENT_ID, stringVal: "")
         GCGarminLoginSetting.clearLastAnswer()
     }
 
@@ -114,6 +116,7 @@ class GCTestGarminOAuth2: XCTestCase {
         GCConnectStatsRequest.signout()
         let profile = GCAppGlobal.profile()
         profile.configSet(CONFIG_CONNECTSTATS_GARMIN_LOGIN, stringVal: self.savedConfig[CONFIG_CONNECTSTATS_GARMIN_LOGIN] as? String ?? "")
+        profile.configSet(CONFIG_CONNECTSTATS_GARMIN_CLIENT_ID, stringVal: self.savedConfig[CONFIG_CONNECTSTATS_GARMIN_CLIENT_ID] as? String ?? "")
         profile.configSet(CONFIG_CONNECTSTATS_TOKEN, stringVal: self.savedConfig[CONFIG_CONNECTSTATS_TOKEN] as? String ?? "")
         profile.configSet(CONFIG_CONNECTSTATS_TOKEN_ID, intVal: self.savedConfig[CONFIG_CONNECTSTATS_TOKEN_ID] as? Int ?? 0)
         profile.configSet(CONFIG_CONNECTSTATS_USER_ID, intVal: self.savedConfig[CONFIG_CONNECTSTATS_USER_ID] as? Int ?? 0)
@@ -318,6 +321,41 @@ class GCTestGarminOAuth2: XCTestCase {
         GCTestMockServer.reset { _ in (200, Data(#"{"status": 1, "garmin_login": "oauth2"}"#.utf8), nil) }
         XCTAssertFalse(self.resolve())
         XCTAssertTrue(GCGarminLoginSetting.isOAuth2)
+    }
+
+    func testClientIdFromServerEnablesBuildWithoutOne() throws {
+        // what matters here is a build with no client id of its own, as for one made before Garmin's conversion
+        try XCTSkipIf(GCGarminOAuth2Login.Configuration.current() != nil, "credentials.json has an oauth2_client_id")
+
+        GCTestMockServer.reset { _ in
+            (200, Data(#"{"status": 1, "garmin_login": "oauth2", "oauth2_client_id": "server-client-id"}"#.utf8), nil)
+        }
+        XCTAssertTrue(self.resolve())
+
+        let configuration = try XCTUnwrap(GCGarminOAuth2Login.Configuration.current())
+        XCTAssertEqual(configuration.clientId, "server-client-id")
+        let url = try XCTUnwrap(GCGarminOAuth2Login.authorizationUrl(configuration: configuration, pkce: GCGarminPKCE(), state: "a-state"))
+        XCTAssertTrue(url.absoluteString.contains("client_id=server-client-id"))
+
+        // an answer that isn't valid keeps what was saved
+        GCGarminLoginSetting.record(status: try self.status(#"{"status": 0}"#))
+        XCTAssertEqual(GCGarminLoginSetting.serverClientId, "server-client-id")
+
+        // a client id alone doesn't turn it on
+        GCGarminLoginSetting.record(status: try self.status(#"{"status": 1, "oauth2_client_id": "server-client-id"}"#))
+        XCTAssertFalse(self.resolve())
+
+        // a valid answer without one removes it
+        GCGarminLoginSetting.record(status: try self.status(#"{"status": 1, "garmin_login": "oauth2"}"#))
+        XCTAssertEqual(GCGarminLoginSetting.serverClientId, "")
+        XCTAssertNil(GCGarminOAuth2Login.Configuration.current())
+        XCTAssertFalse(self.resolve())
+    }
+
+    func testUnexpectedClientIdTypeIsIgnored() throws {
+        let decoded = try self.status(#"{"status": 1, "garmin_login": "oauth2", "oauth2_client_id": 12}"#)
+        XCTAssertEqual(decoded.garminLogin, "oauth2")
+        XCTAssertNil(decoded.oauth2ClientId)
     }
 
     //MARK: - Login flow, with a mock server and no browser

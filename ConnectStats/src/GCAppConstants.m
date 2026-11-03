@@ -109,6 +109,7 @@ NSString * const CONFIG_CONNECTSTATS_TOKEN       = @"config_connectstats_token";
 NSString * const CONFIG_CONNECTSTATS_TOKEN_ID    = @"config_connectstats_token_id";
 NSString * const CONFIG_CONNECTSTATS_USER_ID     = @"config_connectstats_user_id";
 NSString * const CONFIG_CONNECTSTATS_GARMIN_LOGIN = @"config_connectstats_garmin_login";
+NSString * const CONFIG_CONNECTSTATS_GARMIN_CLIENT_ID = @"config_connectstats_garmin_client_id";
 
 //NSString * const  CONFIG_NOTIFICATION_ENABLED      = @"config_notification_enabled_dev";
 NSString * const  CONFIG_NOTIFICATION_PUSH_TYPE    = @"config_notification_push_type";
