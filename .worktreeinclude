@@ -1,0 +1,5 @@
+# Gitignored files Claude Code copies into the worktrees it creates
+# (claude --worktree, isolated subagents). gitignore syntax.
+# The app needs credentials.json to build; asc.py needs .env.
+ConnectStats/credentials.json
+.env
