@@ -1,0 +1,5 @@
+# Dependencies for scripts/asc.py (App Store Connect staging, used by /archive).
+# python3 -m venv venv && venv/bin/pip install -r scripts/requirements-release.txt
+PyJWT[crypto]>=2.8
+requests>=2.31
+python-dotenv>=1.0

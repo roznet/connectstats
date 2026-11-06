@@ -8,3 +8,14 @@ python
 ~$*
 t.json
 
+
+# Release tooling (scripts/asc.py)
+venv/
+.env
+*.p8
+build/
+__pycache__/
+
+# Claude Code local state
+.claude/worktrees/
+.claude/settings.local.json
