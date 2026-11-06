@@ -8,7 +8,7 @@
 
 import Cocoa
 import FitFileParser
-import Armchair
+import StoreKit
 
 class FITSplitViewController: NSSplitViewController {
     var selectionContext : FITSelectionContext?
@@ -43,7 +43,11 @@ class FITSplitViewController: NSSplitViewController {
     
     override func viewDidAppear() {
         super.viewDidAppear()
-        Armchair.showPromptIfNecessary()
+        let prompt = FITAppDelegate.reviewPrompt
+        if prompt.shouldPrompt() {
+            AppStore.requestReview(in: self)
+            prompt.markPrompted()
+        }
     }
     //MARK: - Access View Controllers
     func outlineViewController() -> FITOutlineViewController?{

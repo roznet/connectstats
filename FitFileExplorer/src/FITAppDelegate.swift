@@ -8,10 +8,10 @@
 
 import Foundation
 import Cocoa
-import Armchair
 
 class FITAppDelegate : NSObject, NSApplicationDelegate {
-    
+    static let reviewPrompt = GCAppReviewPrompt(daysUntilPrompt: 5, usesUntilPrompt: 10)
+
     // Trick to override default NSDocumentController as first instance of a
     // DocumentController will become the default. create it as variable in app delegate
     let documentController = FITDocumentController()
@@ -24,9 +24,7 @@ class FITAppDelegate : NSObject, NSApplicationDelegate {
         #endif
         // Force init of the shared global state
         _ = FITAppGlobal.shared
-        Armchair.appID("1244431640")
-        Armchair.usesUntilPrompt(10)
-        Armchair.daysUntilPrompt(5)
+        FITAppDelegate.reviewPrompt.recordUse()
     }
     
     func applicationShouldOpenUntitledFile(_ sender: NSApplication) -> Bool {

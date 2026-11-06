@@ -59,7 +59,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void)saveSettings;
 -(void)addOrSelectProfile:(NSString*)pName;
-+(void)publishEvent:(NSString*)name;
 +(BOOL)connectStatsVersion;
 +(BOOL)healthStatsVersion;
 

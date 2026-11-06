@@ -22,7 +22,6 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 //  
-@import Flurry_iOS_SDK;
 #import "GCActivityListViewController.h"
 #import "GCActivitiesOrganizer.h"
 #import "GCAppGlobal.h"

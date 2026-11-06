@@ -35,7 +35,6 @@
 #import "GCService.h"
 #import "GCActivity+Database.h"
 
-@import Flurry_iOS_SDK;
 
 #define GC_SYNC_KEY(act,service) [[act activityId] stringByAppendingString:service]
 
@@ -265,23 +264,6 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
     self.storedHealth = health;
 }
 
--(void)publishEvent{
-#ifdef GC_USE_FLURRY
-    NSUInteger report = _allActivities.count;
-    if (report > 10 && report<100) {
-        report /= 10;
-        report *= 10;
-    }else if (report>100){
-        report /= 50;
-        report *= 50;
-    }
-    if (report > 0) {
-        NSDictionary * params = @{@"Count": @((int)report)};
-        [Flurry logEvent:EVENT_LOAD_ACTIVITIES withParameters:params];
-    }
-#endif
-}
-
 -(void)notifyOnMainThread:(NSString*)stringOrNil{
     if (stringOrNil) {
         dispatch_async(dispatch_get_main_queue(), ^(){
@@ -506,7 +488,6 @@ NSString * kNotifyOrganizerReset = @"kNotifyOrganizerReset";
         [self notifyOnMainThread:nil];
         dispatch_async(dispatch_get_main_queue(), ^(){
             [[NSNotificationCenter defaultCenter] postNotificationName:kNotifyOrganizerLoadComplete object:nil];
-            [self publishEvent];
         });
     }
     @synchronized (self){

@@ -29,7 +29,6 @@
 #import "GCViewConfig.h"
 #import "GCStatsOneFieldViewController.h"
 #import "GCCellGrid+Templates.h"
-@import Flurry_iOS_SDK;
 #import "GCSimpleGraphCachedDataSource+Templates.h"
 #import "GCStatsOneFieldGraphViewController.h"
 #import "GCViewIcons.h"
@@ -595,13 +594,6 @@
     }
 }
 
--(void)publishEvent{
-    NSString * choice = self.multiFieldConfig.viewDescription;
-    NSDictionary * params = @{@"ActivityType": self.activityType ?: @"None",
-                             @"Choice": choice ?: @"None"};
-    [Flurry logEvent:EVENT_REPORT withParameters:params];
-}
-
 #pragma mark - Config
 
 -(BOOL)useFilter{
@@ -900,9 +892,6 @@
             });
         }
         RZLog(RZLogInfo, @"config %@", self.multiFieldConfig)
-#ifdef GC_USE_FLURRY
-        [self publishEvent];
-#endif
     }else if( ! [self.multiFieldConfig isEqualToConfig:nConfig] ){
         self.multiFieldConfig = nConfig;
         [self.tableView reloadData];
