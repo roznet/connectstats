@@ -23,7 +23,6 @@
 //  SOFTWARE.
 //  
 
-#define GC_USE_FLURRY
 
 // Add new to [GCSettingsBugReportViewController configCheck]?
 extern NSString * const  CONFIG_REFRESH_STARTUP;
