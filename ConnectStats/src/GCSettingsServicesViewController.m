@@ -841,6 +841,12 @@
                 RZLog(RZLogInfo,@"Strava: Disabled");
             }
             [GCAppGlobal saveSettings];
+            if ([[GCAppGlobal profile] configGetBool:CONFIG_STRAVA_ENABLE defaultValue:NO] &&
+                ![[GCAppGlobal profile] serviceSuccess:gcServiceStrava]) {
+                // user just turned Strava on: start the sign in now (sync never prompts on its own)
+                [GCStravaRequestBase requestSignIn];
+                [GCAppGlobal searchRecentActivities];
+            }
             break;
         case GC_IDENTIFIER(GC_SECTIONS_STRAVA, GC_STRAVA_SEGMENTS):
             [[GCAppGlobal profile] configToggleBool:CONFIG_STRAVA_SEGMENTS];
@@ -952,6 +958,9 @@
 
     }else{
         [reqCls signout];
+        if (service == gcServiceStrava) {
+            [GCStravaRequestBase requestSignIn];
+        }
         [GCAppGlobal searchRecentActivities];
     }
 }

@@ -136,7 +136,9 @@ import RZUtilsSwift
             
             return GCStravaRequestActivityList(previous: self)
         }
-        if self.reloadAll {
+        // Only mark the full history as downloaded if this last page actually succeeded,
+        // otherwise a timeout deep in the history would stop it from ever being retried
+        if self.reloadAll && self.status == GCWebStatus.OK {
             DispatchQueue.main.async {
                 GCAppGlobal.profile().serviceCompletedFull(gcService.strava, set: true)
                 GCAppGlobal.saveSettings()
