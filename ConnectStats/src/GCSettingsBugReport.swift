@@ -39,7 +39,7 @@ extension GCSettingsBugReport {
         let bugPathURL = URL(fileURLWithPath: bugPath )
         var archiveSucess = true
         
-        let archive = Archive(url: bugPathURL, accessMode: .create)
+        let archive = try? Archive(url: bugPathURL, accessMode: .create, pathEncoding: nil)
         
         if let data = RZLogFileContent().data(using: .utf8){
             do {

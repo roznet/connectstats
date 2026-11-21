@@ -1,0 +1,168 @@
+{
+  "originHash" : "f1e54117aa8b504fcf49eee6aba38292c5ab84ff7a0bb35aba968830f4ea2c81",
+  "pins" : [
+    {
+      "identity" : "brightfutures",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Thomvis/BrightFutures.git",
+      "state" : {
+        "revision" : "fa66fa183dce7196d431244d0215748cd14c5758",
+        "version" : "8.2.0"
+      }
+    },
+    {
+      "identity" : "deviceguru",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/InderKumarRathore/DeviceGuru",
+      "state" : {
+        "branch" : "master",
+        "revision" : "0e551a59320f932888513458848021ccc8401881"
+      }
+    },
+    {
+      "identity" : "erik",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/phimage/Erik.git",
+      "state" : {
+        "revision" : "109a130e9cdb00789a43a7a625293eeb12d22989",
+        "version" : "5.1.0"
+      }
+    },
+    {
+      "identity" : "filekit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/nvzqz/FileKit.git",
+      "state" : {
+        "revision" : "9006d2888025fbe893c3c396327b2fe45a8c177b",
+        "version" : "6.1.0"
+      }
+    },
+    {
+      "identity" : "fitfileparser",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/roznet/FitFileParser.git",
+      "state" : {
+        "revision" : "afcdf1677d89819f305f7714bb3b6a18dca05cc6",
+        "version" : "1.5.2"
+      }
+    },
+    {
+      "identity" : "fmdb",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ccgus/fmdb",
+      "state" : {
+        "revision" : "1227a3fa2b9916bfd75fe380eb45cd210e69e251",
+        "version" : "2.7.12"
+      }
+    },
+    {
+      "identity" : "generic-json-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/zoul/generic-json-swift.git",
+      "state" : {
+        "revision" : "0a06575f4038b504e78ac330913d920f1630f510",
+        "version" : "2.0.2"
+      }
+    },
+    {
+      "identity" : "ios-maps-sdk",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/googlemaps/ios-maps-sdk",
+      "state" : {
+        "revision" : "0a12af046bb5c5dec6b600e23f251d2e610596b1",
+        "version" : "11.4.0"
+      }
+    },
+    {
+      "identity" : "kanna",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/tid-kijyun/Kanna.git",
+      "state" : {
+        "revision" : "41c3d28ea0eac07e4551b28def9de1ede702e739",
+        "version" : "5.3.0"
+      }
+    },
+    {
+      "identity" : "keychainaccess",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kishikawakatsumi/KeychainAccess.git",
+      "state" : {
+        "revision" : "84e546727d66f1adc5439debad16270d0fdd04e7",
+        "version" : "4.2.2"
+      }
+    },
+    {
+      "identity" : "mbprogresshud",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/jdg/MBProgressHUD",
+      "state" : {
+        "revision" : "bca42b801100b2b3a4eda0ba8dd33d858c780b0d",
+        "version" : "1.2.0"
+      }
+    },
+    {
+      "identity" : "oauthswift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/OAuthSwift/OAuthSwift.git",
+      "state" : {
+        "revision" : "d85964b96dbce94df961f28b996187c835089903",
+        "version" : "2.2.0"
+      }
+    },
+    {
+      "identity" : "rzexternal",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/roznet/rzexternal",
+      "state" : {
+        "revision" : "efce225e6616ab3eb5dac5470c470ecada2c0bc0",
+        "version" : "1.0.5"
+      }
+    },
+    {
+      "identity" : "rzutils",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/roznet/rzutils.git",
+      "state" : {
+        "revision" : "e2c66339b9dfdf88ba11be04561ea659f8afddcc",
+        "version" : "1.0.31"
+      }
+    },
+    {
+      "identity" : "rzutils-macos",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/roznet/rzutils-macos",
+      "state" : {
+        "revision" : "9b567821a8113338f75c9fb83da469d07eb5e233",
+        "version" : "1.0.0"
+      }
+    },
+    {
+      "identity" : "rzutils-touch",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/roznet/rzutils-touch.git",
+      "state" : {
+        "revision" : "abca256f68fc385b70d8c96ae4c95feb745499fc",
+        "version" : "1.0.8"
+      }
+    },
+    {
+      "identity" : "swifter",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/httpswift/swifter.git",
+      "state" : {
+        "revision" : "9483a5d459b45c3ffd059f7b55f9638e268632fd",
+        "version" : "1.5.0"
+      }
+    },
+    {
+      "identity" : "zipfoundation",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/weichsel/ZIPFoundation.git",
+      "state" : {
+        "revision" : "e7048f0569f0ba37df26f8357f560b9d25e9a284",
+        "version" : "0.9.21"
+      }
+    }
+  ],
+  "version" : 3
+}

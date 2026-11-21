@@ -32,7 +32,7 @@ import RZUtilsSwift
 extension GCGarminActivityTrack13Request {
     @discardableResult
     @objc static func extract(fitData : Data, baseName : String) -> Bool {
-        guard let archive = Archive(data: fitData, accessMode: .read ) else {
+        guard let archive = try? Archive(data: fitData, accessMode: .read, pathEncoding: nil) else {
             RZSLog.error("Failed to create zip archive from data")
             return false
         }
