@@ -111,10 +111,34 @@ plutil -p ConnectStats/ConnectStats-Info.plist | grep -E 'ITSApp|Usage'
 find ConnectStats -name PrivacyInfo.xcprivacy
 ```
 
-A `PrivacyInfo.xcprivacy` in the app target is expected by App Review (required-
-reason APIs: UserDefaults, file timestamps, disk space, system boot time). If it
-is missing, **warn** and offer to add one before archiving; Apple currently
-emails ITMS-91053 warnings rather than rejecting, but that can change.
+`ConnectStats/PrivacyInfo.xcprivacy` must exist and be in the ConnectStats
+target's Resources (blocking):
+
+```bash
+plutil -lint ConnectStats/PrivacyInfo.xcprivacy
+grep -c 'PrivacyInfo.xcprivacy in Resources' ConnectStats.xcodeproj/project.pbxproj   # expect 2 (build file + phase)
+```
+
+Then check it is still true (warn, and propose an edit):
+
+- **New required-reason APIs** since the last tag — UserDefaults, file
+  timestamps (`modificationDate`, `creationDate`, `NSFileModificationDate`),
+  boot time (`systemUptime`, `mach_absolute_time`), disk space
+  (`volumeAvailableCapacity`, `NSFileSystemFreeSize`), `activeInputModes`:
+  `git diff {last_tag}..HEAD -- ConnectStats/src | grep -E '^\+.*(UserDefaults|modificationDate|creationDate|systemUptime|mach_absolute_time|volumeAvailableCapacity|NSFileSystemFreeSize|activeInputModes)'`.
+  Each category must be in the manifest with a reason code.
+- **New data leaving the device** (new server endpoint payloads, new SDK):
+  add it to the manifest's `NSPrivacyCollectedDataTypes`.
+- **New SPM package**: does it ship its own `PrivacyInfo.xcprivacy`? If not,
+  its API use is the app's to declare.
+
+**The App Store Connect App Privacy label must cover the manifest plus every
+SDK's manifest** (Google Maps adds Usage Data, Device ID, Crash/Performance
+Data, Other Data). Expected label (2026-11-21): Usage Data, Location (precise),
+Health & Fitness (Fitness only — HealthKit data never leaves the device),
+Diagnostics, Identifiers (User ID, Device ID), Contact Info (Email — optional
+bug-report contact), Other Data. If the manifest changed, remind the user to
+update the label in App Store Connect → App Privacy before submitting.
 
 ### 2d — Package pinning and local overrides (blocking)
 

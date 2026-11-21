@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C5A1B2E2F00000100A1B2C3 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 4C5A1B2E2F00000200A1B2C3 /* PrivacyInfo.xcprivacy */; };
 		1C07D5D20DFB869B1FC8958E /* GCAppReviewPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8C2B3F7CEE1D0E0BDC8FBEF /* GCAppReviewPrompt.swift */; };
 		2557FF5BFEE4E75EFBAC533F /* GoogleMaps in Frameworks */ = {isa = PBXBuildFile; productRef = E08C941E68E2C9B71FA0866E /* GoogleMaps */; };
 		420063FA18C238530031395F /* GCWebConnect+Requests.m in Sources */ = {isa = PBXBuildFile; fileRef = 420063F918C238530031395F /* GCWebConnect+Requests.m */; };
@@ -1304,6 +1305,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4C5A1B2E2F00000200A1B2C3 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		04ADAE7DBACEE3DD181E7EF7 /* CHCSVParser.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = CHCSVParser.h; sourceTree = "<group>"; };
 		420063F818C238530031395F /* GCWebConnect+Requests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "GCWebConnect+Requests.h"; path = "src/GCWebConnect+Requests.h"; sourceTree = "<group>"; };
 		420063F918C238530031395F /* GCWebConnect+Requests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "GCWebConnect+Requests.m"; path = "src/GCWebConnect+Requests.m"; sourceTree = "<group>"; };
@@ -2973,6 +2975,7 @@
 			isa = PBXGroup;
 			children = (
 				428FF71515F36888007A88FA /* ConnectStats-Info.plist */,
+				4C5A1B2E2F00000200A1B2C3 /* PrivacyInfo.xcprivacy */,
 				42934F041979AD960031532D /* ConnectStats.entitlements */,
 				42560710169A112E008E9DC3 /* version.plist */,
 			);
@@ -4727,6 +4730,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C5A1B2E2F00000100A1B2C3 /* PrivacyInfo.xcprivacy in Resources */,
 				422CCE8D1B7EAB7200A4DAEB /* TabBar.xcassets in Resources */,
 				42FC98DB261C6A4D00ACF6E1 /* GCActivityTypeSelectionViewController.xib in Resources */,
 				42CBD0C625E4EE880024BD28 /* TM_WORLD_BORDERS-0.2.shp in Resources */,
