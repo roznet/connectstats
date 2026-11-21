@@ -60,6 +60,7 @@ NSString * GCWebConnectStatsWeather(gcWebConnectStatsConfig config);
 NSString * GCWebConnectStatsApiCheck(gcWebConnectStatsConfig config);
 NSString * GCWebConnectStatsRegisterUser( gcWebConnectStatsConfig config, NSString * accessToken, NSString * accessTokenSecret);
 NSString * GCWebConnectStatsRegisterUserOAuth2( gcWebConnectStatsConfig config );
+NSString * GCWebConnectStatsDisconnect( gcWebConnectStatsConfig config );
 NSString * GCWebConnectStatsRegisterNotification(gcWebConnectStatsConfig config);
 
 NSString * GCWebConnectStatsBugReport( gcWebConnectStatsConfig config );

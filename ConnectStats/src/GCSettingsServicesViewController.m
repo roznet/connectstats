@@ -946,7 +946,14 @@
         [alert addCancelAction];
         [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Logout",@"Service View") style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
             RZLog(RZLogInfo, @"Log out of %@", serviceName);
-            [reqCls signout];
+            if( reqCls == [GCConnectStatsRequest class] ){
+                // Garmin requires removing the consent when a user logs out
+                [GCConnectStatsRequest disconnectAndSignout:^(){
+                    [self.tableView reloadData];
+                }];
+            }else{
+                [reqCls signout];
+            }
         }]];
         [self presentViewController:alert animated:YES completion:nil];
 

@@ -51,6 +51,10 @@ typedef NS_ENUM(NSUInteger, gcWebConnectStatsMode) {
 -(BOOL)isSignedIn;
 -(void)signIn;
 +(void)signout;
+// Logout asked by the user: removes the consent at Garmin through the server, as Garmin requires,
+// then signs out. Signs out even if the server can't be reached. Completion on the main queue.
+// Not for a 401: that only needs +signout, the user didn't ask to disconnect.
++(void)disconnectAndSignout:(nullable void(^)(void))completion;
 // Save the result of a new OAuth 2.0 login, returns false if it could not be saved
 -(BOOL)completeOAuth2Login:(GCGarminOAuth2Credentials*)credentials;
 

@@ -149,6 +149,51 @@ static GCAppPasswordManager * serverTokenKeychain(NSUInteger tokenId){
     }
 }
 
++(void)disconnectAndSignout:(void(^)(void))completion{
+    GCConnectStatsRequest * req = RZReturnAutorelease([[GCConnectStatsRequest alloc] init]);
+    [req checkToken];
+
+    NSURLRequest * prepared = nil;
+    if( req.tokenId != 0 ){
+        if( req.serverToken == nil && req.oauthToken.length > 0 && req.oauthTokenSecret.length > 0 ){
+            [req buildOAuthController];
+        }
+        if( req.serverToken || req.oauth1Controller ){
+            prepared = [req preparedUrlRequest:GCWebConnectStatsDisconnect([GCAppGlobal webConnectsStatsConfig])
+                                        params:@{ @"token_id": @(req.tokenId) }];
+        }
+    }
+
+    void (^finish)(void) = ^(){
+        dispatch_async(dispatch_get_main_queue(), ^(){
+            [GCConnectStatsRequest signout];
+            if( completion ){
+                completion();
+            }
+        });
+    };
+
+    if( prepared == nil ){
+        RZLog(RZLogInfo, @"ConnectStats logout: no credentials to disconnect");
+        finish();
+        return;
+    }
+    NSMutableURLRequest * request = RZReturnAutorelease([prepared mutableCopy]);
+    // Don't hold the logout for long if the server is unreachable
+    request.timeoutInterval = 10.0;
+    NSUInteger tokenId = req.tokenId;
+    [[[req sharedSession] dataTaskWithRequest:request completionHandler:^(NSData * data, NSURLResponse * response, NSError * error){
+        NSInteger statusCode = [response isKindOfClass:[NSHTTPURLResponse class]] ? ((NSHTTPURLResponse*)response).statusCode : 0;
+        if( error || statusCode != 200 ){
+            RZLog(RZLogWarning, @"ConnectStats disconnect token_id=%@ failed http=%@ %@", @(tokenId), @(statusCode), error);
+        }else{
+            NSString * body = data ? RZReturnAutorelease([[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]) : @"";
+            RZLog(RZLogInfo, @"ConnectStats disconnect token_id=%@ %@", @(tokenId), body);
+        }
+        finish();
+    }] resume];
+}
+
 -(BOOL)checkNoErrors{
     if( self.delegate.lastStatusCode == 401){
         self.status = GCWebStatusLoginFailed;
