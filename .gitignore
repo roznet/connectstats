@@ -8,3 +8,9 @@ python
 ~$*
 t.json
 
+
+# release tooling (scripts/asc.py)
+.env
+venv/
+*.p8
+__pycache__/
