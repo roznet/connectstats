@@ -57,9 +57,8 @@ file either way.
 python3 scripts/bump_version.py
 ```
 
-Show: "Current version: X.Y (build N)". The local build number is not meaningful
-on its own (it sat at `1` while Xcode Cloud numbered the builds) — Step 3 takes
-the real one from App Store Connect.
+Show: "Current version: X.Y (build N)". Step 3 checks the build number against
+App Store Connect.
 
 ## Step 2 — Pre-flight checks
 
@@ -232,23 +231,25 @@ to know before spending ten minutes on an archive.
 
 ## Step 3 — Pick the build number and bump
 
-Build numbers must be higher than anything already uploaded for this app —
-including Xcode Cloud builds, which never touched the local project file. Ask
-App Store Connect:
+Compute the marketing version from the bump type first. Build numbers only have
+to be unique **within a marketing version**, and ConnectStats restarts them for
+each version (9.0 shipped as build 1; 8.0.2 as 1–3). Ask App Store Connect for
+the next free one for the new version:
 
 ```bash
-source venv/bin/activate && python3 scripts/asc.py latest-build
+source venv/bin/activate && python3 scripts/asc.py latest-build --version {X.Y}
 ```
 
-It prints recent uploads and `NEXT_BUILD=<max+1>`. Use
-**max(NEXT_BUILD, project build + 1)**, in case the project is ahead of App Store
-Connect (a build archived but never uploaded). If `asc.py` is unavailable (no
-venv or no `.env`, see "One-time setup"), ask the user for the last build number
-shown in App Store Connect → TestFlight. If they don't know, use project + 1 and
-warn that Xcode Cloud may already have used it. A duplicate is rejected at
+- **New marketing version** (patch/minor/major): normally `NEXT_BUILD=1`.
+- **Build-only bump**: the version's highest uploaded build + 1. If the project's
+  build is already higher (archived but never uploaded), use project + 1.
+
+If `asc.py` is unavailable (no venv or no `.env`, see "One-time setup"): use 1
+for a new version; for a build-only bump ask the user for the last build of that
+version shown in App Store Connect → TestFlight. A duplicate is rejected at
 upload, so the fix is to re-run with a higher number.
 
-Compute the marketing version from the bump type, then:
+Then:
 
 ```bash
 [ "$(git rev-parse HEAD)" = "$PINNED_SHA" ] || echo "HEAD MOVED since pre-flight — stop"
@@ -260,10 +261,11 @@ git commit -m "Bump version to {X.Y} (build {N}) for App Store release"
 Commit **before** archiving so the archive corresponds to a real commit. If HEAD
 moved, stop, show `git log --oneline $PINNED_SHA..HEAD`, and re-run the pre-flight.
 
-**Xcode Cloud note:** if an Xcode Cloud workflow also archives ConnectStats, its
-own build counter does not see local uploads. After a local upload, set Xcode
-Cloud's "next build number" above `{N}` (App Store Connect → Xcode Cloud →
-Settings → Build Number) or its next upload will be rejected as a duplicate.
+**Xcode Cloud:** an Xcode Cloud setup exists (`xcshareddata/xcodecloud/`), but
+up to 9.0 every App Store build was archived locally with the project's own
+build number (9.0 build 1, uploaded 2026-02-21). If an Xcode Cloud workflow ever
+starts uploading builds, its counter won't see local uploads, so set its "next
+build number" above `{N}`.
 
 ## Step 4 — Clean and archive
 
@@ -391,7 +393,7 @@ that `isGarminSimulatorAccount` accepts.
 - If staged: final `asc.py status`; remind them to press **Submit for Review**
 - If not staged: Xcode → Window → Organizer → Distribute App → App Store Connect,
   then paste the notes in by hand
-- Xcode Cloud build-number reminder if a workflow is active
+- Next step for the privacy label if the manifest changed
 
 ## One-time setup (asc.py)
 

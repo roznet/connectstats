@@ -510,21 +510,23 @@ class Asc:
                 return build
         return None
 
-    def recent_builds(self, limit: int = 10) -> list[tuple[str, str, str, str]]:
+    def recent_builds(
+        self, limit: int = 10, marketing_version: str | None = None
+    ) -> list[tuple[str, str, str, str]]:
         """Most recently uploaded builds as (marketing, build, state, uploaded).
 
         Covers every upload path — Xcode Cloud, Organizer, `asc.py upload` — so
         it is the source of truth for "what build number comes next".
         """
-        data = self.get(
-            "/builds",
-            **{
-                "filter[app]": self.app_id(),
-                "sort": "-uploadedDate",
-                "include": "preReleaseVersion",
-                "limit": limit,
-            },
-        )
+        params: dict[str, Any] = {
+            "filter[app]": self.app_id(),
+            "sort": "-uploadedDate",
+            "include": "preReleaseVersion",
+            "limit": limit,
+        }
+        if marketing_version:
+            params["filter[preReleaseVersion.version]"] = marketing_version
+        data = self.get("/builds", **params)
         included = {
             item["id"]: item
             for item in data.get("included", [])
@@ -1024,6 +1026,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     p = sub.add_parser("latest-build", help="list recent uploads and the next free build number")
     p.add_argument("--limit", type=int, default=10)
+    p.add_argument("--version", help="marketing version: only its builds, and NEXT_BUILD for it")
 
     p = sub.add_parser("ensure-version", help="get-or-create the editable version")
     p.add_argument("--version", required=True, help="marketing version, e.g. 1.5")
@@ -1109,18 +1112,24 @@ def main() -> None:
         return
 
     if args.command == "latest-build":
-        rows = asc.recent_builds(args.limit)
-        if not rows:
-            print("No builds uploaded yet. NEXT_BUILD=1")
-            return
-        print(f"{'version':<10}{'build':<10}{'state':<12}uploaded")
-        for marketing, build, state, uploaded in rows:
-            print(f"{marketing:<10}{build:<10}{state:<12}{uploaded}")
-        numeric = [int(b) for _, b, _, _ in rows if b.isdigit()]
-        if numeric:
-            print(f"\nNEXT_BUILD={max(numeric) + 1}")
+        # Build numbers only have to be unique within a marketing version
+        # (ConnectStats restarts at 1 for each version: 9.0 shipped as build 1).
+        # With --version, NEXT_BUILD is the next free number for that version.
+        rows = asc.recent_builds(200 if args.version else args.limit, args.version)
+        if rows:
+            print(f"{'version':<10}{'build':<10}{'state':<12}uploaded")
+            for marketing, build, state, uploaded in rows:
+                print(f"{marketing:<10}{build:<10}{state:<12}{uploaded}")
+        elif args.version:
+            print(f"No builds uploaded for {args.version} yet.")
         else:
+            print("No builds uploaded yet.")
+        if any(not b.isdigit() for _, b, _, _ in rows):
             print("\nBuild numbers are not plain integers — pick the next one by hand.")
+            return
+        top = max((int(b) for _, b, _, _ in rows), default=0)
+        scope = f" for {args.version}" if args.version else " (max over all versions; pass --version X.Y)"
+        print(f"\nNEXT_BUILD={top + 1}{scope}")
         return
 
     if args.command == "ensure-version":

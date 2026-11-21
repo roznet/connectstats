@@ -77,7 +77,7 @@ FitFileExplorer and all Swift are ARC.
 ## Releasing
 
 `/release-ios [build|patch|minor|major]` runs the pre-flight checks and tests, takes the
-build number from App Store Connect (Xcode Cloud has its own numbering), bumps the version,
+next build number for the new version from App Store Connect, bumps the version,
 archives, tags and stages the version on App Store Connect. It never submits for review;
 that stays a manual press in App Store Connect. Needs `venv/` (`scripts/requirements.txt`)
 and `.env` (`scripts/env.sample`).
