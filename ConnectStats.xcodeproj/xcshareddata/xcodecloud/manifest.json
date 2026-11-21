@@ -1,0 +1,13 @@
+{
+  "id" : "88590603-7d14-4b66-8781-abc0d250aa8f",
+  "targets" : [
+    {
+      "id" : "63091947-7623-4C59-BFF9-F01F395EDF91",
+      "name" : "ConnectStats"
+    },
+    {
+      "id" : "5E29DABA-A031-4463-9691-67C01C0AE21B",
+      "name" : "FitFileExplorer"
+    }
+  ]
+}

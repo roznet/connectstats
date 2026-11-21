@@ -14,3 +14,6 @@ t.json
 venv/
 *.p8
 __pycache__/
+
+# Claude Code worktrees
+.claude/worktrees/
