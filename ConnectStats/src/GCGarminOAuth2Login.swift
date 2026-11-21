@@ -42,7 +42,7 @@ struct GCConnectStatsAPIStatus : Decodable {
         case status
         case redirect
         case garminLogin = "garmin_login"
-        case oauth2ClientId = "oauth2_client_id"
+        case oauth2ClientId = "garmin_client_id"
     }
 
     init(from decoder: Decoder) throws {
@@ -122,7 +122,7 @@ struct GCConnectStatsAPIStatus : Decodable {
             return false
         }
         if GCGarminOAuth2Login.Configuration.current() == nil {
-            RZSLog.error("Garmin login setting is oauth2 but no oauth2_client_id available, using OAuth 1.0")
+            RZSLog.error("Garmin login setting is oauth2 but no client id available (garmin_client_id from the server or oauth2_client_id in credentials.json), using OAuth 1.0")
             return false
         }
         return true

@@ -328,7 +328,7 @@ class GCTestGarminOAuth2: XCTestCase {
         try XCTSkipIf(GCGarminOAuth2Login.Configuration.current() != nil, "credentials.json has an oauth2_client_id")
 
         GCTestMockServer.reset { _ in
-            (200, Data(#"{"status": 1, "garmin_login": "oauth2", "oauth2_client_id": "server-client-id"}"#.utf8), nil)
+            (200, Data(#"{"status": 1, "garmin_login": "oauth2", "garmin_client_id": "server-client-id"}"#.utf8), nil)
         }
         XCTAssertTrue(self.resolve())
 
@@ -342,7 +342,7 @@ class GCTestGarminOAuth2: XCTestCase {
         XCTAssertEqual(GCGarminLoginSetting.serverClientId, "server-client-id")
 
         // a client id alone doesn't turn it on
-        GCGarminLoginSetting.record(status: try self.status(#"{"status": 1, "oauth2_client_id": "server-client-id"}"#))
+        GCGarminLoginSetting.record(status: try self.status(#"{"status": 1, "garmin_client_id": "server-client-id"}"#))
         XCTAssertFalse(self.resolve())
 
         // a valid answer without one removes it
@@ -353,7 +353,7 @@ class GCTestGarminOAuth2: XCTestCase {
     }
 
     func testUnexpectedClientIdTypeIsIgnored() throws {
-        let decoded = try self.status(#"{"status": 1, "garmin_login": "oauth2", "oauth2_client_id": 12}"#)
+        let decoded = try self.status(#"{"status": 1, "garmin_login": "oauth2", "garmin_client_id": 12}"#)
         XCTAssertEqual(decoded.garminLogin, "oauth2")
         XCTAssertNil(decoded.oauth2ClientId)
     }
