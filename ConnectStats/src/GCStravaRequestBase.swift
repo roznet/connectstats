@@ -26,14 +26,25 @@
 
 
 import UIKit
+import SafariServices
 import OAuthSwift
 import RZUtilsSwift
 
-class GCStravaRequestBase: GCWebRequestStandard {
+class GCStravaRequestBase: GCWebRequestStandard, SFSafariViewControllerDelegate {
 
     let stravaAuth : OAuth2Swift
     let navigationController : UINavigationController
-    
+
+    /// Interactive (Safari) sign-in is only started when the user explicitly asked for it
+    /// from settings. Automatic syncs never pop up the Strava sign-in page, otherwise a user
+    /// whose credential was cleared gets the page (and a hung sync) on every launch.
+    @objc static var signInRequested : Bool = false
+
+    /// Ensures processDone is only called once for the interactive sign-in, whichever of the
+    /// OAuth completion or the Safari "Done" button comes first
+    private var signInFinished : Bool = false
+    private var customMessageText : String? = nil
+
     struct Credential {
         static let serviceName = "strava"
     }
@@ -74,6 +85,12 @@ class GCStravaRequestBase: GCWebRequestStandard {
     
     //MARK: - Credentials
     
+    /// Called from settings when the user turns Strava on or taps login
+    @objc static func requestSignIn() {
+        RZSLog.info("strava signin requested by user")
+        self.signInRequested = true
+    }
+
     @objc static func signout() {
         GCAppGlobal.profile().serviceSuccess(gcService.strava, set: false)
         self.clearCredential()
@@ -119,25 +136,71 @@ class GCStravaRequestBase: GCWebRequestStandard {
     override func process() {
         self.retrieveCredential()
         if GCAppGlobal.profile().serviceSuccess(gcService.strava) == false {
+            guard GCStravaRequestBase.signInRequested else {
+                RZSLog.info("strava not signed in, skipping (sign in from settings)")
+                self.customMessageText = NSLocalizedString("Not signed in. Go to Settings › Services › Strava to sign in.", comment: "Strava Request")
+                self.status = GCWebStatus.customMessage
+                DispatchQueue.main.async {
+                    self.processDone()
+                }
+                return
+            }
+            GCStravaRequestBase.signInRequested = false
+            self.signInFinished = false
+
             let urlscheme = GCAppGlobal.appURLScheme()
             RZSLog.info("strava signin start")
+            if let safariHandler = self.stravaAuth.authorizeURLHandler as? SafariURLHandler {
+                // so we get notified if the user closes the page with Done
+                safariHandler.delegate = self
+            }
             self.stravaAuth.authorize(withCallbackURL: "\(urlscheme)://ro-z.net/oauth/strava",
                                       scope: "activity:read_all,read_all",
                                       state: "prod" ) { result in
                 switch result {
                 case .success:
                     RZSLog.info("strava signin success")
+                    self.signInFinished = true
+                    self.clearSafariDelegate()
                     self.saveCredential()
                     self.makeRequest()
                 case .failure(let error):
                     RZSLog.error("strava signin failed to authorise \(error)")
-                    self.status = GCWebStatus.loginFailed
-                    self.processDone()
+                    self.signInFailed()
                 }
             }
         }else{
             self.makeRequest()
         }
+    }
+
+    private func clearSafariDelegate() {
+        if let safariHandler = self.stravaAuth.authorizeURLHandler as? SafariURLHandler {
+            safariHandler.delegate = nil
+        }
+    }
+
+    /// Called on the main thread (OAuth completion and Safari delegate both are)
+    private func signInFailed() {
+        guard !self.signInFinished else { return }
+        self.signInFinished = true
+        self.clearSafariDelegate()
+        self.status = GCWebStatus.loginFailed
+        self.processDone()
+    }
+
+    //MARK: - SFSafariViewControllerDelegate
+
+    func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
+        // "Done" pressed: OAuthSwift only clears its observers and never calls the
+        // authorize completion, so without this the request would hang forever
+        RZSLog.info("strava signin cancelled by user")
+        self.stravaAuth.cancel()
+        self.signInFailed()
+    }
+
+    @objc override func customMessage() -> String? {
+        return self.customMessageText
     }
     
     func makeRequest() {

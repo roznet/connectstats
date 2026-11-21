@@ -25,7 +25,6 @@
 
 #import "GCAppGlobal.h"
 #import "GCAppProfiles.h"
-@import Flurry_iOS_SDK;
 #import "GCService.h"
 #import "GCAppProfiles+Swift.h"
 
@@ -315,11 +314,6 @@ NSInteger kServiceNoAnchor = 0;
     return [_profiles valueForKey:PROFILE_NAME];
 }
 
--(void)publishEvent{
-    NSDictionary * params = @{@"Count": @(_profiles.count)};
-    [Flurry logEvent:EVENT_NEW_PROFILE withParameters:params];
-}
-
 -(void)addOrSelectProfile:(NSString*)pName{
     NSUInteger existing = [self profileIndexForName:pName];
     if (existing < _profiles.count) {
@@ -333,9 +327,6 @@ NSInteger kServiceNoAnchor = 0;
                                        [NSString stringWithFormat:@"activities_%@.db",pName],PROFILE_DBPATH,
                                        nil]];
         _currentProfile = _profiles.count-1;
-#ifdef GC_USE_FLURRY
-        [self publishEvent];
-#endif
 
     }
     [self notify];

@@ -25,7 +25,6 @@
 
 #import "GCSettingsHelpViewController.h"
 #import "GCViewIcons.h"
-@import Flurry_iOS_SDK;
 #import "GCAppGlobal.h"
 #import "GCViewConfig.h"
 
@@ -83,8 +82,6 @@
     
     [GCViewConfig setupViewController:self];
     self.webView.frame = self.view.frame;
-    [Flurry logEvent:EVENT_HELP];
-    
 }
 
 - (void)didReceiveMemoryWarning

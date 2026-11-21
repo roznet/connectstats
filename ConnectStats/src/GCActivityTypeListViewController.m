@@ -23,7 +23,6 @@
 //  SOFTWARE.
 //  
 
-@import Flurry_iOS_SDK;
 
 #import "GCActivityTypeListViewController.h"
 #import "GCAppGlobal.h"

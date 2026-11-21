@@ -26,7 +26,6 @@
 #import "GCAppGlobal.h"
 #import "GCAppDelegate.h"
 #import "GCAppDelegate+Swift.h"
-@import Flurry_iOS_SDK;
 #import "GCHealthViewController.h"
 #import "GCWebConnect+Requests.h"
 
@@ -165,9 +164,6 @@ NS_INLINE GCAppDelegate * _sharedApplicationDelegate(void){
 #pragma mark - Global Actions
 
 +(void)publishEvent:(NSString*)name{
-#ifdef GC_USE_FLURRY
-	[Flurry logEvent:name];
-#endif
 }
 
 +(NSInteger)recordEvent:(NSString*)name count:(int)count every:(int)aStep{
@@ -182,10 +178,6 @@ NS_INLINE GCAppDelegate * _sharedApplicationDelegate(void){
         next = count/aStep+aStep;
         rv = next;
         [self configSet:nextRecordKey intVal:next];
-#ifdef GC_USE_FLURRY
-        NSDictionary * params = @{@"Count": @(next)};
-        [Flurry logEvent:name withParameters:params];
-#endif
 
     }
 

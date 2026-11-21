@@ -25,7 +25,6 @@ A few component of ConnectStats have been made available as open source packages
 
 ### To build and run the app locally
 
-- run `pod install`
 - copy and edit with your own keys the file `credentials.sample.json` as `credentials.json`. Note that if you do not provide any keys you will only be able to use the Garmin Service from the web site and not Strava or ConnectStats server.
 - open `ConnectStats.xcworkspace`
 

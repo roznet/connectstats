@@ -23,7 +23,6 @@
 //  SOFTWARE.
 //  
 
-@import Flurry_iOS_SDK;
 
 #import "GCWeather.h"
 #import "GCAppGlobal.h"
@@ -577,9 +576,6 @@ NSString * windDirectionToCompassPoint(double bearing){
     }else{
         NSString * missing = [NSString stringWithFormat:@"%d(%@)", (int)self.weatherType, self.weatherTypeDesc];
         RZLog(RZLogInfo, @"Missing weather icon type %@", missing);
-#ifdef GC_USE_FLURRY
-        [Flurry logEvent:@"missingWeatherIcon" withParameters:@{GC_WEATHER_ICON:missing}];
-#endif
         
     }
     

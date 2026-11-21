@@ -25,7 +25,6 @@
 
 #import "GCTabBarController.h"
 #import "GCAppGlobal.h"
-@import Flurry_iOS_SDK;
 @import RZExternal;
 #import "GCViewIcons.h"
 #import "GCWebConnect+Requests.h"
@@ -295,7 +294,6 @@
         if ([[GCAppGlobal organizer] countOfActivities]) {
             [self.calendarViewController showAndSelectDate:[[GCAppGlobal organizer] currentActivity].date];
         }
-        [Flurry logEvent:EVENT_CALENDAR];
     }
 }
 

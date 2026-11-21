@@ -28,7 +28,6 @@
 #import "GCTrackPoint.h"
 #import "GCAppGlobal.h"
 #import "GCMapAnnotation.h"
-@import Flurry_iOS_SDK;
 #import "GCViewConfig.h"
 #import "GCActivity+CalculatedLaps.h"
 #import "GCFields.h"

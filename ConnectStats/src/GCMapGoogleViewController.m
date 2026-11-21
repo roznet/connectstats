@@ -54,7 +54,10 @@
     [super viewDidLoad];
     CLLocationCoordinate2D coord = [self.mapDataSource activity].beginCoordinate;
     GMSCameraPosition *camera = [GMSCameraPosition cameraWithTarget:coord zoom:6.];
-    self.mapView = [GMSMapView mapWithFrame:CGRectZero camera:camera];
+    GMSMapViewOptions * options = RZReturnAutorelease([[GMSMapViewOptions alloc] init]);
+    options.camera = camera;
+    options.frame = CGRectZero;
+    self.mapView = RZReturnAutorelease([[GMSMapView alloc] initWithOptions:options]);
     [self.view addSubview:self.mapView];
 	// Do any additional setup after loading the view.
 }

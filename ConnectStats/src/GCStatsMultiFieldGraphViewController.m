@@ -26,7 +26,6 @@
 #import "GCStatsMultiFieldGraphViewController.h"
 #import "GCSimpleGraphCachedDataSource+Templates.h"
 #import "GCViewConfig.h"
-@import Flurry_iOS_SDK;
 #import "GCAppConstants.h"
 #import "GCViewIcons.h"
 #import "GCHistoryFieldDataSerie.h"
@@ -69,15 +68,6 @@
     [super dealloc];
 }
 
--(void)publishEvent{
-    GCField * x  = self.historyFieldConfig.x_activityField;
-    GCField * f  = self.historyFieldConfig.activityField;
-
-    NSDictionary * params= @{@"XField": x ?: @"None",
-                            @"Field": f ?: @"None"};
-    [Flurry logEvent:EVENT_GRAPH_HISTORY withParameters:params];
-}
-
 -(GCHistoryFieldDataSerieConfig *)historyFieldConfig{
     return self.scatterStats.config;
 }
@@ -102,9 +92,6 @@
     self.x_field = nextKey;
     if (self.x_field ) {
         [self configureGraph];
-#ifdef GC_USE_FLURRY
-        [self publishEvent];
-#endif
     }
 }
 

@@ -26,7 +26,6 @@
 #import "GCAppGlobal.h"
 #import "GCAppDelegate.h"
 #import "GCWebConnect.h"
-@import Flurry_iOS_SDK;
 #import "GCActivitiesCacheManagement.h"
 #include <execinfo.h>
 @import RZExternal;
@@ -134,14 +133,6 @@ void checkVersion(void){
     if( launchOptions.count > 0){
         RZLog(RZLogInfo,@"launchOptions: %@", launchOptions);
     }
-    [self credentialsForService:@"flurry" andKey:@"connectstats"];
-#if !TARGET_IPHONE_SIMULATOR
-	NSString *applicationCode = [GCAppDelegate connectStatsVersion] ? [self credentialsForService:@"flurry" andKey:@"connectstats"] : [self credentialsForService:@"flurry" andKey:@"healthstats"];
-    if ([GCAppDelegate healthStatsVersion]) {
-        applicationCode =  [self credentialsForService:@"flurry" andKey:@"healthstats"];
-    }
-    [Flurry startSession:applicationCode];
-#endif
     [self handleAppRating];
     [GCMapGoogleViewController provideAPIKey:[self credentialsForService:@"googlemaps" andKey:@"api_key"]];
 
@@ -417,12 +408,6 @@ void checkVersion(void){
     self.worker = queue;
     dispatch_release(queue);
 
-}
-
-+(void)publishEvent:(NSString*)name{
-#ifdef GC_USE_FLURRY
-	[Flurry logEvent:name];
-#endif
 }
 
 #pragma mark - Location Manager

@@ -26,20 +26,28 @@
 
 
 import Foundation
-import Armchair
+import UIKit
+import StoreKit
 import RZUtilsSwift
 
 extension GCAppDelegate {
+    private static let reviewPrompt = GCAppReviewPrompt(daysUntilPrompt: 20, usesUntilPrompt: 10)
+
     @objc func initiateAppRating() {
-        Armchair.appID(self.credentials(forService: "appstore", andKey: "connectstats"))
-        Armchair.tracksNewVersions(false)
-        Armchair.shouldPromptIfRated(false)
-        Armchair.daysUntilPrompt(20)
-        Armchair.usesUntilPrompt(10)
+        GCAppDelegate.reviewPrompt.recordUse()
     }
-    
+
     @objc func startSuccessfulSwift() {
-        Armchair.showPromptIfNecessary()
+        Task { @MainActor in
+            let prompt = GCAppDelegate.reviewPrompt
+            guard prompt.shouldPrompt() else { return }
+            let scene = UIApplication.shared.connectedScenes
+                .first { $0.activationState == .foregroundActive } as? UIWindowScene
+            if let scene = scene {
+                AppStore.requestReview(in: scene)
+                prompt.markPrompted()
+            }
+        }
     }
-    
+
 }

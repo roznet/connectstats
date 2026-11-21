@@ -25,7 +25,6 @@
 
 #import "GCActivityTrackGraphViewController.h"
 #import "GCViewConfig.h"
-@import Flurry_iOS_SDK;
 #import "GCAppGlobal.h"
 #import "GCViewIcons.h"
 #import "GCTrackFieldChoices.h"
@@ -170,9 +169,6 @@
     NSLog(@"%@", NSStringFromCGRect(self.view.frame));
     NSLog(@"%@", NSStringFromCGRect(self.graphView.frame));
  */
-}
-
--(void)publishEvent{
 }
 
 -(void)setupDataSource{
