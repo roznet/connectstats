@@ -36,12 +36,13 @@ If not specified, ask:
 
 ## Where to run it
 
-Run from the **main checkout** (`~/Developer/public/connectstats`), not a worktree.
-`ConnectStats/credentials.json` and `ConnectStats.xcodeproj/.../Package.resolved`
-are only in the main checkout: in a fresh worktree the build phase "Check
-Credentials" silently copies `credentials.sample.json` in (the binary ships `***`
-keys) and SPM resolves whatever package versions are newest. If you must use a
-worktree, copy `credentials.json` over first and let the 2a check confirm it.
+Prefer the **main checkout** (`~/Developer/public/connectstats`) on `master`.
+`ConnectStats/credentials.json` and `.env` are gitignored. Without
+`credentials.json` the build phase "Check Credentials" silently copies
+`credentials.sample.json` in and the binary ships `***` keys. `.worktreeinclude`
+makes Claude Code copy both into the worktrees it creates. For a manual
+`git worktree add`, copy them yourself. Check 2a catches a missing or sample
+file either way.
 
 ## Step 1 — Read current version
 
@@ -94,9 +95,16 @@ never changed it must be production:
 grep -n 'CONFIG_CONNECTSTATS_CONFIG defaultValue' ConnectStats/src/GCAppGlobal.m
 ```
 
-Must read `defaultValue:gcWebConnectStatsConfigProductionConnectStatsApp`. Also
-check `GCWebUseSimulator` is only enabled from test / debug code paths:
-`grep -rn 'GCWebUseSimulator(' ConnectStats/src | grep -v 'void GCWebUseSimulator'`.
+Must read `defaultValue:gcWebConnectStatsConfigProductionConnectStatsApp`. Also:
+
+- `GCConnectStatsStatus.m`: the active `statusURL` must be
+  `https://connectstats.app/prod/api/status/app`. A `localhost.ro-z.me` line may
+  exist only commented out:
+  `grep -n 'statusURL = ' ConnectStats/src/GCConnectStatsStatus.m`.
+- `GCWebUrl.m`: in `GCWebUseSimulator`, the `https://localhost` default must stay
+  inside `#if TARGET_IPHONE_SIMULATOR`, with `connectstats.app` in the `#else`.
+- `GCWebUseSimulator` is only switched on from test / debug code paths:
+  `grep -rn 'GCWebUseSimulator(' ConnectStats/src | grep -v 'void GCWebUseSimulator'`.
 
 ### 2c — Info.plist and privacy manifest
 
@@ -104,7 +112,8 @@ check `GCWebUseSimulator` is only enabled from test / debug code paths:
 `ITSAppUsesNonExemptEncryption = false`, and a usage string for each permission
 the app asks for — `NSLocationWhenInUseUsageDescription`,
 `NSHealthShareUsageDescription`, `NSHealthUpdateUsageDescription`,
-`NSPhotoLibraryUsageDescription`.
+`NSPhotoLibraryUsageDescription`. Without the encryption key, every build
+stops at "Missing Compliance" in App Store Connect and `asc.py` cannot attach it.
 
 ```bash
 plutil -p ConnectStats/ConnectStats-Info.plist | grep -E 'ITSApp|Usage'
@@ -145,6 +154,7 @@ update the label in App Store Connect → App Privacy before submitting.
 ```bash
 grep -n '/Users/\|XCLocalSwiftPackageReference' ConnectStats.xcodeproj/project.pbxproj || echo "no local package overrides"
 git ls-files --error-unmatch ConnectStats.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
+test -e Podfile && echo "Podfile present — CocoaPods is back, stop"
 ```
 
 Local package paths (a sibling `rzutils` checkout, say) must be reverted to the
@@ -174,16 +184,34 @@ UI test suite): 109 tests, ~1 min incremental on the MacBook (2026-11-21); a
 cold build is several minutes, so run it with `run_in_background: true`:
 
 ```bash
+R="$CLAUDE_JOB_DIR/tmp/release-tests.xcresult"; rm -rf "$R"
 xcodebuild test -project ConnectStats.xcodeproj -scheme ConnectStats \
   -destination 'platform=iOS Simulator,name=iPhone 17' \
-  -resultBundlePath "$CLAUDE_JOB_DIR/tmp/release-tests.xcresult" \
+  -resultBundlePath "$R" \
   > "$CLAUDE_JOB_DIR/tmp/release-tests.log" 2>&1; echo rc=$?
-grep -E 'Executed|TEST (SUCCEEDED|FAILED)|error:|failed \(' "$CLAUDE_JOB_DIR/tmp/release-tests.log" | tail -25
+grep -E 'error:|failed \(' "$CLAUDE_JOB_DIR/tmp/release-tests.log" | tail -25
+xcrun xcresulttool get test-results summary --path "$R"
 ```
+
+Read `totalTestCount` / `failedTests` from the summary rather than trusting
+`** TEST SUCCEEDED **`: a run that executes zero tests also "succeeds". Expect
+about 109. Run the tests **signed**, without `CODE_SIGNING_ALLOWED=NO`: the
+profile tests use the keychain and fail with `OSStatus -34018` in an unsigned
+build.
 
 (Pick another device from `xcrun simctl list devices available` if that name is
 gone; use a job/scratch dir if `$CLAUDE_JOB_DIR` is unset.) On failure, stop and
 show the failing tests. Retry once on a simulator-boot flake before calling it real.
+
+### 2h — App Store Connect state (if `asc.py` is set up)
+
+```bash
+source venv/bin/activate && python3 scripts/asc.py status
+```
+
+Warn now if a version is already `WAITING_FOR_REVIEW` / `IN_REVIEW`: Step 8
+will refuse to touch it, and cancelling a submission is the user's call. Better
+to know before spending ten minutes on an archive.
 
 ## Step 3 — Pick the build number and bump
 
@@ -195,9 +223,13 @@ App Store Connect:
 source venv/bin/activate && python3 scripts/asc.py latest-build
 ```
 
-It prints recent uploads and `NEXT_BUILD=<max+1>`. If `asc.py` is unavailable
-(no venv or no `.env`, see "One-time setup"), ask the user for the last build
-number shown in App Store Connect → TestFlight.
+It prints recent uploads and `NEXT_BUILD=<max+1>`. Use
+**max(NEXT_BUILD, project build + 1)**, in case the project is ahead of App Store
+Connect (a build archived but never uploaded). If `asc.py` is unavailable (no
+venv or no `.env`, see "One-time setup"), ask the user for the last build number
+shown in App Store Connect → TestFlight. If they don't know, use project + 1 and
+warn that Xcode Cloud may already have used it. A duplicate is rejected at
+upload, so the fix is to re-run with a higher number.
 
 Compute the marketing version from the bump type, then:
 
