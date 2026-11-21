@@ -34,6 +34,13 @@ increments the third component; minor increments the second and drops the third.
 If not specified, ask:
 > Current version: X.Y (build N). Bump type? [build / patch / minor / major]
 
+**`rehearsal`** (or "dry run"): run Steps 1, 2, 4 and 5 for real, but skip the
+bump commit and archive to `$CLAUDE_JOB_DIR/tmp/ConnectStats-rehearsal.xcarchive`
+instead of `~/Library/Developer/Xcode/Archives/`, so it never shows in
+Organizer. Draft the Step 6 notes without saving them. Nothing is committed,
+tagged, pushed or uploaded; run `asc.py` read-only (`status`, `latest-build`)
+if it is set up. Use it a few days before a release to surface problems early.
+
 ## Where to run it
 
 Prefer the **main checkout** (`~/Developer/public/connectstats`) on `master`.
@@ -103,8 +110,17 @@ Must read `defaultValue:gcWebConnectStatsConfigProductionConnectStatsApp`. Also:
   `grep -n 'statusURL = ' ConnectStats/src/GCConnectStatsStatus.m`.
 - `GCWebUrl.m`: in `GCWebUseSimulator`, the `https://localhost` default must stay
   inside `#if TARGET_IPHONE_SIMULATOR`, with `connectstats.app` in the `#else`.
-- `GCWebUseSimulator` is only switched on from test / debug code paths:
-  `grep -rn 'GCWebUseSimulator(' ConnectStats/src | grep -v 'void GCWebUseSimulator'`.
+- `GCWebUseSimulator(true, …)` is switched on in a release build, deliberately.
+  It is the **App Review demo login** in `GCWebConnect+Requests.m`
+  (`isGarminSimulatorAccount`: a username starting `simulator`/`testaccount`
+  with one of the hard-coded tester passwords). What must hold: the calls stay
+  behind `isGarminSimulatorAccount`, and `+[GCAppGlobal simulatorUrl]` returns
+  `nil`, so a device falls back to `https://connectstats.app`:
+  ```bash
+  grep -rn 'GCWebUseSimulator(true' ConnectStats/src
+  grep -n -A2 '+(NSString\*)simulatorUrl' ConnectStats/src/GCAppGlobal.m   # must be: return nil;
+  ```
+  A localhost URL in `simulatorUrl` would send App Review to your Mac. Block.
 
 ### 2c — Info.plist and privacy manifest
 
@@ -180,8 +196,9 @@ git diff {last_tag}..HEAD -- ConnectStats/src | grep -E '^\+.*(print\(|NSLog\(|T
 ### 2g — Unit tests (blocking)
 
 The `ConnectStats` scheme's test action runs `ConnectStatsXCTests` (there is no
-UI test suite): 109 tests, ~1 min incremental on the MacBook (2026-11-21); a
-cold build is several minutes, so run it with `run_in_background: true`:
+UI test suite): 109 tests, ~55 s on the MacBook with warm DerivedData
+(2026-11-21); a cold build takes several minutes, so run it with
+`run_in_background: true`:
 
 ```bash
 R="$CLAUDE_JOB_DIR/tmp/release-tests.xcresult"; rm -rf "$R"
@@ -250,8 +267,12 @@ Settings → Build Number) or its next upload will be rejected as a duplicate.
 
 ## Step 4 — Clean and archive
 
+Don't run this while a test run is still building: both use the same
+DerivedData and fight over its build database.
+
 ```bash
-xcodebuild clean -project ConnectStats.xcodeproj -scheme ConnectStats -configuration Release
+LOG="$CLAUDE_JOB_DIR/tmp/archive.log"
+xcodebuild clean -project ConnectStats.xcodeproj -scheme ConnectStats -configuration Release > /dev/null
 
 ARCHIVE_PATH=~/Library/Developer/Xcode/Archives/$(date +%Y-%m-%d)/"ConnectStats $(date +%d-%m-%Y,\ %H.%M).xcarchive"
 xcodebuild archive \
@@ -261,13 +282,17 @@ xcodebuild archive \
   -destination "generic/platform=iOS" \
   -archivePath "$ARCHIVE_PATH" \
   -allowProvisioningUpdates \
-  | tail -20
+  > "$LOG" 2>&1; echo rc=$?
+tail -3 "$LOG"; grep -E 'error:' "$LOG" | sort -u | head -20
 echo "$ARCHIVE_PATH"
 ```
 
-Signing is automatic (team `M7QSSF3624`); `-allowProvisioningUpdates` lets Xcode
-fetch profiles on a new Mac. The path under `Archives/` makes it show up in
-Organizer. Timeout 600000 ms.
+Keep the full log in a file: `| tail -20` loses the first error when a build
+fails. Signing is automatic (team `M7QSSF3624`); `-allowProvisioningUpdates`
+lets Xcode fetch profiles on a new Mac. The path under `Archives/` makes it show
+up in Organizer. With a warm compilation cache this takes under a minute even
+after `clean` (37 s, 2026-11-21); a cold one takes several. Timeout 600000 ms,
+run in the background.
 
 ## Step 5 — Verify the archive
 
@@ -282,6 +307,20 @@ git status --porcelain -- ConnectStats ConnectStats.xcodeproj
 Version, build and `net.ro-z.connectstats` must match Step 3; the tree must be
 clean and HEAD's parent the pinned commit. Otherwise delete the archive and
 start over from the pre-flight — the binary may mix sources from two commits.
+
+Then check what actually went into the app (blocking):
+
+```bash
+APP="$ARCHIVE_PATH/Products/Applications/ConnectStats.app"
+cmp -s "$APP/credentials.json" ConnectStats/credentials.json && echo "credentials: real" || echo "credentials: NOT the real file — stop"
+ls "$APP/PrivacyInfo.xcprivacy" && ls "$ARCHIVE_PATH/dSYMs/ConnectStats.app.dSYM" > /dev/null && echo "privacy manifest + dSYM present"
+codesign -dv "$APP" 2>&1 | grep -E 'Identifier=|TeamIdentifier'
+```
+
+The credentials comparison is the real proof for 2a: it checks the file the
+binary will ship, not just the one in the checkout. The signing identity in the
+archive is **Apple Development**, which is expected. The upload in Step 8
+re-signs it for distribution with the App Store Connect key.
 
 ## Step 6 — Release notes
 
@@ -337,7 +376,10 @@ Offer `--dry-run` first. Behaviour (all normal):
 - **Refuses** a version already `WAITING_FOR_REVIEW` / `IN_REVIEW`; cancelling is the user's call.
 
 Leave App Review notes alone unless the user asks (`--review-notes "…"`): the
-reviewer demo-account text is maintained in App Store Connect.
+reviewer demo-account text is maintained in App Store Connect. That demo account
+is the simulator login checked in 2b. If the reviewer can't sign in, check that
+the notes still give a username starting `simulator`/`testaccount` and a password
+that `isGarminSimulatorAccount` accepts.
 
 ## Step 9 — Report
 
