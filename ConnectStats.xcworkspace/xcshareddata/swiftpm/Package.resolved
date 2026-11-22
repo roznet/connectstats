@@ -16,7 +16,7 @@
       "location" : "https://github.com/InderKumarRathore/DeviceGuru",
       "state" : {
         "branch" : "master",
-        "revision" : "186f69781f3da5f3b50b23c595368ea018bd41a0"
+        "revision" : "0e551a59320f932888513458848021ccc8401881"
       }
     },
     {
@@ -33,8 +33,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/nvzqz/FileKit.git",
       "state" : {
-        "revision" : "826d9161b184509f80d85c28cd612d630646de98",
-        "version" : "6.0.0"
+        "revision" : "9006d2888025fbe893c3c396327b2fe45a8c177b",
+        "version" : "6.1.0"
       }
     },
     {
@@ -51,8 +51,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ccgus/fmdb",
       "state" : {
-        "revision" : "61e51fde7f7aab6554f30ab061cc588b28a97d04",
-        "version" : "2.7.7"
+        "revision" : "1227a3fa2b9916bfd75fe380eb45cd210e69e251",
+        "version" : "2.7.12"
       }
     },
     {
@@ -69,8 +69,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/googlemaps/ios-maps-sdk",
       "state" : {
-        "revision" : "962122bc8bf6dc65998ec9831b1aa316e1bf6eca",
-        "version" : "11.3.0"
+        "revision" : "0a12af046bb5c5dec6b600e23f251d2e610596b1",
+        "version" : "11.4.0"
       }
     },
     {
@@ -78,8 +78,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/tid-kijyun/Kanna.git",
       "state" : {
-        "revision" : "f9e4922223dd0d3dfbf02ca70812cf5531fc0593",
-        "version" : "5.2.7"
+        "revision" : "41c3d28ea0eac07e4551b28def9de1ede702e739",
+        "version" : "5.3.0"
       }
     },
     {
@@ -123,8 +123,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/roznet/rzutils.git",
       "state" : {
-        "revision" : "178a6b77a9c2d895d76ac7bed34bdc9719d5d8a0",
-        "version" : "1.0.27"
+        "revision" : "e2c66339b9dfdf88ba11be04561ea659f8afddcc",
+        "version" : "1.0.31"
       }
     },
     {
@@ -141,8 +141,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/roznet/rzutils-touch.git",
       "state" : {
-        "revision" : "a6951a86b5e8aa9d779b1d4605d444f066e84739",
-        "version" : "1.0.6"
+        "revision" : "abca256f68fc385b70d8c96ae4c95feb745499fc",
+        "version" : "1.0.8"
       }
     },
     {
@@ -159,8 +159,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/weichsel/ZIPFoundation.git",
       "state" : {
-        "revision" : "43ec568034b3731101dbf7670765d671c30f54f3",
-        "version" : "0.9.16"
+        "revision" : "e7048f0569f0ba37df26f8357f560b9d25e9a284",
+        "version" : "0.9.21"
       }
     }
   ],

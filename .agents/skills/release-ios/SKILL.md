@@ -169,8 +169,17 @@ update the label in App Store Connect → App Privacy before submitting.
 ```bash
 grep -n '/Users/\|XCLocalSwiftPackageReference' ConnectStats.xcodeproj/project.pbxproj || echo "no local package overrides"
 git ls-files --error-unmatch ConnectStats.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
+cmp ConnectStats.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved \
+    ConnectStats.xcworkspace/xcshareddata/swiftpm/Package.resolved && echo "pins identical"
 test -e Podfile && echo "Podfile present — CocoaPods is back, stop"
 ```
+
+There are **two** tracked `Package.resolved` files: the project's (used by
+`-project`, i.e. this skill's tests and archive) and the workspace's (used by
+`-workspace`, CI's `main.yml` and opening the `.xcworkspace` in Xcode). They
+must be identical. On 2026-11-22 the workspace copy still pinned ZIPFoundation
+0.9.16 and 7 other old versions, so workspace builds failed to compile. If they
+differ, copy the project's file over the workspace's and commit it.
 
 Local package paths (a sibling `rzutils` checkout, say) must be reverted to the
 remote SPM reference. `Package.resolved` must be committed so the archive (and
