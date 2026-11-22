@@ -90,6 +90,7 @@ import hashlib
 import json
 import os
 import plistlib
+import re
 import subprocess
 import sys
 import tempfile
@@ -440,13 +441,20 @@ class Asc:
     # --- What's New ---
 
     def set_notes(
-        self, version_id: str, text: str, locales: list[str] | None = None
+        self,
+        version_id: str,
+        text: str,
+        locales: list[str] | None = None,
+        overrides: dict[str, str] | None = None,
     ) -> list[str]:
         """Overwrite `whatsNew` on the version's localizations.
 
         Localizations are created by Apple for each locale the app already
         supports, so this patches what is there rather than creating rows.
+        `overrides` maps a locale (e.g. `fr-FR`) to its own text; every other
+        locale gets `text`.
         """
+        overrides = overrides or {}
         data = self.get(f"/appStoreVersions/{version_id}/appStoreVersionLocalizations")
         rows = data.get("data", [])
         if not rows:
@@ -464,11 +472,15 @@ class Asc:
                     "data": {
                         "id": row["id"],
                         "type": "appStoreVersionLocalizations",
-                        "attributes": {"whatsNew": text},
+                        "attributes": {"whatsNew": overrides.get(locale, text)},
                     }
                 },
             )
-            updated.append(locale)
+            updated.append(f"{locale} (own file)" if locale in overrides else locale)
+        unused = sorted(set(overrides) - {r["attributes"].get("locale") for r in rows})
+        if unused:
+            print(f"warning: no {', '.join(unused)} localization on this version — "
+                  "those notes files were not used.")
         if not updated:
             _fail(
                 f"no localization matched {locales}. Available: "
@@ -953,6 +965,38 @@ def load_notes(args: argparse.Namespace) -> str:
     return path.read_text().strip()
 
 
+_LOCALE_RE = re.compile(r"^[a-z]{2,3}(-[A-Za-z0-9]+)*$")
+
+
+def load_locale_notes(args: argparse.Namespace) -> dict[str, str]:
+    """Per-locale What's New files next to --notes-file.
+
+    For `release-notes/ios-10.0.txt`, `release-notes/ios-10.0.fr-FR.txt` holds
+    the fr-FR text. Locales without their own file get the main file's text,
+    so without these the French store page shows the English notes.
+    """
+    if getattr(args, "text", None) or args.notes_file == "-":
+        return {}
+    path = Path(args.notes_file)
+    if path.suffix != ".txt":
+        return {}
+    found: dict[str, str] = {}
+    for sibling in sorted(path.parent.glob(f"{path.stem}.*.txt")):
+        locale = sibling.name[len(path.stem) + 1 : -len(".txt")]
+        if _LOCALE_RE.match(locale):
+            found[locale] = sibling.read_text().strip()
+    return found
+
+
+def report_notes(written: list[str]) -> None:
+    print(f"What's New written to: {', '.join(written)}")
+    defaulted = [loc for loc in written
+                 if not loc.endswith("(own file)") and not loc.startswith("en")]
+    if defaulted:
+        print(f"note: {', '.join(defaulted)} got the main (English) text — add "
+              "release-notes/ios-<version>.<locale>.txt to localise it.")
+
+
 # --- Reporting ---------------------------------------------------------------
 
 
@@ -1141,8 +1185,9 @@ def main() -> None:
         editable = asc.editable_version()
         if editable is None:
             _fail("no editable version — run `ensure-version` first.")
-        locales = asc.set_notes(editable["id"], load_notes(args), args.locale)
-        print(f"What's New written to: {', '.join(locales)}")
+        written = asc.set_notes(editable["id"], load_notes(args), args.locale,
+                                load_locale_notes(args))
+        report_notes(written)
         return
 
     if args.command == "upload":
@@ -1191,14 +1236,22 @@ def main() -> None:
                        if args.screenshots else None)
         version = asc.ensure_version(args.version, args.release_type)
         version_id = version.get("id")
-
         notes = load_notes(args)
-        locales = asc.set_notes(version_id, notes, args.locale)
-        print(f"What's New written to: {', '.join(locales)}")
+        locale_notes = load_locale_notes(args)
 
-        if args.review_notes:
-            asc.set_review_notes(version_id, args.review_notes)
-            print("App Review notes updated.")
+        if version_id is None and asc.dry_run:
+            # A dry run doesn't create the version, so there is no id to read
+            # its localizations from. Show what would be written instead.
+            print("[dry-run] version not created, so skipping What's New / review "
+                  "notes / screenshots. Would write the main text"
+                  + (f" plus own files for {', '.join(locale_notes)}" if locale_notes else "")
+                  + ":")
+            print(notes)
+        else:
+            report_notes(asc.set_notes(version_id, notes, args.locale, locale_notes))
+            if args.review_notes:
+                asc.set_review_notes(version_id, args.review_notes)
+                print("App Review notes updated.")
 
         if args.archive:
             upload_archive(config, Path(args.archive).expanduser(), asc.dry_run)
@@ -1212,7 +1265,7 @@ def main() -> None:
             print(f"Attached build {args.version} ({args.build}).")
 
         # Last, so a screenshot upload failure never costs the build its upload.
-        if local_shots is not None:
+        if local_shots is not None and version_id is not None:
             sync_screenshots(asc, version_id, local_shots, args.locale)
         if asc.dry_run:
             return

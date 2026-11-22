@@ -344,6 +344,19 @@ a line for privacy). Show the notes and **wait for approval**, then save them
 verbatim to `release-notes/ios-{X.Y}.txt` (plain text, `- ` bullets) and commit:
 `Release notes for iOS {X.Y}`.
 
+**The App Store listing also has a French (`fr-FR`) localization.** Every
+locale without its own file gets the main English text (10.0 shipped that way).
+Ask alongside the approval:
+
+> The French store page will show these English notes. Want a French version?
+
+If yes, draft the translation, get it approved too, and save it as
+`release-notes/ios-{X.Y}.fr-FR.txt`, committed with the English file. `asc.py`
+picks up any `ios-{X.Y}.<locale>.txt` next to the main file by itself, and its
+output names every locale that still got the English text. Do this before Step
+8: once the user has pressed Submit, What's New can't be edited without
+cancelling the submission.
+
 ## Step 7 — Tag (ask before pushing)
 
 Confirm HEAD is still bump commit + notes commit (`git log --oneline -3`).
@@ -368,7 +381,9 @@ python3 scripts/asc.py stage \
   --notes-file release-notes/ios-{X.Y}.txt
 ```
 
-Offer `--dry-run` first. Behaviour (all normal):
+Offer `--dry-run` first. For a brand-new version (the usual case) the dry run
+can't create the version, so it skips What's New / review notes and just prints
+the text it would write. That's expected, not a failure. Behaviour (all normal):
 
 - **No submit, by design.** The user presses Submit for Review in the web UI.
 - **Re-runnable.** Reuses / renames the editable version, overwrites What's New.
