@@ -1,5 +1,4 @@
 - Garmin: support for Garmin's new sign-in (OAuth 2.0)
-- Garmin: logging out now also disconnects ConnectStats from your Garmin account
 - Strava: fixed sync hanging after signing in
 - Strava: a failed sync is no longer recorded as a complete history download
 - Activities imported from both Garmin and Strava are now matched as duplicates reliably, whatever order they arrive in
