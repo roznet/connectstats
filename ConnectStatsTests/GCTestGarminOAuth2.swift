@@ -89,7 +89,7 @@ class GCTestGarminOAuth2: XCTestCase {
 
     let configuration = GCGarminOAuth2Login.Configuration(clientId: "client id",
                                                           authorizeUrl: URL(string: "https://example.test/oauth2Confirm")!,
-                                                          redirectUri: "connectstats://ro-z.net/oauth/garmin",
+                                                          redirectUri: "connectstats-oauth://oauth-callback/garmin",
                                                           registerUrl: URL(string: "https://example.test/prod/api/connectstats/user_register_oauth2")!)
 
     private var savedConfig : [String:Any] = [:]
@@ -184,22 +184,22 @@ class GCTestGarminOAuth2: XCTestCase {
             "client_id" : "client id",
             "code_challenge" : pkce.challenge,
             "code_challenge_method" : "S256",
-            "redirect_uri" : "connectstats://ro-z.net/oauth/garmin",
+            "redirect_uri" : "connectstats-oauth://oauth-callback/garmin",
             "state" : "a-state",
         ])
         XCTAssertFalse(url.absoluteString.contains(pkce.verifier), "verifier must not be sent to Garmin")
     }
 
     func testRedirectChecksState() throws {
-        let good = URL(string: "connectstats://ro-z.net/oauth/garmin?code=a-code&state=expected")!
+        let good = URL(string: "connectstats-oauth://oauth-callback/garmin?code=a-code&state=expected")!
         XCTAssertEqual(try GCGarminOAuth2Login.authorizationCode(callback: good, expectedState: "expected"), "a-code")
 
         let badUrls = [
-            "connectstats://ro-z.net/oauth/garmin?code=a-code&state=other",
-            "connectstats://ro-z.net/oauth/garmin?code=a-code",
-            "connectstats://ro-z.net/oauth/garmin?state=expected",
-            "connectstats://ro-z.net/oauth/garmin?state=expected&code=",
-            "connectstats://ro-z.net/oauth/garmin?error=access_denied&state=expected",
+            "connectstats-oauth://oauth-callback/garmin?code=a-code&state=other",
+            "connectstats-oauth://oauth-callback/garmin?code=a-code",
+            "connectstats-oauth://oauth-callback/garmin?state=expected",
+            "connectstats-oauth://oauth-callback/garmin?state=expected&code=",
+            "connectstats-oauth://oauth-callback/garmin?error=access_denied&state=expected",
         ]
         for one in badUrls {
             XCTAssertThrowsError(try GCGarminOAuth2Login.authorizationCode(callback: URL(string: one)!, expectedState: "expected"), one)
@@ -218,7 +218,7 @@ class GCTestGarminOAuth2: XCTestCase {
         XCTAssertEqual(self.formFields(body), [
             "code" : "a code&more",
             "code_verifier" : "a+verifier/value",
-            "redirect_uri" : "connectstats://ro-z.net/oauth/garmin",
+            "redirect_uri" : "connectstats-oauth://oauth-callback/garmin",
         ])
     }
 
@@ -375,7 +375,7 @@ class GCTestGarminOAuth2: XCTestCase {
     private func redirect(for url : URL, code : String = "a-code") -> URL {
         let items = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems ?? []
         let state = items.first { $0.name == "state" }?.value ?? ""
-        return URL(string: "connectstats://ro-z.net/oauth/garmin?code=\(code)&state=\(state)")!
+        return URL(string: "connectstats-oauth://oauth-callback/garmin?code=\(code)&state=\(state)")!
     }
 
     func testFlowSuccessMatchesVerifierAndChallenge() throws {
@@ -410,7 +410,7 @@ class GCTestGarminOAuth2: XCTestCase {
         GCTestMockServer.reset { _ in (200, nil, nil) }
 
         let (_, wrongState) = self.runFlow { _, completion in
-            completion(URL(string: "connectstats://ro-z.net/oauth/garmin?code=a-code&state=forged")!, nil)
+            completion(URL(string: "connectstats-oauth://oauth-callback/garmin?code=a-code&state=forged")!, nil)
             return true
         }
         XCTAssertNotNil(wrongState)

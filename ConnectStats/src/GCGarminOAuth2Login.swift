@@ -216,6 +216,9 @@ enum GCGarminOAuth2LoginError : Error {
 
     struct Configuration {
         static let defaultAuthorizeUrl = "https://connect.garmin.com/oauth2Confirm"
+        /// The redirect URL registered for the app in Garmin's Developer Portal: Garmin only accepts
+        /// an exact match. It's also the OAuth 1.0 callback, so the portal doesn't need to change
+        static let defaultRedirectUri = "connectstats-oauth://oauth-callback/garmin"
 
         let clientId : String
         let authorizeUrl : URL
@@ -235,11 +238,13 @@ enum GCGarminOAuth2LoginError : Error {
             let configuredUrl : String = GCAppGlobal.credentials(forService: service, andKey: "oauth2_authenticate_url")
             let authorizeUrl = URL(string: configuredUrl.isEmpty ? defaultAuthorizeUrl : configuredUrl)
             let registerUrl = URL(string: GCWebConnectStatsRegisterUserOAuth2(config))
+            // Same value as the OAuth 1.0 login: the one registered in Garmin's Developer Portal
+            let configuredRedirect : String = GCAppGlobal.credentials(forService: service, andKey: "oauth_callback")
+            let redirectUri = configuredRedirect.isEmpty || configuredRedirect == "***" ? defaultRedirectUri : configuredRedirect
             if let authorizeUrl = authorizeUrl, let registerUrl = registerUrl {
-                // This value has to be registered with Garmin
                 return Configuration(clientId: clientId,
                                      authorizeUrl: authorizeUrl,
-                                     redirectUri: "\(GCAppGlobal.appURLScheme())://ro-z.net/oauth/garmin",
+                                     redirectUri: redirectUri,
                                      registerUrl: registerUrl)
             }
             return nil

@@ -235,7 +235,7 @@ Garmin retires OAuth 1.0 on 31 Dec 2026. Full plan: `designs/oauth2-migration.md
 **Flow** (`GCGarminOAuth2Login.swift`):
 
 1. Create the PKCE verifier, challenge and `state`
-2. Open `oauth2Confirm` in an `ASWebAuthenticationSession`, redirect URI `connectstats://ro-z.net/oauth/garmin`
+2. Open `oauth2Confirm` in an `ASWebAuthenticationSession`, redirect URI `connectstats-oauth://oauth-callback/garmin` (`oauth_callback` in `credentials.json`: the one registered in Garmin's Developer Portal, which only accepts an exact match. It's also the OAuth 1.0 callback, so the portal doesn't change)
 3. Check `state`, then POST `code`, `code_verifier` and `redirect_uri` to `/api/connectstats/user_register_oauth2`, form-encoded
 4. Save `server_token` in the Keychain and `token_id`, `cs_user_id` in the config
 
