@@ -261,10 +261,6 @@ NSString * GCWebConnectStatsRegisterUserOAuth2( gcWebConnectStatsConfig config )
     return [NSString stringWithFormat:@"%@/api/connectstats/user_register_oauth2", GCWebConnectStatsPrefixForConfig(config)];
 }
 
-NSString * GCWebConnectStatsDisconnect( gcWebConnectStatsConfig config ){
-    return [NSString stringWithFormat:@"%@/api/connectstats/user_disconnect", GCWebConnectStatsPrefixForConfig(config)];
-}
-
 #pragma mark - Garmin
 
 NSString * GCWebSimulatorSigninURL( NSString * uname, NSString * pwd){
