@@ -414,7 +414,7 @@ class FITSelectionContext {
         paragraphStyle.lineBreakMode = NSLineBreakMode.byTruncatingMiddle
         
         let attr = [ NSAttributedString.Key.font:NSFont.systemFont(ofSize: 12.0),
-                     NSAttributedString.Key.foregroundColor:NSColor.textColor,
+                     NSAttributedString.Key.foregroundColor:NSColor.labelColor,
                      NSAttributedString.Key.paragraphStyle: paragraphStyle]
 
         return NSAttributedString(attr, with: display)
@@ -426,8 +426,8 @@ class FITSelectionContext {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineBreakMode = NSLineBreakMode.byTruncatingMiddle
         
-        let disabledLabelColor = NSColor.disabledControlTextColor
-        let highlightLabelColor = NSColor.textColor
+        let disabledLabelColor = NSColor.tertiaryLabelColor
+        let highlightLabelColor = NSColor.labelColor
         
         var attr = [ NSAttributedString.Key.font:NSFont.systemFont(ofSize: 12.0),
                      NSAttributedString.Key.foregroundColor:highlightLabelColor,
